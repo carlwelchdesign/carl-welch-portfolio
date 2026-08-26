@@ -33,7 +33,7 @@ export default function RecommendationsPage() {
           </section>
           <ol className="recommendation-list" aria-label="LinkedIn recommendation candidates">
             {recommendations.map((recommendation, index) => (
-              <li key={`${recommendation.name}-${recommendation.date}`}>
+              <li key={recommendation.id} data-review-state={recommendation.reviewState}>
                 <Reveal className="recommendation-card">
                   <div className="recommendation-index" aria-hidden="true">
                     {String(index + 1).padStart(2, '0')}

@@ -76,7 +76,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             <div>
               <p className="eyebrow">What is implemented</p>
               <ul>
-                {project.evidence.map((item) => <li key={item}>{item}</li>)}
+                {project.evidence.map((item) => <li key={item.id}>{item.text}</li>)}
               </ul>
             </div>
             <div>

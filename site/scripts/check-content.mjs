@@ -3,10 +3,37 @@ import { resolve } from 'node:path';
 import { loadTypescriptData } from './load-typescript-data.mjs';
 
 const root = process.cwd();
+const allowedStrengths = new Set(['strong', 'moderate', 'limited']);
+const allowedMaturities = new Set(['production', 'deployed_demo', 'pre_release', 'prototype', 'planned', 'experiment']);
+const stableRecordId = /^portfolio:(claim|capability|recommendation|source):[a-z0-9-]+(?::[a-z0-9-]+)*$/;
 
 function requireUnique(items, label) {
   const unique = new Set(items);
   if (unique.size !== items.length) throw new Error(`${label} contains duplicate values.`);
+}
+
+function requireStableId(id, label) {
+  if (typeof id !== 'string' || !stableRecordId.test(id)) {
+    throw new Error(`${label} must use a stable portfolio record ID.`);
+  }
+}
+
+function stableSlug(value) {
+  return value.toLowerCase().replaceAll(/[^a-z0-9]+/g, '-').replaceAll(/(^-|-$)/g, '');
+}
+
+function requirePublicEvidence(record, label) {
+  requireStableId(record.id, label);
+  if (record.reviewState !== 'approved' || record.publicApproved !== true) {
+    throw new Error(`${label} is rendered as public evidence without explicit approval.`);
+  }
+  if (!allowedStrengths.has(record.strength)) throw new Error(`${label} has an invalid evidence strength.`);
+  if (!allowedMaturities.has(record.maturity)) throw new Error(`${label} has an invalid project maturity.`);
+  if (!Array.isArray(record.sourceIds) || record.sourceIds.length === 0) {
+    throw new Error(`${label} must cite at least one stable source record.`);
+  }
+  record.sourceIds.forEach((sourceId) => requireStableId(sourceId, `${label} source`));
+  if (!Array.isArray(record.limitations)) throw new Error(`${label} must model limitations explicitly.`);
 }
 
 async function requireFile(relativePath, minimumBytes = 1) {
@@ -38,15 +65,42 @@ if (projects.length < 3) throw new Error('At least three detailed case studies a
 requireUnique(projects.map((project) => project.slug), 'Case-study slugs');
 requireUnique(githubProjects.map((project) => project.name), 'GitHub repository names');
 requireUnique(recommendations.map((item) => `${item.name}:${item.date}`), 'Recommendation attributions');
+requireUnique(recommendations.map((item) => item.id), 'Recommendation IDs');
 requireUnique(capabilities.map((capability) => capability.id), 'Capability IDs');
 
 const projectSlugs = new Set(projects.map((project) => project.slug));
 const repositoryNames = new Set(githubProjects.map((project) => project.name));
 const companyNames = new Set(experience.map((role) => role.company));
+const sourceIds = new Set([
+  ...projects.map((project) => project.sourceId),
+  ...experience.map((role) => role.sourceId),
+  ...githubProjects.map((project) => `portfolio:source:repository:${stableSlug(project.name)}`),
+  ...recommendations.map((recommendation) => recommendation.sourceId),
+]);
+requireUnique([...sourceIds], 'Source IDs');
+sourceIds.forEach((sourceId) => requireStableId(sourceId, 'Source ID'));
+
+const publicEvidenceIds = [];
+for (const project of projects) {
+  if (!allowedMaturities.has(project.maturity)) throw new Error(`${project.name} has an invalid project maturity.`);
+  requireStableId(project.sourceId, `${project.name} source`);
+  for (const evidence of project.evidence) {
+    requirePublicEvidence(evidence, `${project.name} evidence ${evidence.id || '(missing ID)'}`);
+    if (evidence.maturity !== project.maturity) {
+      throw new Error(`${evidence.id} maturity does not match its project boundary.`);
+    }
+    for (const sourceId of evidence.sourceIds) {
+      if (!sourceIds.has(sourceId)) throw new Error(`${evidence.id} references unknown source ${sourceId}.`);
+    }
+    publicEvidenceIds.push(evidence.id);
+  }
+}
 
 for (const capability of capabilities) {
   if (capability.evidence.length < 2) throw new Error(`${capability.name} does not contain enough supporting evidence.`);
   for (const evidence of capability.evidence) {
+    requirePublicEvidence(evidence, `${capability.name} evidence ${evidence.id || '(missing ID)'}`);
+    publicEvidenceIds.push(evidence.id);
     const { kind, id } = evidence.reference;
     if (kind === 'project' && !projectSlugs.has(id)) {
       throw new Error(`${capability.name} references unknown case study ${id}.`);
@@ -60,6 +114,25 @@ for (const capability of capabilities) {
     if (kind === 'recommendations' && evidence.href !== '/recommendations') {
       throw new Error(`${capability.name} has an invalid recommendations reference.`);
     }
+    for (const sourceId of evidence.sourceIds) {
+      if (!sourceIds.has(sourceId)) throw new Error(`${evidence.id} references unknown source ${sourceId}.`);
+    }
+  }
+}
+
+requireUnique(publicEvidenceIds, 'Public evidence IDs');
+
+for (const recommendation of recommendations) {
+  requireStableId(recommendation.id, 'Recommendation ID');
+  requireStableId(recommendation.sourceId, `${recommendation.id} source`);
+  if ((recommendation.reviewState === 'approved') !== recommendation.publicApproved) {
+    throw new Error(`${recommendation.id} has inconsistent review and public-approval state.`);
+  }
+  if (recommendation.reviewState !== 'review_required' || recommendation.publicApproved !== false) {
+    throw new Error(`${recommendation.id} must remain review-only until the LinkedIn reconciliation ticket is complete.`);
+  }
+  if (!Array.isArray(recommendation.limitations) || recommendation.limitations.length === 0) {
+    throw new Error(`${recommendation.id} must retain its publication limitation.`);
   }
 }
 
