@@ -12,8 +12,9 @@
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
     "check:content": "node scripts/check-content.mjs",
     "check:github": "node scripts/check-github-archive.mjs",
+    "check:jolene-contract": "node scripts/check-jolene-contract.mjs",
     "check:routes": "node scripts/check-routes.mjs",
-    "check": "pnpm lint && pnpm check:content && pnpm build"
+    "check": "pnpm lint && pnpm check:content && pnpm check:jolene-contract && pnpm build"
   },
   "dependencies": {
     "motion": "13.1.1",

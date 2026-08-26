@@ -23,8 +23,18 @@ Implementation update, August 25, 2026:
 - The workspace now has a local Git repository on `main`. Publication, remote creation, and deployment remain intentionally unperformed.
 - Root and route metadata, canonical handling, an Open Graph preview image, X card fields, sitemap, robots rules, web manifest, favicon, corrected LinkedIn destination, and a local résumé download are implemented. The production base URL remains environment-configured because a public domain has not been approved.
 - Lint, the production build, every application route, all metadata routes, and the running local preview pass.
-- Copy remains provisional. Official LinkedIn recommendation reconciliation, final copy review, interactive browser/accessibility QA, Jolene, a reviewed archive-update operation, source-control initialization, and deployment remain open.
+- Copy remains provisional. Official LinkedIn recommendation reconciliation, final copy review, interactive browser/accessibility QA, Jolene, a reviewed archive-update operation, and deployment remain open.
 - No public deployment has been created; publication remains approval-gated.
+
+Public Jolene architecture reconciliation, August 25, 2026:
+
+- The first portfolio release remains independent of Jolene. Public chat is a separately gated post-release capability, so unfinished agent work cannot delay the portfolio launch.
+- No public Jolene endpoint is implemented. Portfolio development proceeds against a versioned adapter contract and deterministic fixtures until `JOL-CAREER-004` and `JOL-CAREER-005` are implemented and verified in the canonical Jolene repository.
+- The portfolio must never call Jolene's private API, mount or read Obsidian, access private durable memory, or use private MCP tools. It may consume only a versioned, content-minimized export of active `public_approved` career evidence through a dedicated public service.
+- Public responses must preserve structured claims, evidence IDs and citations, evidence strength, project maturity, limitations, follow-up questions, and corpus version. Job-description comparison must classify each requirement as `direct`, `adjacent`, `missing`, or `unknown` without fabricating fit.
+- Job descriptions and transcripts are ephemeral by default. The public boundary requires input limits, rate limits, cost ceilings, redaction, abuse controls, and a kill switch before live integration.
+- Contact remains a minimized, consented, reviewable handoff. Jolene cannot apply, email, schedule, negotiate, promise availability, relocation, or compensation, or contact recruiters on Carl's behalf.
+- The avatar is a replaceable presentation layer with its own art-approval gate. Rejected generated concepts are not implementation inputs, and avatar availability cannot control whether the text experience works.
 
 ## 1. Decision reset
 
@@ -35,7 +45,7 @@ The following decisions now govern the work:
 1. The portfolio will lean heavily on [Motion for React](https://motion.dev/docs/react), but motion must explain, connect, compare, orient, or confirm. Decorative movement alone is not sufficient.
 2. The [Motion.dev landing page](https://motion.dev/) is the primary approved reference for visual grammar, interaction attitude, and motion pacing. It is a reference to adapt, not a template to copy.
 3. Yellow is rejected. Vermilion red, safety orange, and electric green form a section-aware signal system rather than competing as one global brand color.
-4. Jolene, Dolly, AI chat, character rigging, Canvas, and WebGL are deferred outside the first portfolio release.
+4. Jolene, Dolly, AI chat, character rigging, Canvas, and WebGL remain outside the first portfolio release. Portfolio-side contracts and deterministic fixtures may be developed in a separate post-release track, but public enablement remains dependency- and approval-gated.
 5. Static image mockups are not the primary approval artifact for a motion-led site. Carl will review functioning browser prototypes using real portfolio content.
 6. The first release will feature 3–4 evidence-rich case studies, not six uniform flagship stories.
 7. All approved public repositories remain available through a compact archive, but they do not receive equal visual emphasis.
@@ -828,6 +838,19 @@ Exit gate: every route works fully without animation and passes content/schema c
 - After Carl approves a crawler-accessible preview or public release, run provider cache refreshes and capture the final preview evidence before broad sharing.
 - Publish only after Carl explicitly approves the implemented experience.
 
+### Phase 6 — Public Jolene delegate and avatar
+
+- Freeze the versioned public manifest, answer, job-fit, and contact-intent contracts without claiming the proposed endpoints are live.
+- Build the portfolio-side adapter, runtime validation, deterministic fixtures, accessible bottom-right launcher, and text-first chat states independently of the backend.
+- Map public evidence IDs to stable portfolio routes and accessible highlight anchors.
+- Complete `JOL-CAREER-004` public evidence export and `JOL-CAREER-005` public delegate work in the Jolene repository; the portfolio does not substitute for those dependencies.
+- Add the same-origin server boundary, secrets handling, input and rate limits, cost ceilings, redaction, abuse controls, retention policy, observability, and kill switch.
+- Run grounding, citation, maturity, privacy, prompt-injection, abuse, failure, latency, and cost evaluations before enabling a live service.
+- Reset avatar art direction through a professional pixel-art brief, obtain Carl's explicit approval of one waist-up master, then produce and integrate an animation-ready sprite sheet behind a replaceable renderer.
+- Verify keyboard, screen-reader, reduced-motion, static fallback, physical-iPhone, performance, outage, and rollback behavior.
+
+Exit gate: Carl approves the public evidence set, representative grounded answers, job-description behavior, contact consent flow, avatar, security and privacy controls, evaluation results, and controlled production enablement.
+
 ## 16. Prioritized backlog
 
 ### P0 — Reset and discovery
@@ -926,6 +949,30 @@ Recommendation launch acceptance criteria:
 - **PORT-064 — Complete performance and lifecycle verification**
 - **PORT-065 — Produce private launch preview**
 
+### P1 — Public Jolene delegate
+
+- **PORT-JOL-001 — Freeze public Jolene v1 API and fixture contract**
+- **PORT-JOL-002 — Build portfolio-side public Jolene adapter and deterministic fixtures**
+- **PORT-JOL-003 — Map public evidence IDs to portfolio routes and highlight anchors**
+- **PORT-JOL-004 — Build accessible bottom-right Jolene launcher and chat shell**
+- **PORT-JOL-005 — Render structured answers, citations, limitations, and evidence highlights**
+- **PORT-JOL-006 — Build ephemeral job-description comparison experience**
+- **PORT-JOL-007 — Build minimized consented contact-intent handoff**
+- **PORT-JOL-008 — Add portfolio BFF security, limits, redaction, and kill switch**
+- **PORT-JOL-009 — Integrate the live public Jolene service behind the adapter**
+- **PORT-DEP-001 — Track JOL-CAREER-004 public evidence export dependency**
+- **PORT-DEP-002 — Track JOL-CAREER-005 public delegate dependency**
+- **PORT-CONTRACT-001 — Add API schema, fixture, and corpus-version compatibility tests**
+- **PORT-EVAL-001 — Run grounding, privacy, abuse, injection, and cost evaluations**
+
+### P1 — Jolene avatar
+
+- **PORT-AVATAR-001 — Reset avatar art direction with a professional pixel-art brief**
+- **PORT-AVATAR-002 — Approve one waist-up Dolly/Jolene master design**
+- **PORT-AVATAR-003 — Produce animation-ready sprite sheet and state contract**
+- **PORT-AVATAR-004 — Integrate sprite renderer with chat state**
+- **PORT-AVATAR-005 — Validate accessibility, reduced motion, mobile, and performance**
+
 ## 17. Risks and gates
 
 | Risk | Impact | Likelihood | Mitigation | Release gate |
@@ -945,11 +992,11 @@ Recommendation launch acceptance criteria:
 | Shared links look generic, stale, or misleading | High | Medium | Route-specific reviewed metadata, versioned preview assets, and real provider inspection | Share-preview acceptance criteria pass |
 | Multi-color system becomes noisy or harms orientation | Medium | Medium | One dominant color, stable black surfaces, clear section mapping, and neutral reading zones | Color-flow prototype and accessibility review pass |
 
-## 18. MVP non-goals
+## 18. First-release non-goals
 
-- Jolene or any AI assistant.
-- Dolly assets or character rigging.
-- Canvas, WebGL, particles, or ambient generative systems.
+- Live Jolene or any AI assistant. Contract and fixture development remains isolated from the first-release runtime.
+- Dolly assets or character rigging. Avatar design and production require a separate post-release art-approval gate.
+- Canvas, WebGL, particles, or ambient generative systems. A later avatar renderer must use the simplest implementation justified by the approved sprite assets.
 - Final visual design before taste calibration.
 - Full editorial case studies for all repositories.
 - Motion+ early-access dependencies in production.
@@ -971,7 +1018,7 @@ This revision incorporates independent reviews from:
 
 - Revoke the earlier visual prescription.
 - Use Motion.dev as the anchor reference for visual grammar and motion pacing without cloning its brand.
-- Defer Jolene completely.
+- Defer live Jolene from the first release and keep later public integration physically separate from private Jolene.
 - Use live motion prototypes as the main approval artifact.
 - Make Motion semantic and foundational.
 - Keep pages server-rendered and motion behavior in narrow client islands.
@@ -992,7 +1039,8 @@ This revision incorporates independent reviews from:
 | Multi-agent copy workflow with Carl as final voice and publication approver | Approved by user direction | Carl + content |
 | LinkedIn recommendations as launch evidence with a complete dedicated archive | Approved by user direction | Carl + content |
 | Final typography and image system | Unapproved pending the live prototypes | Carl + design |
-| Jolene/Dolly/AI assistant | Deferred | Carl |
+| Jolene public delegate | Approved for post-release adapter and fixture development; live service dependency- and approval-gated | Carl + engineering |
+| Jolene/Dolly avatar | Art direction reset required; no generated concept approved | Carl + design |
 | 3–4 launch case studies | Proposed pending evidence matrix | Carl + product |
 | Stable Motion APIs form production baseline | Proposed | Engineering |
 | Motion+ and cross-route shared transitions | Prototype-only | Engineering + Carl |
@@ -1024,4 +1072,4 @@ Before public release:
 3. The production origin is set through `NEXT_PUBLIC_SITE_URL` and social previews are inspected on the intended providers.
 4. Carl explicitly approves deployment. No remote repository, hosting deployment, domain change, or public publication is authorized by this plan alone.
 
-Jolene, Dolly assets, character rigging, Canvas, and WebGL remain deferred to a separate phase after the portfolio itself is approved.
+Live Jolene and the avatar remain outside the first portfolio release. The portfolio-side contract and fixture boundary may proceed now, while public enablement waits for approved public evidence, `JOL-CAREER-004`, `JOL-CAREER-005`, security and evaluation gates, and Carl's explicit approval. Avatar production begins only after Carl approves a new professional art direction and master design.
