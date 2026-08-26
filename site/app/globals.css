@@ -226,6 +226,42 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .footer-links { display: flex; flex-wrap: wrap; gap: 20px 28px; }
 .footer-links a:first-child { overflow-wrap: anywhere; text-transform: none; letter-spacing: 0; }
 
+.jolene-fixture { --jolene-accent: var(--orange); position: fixed; z-index: 80; right: max(20px, env(safe-area-inset-right)); bottom: max(20px, env(safe-area-inset-bottom)); color: var(--paper); }
+.jolene-launcher { min-height: 58px; display: flex; align-items: center; gap: 13px; padding: 7px 16px 7px 7px; border: 1px solid rgba(242, 242, 235, 0.72); border-radius: 0; background: var(--ink); color: var(--paper); box-shadow: 0 18px 52px rgba(0, 0, 0, 0.3); cursor: pointer; font: 700 13px var(--font-geist-sans), sans-serif; text-align: left; transition: transform 180ms ease, background 180ms ease, color 180ms ease; }
+.jolene-launcher:hover { transform: translateY(-2px); background: var(--paper); color: var(--ink); }
+.jolene-launcher-mark { width: 42px; height: 42px; display: grid; place-items: center; background: var(--jolene-accent); color: var(--ink); font-size: 24px; font-weight: 800; letter-spacing: -0.06em; }
+.jolene-launcher > span:last-child { display: grid; gap: 2px; }
+.jolene-launcher small { color: var(--muted); font: 9px var(--font-geist-mono), monospace; letter-spacing: 0.1em; text-transform: uppercase; }
+.jolene-launcher:hover small { color: #565d54; }
+.jolene-panel { position: absolute; right: 0; bottom: 76px; width: min(430px, calc(100vw - 40px)); max-height: min(720px, calc(100svh - 122px)); display: grid; grid-template-rows: auto auto minmax(160px, 1fr) auto auto; overflow: hidden; border: 1px solid rgba(242, 242, 235, 0.72); background: var(--ink); box-shadow: 0 24px 80px rgba(0, 0, 0, 0.42); }
+.jolene-panel-header { min-height: 104px; padding: 20px; display: flex; justify-content: space-between; gap: 20px; align-items: flex-start; background: var(--jolene-accent); color: var(--ink); }
+.jolene-panel-header p, .jolene-panel-header h2 { margin: 0; }
+.jolene-panel-header p { font: 9px var(--font-geist-mono), monospace; letter-spacing: 0.1em; text-transform: uppercase; }
+.jolene-panel-header h2 { margin-top: 10px; font-size: 34px; line-height: 0.9; letter-spacing: -0.055em; }
+.jolene-panel-header button { min-height: 36px; padding: 0 10px; border: 1px solid currentColor; border-radius: 0; background: transparent; color: inherit; cursor: pointer; font: 700 9px var(--font-geist-mono), monospace; letter-spacing: 0.09em; text-transform: uppercase; }
+.jolene-panel-header button:hover { background: var(--ink); color: var(--paper); }
+.jolene-fixture-notice { margin: 0; padding: 10px 20px; border-bottom: 1px solid var(--line); color: var(--muted); font: 9px/1.45 var(--font-geist-mono), monospace; letter-spacing: 0.045em; text-transform: uppercase; }
+.jolene-messages { padding: 18px 20px; overflow-y: auto; overscroll-behavior: contain; scrollbar-color: var(--muted) transparent; }
+.jolene-message { margin: 0 0 18px; padding: 14px; border: 1px solid var(--line); background: #11150f; }
+.jolene-message[data-role='visitor'] { margin-left: 40px; border-color: rgba(255, 104, 0, 0.72); background: rgba(255, 104, 0, 0.1); }
+.jolene-message p { margin: 0; font-size: 14px; line-height: 1.5; }
+.jolene-message .jolene-message-role { margin-bottom: 8px; color: var(--jolene-accent); font: 9px var(--font-geist-mono), monospace; letter-spacing: 0.11em; text-transform: uppercase; }
+.jolene-message[data-role='visitor'] .jolene-message-role { color: var(--paper); }
+.jolene-message .jolene-message-note { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; }
+.jolene-waiting { margin: 0; color: var(--muted); font: 10px var(--font-geist-mono), monospace; letter-spacing: 0.06em; }
+.jolene-starters { padding: 0 20px 16px; display: grid; gap: 7px; }
+.jolene-starters button { min-height: 42px; padding: 9px 12px; border: 1px solid var(--line); border-radius: 0; background: transparent; color: var(--paper); cursor: pointer; font: 12px/1.35 var(--font-geist-sans), sans-serif; text-align: left; }
+.jolene-starters button:hover { border-color: var(--jolene-accent); background: rgba(255, 104, 0, 0.1); }
+.jolene-form { padding: 16px 20px 18px; border-top: 1px solid var(--line); background: #0d100d; }
+.jolene-form label { display: block; margin-bottom: 8px; color: var(--muted); font: 9px var(--font-geist-mono), monospace; letter-spacing: 0.08em; text-transform: uppercase; }
+.jolene-form textarea { width: 100%; resize: vertical; min-height: 74px; max-height: 150px; padding: 11px; border: 1px solid var(--line); border-radius: 0; background: var(--ink); color: var(--paper); font: 14px/1.45 var(--font-geist-sans), sans-serif; }
+.jolene-form textarea::placeholder { color: #72796f; }
+.jolene-form > div { min-height: 38px; margin-top: 9px; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+.jolene-form span { color: var(--muted); font: 9px var(--font-geist-mono), monospace; }
+.jolene-form button { min-height: 38px; padding: 0 13px; border: 1px solid var(--jolene-accent); border-radius: 0; background: var(--jolene-accent); color: var(--ink); cursor: pointer; font: 700 9px var(--font-geist-mono), monospace; letter-spacing: 0.09em; text-transform: uppercase; }
+.jolene-form button:hover:not(:disabled) { background: var(--paper); border-color: var(--paper); }
+.jolene-form button:disabled, .jolene-starters button:disabled { cursor: not-allowed; opacity: 0.48; }
+
 @media (max-width: 1000px) {
   .site-header { grid-template-columns: 1fr auto auto; }
   .build-label { margin-left: 24px; }
@@ -299,6 +335,12 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .archive-grid { grid-template-columns: 1fr; }
   .site-footer { grid-template-columns: 1fr; align-items: start; }
   .footer-links { align-items: flex-start; flex-direction: column; }
+  .jolene-fixture { right: max(12px, env(safe-area-inset-right)); bottom: max(12px, env(safe-area-inset-bottom)); }
+  .jolene-launcher { min-height: 54px; }
+  .jolene-panel { position: fixed; right: 12px; bottom: calc(78px + env(safe-area-inset-bottom)); left: 12px; width: auto; max-height: calc(100svh - 102px - env(safe-area-inset-top)); }
+  .jolene-panel-header { min-height: 92px; }
+  .jolene-panel-header h2 { font-size: 30px; }
+  .jolene-message[data-role='visitor'] { margin-left: 18px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
