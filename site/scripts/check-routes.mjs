@@ -43,6 +43,7 @@ function requireShareMetadata(html, route) {
   const canonicalTag = getTag(html, 'link', 'rel', 'canonical');
   const openGraphUrlTag = getTag(html, 'meta', 'property', 'og:url');
   const openGraphTitleTag = getTag(html, 'meta', 'property', 'og:title');
+  const openGraphImageTag = getTag(html, 'meta', 'property', 'og:image');
   const twitterTitleTag = getTag(html, 'meta', 'name', 'twitter:title');
   const documentTitle = html.match(/<title>([^<]+)<\/title>/)?.[1];
 
@@ -58,9 +59,15 @@ function requireShareMetadata(html, route) {
   if (getTagAttribute(twitterTitleTag, 'content') !== documentTitle) {
     throw new Error(`${route} X card title does not match its document title.`);
   }
-  if (!getTag(html, 'meta', 'property', 'og:image')) {
+  const openGraphImageUrl = getTagAttribute(openGraphImageTag, 'content');
+  if (!openGraphImageUrl) {
     throw new Error(`${route} is missing an Open Graph image.`);
   }
+  if (new URL(openGraphImageUrl).origin !== baseUrl) {
+    throw new Error(`${route} Open Graph image does not use the configured public origin.`);
+  }
+
+  return openGraphImageUrl;
 }
 
 const pageExpectations = [
@@ -72,12 +79,13 @@ const pageExpectations = [
   ['/contact', 'carlwelchdesign@gmail.com'],
   ...projects.map((project) => [`/work/${project.slug}`, project.name]),
 ];
+const shareImageUrls = new Set();
 
 await Promise.all(pageExpectations.map(async ([route, expectedText]) => {
   const response = await fetchRoute(route);
   const html = await response.text();
   requirePageStructure(html, route);
-  requireShareMetadata(html, route);
+  shareImageUrls.add(requireShareMetadata(html, route));
   requireText(html, expectedText, route);
 
   if (route === '/') {
@@ -87,6 +95,16 @@ await Promise.all(pageExpectations.map(async ([route, expectedText]) => {
 
   if (route === '/recommendations' && !/<meta name="robots" content="[^"]*noindex/.test(html)) {
     throw new Error('/recommendations must remain excluded from search indexing until publication approval.');
+  }
+}));
+
+await Promise.all([...shareImageUrls].map(async (imageUrl) => {
+  const response = await fetch(imageUrl);
+  if (response.status !== 200) {
+    throw new Error(`${imageUrl} returned ${response.status}; expected 200.`);
+  }
+  if (!response.headers.get('content-type')?.startsWith('image/')) {
+    throw new Error(`${imageUrl} did not return an image content type.`);
   }
 }));
 
