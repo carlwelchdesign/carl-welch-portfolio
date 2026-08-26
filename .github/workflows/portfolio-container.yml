@@ -21,6 +21,18 @@ jobs:
       - name: Build portfolio image
         run: docker build --tag carl-welch-portfolio:ci site
 
+      - name: Scan production image
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        with:
+          image-ref: carl-welch-portfolio:ci
+          format: table
+          exit-code: "1"
+          ignore-unfixed: true
+          vuln-type: os,library
+          severity: HIGH,CRITICAL
+          scanners: vuln
+          timeout: 10m
+
       - name: Start hardened container
         run: >-
           docker run --detach --name portfolio-ci --publish 3000:3000
