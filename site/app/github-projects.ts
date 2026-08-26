@@ -10,8 +10,45 @@ export type GitHubProject = {
   kind: 'application' | 'library' | 'legacy' | 'profile';
 };
 
-export const githubSnapshotDate = '2026-08-25';
-export const githubSnapshotLabel = 'August 25, 2026';
+export const githubSnapshotDate = '2026-08-26';
+export const githubSnapshotLabel = 'August 26, 2026';
+
+export const githubSnapshotReview = {
+  sourceObservedAt: '2026-08-26T20:49:01.000Z',
+  reviewer: 'Carl Welch',
+  appliedVersion: 1,
+} as const;
+
+// Stable GitHub repository IDs make renames detectable without treating a
+// repository's mutable name or URL as identity. This registry is observed
+// metadata only; it does not grant public-portfolio approval.
+export const githubRepositoryIds: Record<string, number> = {
+  'earth-atlas-ai': 1345152510,
+  'jolene-ai': 1346778647,
+  'supraconscious-avatar-ai': 1223852335,
+  'matchmaker-ai': 1310426591,
+  carlwelchdesign: 1345493582,
+  'flight-tracker-ai': 1306951252,
+  'wave-factory-essentials': 1330027415,
+  'wave-factory-ai-production-assistant': 1327469966,
+  'fruition-venture-studio': 1316602822,
+  'jobsearch-dashboard-ai': 1236009640,
+  'progression-lab-ai': 1183648275,
+  'emf-disturbance-sim': 1212889435,
+  'webauthn-core': 1197826799,
+  'netheria-ui': 523149970,
+  spaceinvaders: 108296292,
+  'reviewtrackers-server': 515778090,
+  'reviewtrackers-ui': 515777498,
+  'react-native-message-loader': 111479518,
+  'React.js-searchable-list': 103580544,
+  cadillac: 37469031,
+  TwitterFeedModule: 43186204,
+  group_actions_CNI: 27100843,
+  Primaloft: 25988120,
+  Superman75thAniv: 25984590,
+  TheConjuringSweepstakes: 25985061,
+};
 
 export const githubProjects: GitHubProject[] = [
   {
