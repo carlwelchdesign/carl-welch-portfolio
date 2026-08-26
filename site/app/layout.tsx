@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { JoleneShell } from './jolene/jolene-shell';
+import { EvidenceTargetObserver } from './jolene/evidence-target-observer';
 import {
   buildPageMetadata,
   defaultDescription,
@@ -51,6 +52,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body>
+        <EvidenceTargetObserver />
         {children}
         <JoleneShell />
       </body>

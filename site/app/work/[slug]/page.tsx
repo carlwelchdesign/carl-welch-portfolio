@@ -5,6 +5,7 @@ import { MotionRuntime, Reveal } from '../../motion-elements';
 import { getProject, projects } from '../../portfolio-data';
 import { ArchitectureDiagram, PageFrame } from '../../site-components';
 import { buildPageMetadata } from '../../site-metadata';
+import { publicEvidenceAnchorId } from '../../jolene/public-evidence-navigation-core';
 
 type ProjectPageProps = {
   params: Promise<{ slug: string }>;
@@ -43,7 +44,13 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     <MotionRuntime>
       <PageFrame>
         <main id="main-content" className={`project-detail project-detail-${project.tone}`} data-tone={project.tone}>
-          <header className="project-detail-hero">
+          <header
+            className="project-detail-hero"
+            id={publicEvidenceAnchorId(project.sourceId)}
+            data-evidence-target
+            tabIndex={-1}
+            aria-label={`${project.name} case study`}
+          >
             <p className="eyebrow">Selected work / {project.number}</p>
             <h1>{project.name}</h1>
             <div className="project-detail-deck">
@@ -76,10 +83,25 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             <div>
               <p className="eyebrow">What is implemented</p>
               <ul>
-                {project.evidence.map((item) => <li key={item.id}>{item.text}</li>)}
+                {project.evidence.map((item) => (
+                  <li
+                    key={item.id}
+                    id={publicEvidenceAnchorId(item.id)}
+                    data-evidence-target
+                    tabIndex={-1}
+                    aria-label={item.text}
+                  >
+                    {item.text}
+                  </li>
+                ))}
               </ul>
             </div>
-            <div>
+            <div
+              id={publicEvidenceAnchorId(`portfolio:limitation:project:${project.slug}`)}
+              data-evidence-target
+              tabIndex={-1}
+              aria-label={`${project.name} current boundaries`}
+            >
               <p className="eyebrow">Current boundaries</p>
               <ul>
                 {project.boundaries.map((item) => <li key={item}>{item}</li>)}

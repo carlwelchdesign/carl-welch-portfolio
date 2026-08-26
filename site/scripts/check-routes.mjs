@@ -2,10 +2,16 @@ import { resolve } from 'node:path';
 import { loadTypescriptData } from './load-typescript-data.mjs';
 
 const baseUrl = (process.env.PORTFOLIO_BASE_URL || 'http://localhost:3000').replace(/\/$/, '');
-const [{ projects }, { githubProjects }] = await Promise.all([
+const [{ projects, experience }, { githubProjects }, { capabilities }, { recommendations }] = await Promise.all([
   loadTypescriptData(resolve(process.cwd(), 'app/portfolio-data.ts')),
   loadTypescriptData(resolve(process.cwd(), 'app/github-projects.ts')),
+  loadTypescriptData(resolve(process.cwd(), 'app/capabilities-data.ts')),
+  loadTypescriptData(resolve(process.cwd(), 'app/recommendations-data.ts')),
 ]);
+
+function evidenceAnchorId(evidenceId) {
+  return `evidence--${evidenceId.replaceAll(':', '--')}`;
+}
 
 async function fetchRoute(path, expectedStatus = 200) {
   const response = await fetch(`${baseUrl}${path}`);
@@ -80,6 +86,19 @@ const pageExpectations = [
   ...projects.map((project) => [`/work/${project.slug}`, project.name]),
 ];
 const shareImageUrls = new Set();
+const routeEvidenceIds = new Map([
+  ['/experience', experience.map((role) => role.sourceId)],
+  ['/capabilities', capabilities.flatMap((capability) => capability.evidence.map((evidence) => evidence.id))],
+  ['/recommendations', recommendations.map((recommendation) => recommendation.sourceId)],
+  ...projects.map((project) => [
+    `/work/${project.slug}`,
+    [
+      project.sourceId,
+      ...project.evidence.map((evidence) => evidence.id),
+      `portfolio:limitation:project:${project.slug}`,
+    ],
+  ]),
+]);
 
 await Promise.all(pageExpectations.map(async ([route, expectedText]) => {
   const response = await fetchRoute(route);
@@ -87,6 +106,12 @@ await Promise.all(pageExpectations.map(async ([route, expectedText]) => {
   requirePageStructure(html, route);
   shareImageUrls.add(requireShareMetadata(html, route));
   requireText(html, expectedText, route);
+  for (const evidenceId of routeEvidenceIds.get(route) || []) {
+    requireText(html, `id="${evidenceAnchorId(evidenceId)}"`, route);
+  }
+  if (route === '/experience') {
+    for (const role of experience) requireText(html, `id="${role.id}"`, route);
+  }
 
   if (route === '/') {
     requireText(html, 'href="/contact"', route);
@@ -135,5 +160,5 @@ if (!resume.headers.get('content-type')?.startsWith('application/pdf')) {
 }
 
 console.log(
-  `Route checks passed: ${pageExpectations.length} pages, ${githubProjects.length} archive images, metadata, indexing gates, sitemap, and résumé.`,
+  `Route checks passed: ${pageExpectations.length} pages, ${githubProjects.length} archive images, evidence anchors, metadata, indexing gates, sitemap, and résumé.`,
 );

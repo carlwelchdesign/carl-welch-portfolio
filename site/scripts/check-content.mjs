@@ -5,7 +5,7 @@ import { loadTypescriptData } from './load-typescript-data.mjs';
 const root = process.cwd();
 const allowedStrengths = new Set(['strong', 'moderate', 'limited']);
 const allowedMaturities = new Set(['production', 'deployed_demo', 'pre_release', 'prototype', 'planned', 'experiment']);
-const stableRecordId = /^portfolio:(claim|capability|recommendation|source):[a-z0-9-]+(?::[a-z0-9-]+)*$/;
+const stableRecordId = /^portfolio:(claim|capability|limitation|recommendation|source):[a-z0-9-]+(?::[a-z0-9-]+)*$/;
 
 function requireUnique(items, label) {
   const unique = new Set(items);
@@ -53,12 +53,20 @@ async function requirePng(relativePath) {
   if (signature !== '89504e470d0a1a0a') throw new Error(`${relativePath} is not a valid PNG file.`);
 }
 
-const [{ githubProjects }, { projects, experience, recommendationReview }, { recommendations }, { capabilities }, { contact }] = await Promise.all([
+const [
+  { githubProjects },
+  { projects, experience, recommendationReview },
+  { recommendations },
+  { capabilities },
+  { contact },
+  { publicEvidenceTargetRecords },
+] = await Promise.all([
   loadTypescriptData(resolve(root, 'app/github-projects.ts')),
   loadTypescriptData(resolve(root, 'app/portfolio-data.ts')),
   loadTypescriptData(resolve(root, 'app/recommendations-data.ts')),
   loadTypescriptData(resolve(root, 'app/capabilities-data.ts')),
   loadTypescriptData(resolve(root, 'app/contact-data.ts')),
+  loadTypescriptData(resolve(root, 'app/jolene/public-evidence-targets.ts')),
 ]);
 
 if (projects.length < 3) throw new Error('At least three detailed case studies are required.');
@@ -134,6 +142,31 @@ for (const recommendation of recommendations) {
   if (!Array.isArray(recommendation.limitations) || recommendation.limitations.length === 0) {
     throw new Error(`${recommendation.id} must retain its publication limitation.`);
   }
+}
+
+const expectedNavigationIds = [
+  ...projects.flatMap((project) => [
+    project.sourceId,
+    ...project.evidence.map((evidence) => evidence.id),
+    `portfolio:limitation:project:${project.slug}`,
+  ]),
+  ...experience.map((role) => role.sourceId),
+  ...capabilities.flatMap((capability) => capability.evidence.map((evidence) => evidence.id)),
+  ...recommendations.map((recommendation) => recommendation.sourceId),
+];
+const navigationIds = publicEvidenceTargetRecords.map(([evidenceId]) => evidenceId);
+requireUnique(navigationIds, 'Public evidence navigation IDs');
+if (
+  [...expectedNavigationIds].sort().join('\n') !== [...navigationIds].sort().join('\n')
+) {
+  throw new Error('Public evidence navigation is missing or contains stale reviewed content IDs.');
+}
+for (const [evidenceId, path, , status] of publicEvidenceTargetRecords) {
+  requireStableId(evidenceId, 'Public evidence navigation ID');
+  if (!/^\/[a-z0-9/-]+$/.test(path)) throw new Error(`${evidenceId} has an unsafe navigation path.`);
+  const recommendation = recommendations.find((item) => item.sourceId === evidenceId);
+  const expectedStatus = recommendation && !recommendation.publicApproved ? 'review_required' : 'available';
+  if (status !== expectedStatus) throw new Error(`${evidenceId} has an inconsistent navigation publication state.`);
 }
 
 if (recommendations.length !== recommendationReview.candidateCount) {
