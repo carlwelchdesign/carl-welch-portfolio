@@ -193,7 +193,7 @@ function createJobFitResponse(scenario: PublicJoleneFixtureScenario): JobFitResp
 function createContactIntentResponse(): ContactIntentResponse {
   return {
     schemaVersion: PUBLIC_JOLENE_SCHEMA_VERSION,
-    intentId: 'contact:20000000-0000-4000-8000-000000000001',
+    intentId: '20000000-0000-4000-8000-000000000001',
     status: 'pending_review',
     submittedAt: fixtureGeneratedAt,
     message: 'Fixture response: the contact request is pending Carl’s review. No outbound action was taken.',
