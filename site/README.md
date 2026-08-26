@@ -49,6 +49,8 @@ Accepted additions, removals, renames, and broken assets are reported as requiri
 
 The files under `app/jolene/` define a proposed public v1 contract, runtime validation, a narrow portfolio-side adapter, and deterministic development fixtures. They do not call a live Jolene service and do not imply that the proposed public endpoints exist.
 
+The machine-readable consumer contract lives at `contracts/public-jolene-v1.openapi.json`. Its path surface is checked against the TypeScript adapter contract in CI. The portfolio accepts additive changes within schema major version 1, rejects incompatible major versions and missing required fields, and fails closed when a response uses a stale corpus version or cites evidence revoked by the reviewed manifest. The OpenAPI document is a proposal and compatibility artifact, not evidence of a deployed service.
+
 The portfolio must never call Jolene's private API, mount or read Obsidian, access private durable memory, or invoke private MCP tools. A future live adapter may consume only the reviewed, content-minimized public evidence export and public delegate created by `JOL-CAREER-004` and `JOL-CAREER-005`. Until those dependencies pass their own security and evaluation gates, UI work must remain in fixture mode.
 
 The bottom-right development shell is disabled by default. Set `NEXT_PUBLIC_JOLENE_MODE=fixture` locally to enable it and choose a deterministic state with `NEXT_PUBLIC_JOLENE_FIXTURE_SCENARIO`: `success`, `partial_evidence`, `no_evidence`, `unavailable`, `rate_limited`, or `version_mismatch`. Do not enable fixture mode for the first public portfolio release.
