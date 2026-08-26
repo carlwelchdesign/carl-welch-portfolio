@@ -35,8 +35,10 @@ Docker is a reproducibility and CI path. Sites/Cloudflare remains the intended p
 
 The files under `app/jolene/` define a proposed public v1 contract, runtime validation, a narrow portfolio-side adapter, and deterministic development fixtures. They do not call a live Jolene service and do not imply that the proposed public endpoints exist.
 
+The frozen portfolio-consumer wire contract and privacy/identifier semantics are reviewable in [`contracts/public-jolene-v1.openapi.json`](contracts/public-jolene-v1.openapi.json) and [`contracts/README.md`](contracts/README.md). Schema version `1.0.0` deliberately omits session continuity and restricts citations to portfolio-relative links.
+
 The portfolio must never call Jolene's private API, mount or read Obsidian, access private durable memory, or invoke private MCP tools. A future live adapter may consume only the reviewed, content-minimized public evidence export and public delegate created by `JOL-CAREER-004` and `JOL-CAREER-005`. Until those dependencies pass their own security and evaluation gates, UI work must remain in fixture mode.
 
-The bottom-right development shell is disabled by default. Set `NEXT_PUBLIC_JOLENE_MODE=fixture` locally to enable it and choose a deterministic state with `NEXT_PUBLIC_JOLENE_FIXTURE_SCENARIO`: `success`, `partial_evidence`, `no_evidence`, `unavailable`, `rate_limited`, or `version_mismatch`. Do not enable fixture mode for the first public portfolio release.
+The bottom-right development shell is disabled by default. Set `NEXT_PUBLIC_JOLENE_MODE=fixture` locally to enable it and choose a deterministic state with `NEXT_PUBLIC_JOLENE_FIXTURE_SCENARIO`: `success`, `partial_evidence`, `no_evidence`, `empty_corpus`, `unavailable`, `rate_limited`, or `version_mismatch`. Do not enable fixture mode for the first public portfolio release.
 
 Set `NEXT_PUBLIC_SITE_URL` to the approved production origin before publication.

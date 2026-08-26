@@ -6,25 +6,20 @@ import type {
   PortfolioAnswerRequest,
   PortfolioAnswerResponse,
   PublicEvidenceManifest,
+  PublicJoleneErrorCode,
 } from './public-contract.js';
-
-export type PublicJoleneErrorCode =
-  | 'invalid_request'
-  | 'unavailable'
-  | 'rate_limited'
-  | 'budget_exhausted'
-  | 'version_mismatch'
-  | 'request_rejected';
 
 export class PublicJoleneAdapterError extends Error {
   readonly code: PublicJoleneErrorCode;
   readonly retryAfterSeconds?: number;
+  readonly requestId?: string;
 
-  constructor(code: PublicJoleneErrorCode, message: string, retryAfterSeconds?: number) {
+  constructor(code: PublicJoleneErrorCode, message: string, retryAfterSeconds?: number, requestId?: string) {
     super(message);
     this.name = 'PublicJoleneAdapterError';
     this.code = code;
     this.retryAfterSeconds = retryAfterSeconds;
+    this.requestId = requestId;
   }
 }
 
