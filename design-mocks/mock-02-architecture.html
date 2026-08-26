@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mock 02 — Animated Architecture Reveal</title>
+  <link rel="stylesheet" href="./mock.css">
+</head>
+<body class="project-page">
+  <main class="page project-page">
+    <header class="topbar">
+      <a class="brand" href="#"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span>Carl Welch</span></a>
+      <nav class="nav" aria-label="Primary"><a href="#">Selected Work</a><a href="#">Experience</a><a href="#">About</a></nav>
+      <a class="top-action mono" href="#">All projects ↗</a>
+    </header>
+
+    <section class="project-shell">
+      <article class="project-copy">
+        <div>
+          <div class="mono">01 / Selected Work</div>
+          <h1>Job<br>Search<br><span style="color:var(--signal)">OS.</span></h1>
+          <div class="status mono">Protected single-user production app</div>
+          <p class="summary">A personal agentic job-search operating system for reviewing opportunities, generating truthful application materials, and keeping the final application decision under human control.</p>
+        </div>
+        <div class="evidence">
+          <div><span class="mono">System</span><strong>Next.js, TypeScript, Prisma, PostgreSQL + pgvector</strong></div>
+          <div><span class="mono">Operating boundary</span><strong>Prepare and propose; external submission remains human-controlled.</strong></div>
+        </div>
+      </article>
+
+      <article class="architecture">
+        <div class="architecture-head mono"><span>System Architecture / Live Reveal</span><span>Replay ↻</span></div>
+        <div class="diagram-wrap">
+          <svg viewBox="0 0 900 690" role="img" aria-labelledby="diagram-title diagram-desc">
+            <title id="diagram-title">Job Search OS system architecture</title>
+            <desc id="diagram-desc">Job sources flow through discovery and scoring into PostgreSQL and pgvector, then into the Apply Workspace, evidence-backed material generation, and final human review.</desc>
+            <defs>
+              <marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L8,3 z" fill="#ffd600"/></marker>
+              <marker id="arrowMuted" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L8,3 z" fill="#6b7169"/></marker>
+            </defs>
+
+            <path class="flow-line" marker-end="url(#arrow)" d="M168 135 C220 135 220 135 270 135"/>
+            <path class="flow-line" marker-end="url(#arrow)" d="M430 135 C485 135 490 135 545 135"/>
+            <path class="flow-line" marker-end="url(#arrow)" d="M625 180 C625 225 625 230 625 270"/>
+            <path class="flow-line" marker-end="url(#arrow)" d="M545 320 C485 320 470 320 410 320"/>
+            <path class="flow-line" marker-end="url(#arrow)" d="M250 320 C195 320 190 320 138 320"/>
+            <path class="flow-line muted" marker-end="url(#arrowMuted)" d="M320 500 C355 455 385 420 430 370"/>
+            <path class="flow-line muted" marker-end="url(#arrowMuted)" d="M505 500 C500 455 490 420 468 370"/>
+            <path class="flow-line muted" marker-end="url(#arrowMuted)" d="M690 500 C650 455 600 420 520 370"/>
+
+            <g class="diagram-node" transform="translate(38 92)"><rect width="130" height="86"/><text x="65" y="35">DIRECT ATS</text><text class="sub" x="65" y="56">COMPANY SOURCES</text></g>
+            <g class="diagram-node" transform="translate(270 92)"><rect width="160" height="86"/><text x="80" y="35">DISCOVERY</text><text class="sub" x="80" y="56">DEDUPE + SCORING</text></g>
+            <g class="diagram-node" transform="translate(545 92)"><rect width="160" height="86"/><text x="80" y="35">POSTGRESQL</text><text class="sub" x="80" y="56">PRISMA + PGVECTOR</text></g>
+            <g class="diagram-node primary" transform="translate(545 270)"><rect width="160" height="100"/><text x="80" y="40">APPLY</text><text x="80" y="58">WORKSPACE</text><text class="sub" x="80" y="80">CANONICAL REVIEW</text></g>
+            <g class="diagram-node" transform="translate(250 270)"><rect width="160" height="100"/><text x="80" y="40">EVIDENCE-</text><text x="80" y="58">BACKED MATERIALS</text><text class="sub" x="80" y="80">ATS-SAFE OUTPUT</text></g>
+            <g class="diagram-node primary" transform="translate(38 270)"><rect width="100" height="100"/><text x="50" y="40">HUMAN</text><text x="50" y="58">REVIEW</text><text class="sub" x="50" y="80">FINAL DECISION</text></g>
+
+            <g class="diagram-node" transform="translate(245 500)"><rect width="150" height="78"/><text x="75" y="33">EMAIL OPS</text><text class="sub" x="75" y="53">OUTCOME SIGNALS</text></g>
+            <g class="diagram-node" transform="translate(430 500)"><rect width="150" height="78"/><text x="75" y="33">JOLENE</text><text class="sub" x="75" y="53">CHIEF OF STAFF</text></g>
+            <g class="diagram-node" transform="translate(615 500)"><rect width="150" height="78"/><text x="75" y="33">ASSISTANCE</text><text class="sub" x="75" y="53">SLACK + CHROME</text></g>
+          </svg>
+          <aside class="diagram-callout"><strong class="mono">Human-control boundary</strong><span>Preparation and assistance converge here. Final submission stays manual.</span></aside>
+        </div>
+      </article>
+    </section>
+  </main>
+  <script type="module" src="./motion-mocks.js"></script>
+</body>
+</html>

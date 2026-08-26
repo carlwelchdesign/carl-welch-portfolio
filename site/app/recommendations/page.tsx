@@ -1,0 +1,56 @@
+import type { Metadata } from 'next';
+import { MotionRuntime, Reveal } from '../motion-elements';
+import { recommendationReview } from '../portfolio-data';
+import { recommendations } from '../recommendations-data';
+import { PageFrame, PageIntro } from '../site-components';
+
+export const metadata: Metadata = {
+  title: 'Recommendations',
+  description: 'Professional recommendations for Carl Welch.',
+  robots: { index: false, follow: true },
+};
+
+export default function RecommendationsPage() {
+  return (
+    <MotionRuntime>
+      <PageFrame>
+        <main id="main-content" data-tone="red">
+          <PageIntro
+            eyebrow="Recommendations"
+            title="The people I worked with"
+            summary="A dedicated place for recommendations from colleagues, managers, and clients."
+          />
+          <section className="recommendation-review" aria-labelledby="review-state-title">
+            <p className="recommendation-count" aria-hidden="true">{recommendationReview.candidateCount}</p>
+            <div>
+              <p className="eyebrow">Working collection</p>
+              <h2 id="review-state-title">Candidate recommendations found</h2>
+              <p>{recommendationReview.description}</p>
+              <p className="review-note">This page is excluded from search indexing until that review is complete.</p>
+            </div>
+          </section>
+          <ol className="recommendation-list" aria-label="LinkedIn recommendation candidates">
+            {recommendations.map((recommendation, index) => (
+              <li key={`${recommendation.name}-${recommendation.date}`}>
+                <Reveal className="recommendation-card">
+                  <div className="recommendation-index" aria-hidden="true">
+                    {String(index + 1).padStart(2, '0')}
+                  </div>
+                  <blockquote>
+                    <p>“{recommendation.quote}”</p>
+                  </blockquote>
+                  <footer>
+                    <strong>{recommendation.name}</strong>
+                    {recommendation.headline ? <span>{recommendation.headline}</span> : null}
+                    <span>{recommendation.relationship}</span>
+                    <time>{recommendation.date}</time>
+                  </footer>
+                </Reveal>
+              </li>
+            ))}
+          </ol>
+        </main>
+      </PageFrame>
+    </MotionRuntime>
+  );
+}

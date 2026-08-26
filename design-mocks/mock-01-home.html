@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mock 01 — Proof in Motion</title>
+  <script>document.documentElement.dataset.theme = new URLSearchParams(location.search).get("theme") || "yellow"</script>
+  <link rel="stylesheet" href="./mock.css">
+</head>
+<body>
+  <main class="page">
+    <header class="topbar">
+      <a class="brand" href="#"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span>Carl Welch</span></a>
+      <nav class="nav" aria-label="Primary"><a href="#">Work</a><a href="#">Experience</a><a href="#">About</a></nav>
+      <a class="top-action mono" href="#">Résumé ↗</a>
+    </header>
+
+    <section class="home-hero">
+      <article class="hero-card grid-surface">
+        <div>
+          <div class="hero-meta mono" data-hero-item><span>Portfolio / 2026</span><span>Product Engineer</span></div>
+          <h1 data-hero-item><span class="signal">Applied AI.</span><br>Working systems.<br>Visible proof.</h1>
+          <p class="hero-lede" data-hero-item>Product engineer building applied AI products, evidence-rich interactive systems, and creative software—from ambiguous problem to working, testable system.</p>
+        </div>
+        <div class="actions" data-hero-item>
+          <a class="button primary mono" href="#"><span>Explore selected work</span><span>→</span></a>
+          <a class="button mono" href="#"><span>About Carl</span><span>↗</span></a>
+        </div>
+      </article>
+
+      <aside class="system-stage" aria-label="Capability system illustration">
+        <span class="stage-label mono">System / Capability Map</span>
+        <span class="stage-count mono">01—04</span>
+        <div class="orbit">
+          <div class="core mono">Carl<br>Welch</div>
+          <div class="system-node n1 mono">Product<br>Judgment</div>
+          <div class="system-node n2 mono">Software<br>Engineering</div>
+          <div class="system-node n3 mono">Applied AI<br>Systems</div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="proof-strip" aria-label="Capability evidence">
+      <article class="proof"><strong class="mono">01 / Applied AI</strong><p>Agents, retrieval, structured outputs, and human-review boundaries.</p></article>
+      <article class="proof"><strong class="mono">02 / Product Systems</strong><p>From ambiguous workflow to inspectable, testable product behavior.</p></article>
+      <article class="proof"><strong class="mono">03 / Creative Software</strong><p>Interactive tools, audio products, and expressive technical interfaces.</p></article>
+      <article class="proof"><strong class="mono">04 / Evidence</strong><p>Architecture, decisions, status, and validation shown with the work.</p></article>
+    </section>
+  </main>
+  <script type="module">
+    if (!new URLSearchParams(location.search).has("static")) import("./motion-mocks.js")
+  </script>
+</body>
+</html>

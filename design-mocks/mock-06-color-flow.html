@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mock 06 — Section-Aware Color Flow</title>
+  <script>
+    const previewTone = new URLSearchParams(window.location.search).get("preview")
+    if (["red", "orange", "green"].includes(previewTone)) document.documentElement.dataset.preview = previewTone
+  </script>
+  <link rel="stylesheet" href="./mock.css">
+</head>
+<body class="color-flow-page">
+  <div class="tone-stack" aria-hidden="true">
+    <div class="tone-layer" data-tone="red"></div>
+    <div class="tone-layer" data-tone="orange"></div>
+    <div class="tone-layer" data-tone="green"></div>
+  </div>
+
+  <header class="flow-header">
+    <a class="brand" href="#top"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span>Carl Welch</span></a>
+    <nav class="nav" aria-label="Portfolio sections"><a class="active" data-section-link="red" href="#applied-ai">Applied AI</a><a data-section-link="orange" href="#product-systems">Product Systems</a><a data-section-link="green" href="#creative-software">Creative Software</a></nav>
+    <div class="flow-progress mono"><b id="flow-number">01</b> / 03</div>
+  </header>
+
+  <main id="top" class="flow-sections">
+    <section id="applied-ai" class="flow-section" data-tone="red" data-number="01">
+      <article class="flow-copy">
+        <div>
+          <div class="mono" style="color:var(--red)">01 / Applied AI</div>
+          <h2>AI that<span>shows its work.</span></h2>
+          <p>I build AI tools for decisions people shouldn't hand over to a model. Sources stay visible, and people keep the final say.</p>
+        </div>
+        <a class="section-link mono" href="#product-systems"><span>Continue to product systems</span><span>↓</span></a>
+      </article>
+      <aside class="flow-system" aria-label="Applied AI capability diagram">
+        <span class="system-title mono">Capability Map / Applied AI</span><span class="system-index mono">Red / 01</span>
+        <div class="pulse-ring"></div><i class="connector one"></i><i class="connector two"></i><i class="connector three"></i>
+        <div class="flow-node a mono">Evidence</div><div class="flow-node b mono">Agent Tools</div><div class="flow-node core-node dark mono">Reasoning<br>System</div><div class="flow-node c mono">Human Review</div>
+        <div class="flow-note mono"><span>Sources → Tools → Decision → Human approval</span><span>Scroll ↓</span></div>
+      </aside>
+    </section>
+
+    <section id="product-systems" class="flow-section" data-tone="orange" data-number="02">
+      <article class="flow-copy">
+        <div>
+          <div class="mono" style="color:var(--orange)">02 / Product Systems</div>
+          <h2>Make the hard parts<span>visible.</span></h2>
+          <p>Permissions, edge cases, handoffs, and failure states aren't cleanup. They're part of the product.</p>
+        </div>
+        <a class="section-link mono" href="#creative-software"><span>Continue to creative software</span><span>↓</span></a>
+      </article>
+      <aside class="flow-system" aria-label="Product systems capability diagram">
+        <span class="system-title mono">Capability Map / Product Systems</span><span class="system-index mono">Orange / 02</span>
+        <div class="pulse-ring"></div><i class="connector one"></i><i class="connector two"></i><i class="connector three"></i>
+        <div class="flow-node a mono">Problem</div><div class="flow-node b mono">Constraints</div><div class="flow-node core-node dark mono">Working<br>Product</div><div class="flow-node c mono">Validation</div>
+        <div class="flow-note mono"><span>Constraint → Decision → Working state → Validation</span><span>Scroll ↓</span></div>
+      </aside>
+    </section>
+
+    <section id="creative-software" class="flow-section" data-tone="green" data-number="03">
+      <article class="flow-copy">
+        <div>
+          <div class="mono" style="color:var(--green)">03 / Creative Software</div>
+          <h2>Code can have<span>a point of view.</span></h2>
+          <p>I build audio and interactive tools where the experience feels as considered as the system behind it.</p>
+        </div>
+        <a class="section-link mono" href="#top"><span>Return to the beginning</span><span>↑</span></a>
+      </article>
+      <aside class="flow-system" aria-label="Creative software capability diagram">
+        <span class="system-title mono">Capability Map / Creative Software</span><span class="system-index mono">Green / 03</span>
+        <div class="pulse-ring"></div><i class="connector one"></i><i class="connector two"></i><i class="connector three"></i>
+        <div class="flow-node a mono">Interaction</div><div class="flow-node b mono">Audio</div><div class="flow-node core-node dark mono">Creative<br>System</div><div class="flow-node c mono">Experience</div>
+        <div class="flow-note mono"><span>Model → Interaction → Signal path → Experience</span><span>03 / 03</span></div>
+      </aside>
+    </section>
+  </main>
+
+  <script type="module" src="./color-flow.js"></script>
+</body>
+</html>
