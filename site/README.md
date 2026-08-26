@@ -12,6 +12,8 @@ Motion-led portfolio site for Carl Welch. The application is intentionally kept 
 
 The application requires Node.js 22.13 or newer.
 
+Repository changes follow the pull-request, verification, secret-boundary, and deployment-approval rules in [`DELIVERY_POLICY.md`](../DELIVERY_POLICY.md).
+
 ## Docker development and CI
 
 `docker compose up --build` creates a reproducible production-mode container at `http://localhost:3000`. The image builds with Node 22, runs as the unprivileged `node` user, exposes a health check, and contains only the standalone Vinext output. Compose additionally uses a read-only root filesystem, a bounded temporary filesystem, no Linux capabilities, and no-new-privileges.
