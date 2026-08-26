@@ -29,6 +29,47 @@ function requirePageStructure(html, route) {
   if (!/<meta name="description" content="[^"]+"/.test(html)) throw new Error(`${route} is missing a meta description.`);
 }
 
+function getTag(html, tagName, attribute, value) {
+  return (html.match(new RegExp(`<${tagName}[^>]*>`, 'g')) || [])
+    .find((tag) => tag.includes(`${attribute}="${value}"`));
+}
+
+function getTagAttribute(tag, attribute) {
+  return tag?.match(new RegExp(`${attribute}="([^"]*)"`))?.[1];
+}
+
+function requireShareMetadata(html, route) {
+  const canonicalUrl = route === '/' ? baseUrl : new URL(route, `${baseUrl}/`).toString();
+  const canonicalTag = getTag(html, 'link', 'rel', 'canonical');
+  const openGraphUrlTag = getTag(html, 'meta', 'property', 'og:url');
+  const openGraphTitleTag = getTag(html, 'meta', 'property', 'og:title');
+  const openGraphImageTag = getTag(html, 'meta', 'property', 'og:image');
+  const twitterTitleTag = getTag(html, 'meta', 'name', 'twitter:title');
+  const documentTitle = html.match(/<title>([^<]+)<\/title>/)?.[1];
+
+  if (getTagAttribute(canonicalTag, 'href') !== canonicalUrl) {
+    throw new Error(`${route} canonical URL does not match ${canonicalUrl}.`);
+  }
+  if (getTagAttribute(openGraphUrlTag, 'content') !== canonicalUrl) {
+    throw new Error(`${route} Open Graph URL does not match ${canonicalUrl}.`);
+  }
+  if (getTagAttribute(openGraphTitleTag, 'content') !== documentTitle) {
+    throw new Error(`${route} Open Graph title does not match its document title.`);
+  }
+  if (getTagAttribute(twitterTitleTag, 'content') !== documentTitle) {
+    throw new Error(`${route} X card title does not match its document title.`);
+  }
+  const openGraphImageUrl = getTagAttribute(openGraphImageTag, 'content');
+  if (!openGraphImageUrl) {
+    throw new Error(`${route} is missing an Open Graph image.`);
+  }
+  if (new URL(openGraphImageUrl).origin !== baseUrl) {
+    throw new Error(`${route} Open Graph image does not use the configured public origin.`);
+  }
+
+  return openGraphImageUrl;
+}
+
 const pageExpectations = [
   ['/', 'Carl Welch'],
   ['/work', `${githubProjects.length} public repositories`],
@@ -38,16 +79,16 @@ const pageExpectations = [
   ['/contact', 'carlwelchdesign@gmail.com'],
   ...projects.map((project) => [`/work/${project.slug}`, project.name]),
 ];
+const shareImageUrls = new Set();
 
 await Promise.all(pageExpectations.map(async ([route, expectedText]) => {
   const response = await fetchRoute(route);
   const html = await response.text();
   requirePageStructure(html, route);
+  shareImageUrls.add(requireShareMetadata(html, route));
   requireText(html, expectedText, route);
 
   if (route === '/') {
-    requireText(html, `<link rel="canonical" href="${baseUrl}"`, route);
-    requireText(html, 'property="og:image"', route);
     requireText(html, 'href="/contact"', route);
     requireText(html, 'mailto:carlwelchdesign@gmail.com', route);
   }
@@ -57,6 +98,16 @@ await Promise.all(pageExpectations.map(async ([route, expectedText]) => {
   }
 
   if (route.startsWith('/work/')) requireText(html, 'id="evidence"', route);
+}));
+
+await Promise.all([...shareImageUrls].map(async (imageUrl) => {
+  const response = await fetch(imageUrl);
+  if (response.status !== 200) {
+    throw new Error(`${imageUrl} returned ${response.status}; expected 200.`);
+  }
+  if (!response.headers.get('content-type')?.startsWith('image/')) {
+    throw new Error(`${imageUrl} did not return an image content type.`);
+  }
 }));
 
 await fetchRoute('/work/not-a-project', 404);

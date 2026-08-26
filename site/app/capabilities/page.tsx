@@ -5,11 +5,13 @@ import { capabilities } from '../capabilities-data';
 import { ArchitectureFlow, MotionRuntime } from '../motion-elements';
 import type { ProjectTone } from '../portfolio-data';
 import { PageFrame, PageIntro } from '../site-components';
+import { buildPageMetadata } from '../site-metadata';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
   title: 'Capabilities and Evidence',
   description: 'A source-grounded map connecting Carl Welch’s capabilities to specific projects, repositories, experience, and recommendations.',
-};
+  path: '/capabilities',
+});
 
 type ToneStyle = CSSProperties & { '--chapter-tone': string };
 

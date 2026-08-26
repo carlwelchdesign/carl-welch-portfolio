@@ -3,12 +3,14 @@ import { MotionRuntime, Reveal } from '../motion-elements';
 import { recommendationReview } from '../portfolio-data';
 import { recommendations } from '../recommendations-data';
 import { PageFrame, PageIntro } from '../site-components';
+import { buildPageMetadata } from '../site-metadata';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
   title: 'Recommendations',
   description: 'Professional recommendations for Carl Welch.',
+  path: '/recommendations',
   robots: { index: false, follow: true },
-};
+});
 
 export default function RecommendationsPage() {
   return (
