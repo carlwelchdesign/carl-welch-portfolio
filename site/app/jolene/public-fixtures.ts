@@ -31,24 +31,25 @@ export const publicJoleneFixtureScenarios = [
 
 export type PublicJoleneFixtureScenario = (typeof publicJoleneFixtureScenarios)[number];
 
-const fixtureCorpusVersion = 'fixture-2026-08-25.1';
+export const PUBLIC_JOLENE_FIXTURE_CORPUS_VERSION = 'fixture-2026-08-25.1';
+const fixtureCorpusVersion = PUBLIC_JOLENE_FIXTURE_CORPUS_VERSION;
 const fixtureGeneratedAt = '2026-08-25T20:00:00.000Z';
 const fixtureReviewedAt = '2026-08-25T19:30:00.000Z';
 
 const citations: PublicEvidenceCitation[] = [
   {
-    evidenceId: 'fixture:project:job-search-os:approval-boundary',
+    evidenceId: 'portfolio:claim:job-search-os:approval-boundary',
     title: 'Fixture evidence — Job Search OS approval boundary',
-    href: '/work/job-search-os',
+    href: '/work/job-search-os#evidence--portfolio--claim--job-search-os--approval-boundary',
     sourceType: 'portfolio_page',
     strength: 'strong',
     maturity: 'production',
     lastReviewedAt: fixtureReviewedAt,
   },
   {
-    evidenceId: 'fixture:project:flight-tracker-ai:typed-system',
+    evidenceId: 'portfolio:claim:flight-tracker-ai:typed-system',
     title: 'Fixture evidence — Flight Tracker AI typed system',
-    href: '/work/flight-tracker-ai',
+    href: '/work/flight-tracker-ai#evidence--portfolio--claim--flight-tracker-ai--typed-system',
     sourceType: 'portfolio_page',
     strength: 'moderate',
     maturity: 'deployed_demo',

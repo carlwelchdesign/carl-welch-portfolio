@@ -31,3 +31,5 @@ This limitation must not be worked around by making the repository public, weake
 ## Approval gates that remain separate
 
 Repository maintenance and green CI do not authorize deployment. Production origin selection, hosted configuration, recommendation publication, public Jolene activation, analytics, and release remain separately tracked approval gates.
+
+The current owners, evidence requirements, statuses, and exact dependencies for those gates are maintained in [`RELEASE_GATES.md`](RELEASE_GATES.md).

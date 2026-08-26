@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { mkdtemp, rm } from 'node:fs/promises';
+import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -8,9 +8,12 @@ import ts from 'typescript';
 const sourceRoot = resolve(process.cwd(), 'app/jolene');
 const sourceFiles = [
   'public-contract.ts',
+  'public-contract-error.ts',
+  'public-compatibility.ts',
   'public-adapter.ts',
   'public-validation.ts',
   'public-fixtures.ts',
+  'public-evidence-navigation-core.ts',
 ].map((file) => resolve(sourceRoot, file));
 const outputRoot = await mkdtemp(join(tmpdir(), 'portfolio-jolene-contract-'));
 
@@ -49,12 +52,18 @@ try {
   const adapterModule = await import(pathToFileURL(resolve(outputRoot, 'public-adapter.js')).href);
   const validation = await import(pathToFileURL(resolve(outputRoot, 'public-validation.js')).href);
   const fixtures = await import(pathToFileURL(resolve(outputRoot, 'public-fixtures.js')).href);
+  const navigation = await import(pathToFileURL(resolve(outputRoot, 'public-evidence-navigation-core.js')).href);
+  const compatibility = await import(pathToFileURL(resolve(outputRoot, 'public-compatibility.js')).href);
+  const openApi = JSON.parse(await readFile(resolve(process.cwd(), 'contracts/public-jolene-v1.openapi.json'), 'utf8'));
 
   const success = fixtures.createFixturePublicJoleneAdapter('success');
   assert.equal(contract.PUBLIC_JOLENE_ENDPOINTS.manifest, '/v1/public-evidence/manifest');
   assert.equal(contract.PUBLIC_JOLENE_ENDPOINTS.answer, '/v1/portfolio/answer');
   assert.equal(contract.PUBLIC_JOLENE_ENDPOINTS.jobFit, '/v1/portfolio/job-fit');
   assert.equal(contract.PUBLIC_JOLENE_ENDPOINTS.contactIntent, '/v1/portfolio/contact-intent');
+  assert.equal(openApi.openapi, '3.1.0');
+  assert.equal(openApi.info.version, contract.PUBLIC_JOLENE_SCHEMA_VERSION);
+  assert.deepEqual(Object.keys(openApi.paths).sort(), Object.values(contract.PUBLIC_JOLENE_ENDPOINTS).sort());
   const manifest = await success.getManifest();
   assert.equal(manifest.schemaVersion, contract.PUBLIC_JOLENE_SCHEMA_VERSION);
   assert.match(manifest.corpusHash, /^sha256:[a-f0-9]{64}$/);
@@ -64,6 +73,78 @@ try {
   assert.ok(answer.claims.length > 0);
   assert.ok(answer.citations.length > 0);
   assert.equal(answer.corpusVersion, manifest.corpusVersion);
+  assert.ok(answer.citations.every((citation) => /^\/work\/[a-z0-9-]+#evidence--portfolio--claim--/.test(citation.href)));
+  compatibility.validateResponseAgainstManifest(answer, manifest);
+
+  const additiveAnswer = structuredClone(answer);
+  additiveAnswer.schemaVersion = '1.1.0';
+  additiveAnswer.futureOptionalField = { safelyIgnored: true };
+  assert.equal(validation.parsePortfolioAnswerResponse(additiveAnswer).schemaVersion, '1.1.0');
+  assert.throws(
+    () => validation.parsePortfolioAnswerResponse({ ...answer, answer: undefined }),
+    (error) => error instanceof validation.PublicJoleneContractError && error.path === 'answerResponse.answer',
+  );
+  assert.throws(
+    () => validation.parsePortfolioAnswerResponse({ ...answer, schemaVersion: '2.0.0' }),
+    (error) => error instanceof validation.PublicJoleneContractError && error.path === 'answerResponse.schemaVersion',
+  );
+  assert.throws(
+    () => compatibility.validateResponseAgainstManifest({ ...answer, corpusVersion: 'stale-corpus' }, manifest),
+    (error) => error instanceof validation.PublicJoleneContractError && error.path === 'response.corpusVersion',
+  );
+  assert.throws(
+    () => compatibility.validateResponseAgainstManifest(answer, {
+      ...manifest,
+      revokedEvidenceIds: [answer.citations[0].evidenceId],
+    }),
+    (error) => error instanceof validation.PublicJoleneContractError && /revoked evidence/.test(error.message),
+  );
+
+  const navigationTarget = {
+    evidenceId: answer.citations[0].evidenceId,
+    href: answer.citations[0].href,
+    anchorId: navigation.publicEvidenceAnchorId(answer.citations[0].evidenceId),
+    label: answer.citations[0].title,
+    status: 'available',
+  };
+  const reviewTarget = {
+    ...navigationTarget,
+    evidenceId: 'portfolio:source:recommendation:review-candidate',
+    status: 'review_required',
+  };
+  const navigationTargets = new Map([
+    [navigationTarget.evidenceId, navigationTarget],
+    [reviewTarget.evidenceId, reviewTarget],
+  ]);
+  const supersededEvidence = new Map([['fixture:legacy:evidence', navigationTarget.evidenceId]]);
+  assert.equal(
+    navigation.resolveEvidenceTarget(navigationTarget.evidenceId, navigationTargets, supersededEvidence).status,
+    'available',
+  );
+  assert.equal(
+    navigation.resolveEvidenceTarget(reviewTarget.evidenceId, navigationTargets, supersededEvidence).status,
+    'review_required',
+  );
+  assert.equal(
+    navigation.resolveEvidenceTarget('fixture:legacy:evidence', navigationTargets, supersededEvidence).status,
+    'superseded',
+  );
+  assert.equal(
+    navigation.resolveEvidenceTarget('portfolio:claim:missing:record', navigationTargets, supersededEvidence).status,
+    'unavailable',
+  );
+  assert.equal(
+    navigation.resolveEvidenceTarget(navigationTarget.evidenceId, navigationTargets, supersededEvidence, {
+      revokedEvidenceIds: [navigationTarget.evidenceId],
+    }).status,
+    'revoked',
+  );
+  assert.equal(
+    navigation.resolveEvidenceTarget(navigationTarget.evidenceId, navigationTargets, supersededEvidence, {
+      corpusVersion: 'old-corpus', expectedCorpusVersion: answer.corpusVersion,
+    }).status,
+    'version_mismatch',
+  );
 
   const partialAnswer = await fixtures
     .createFixturePublicJoleneAdapter('partial_evidence')
@@ -93,6 +174,9 @@ try {
   });
   assert.equal(contact.status, 'pending_review');
   assert.match(contact.message, /No outbound action was taken/);
+  assert.ok(!JSON.stringify(contact).includes('visitor@example.com'));
+  assert.ok(!JSON.stringify(contact).includes('Fixture visitor'));
+  assert.ok(!JSON.stringify(contact).includes('I would like Carl to review this contact request.'));
 
   await assert.rejects(
     success.answer({ question: '' }),
@@ -146,7 +230,7 @@ try {
     (error) => error instanceof adapterModule.PublicJoleneAdapterError && error.code === 'version_mismatch',
   );
 
-  console.log('Public Jolene contract checks passed: schema, fixtures, validation, evidence references, and failure states.');
+  console.log('Public Jolene contract checks passed: OpenAPI, additive compatibility, fixtures, corpus/revocation gates, evidence references, and failure states.');
 } finally {
   await rm(outputRoot, { recursive: true, force: true });
 }

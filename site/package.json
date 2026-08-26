@@ -11,12 +11,18 @@
     "build": "vinext build",
     "start": "vinext start",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
+    "check:metadata": "node scripts/check-metadata.mjs",
     "check:content": "node scripts/check-content.mjs",
     "check:github": "node scripts/check-github-archive.mjs",
+    "check:github-sync": "node scripts/check-github-content-sync.mjs",
+    "sync:github": "node scripts/sync-github-content.mjs",
     "check:jolene-contract": "node scripts/check-jolene-contract.mjs",
+    "check:jolene-job-fit": "node scripts/check-jolene-job-fit.mjs",
+    "check:jolene-bff": "node scripts/check-jolene-bff.mjs",
+    "check:analytics": "node scripts/check-analytics.mjs",
     "check:container": "node scripts/check-container.mjs",
     "check:routes": "node scripts/check-routes.mjs",
-    "check": "pnpm lint && pnpm check:content && pnpm check:jolene-contract && pnpm build"
+    "check": "pnpm lint && pnpm check:metadata && pnpm check:content && pnpm check:github-sync && pnpm check:jolene-contract && pnpm check:jolene-job-fit && pnpm check:jolene-bff && pnpm check:analytics && pnpm build"
   },
   "dependencies": {
     "@vitejs/plugin-react": "6.0.2",

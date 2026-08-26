@@ -2,10 +2,16 @@ import { resolve } from 'node:path';
 import { loadTypescriptData } from './load-typescript-data.mjs';
 
 const baseUrl = (process.env.PORTFOLIO_BASE_URL || 'http://localhost:3000').replace(/\/$/, '');
-const [{ projects }, { githubProjects }] = await Promise.all([
+const [{ projects, experience }, { githubProjects }, { capabilities }, { recommendations }] = await Promise.all([
   loadTypescriptData(resolve(process.cwd(), 'app/portfolio-data.ts')),
   loadTypescriptData(resolve(process.cwd(), 'app/github-projects.ts')),
+  loadTypescriptData(resolve(process.cwd(), 'app/capabilities-data.ts')),
+  loadTypescriptData(resolve(process.cwd(), 'app/recommendations-data.ts')),
 ]);
+
+function evidenceAnchorId(evidenceId) {
+  return `evidence--${evidenceId.replaceAll(':', '--')}`;
+}
 
 async function fetchRoute(path, expectedStatus = 200) {
   const response = await fetch(`${baseUrl}${path}`);
@@ -29,6 +35,47 @@ function requirePageStructure(html, route) {
   if (!/<meta name="description" content="[^"]+"/.test(html)) throw new Error(`${route} is missing a meta description.`);
 }
 
+function getTag(html, tagName, attribute, value) {
+  return (html.match(new RegExp(`<${tagName}[^>]*>`, 'g')) || [])
+    .find((tag) => tag.includes(`${attribute}="${value}"`));
+}
+
+function getTagAttribute(tag, attribute) {
+  return tag?.match(new RegExp(`${attribute}="([^"]*)"`))?.[1];
+}
+
+function requireShareMetadata(html, route) {
+  const canonicalUrl = route === '/' ? baseUrl : new URL(route, `${baseUrl}/`).toString();
+  const canonicalTag = getTag(html, 'link', 'rel', 'canonical');
+  const openGraphUrlTag = getTag(html, 'meta', 'property', 'og:url');
+  const openGraphTitleTag = getTag(html, 'meta', 'property', 'og:title');
+  const openGraphImageTag = getTag(html, 'meta', 'property', 'og:image');
+  const twitterTitleTag = getTag(html, 'meta', 'name', 'twitter:title');
+  const documentTitle = html.match(/<title>([^<]+)<\/title>/)?.[1];
+
+  if (getTagAttribute(canonicalTag, 'href') !== canonicalUrl) {
+    throw new Error(`${route} canonical URL does not match ${canonicalUrl}.`);
+  }
+  if (getTagAttribute(openGraphUrlTag, 'content') !== canonicalUrl) {
+    throw new Error(`${route} Open Graph URL does not match ${canonicalUrl}.`);
+  }
+  if (getTagAttribute(openGraphTitleTag, 'content') !== documentTitle) {
+    throw new Error(`${route} Open Graph title does not match its document title.`);
+  }
+  if (getTagAttribute(twitterTitleTag, 'content') !== documentTitle) {
+    throw new Error(`${route} X card title does not match its document title.`);
+  }
+  const openGraphImageUrl = getTagAttribute(openGraphImageTag, 'content');
+  if (!openGraphImageUrl) {
+    throw new Error(`${route} is missing an Open Graph image.`);
+  }
+  if (new URL(openGraphImageUrl).origin !== baseUrl) {
+    throw new Error(`${route} Open Graph image does not use the configured public origin.`);
+  }
+
+  return openGraphImageUrl;
+}
+
 const pageExpectations = [
   ['/', 'Carl Welch'],
   ['/work', `${githubProjects.length} public repositories`],
@@ -38,22 +85,53 @@ const pageExpectations = [
   ['/contact', 'carlwelchdesign@gmail.com'],
   ...projects.map((project) => [`/work/${project.slug}`, project.name]),
 ];
+const shareImageUrls = new Set();
+const routeEvidenceIds = new Map([
+  ['/experience', experience.map((role) => role.sourceId)],
+  ['/capabilities', capabilities.flatMap((capability) => capability.evidence.map((evidence) => evidence.id))],
+  ['/recommendations', recommendations.map((recommendation) => recommendation.sourceId)],
+  ...projects.map((project) => [
+    `/work/${project.slug}`,
+    [
+      project.sourceId,
+      ...project.evidence.map((evidence) => evidence.id),
+      `portfolio:limitation:project:${project.slug}`,
+    ],
+  ]),
+]);
 
 await Promise.all(pageExpectations.map(async ([route, expectedText]) => {
   const response = await fetchRoute(route);
   const html = await response.text();
   requirePageStructure(html, route);
+  shareImageUrls.add(requireShareMetadata(html, route));
   requireText(html, expectedText, route);
+  for (const evidenceId of routeEvidenceIds.get(route) || []) {
+    requireText(html, `id="${evidenceAnchorId(evidenceId)}"`, route);
+  }
+  if (route === '/experience') {
+    for (const role of experience) requireText(html, `id="${role.id}"`, route);
+  }
 
   if (route === '/') {
-    requireText(html, `<link rel="canonical" href="${baseUrl}"`, route);
-    requireText(html, 'property="og:image"', route);
     requireText(html, 'href="/contact"', route);
     requireText(html, 'mailto:carlwelchdesign@gmail.com', route);
   }
 
   if (route === '/recommendations' && !/<meta name="robots" content="[^"]*noindex/.test(html)) {
     throw new Error('/recommendations must remain excluded from search indexing until publication approval.');
+  }
+
+  if (route.startsWith('/work/')) requireText(html, 'id="evidence"', route);
+}));
+
+await Promise.all([...shareImageUrls].map(async (imageUrl) => {
+  const response = await fetch(imageUrl);
+  if (response.status !== 200) {
+    throw new Error(`${imageUrl} returned ${response.status}; expected 200.`);
+  }
+  if (!response.headers.get('content-type')?.startsWith('image/')) {
+    throw new Error(`${imageUrl} did not return an image content type.`);
   }
 }));
 
@@ -82,5 +160,5 @@ if (!resume.headers.get('content-type')?.startsWith('application/pdf')) {
 }
 
 console.log(
-  `Route checks passed: ${pageExpectations.length} pages, ${githubProjects.length} archive images, metadata, indexing gates, sitemap, and résumé.`,
+  `Route checks passed: ${pageExpectations.length} pages, ${githubProjects.length} archive images, evidence anchors, metadata, indexing gates, sitemap, and résumé.`,
 );

@@ -1,0 +1,172 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Public Jolene Portfolio API",
+    "version": "1.0.0",
+    "description": "Proposed consumer contract only. Presence of this document does not mean these endpoints are deployed."
+  },
+  "paths": {
+    "/v1/public-evidence/manifest": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Reviewed public evidence manifest",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/PublicEvidenceManifest" } } }
+          }
+        }
+      }
+    },
+    "/v1/portfolio/answer": {
+      "post": {
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/PortfolioAnswerRequest" } } } },
+        "responses": { "200": { "description": "Evidence-grounded answer", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/PortfolioAnswerResponse" } } } } }
+      }
+    },
+    "/v1/portfolio/job-fit": {
+      "post": {
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/JobFitRequest" } } } },
+        "responses": { "200": { "description": "Requirement-by-requirement comparison", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/JobFitResponse" } } } } }
+      }
+    },
+    "/v1/portfolio/contact-intent": {
+      "post": {
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ContactIntentRequest" } } } },
+        "responses": { "200": { "description": "Reviewable contact handoff", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ContactIntentResponse" } } } } }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "SchemaVersion": { "type": "string", "pattern": "^1\\.\\d+\\.\\d+$" },
+      "SessionToken": { "type": "string", "minLength": 1, "maxLength": 256 },
+      "EvidenceId": { "type": "string", "minLength": 1 },
+      "EvidenceStrength": { "type": "string", "enum": ["strong", "moderate", "limited"] },
+      "ProjectMaturity": { "type": "string", "enum": ["not_applicable", "planning", "prototype", "development", "pre_release", "deployed_demo", "production", "released_product"] },
+      "PublicEvidenceCitation": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": ["evidenceId", "title", "href", "sourceType", "strength", "maturity", "lastReviewedAt"],
+        "properties": {
+          "evidenceId": { "$ref": "#/components/schemas/EvidenceId" },
+          "title": { "type": "string", "minLength": 1 },
+          "href": { "type": "string", "minLength": 1 },
+          "sourceType": { "type": "string", "enum": ["resume", "employer_history", "recommendation", "project", "repository", "release_artifact", "portfolio_page", "confirmed_fact"] },
+          "strength": { "$ref": "#/components/schemas/EvidenceStrength" },
+          "maturity": { "$ref": "#/components/schemas/ProjectMaturity" },
+          "lastReviewedAt": { "type": "string", "format": "date-time" }
+        }
+      },
+      "PublicClaim": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": ["claimId", "text", "evidenceIds", "evidenceStrength", "maturity", "limitations"],
+        "properties": {
+          "claimId": { "type": "string", "minLength": 1 },
+          "text": { "type": "string", "minLength": 1 },
+          "evidenceIds": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/components/schemas/EvidenceId" } },
+          "evidenceStrength": { "$ref": "#/components/schemas/EvidenceStrength" },
+          "maturity": { "$ref": "#/components/schemas/ProjectMaturity" },
+          "limitations": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+        }
+      },
+      "PublicEvidenceManifest": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": ["schemaVersion", "corpusVersion", "corpusHash", "generatedAt", "reviewedAt", "evidenceCount", "revokedEvidenceIds"],
+        "properties": {
+          "schemaVersion": { "$ref": "#/components/schemas/SchemaVersion" },
+          "corpusVersion": { "type": "string", "minLength": 1 },
+          "corpusHash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+          "generatedAt": { "type": "string", "format": "date-time" },
+          "reviewedAt": { "type": "string", "format": "date-time" },
+          "evidenceCount": { "type": "integer", "minimum": 0 },
+          "revokedEvidenceIds": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/components/schemas/EvidenceId" } }
+        }
+      },
+      "PortfolioAnswerRequest": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": ["question"],
+        "properties": {
+          "question": { "type": "string", "minLength": 1, "maxLength": 800 },
+          "sessionToken": { "$ref": "#/components/schemas/SessionToken" }
+        }
+      },
+      "PortfolioAnswerResponse": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": ["schemaVersion", "answer", "claims", "citations", "limitations", "suggestedFollowUpQuestions", "corpusVersion"],
+        "properties": {
+          "schemaVersion": { "$ref": "#/components/schemas/SchemaVersion" },
+          "answer": { "type": "string", "minLength": 1 },
+          "claims": { "type": "array", "items": { "$ref": "#/components/schemas/PublicClaim" } },
+          "citations": { "type": "array", "items": { "$ref": "#/components/schemas/PublicEvidenceCitation" } },
+          "limitations": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+          "suggestedFollowUpQuestions": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+          "corpusVersion": { "type": "string", "minLength": 1 },
+          "sessionToken": { "$ref": "#/components/schemas/SessionToken" }
+        }
+      },
+      "JobFitRequest": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": ["jobDescription"],
+        "properties": {
+          "jobDescription": { "type": "string", "minLength": 1, "maxLength": 12000 },
+          "sessionToken": { "$ref": "#/components/schemas/SessionToken" }
+        }
+      },
+      "JobRequirementResult": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": ["requirementId", "requirement", "assessment", "explanation", "evidenceIds", "limitations"],
+        "properties": {
+          "requirementId": { "type": "string", "minLength": 1 },
+          "requirement": { "type": "string", "minLength": 1 },
+          "assessment": { "type": "string", "enum": ["direct", "adjacent", "missing", "unknown"] },
+          "explanation": { "type": "string", "minLength": 1 },
+          "evidenceIds": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/components/schemas/EvidenceId" } },
+          "limitations": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+        }
+      },
+      "JobFitResponse": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": ["schemaVersion", "requirements", "citations", "caveats", "suggestedFollowUpQuestions", "corpusVersion"],
+        "properties": {
+          "schemaVersion": { "$ref": "#/components/schemas/SchemaVersion" },
+          "requirements": { "type": "array", "items": { "$ref": "#/components/schemas/JobRequirementResult" } },
+          "citations": { "type": "array", "items": { "$ref": "#/components/schemas/PublicEvidenceCitation" } },
+          "caveats": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+          "suggestedFollowUpQuestions": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+          "corpusVersion": { "type": "string", "minLength": 1 },
+          "sessionToken": { "$ref": "#/components/schemas/SessionToken" }
+        }
+      },
+      "ContactIntentRequest": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": ["name", "email", "message", "consent"],
+        "properties": {
+          "name": { "type": "string", "minLength": 1, "maxLength": 100 },
+          "email": { "type": "string", "format": "email", "maxLength": 254 },
+          "organization": { "type": "string", "minLength": 1, "maxLength": 120 },
+          "message": { "type": "string", "minLength": 1, "maxLength": 2000 },
+          "consent": { "const": true }
+        }
+      },
+      "ContactIntentResponse": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": ["schemaVersion", "intentId", "status", "submittedAt", "message"],
+        "properties": {
+          "schemaVersion": { "$ref": "#/components/schemas/SchemaVersion" },
+          "intentId": { "type": "string", "minLength": 1 },
+          "status": { "const": "pending_review" },
+          "submittedAt": { "type": "string", "format": "date-time" },
+          "message": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  }
+}

@@ -4,6 +4,8 @@ Status: proposed topology for review; no public deployment or live portfolio int
 
 Owner: portfolio runtime and browser experience — portfolio workstream; public evidence export and delegate — Jolene workstream; production enablement — Carl Welch.
 
+Current implementation truth: the portfolio now contains a disabled-by-default same-origin BFF, strict contract fixtures, job-fit/contact fixture flows, security controls, and sanitized operational events. The proposed public evidence export and isolated public delegate endpoints are not verified live. The portfolio must continue using deterministic fixtures until `JOL-CAREER-004` and `JOL-CAREER-005` are implemented and approved.
+
 ## Decision
 
 The portfolio and public Jolene delegate remain separate deployable systems. The browser talks only to the portfolio origin. A same-origin portfolio backend-for-frontend (BFF) validates and minimizes requests before calling the public delegate over a private service-to-service route. The delegate reads only a versioned, immutable export containing active `public_approved` evidence.
@@ -60,9 +62,9 @@ flowchart TB
 | Component | Responsibility | State | Network exposure |
 | --- | --- | --- | --- |
 | Portfolio application | Server-rendered portfolio, static assets, fixture UI | Implemented locally and in Docker | Public only after release approval |
-| Portfolio BFF | Same-origin validation, redaction, admission, timeout, response normalization, live/fixture switch | Planned | Public same-origin route; private egress to delegate |
-| Public Jolene delegate | Evidence-grounded answer and job-fit behavior against the public artifact | Loopback reference slices implemented; production service incomplete | Private service network only |
-| Public evidence artifact | Immutable, versioned, content-minimized reviewed evidence | Export implemented; currently valid and empty until human public approval | Readable only by delegate and authorized release tooling |
+| Portfolio BFF | Same-origin validation, redaction, admission, timeout, response normalization, live/fixture switch | Implemented and disabled by default; no live upstream authorized | Public same-origin route; private egress to delegate |
+| Public Jolene delegate | Evidence-grounded answer and job-fit behavior against the public artifact | Proposed dependency; no public endpoint verified live | Private service network only |
+| Public evidence artifact | Immutable, versioned, content-minimized reviewed evidence | Proposed dependency; no consumable public export verified live | Readable only by delegate and authorized release tooling |
 | Contact review queue | Durable minimal contact intent awaiting Carl's review | Planned | No direct browser access |
 | Private Jolene | Private agent, career registry, retrieval, memory, Slack, Obsidian access | Separate private system | Never reachable from the public plane |
 
@@ -166,7 +168,7 @@ A separate graph database is not currently justified. Stable evidence IDs and ex
 ## Environment and release sequence
 
 1. **Local fixture:** portfolio adapter uses deterministic fixtures; no Jolene process is required.
-2. **Local contract integration:** BFF calls the loopback public delegate against a reviewed test artifact. No public bind or contact delivery.
+2. **Local contract integration:** after the delegate and export dependencies exist, the BFF calls a loopback public delegate against a reviewed test artifact. No public bind or contact delivery.
 3. **Private preview:** separately deployed preview services, synthetic or explicitly approved public evidence, isolated budgets, and no indexing.
 4. **Production dark launch:** deploy with both kill switches off and no visitor route enabled; verify health, telemetry, limits, and rollback.
 5. **Controlled enablement:** enable for an approved audience only after contract, grounding, privacy, abuse, accessibility, performance, cost, and incident-response gates pass.

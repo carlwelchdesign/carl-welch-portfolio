@@ -5,11 +5,14 @@ import { capabilities } from '../capabilities-data';
 import { ArchitectureFlow, MotionRuntime } from '../motion-elements';
 import type { ProjectTone } from '../portfolio-data';
 import { PageFrame, PageIntro } from '../site-components';
+import { buildPageMetadata } from '../site-metadata';
+import { publicEvidenceAnchorId } from '../jolene/public-evidence-navigation-core';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
   title: 'Capabilities and Evidence',
   description: 'A source-grounded map connecting Carl Welch’s capabilities to specific projects, repositories, experience, and recommendations.',
-};
+  path: '/capabilities',
+});
 
 type ToneStyle = CSSProperties & { '--chapter-tone': string };
 
@@ -62,9 +65,23 @@ export default function CapabilitiesPage() {
                             </>
                           );
                           return evidence.href.startsWith('http') ? (
-                            <a key={evidence.label} href={evidence.href} className="evidence-link">{content}</a>
+                            <a
+                              key={evidence.id}
+                              id={publicEvidenceAnchorId(evidence.id)}
+                              href={evidence.href}
+                              className="evidence-link"
+                              data-evidence-target
+                              aria-label={`${capability.name}: ${evidence.label}`}
+                            >{content}</a>
                           ) : (
-                            <Link key={evidence.label} href={evidence.href} className="evidence-link">{content}</Link>
+                            <Link
+                              key={evidence.id}
+                              id={publicEvidenceAnchorId(evidence.id)}
+                              href={evidence.href}
+                              className="evidence-link"
+                              data-evidence-target
+                              aria-label={`${capability.name}: ${evidence.label}`}
+                            >{content}</Link>
                           );
                         })}
                       </ArchitectureFlow>

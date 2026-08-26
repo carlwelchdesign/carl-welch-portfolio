@@ -1,6 +1,5 @@
 import {
   PUBLIC_JOLENE_LIMITS,
-  PUBLIC_JOLENE_SCHEMA_VERSION,
   evidenceStrengths,
   jobRequirementAssessments,
   projectMaturities,
@@ -19,19 +18,14 @@ import {
   type PublicEvidenceCitation,
   type PublicEvidenceManifest,
   type PublicEvidenceSourceType,
+  type PublicJoleneSchemaVersion,
 } from './public-contract.js';
+import { requireCompatibleSchemaVersion } from './public-compatibility.js';
+import { PublicJoleneContractError } from './public-contract-error.js';
+
+export { PublicJoleneContractError } from './public-contract-error.js';
 
 type JsonRecord = Record<string, unknown>;
-
-export class PublicJoleneContractError extends Error {
-  readonly path: string;
-
-  constructor(path: string, message: string) {
-    super(`${path}: ${message}`);
-    this.name = 'PublicJoleneContractError';
-    this.path = path;
-  }
-}
 
 function readRecord(value: unknown, path: string): JsonRecord {
   if (typeof value !== 'object' || value === null || Array.isArray(value)) {
@@ -84,11 +78,9 @@ function requireUnique(values: readonly string[], path: string): void {
   }
 }
 
-function readSchemaVersion(value: unknown, path: string): typeof PUBLIC_JOLENE_SCHEMA_VERSION {
-  if (value !== PUBLIC_JOLENE_SCHEMA_VERSION) {
-    throw new PublicJoleneContractError(path, `requires schema version ${PUBLIC_JOLENE_SCHEMA_VERSION}`);
-  }
-  return PUBLIC_JOLENE_SCHEMA_VERSION;
+function readSchemaVersion(value: unknown, path: string): PublicJoleneSchemaVersion {
+  requireCompatibleSchemaVersion(value, path);
+  return value as PublicJoleneSchemaVersion;
 }
 
 function parseCitation(value: unknown, path: string): PublicEvidenceCitation {

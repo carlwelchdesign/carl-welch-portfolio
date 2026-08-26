@@ -1,6 +1,5 @@
 import type { MetadataRoute } from 'next';
-
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+import { siteUrl } from './site-metadata';
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -9,6 +8,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: '/recommendations',
     },
-    sitemap: `${baseUrl}/sitemap.xml`,
+    sitemap: `${siteUrl.origin}/sitemap.xml`,
   };
 }
