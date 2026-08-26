@@ -4,6 +4,7 @@ import { useState, type FormEvent } from 'react';
 import type { PublicJoleneAdapter } from './public-adapter';
 import { PUBLIC_JOLENE_LIMITS, type ContactIntentRequest } from './public-contract';
 import { PublicJoleneContractError, parseContactIntentRequest } from './public-validation';
+import { trackAnalytics } from '../analytics/analytics-client';
 
 type ContactDraft = Omit<ContactIntentRequest, 'consent'>;
 type ContactStep = 'edit' | 'review' | 'submitting' | 'submitted';
@@ -71,12 +72,14 @@ export function JoleneContactIntent({
 
     try {
       const response = await adapter.submitContactIntent({ ...reviewedDraft, consent: true });
+      trackAnalytics('jolene_response', { operation: 'contact_intent', state: 'success' });
       setReceipt({ intentId: response.intentId, message: response.message });
       setDraft(emptyDraft);
       setReviewedDraft(null);
       setConsent(false);
       setStep('submitted');
     } catch {
+      trackAnalytics('jolene_response', { operation: 'contact_intent', state: 'error' });
       setError('The contact request was not submitted. No outbound action was taken.');
       setStep('review');
     }

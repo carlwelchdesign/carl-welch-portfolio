@@ -12,6 +12,7 @@ import { JoleneEvidence, type JoleneAnswerEvidence } from './jolene-evidence';
 import { PublicJoleneContractError } from './public-validation';
 import { JoleneContactIntent } from './jolene-contact-intent';
 import { JoleneJobFit } from './jolene-job-fit';
+import { trackAnalytics } from '../analytics/analytics-client';
 
 type ChatMessage = {
   id: string;
@@ -111,6 +112,10 @@ export function JoleneFixtureChat({ scenario: scenarioValue }: { scenario: strin
 
     try {
       const response = await adapter.answer({ question: normalizedQuestion });
+      trackAnalytics('jolene_response', {
+        operation: 'answer',
+        state: response.claims.length > 0 ? 'success' : 'no_evidence',
+      });
       setMessages((current) => [
         ...current,
         {
@@ -130,6 +135,10 @@ export function JoleneFixtureChat({ scenario: scenarioValue }: { scenario: strin
         },
       ]);
     } catch (error) {
+      trackAnalytics('jolene_response', {
+        operation: 'answer',
+        state: error instanceof PublicJoleneAdapterError && error.code === 'unavailable' ? 'unavailable' : 'error',
+      });
       setMessages((current) => [
         ...current,
         {
@@ -250,7 +259,13 @@ export function JoleneFixtureChat({ scenario: scenarioValue }: { scenario: strin
         type="button"
         aria-expanded={open}
         aria-controls="jolene-fixture-panel"
-        onClick={() => (open ? closePanel() : setOpen(true))}
+        onClick={() => {
+          if (open) closePanel();
+          else {
+            trackAnalytics('jolene_open', { source: 'launcher' });
+            setOpen(true);
+          }
+        }}
         data-jolene-fixture-launcher
       >
         <span className="jolene-launcher-mark" aria-hidden="true">J</span>
