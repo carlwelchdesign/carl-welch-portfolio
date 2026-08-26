@@ -27,4 +27,9 @@ const resume = await requireResponse('/carl-welch-resume.pdf', /application\/pdf
 const resumeSignature = Buffer.from(await resume.arrayBuffer()).subarray(0, 4).toString('ascii');
 assert.equal(resumeSignature, '%PDF', 'The résumé response is not a valid PDF.');
 
+const disabledJolene = await fetch(new URL('/api/jolene/manifest', baseUrl));
+assert.equal(disabledJolene.status, 503, 'The default container must keep the public Jolene BFF disabled.');
+assert.deepEqual(await disabledJolene.json(), { error: 'service_disabled' });
+assert.equal(disabledJolene.headers.get('cache-control'), 'no-store');
+
 console.log(`Container smoke checks passed at ${baseUrl.origin}: home, manifest, résumé, and Jolene production gate.`);
