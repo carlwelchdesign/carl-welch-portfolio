@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
+import { JoleneShell } from './jolene/jolene-shell';
 import './globals.css';
 
 const siteUrl = new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000');
@@ -66,7 +67,10 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
-      <body>{children}</body>
+      <body>
+        {children}
+        <JoleneShell />
+      </body>
     </html>
   );
 }

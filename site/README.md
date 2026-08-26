@@ -27,4 +27,6 @@ The files under `app/jolene/` define a proposed public v1 contract, runtime vali
 
 The portfolio must never call Jolene's private API, mount or read Obsidian, access private durable memory, or invoke private MCP tools. A future live adapter may consume only the reviewed, content-minimized public evidence export and public delegate created by `JOL-CAREER-004` and `JOL-CAREER-005`. Until those dependencies pass their own security and evaluation gates, UI work must remain in fixture mode.
 
+The bottom-right development shell is disabled by default. Set `NEXT_PUBLIC_JOLENE_MODE=fixture` locally to enable it and choose a deterministic state with `NEXT_PUBLIC_JOLENE_FIXTURE_SCENARIO`: `success`, `partial_evidence`, `no_evidence`, `unavailable`, `rate_limited`, or `version_mismatch`. Do not enable fixture mode for the first public portfolio release.
+
 Set `NEXT_PUBLIC_SITE_URL` to the approved production origin before publication.
