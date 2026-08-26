@@ -11,6 +11,7 @@ const sourceFiles = [
   'public-adapter.ts',
   'public-validation.ts',
   'public-fixtures.ts',
+  'public-evidence-navigation-core.ts',
 ].map((file) => resolve(sourceRoot, file));
 const outputRoot = await mkdtemp(join(tmpdir(), 'portfolio-jolene-contract-'));
 
@@ -49,6 +50,7 @@ try {
   const adapterModule = await import(pathToFileURL(resolve(outputRoot, 'public-adapter.js')).href);
   const validation = await import(pathToFileURL(resolve(outputRoot, 'public-validation.js')).href);
   const fixtures = await import(pathToFileURL(resolve(outputRoot, 'public-fixtures.js')).href);
+  const navigation = await import(pathToFileURL(resolve(outputRoot, 'public-evidence-navigation-core.js')).href);
 
   const success = fixtures.createFixturePublicJoleneAdapter('success');
   assert.equal(contract.PUBLIC_JOLENE_ENDPOINTS.manifest, '/v1/public-evidence/manifest');
@@ -64,7 +66,53 @@ try {
   assert.ok(answer.claims.length > 0);
   assert.ok(answer.citations.length > 0);
   assert.equal(answer.corpusVersion, manifest.corpusVersion);
-  assert.ok(answer.citations.every((citation) => /^\/work\/[a-z0-9-]+#evidence$/.test(citation.href)));
+  assert.ok(answer.citations.every((citation) => /^\/work\/[a-z0-9-]+#evidence--portfolio--claim--/.test(citation.href)));
+
+  const navigationTarget = {
+    evidenceId: answer.citations[0].evidenceId,
+    href: answer.citations[0].href,
+    anchorId: navigation.publicEvidenceAnchorId(answer.citations[0].evidenceId),
+    label: answer.citations[0].title,
+    status: 'available',
+  };
+  const reviewTarget = {
+    ...navigationTarget,
+    evidenceId: 'portfolio:source:recommendation:review-candidate',
+    status: 'review_required',
+  };
+  const navigationTargets = new Map([
+    [navigationTarget.evidenceId, navigationTarget],
+    [reviewTarget.evidenceId, reviewTarget],
+  ]);
+  const supersededEvidence = new Map([['fixture:legacy:evidence', navigationTarget.evidenceId]]);
+  assert.equal(
+    navigation.resolveEvidenceTarget(navigationTarget.evidenceId, navigationTargets, supersededEvidence).status,
+    'available',
+  );
+  assert.equal(
+    navigation.resolveEvidenceTarget(reviewTarget.evidenceId, navigationTargets, supersededEvidence).status,
+    'review_required',
+  );
+  assert.equal(
+    navigation.resolveEvidenceTarget('fixture:legacy:evidence', navigationTargets, supersededEvidence).status,
+    'superseded',
+  );
+  assert.equal(
+    navigation.resolveEvidenceTarget('portfolio:claim:missing:record', navigationTargets, supersededEvidence).status,
+    'unavailable',
+  );
+  assert.equal(
+    navigation.resolveEvidenceTarget(navigationTarget.evidenceId, navigationTargets, supersededEvidence, {
+      revokedEvidenceIds: [navigationTarget.evidenceId],
+    }).status,
+    'revoked',
+  );
+  assert.equal(
+    navigation.resolveEvidenceTarget(navigationTarget.evidenceId, navigationTargets, supersededEvidence, {
+      corpusVersion: 'old-corpus', expectedCorpusVersion: answer.corpusVersion,
+    }).status,
+    'version_mismatch',
+  );
 
   const partialAnswer = await fixtures
     .createFixturePublicJoleneAdapter('partial_evidence')

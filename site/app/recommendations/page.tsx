@@ -4,6 +4,7 @@ import { recommendationReview } from '../portfolio-data';
 import { recommendations } from '../recommendations-data';
 import { PageFrame, PageIntro } from '../site-components';
 import { buildPageMetadata } from '../site-metadata';
+import { publicEvidenceAnchorId } from '../jolene/public-evidence-navigation-core';
 
 export const metadata: Metadata = buildPageMetadata({
   title: 'Recommendations',
@@ -33,7 +34,14 @@ export default function RecommendationsPage() {
           </section>
           <ol className="recommendation-list" aria-label="LinkedIn recommendation candidates">
             {recommendations.map((recommendation, index) => (
-              <li key={recommendation.id} data-review-state={recommendation.reviewState}>
+              <li
+                key={recommendation.id}
+                id={publicEvidenceAnchorId(recommendation.sourceId)}
+                data-review-state={recommendation.reviewState}
+                data-evidence-target
+                tabIndex={-1}
+                aria-label={`${recommendation.name} recommendation candidate`}
+              >
                 <Reveal className="recommendation-card">
                   <div className="recommendation-index" aria-hidden="true">
                     {String(index + 1).padStart(2, '0')}

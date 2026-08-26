@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react';
 import { PublicJoleneAdapterError } from './public-adapter';
 import {
   createFixturePublicJoleneAdapter,
+  PUBLIC_JOLENE_FIXTURE_CORPUS_VERSION,
   publicJoleneFixtureScenarios,
   type PublicJoleneFixtureScenario,
 } from './public-fixtures';
@@ -119,6 +120,8 @@ export function JoleneFixtureChat({ scenario: scenarioValue }: { scenario: strin
             limitations: response.limitations,
             suggestedFollowUpQuestions: response.suggestedFollowUpQuestions,
             corpusVersion: response.corpusVersion,
+            expectedCorpusVersion: PUBLIC_JOLENE_FIXTURE_CORPUS_VERSION,
+            revokedEvidenceIds: [],
           },
         },
       ]);

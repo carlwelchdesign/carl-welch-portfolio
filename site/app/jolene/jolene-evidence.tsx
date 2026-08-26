@@ -6,11 +6,15 @@ import {
   type ProjectMaturity,
   type PublicEvidenceCitation,
 } from './public-contract';
+import { resolvePublicEvidenceTarget } from './public-evidence-navigation';
 
 export type JoleneAnswerEvidence = Pick<
   PortfolioAnswerResponse,
   'claims' | 'citations' | 'limitations' | 'suggestedFollowUpQuestions' | 'corpusVersion'
->;
+> & {
+  expectedCorpusVersion?: string;
+  revokedEvidenceIds?: string[];
+};
 
 type JoleneEvidenceProps = {
   evidence: JoleneAnswerEvidence;
@@ -27,15 +31,43 @@ const maturityLabels: Record<ProjectMaturity, string> = {
   released_product: 'Released product',
 };
 
-function CitationLink({ citation }: { citation: PublicEvidenceCitation }) {
-  return (
-    <a className="jolene-citation" href={citation.href}>
+function CitationLink({ citation, evidence }: { citation: PublicEvidenceCitation; evidence: JoleneAnswerEvidence }) {
+  const resolution = resolvePublicEvidenceTarget(citation.evidenceId, {
+    corpusVersion: evidence.corpusVersion,
+    expectedCorpusVersion: evidence.expectedCorpusVersion,
+    revokedEvidenceIds: evidence.revokedEvidenceIds,
+  });
+  const details = (
+    <>
       <span>{citation.title}</span>
       <small>
         {citation.sourceType.replaceAll('_', ' ')} · {citation.strength} · {maturityLabels[citation.maturity]}
       </small>
       <code>{citation.evidenceId}</code>
-    </a>
+    </>
+  );
+
+  if (resolution.status === 'available' || resolution.status === 'superseded') {
+    return (
+      <a className="jolene-citation" href={resolution.target.href}>
+        {details}
+        {resolution.status === 'superseded' ? <small>Updated evidence target</small> : null}
+      </a>
+    );
+  }
+
+  const statusLabels = {
+    review_required: 'Not published — review required',
+    revoked: 'Evidence revoked',
+    version_mismatch: 'Evidence map needs an update',
+    unavailable: 'Evidence unavailable',
+  } as const;
+
+  return (
+    <span className="jolene-citation jolene-citation-unavailable" role="note">
+      {details}
+      <small>{statusLabels[resolution.status]}</small>
+    </span>
   );
 }
 
@@ -74,7 +106,7 @@ export function JoleneEvidence({ evidence }: JoleneEvidenceProps) {
                   <div className="jolene-claim-sources">
                     <strong>Supporting sources</strong>
                     {claimCitations.map((citation) => (
-                      <CitationLink citation={citation} key={citation.evidenceId} />
+                      <CitationLink citation={citation} evidence={evidence} key={citation.evidenceId} />
                     ))}
                   </div>
 
