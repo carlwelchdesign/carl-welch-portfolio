@@ -102,7 +102,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .capabilities-preview > ol strong { font-size: clamp(26px, 3.5vw, 54px); letter-spacing: -0.045em; }
 
 .page-intro { min-height: 68svh; padding: clamp(92px, 13vw, 190px) var(--page-padding) clamp(72px, 9vw, 130px); display: flex; flex-direction: column; justify-content: flex-end; background: rgba(242, 242, 235, 0.93); color: var(--ink); }
-.page-intro h1 { max-width: 1100px; margin: 26px 0 34px; font-size: clamp(70px, 12vw, 178px); line-height: 0.82; letter-spacing: -0.085em; }
+.page-intro h1 { max-width: 1100px; margin: 26px 0 34px; font-size: clamp(70px, 12vw, 178px); line-height: 0.9; letter-spacing: -0.045em; }
 .page-intro > p:last-child { max-width: 780px; margin: 0; font-size: clamp(18px, 2vw, 28px); line-height: 1.45; letter-spacing: -0.025em; }
 
 .project-detail { --chapter-tone: var(--red); padding-bottom: 110px; background: color-mix(in srgb, var(--chapter-tone) 20%, var(--paper)); color: var(--ink); }
