@@ -1,0 +1,20 @@
+services:
+  portfolio:
+    build:
+      context: .
+      args:
+        NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-http://localhost:3000}
+        NEXT_PUBLIC_JOLENE_MODE: ${NEXT_PUBLIC_JOLENE_MODE:-disabled}
+        NEXT_PUBLIC_JOLENE_FIXTURE_SCENARIO: ${NEXT_PUBLIC_JOLENE_FIXTURE_SCENARIO:-success}
+    image: carl-welch-portfolio:local
+    init: true
+    read_only: true
+    tmpfs:
+      - /tmp:size=64m,mode=1777
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - "${PORTFOLIO_PORT:-3000}:3000"
+    restart: unless-stopped

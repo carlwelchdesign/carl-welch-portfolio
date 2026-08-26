@@ -12,6 +12,14 @@ Motion-led portfolio site for Carl Welch. The application is intentionally kept 
 
 The application requires Node.js 22.13 or newer.
 
+## Docker development and CI
+
+`docker compose up --build` creates a reproducible production-mode container at `http://localhost:3000`. The image builds with Node 22, runs as the unprivileged `node` user, exposes a health check, and contains only the standalone Vinext output. Compose additionally uses a read-only root filesystem, a bounded temporary filesystem, no Linux capabilities, and no-new-privileges.
+
+The Docker build context excludes local environments, dependencies, generated output, Git history, and deployment state. Public build-time values such as `NEXT_PUBLIC_SITE_URL` may be supplied to Compose; secrets must never use a `NEXT_PUBLIC_` variable or Docker build argument. After the container is healthy, `pnpm check:container` verifies the home page, manifest, résumé, and the default-disabled Jolene gate.
+
+Docker is a reproducibility and CI path. Sites/Cloudflare remains the intended publication path, and running Compose does not deploy or publish the portfolio.
+
 ## Content boundaries
 
 - `app/portfolio-data.ts` contains the detailed case studies and verified experience summaries.
