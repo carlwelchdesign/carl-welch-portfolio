@@ -17,9 +17,10 @@
     "check:github-sync": "node scripts/check-github-content-sync.mjs",
     "sync:github": "node scripts/sync-github-content.mjs",
     "check:jolene-contract": "node scripts/check-jolene-contract.mjs",
+    "check:jolene-bff": "node scripts/check-jolene-bff.mjs",
     "check:container": "node scripts/check-container.mjs",
     "check:routes": "node scripts/check-routes.mjs",
-    "check": "pnpm lint && pnpm check:metadata && pnpm check:content && pnpm check:github-sync && pnpm check:jolene-contract && pnpm build"
+    "check": "pnpm lint && pnpm check:metadata && pnpm check:content && pnpm check:github-sync && pnpm check:jolene-contract && pnpm check:jolene-bff && pnpm build"
   },
   "dependencies": {
     "@vitejs/plugin-react": "6.0.2",

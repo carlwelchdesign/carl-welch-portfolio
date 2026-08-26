@@ -7,6 +7,7 @@ Motion-led portfolio site for Carl Welch. The application is intentionally kept 
 - `pnpm dev` starts the local site.
 - `pnpm check` runs lint, content-integrity checks, the public Jolene contract checks, and the production build.
 - `pnpm check:jolene-contract` compiles and exercises the proposed public Jolene v1 contract, deterministic fixtures, runtime validation, citation integrity, and failure states.
+- `pnpm check:jolene-bff` exercises the disabled-by-default same-origin BFF, request/response gates, admission budgets, kill switches, safe retries, and sanitized observability.
 - `pnpm check:github` compares the checked-in public-repository snapshot with Carl's current public GitHub repositories.
 - `pnpm check:github-sync` tests deterministic GitHub drift review, stable rename detection, stale-source rejection, protected editorial fields, media failures, and explicit decisions.
 - `pnpm sync:github` prints a read-only Markdown review of current GitHub drift. It never changes portfolio content by default.
@@ -53,8 +54,10 @@ The machine-readable consumer contract lives at `contracts/public-jolene-v1.open
 
 The portfolio must never call Jolene's private API, mount or read Obsidian, access private durable memory, or invoke private MCP tools. A future live adapter may consume only the reviewed, content-minimized public evidence export and public delegate created by `JOL-CAREER-004` and `JOL-CAREER-005`. Until those dependencies pass their own security and evaluation gates, UI work must remain in fixture mode.
 
+The same-origin route at `/api/jolene/[operation]` is the future browser-to-service boundary and is disabled by default. It requires server-only credentials, exact request and response validation, manifest/corpus checks, disclosure rejection, timeouts, admission limits, and global plus feature-level switches. An optional authenticated runtime control document can disable enabled features without a portfolio code release and fails closed when unavailable. The complete abuse analysis and remaining distributed/platform gates are recorded in [`docs/JOLENE_BFF_THREAT_MODEL.md`](docs/JOLENE_BFF_THREAT_MODEL.md). Implemented controls do not authorize live activation.
+
 The bottom-right development shell is disabled by default. Set `NEXT_PUBLIC_JOLENE_MODE=fixture` locally to enable it and choose a deterministic state with `NEXT_PUBLIC_JOLENE_FIXTURE_SCENARIO`: `success`, `partial_evidence`, `no_evidence`, `unavailable`, `rate_limited`, or `version_mismatch`. Do not enable fixture mode for the first public portfolio release.
 
-The fixture contact-intent flow collects only name, email, optional organization, and a short message. It requires a separate review step and explicit consent before calling the fixture adapter, clears the personal fields after a successful fixture receipt, and has no persistence or outbound capability. Closing the panel also discards the in-memory draft. Production retention, deletion, abuse prevention, rate limiting, and live transport remain gated by `PORT-JOL-008` and `PORT-JOL-009`; the fixture UI must not be represented as a live contact channel.
+The fixture contact-intent flow collects only name, email, optional organization, and a short message. It requires a separate review step and explicit consent before calling the fixture adapter, clears the personal fields after a successful fixture receipt, and has no persistence or outbound capability. Closing the panel also discards the in-memory draft. Production retention, deletion, distributed abuse prevention, monitoring, and live transport remain release gates; the fixture UI must not be represented as a live contact channel.
 
 Set `NEXT_PUBLIC_SITE_URL` to the approved production origin before publication.
