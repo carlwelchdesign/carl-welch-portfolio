@@ -2,11 +2,13 @@ import type { Metadata } from 'next';
 import { MotionRuntime, Reveal } from '../motion-elements';
 import { earlierExperience, experience } from '../portfolio-data';
 import { PageFrame, PageIntro } from '../site-components';
+import { buildPageMetadata } from '../site-metadata';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
   title: 'Experience',
   description: 'Professional product engineering experience for Carl Welch.',
-};
+  path: '/experience',
+});
 
 export default function ExperiencePage() {
   return (

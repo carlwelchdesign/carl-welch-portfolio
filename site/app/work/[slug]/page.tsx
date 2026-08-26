@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { MotionRuntime, Reveal } from '../../motion-elements';
 import { getProject, projects } from '../../portfolio-data';
 import { ArchitectureDiagram, PageFrame } from '../../site-components';
+import { buildPageMetadata } from '../../site-metadata';
 
 type ProjectPageProps = {
   params: Promise<{ slug: string }>;
@@ -19,15 +20,17 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
 
   if (!project) return {};
 
-  return {
+  return buildPageMetadata({
     title: project.name,
     description: project.summary,
-    openGraph: {
-      title: `${project.name} | Carl Welch`,
-      description: project.summary,
-      images: [{ url: project.image.src, width: project.image.width, height: project.image.height, alt: project.image.alt }],
+    path: `/work/${project.slug}`,
+    image: {
+      url: project.image.src,
+      width: project.image.width,
+      height: project.image.height,
+      alt: project.image.alt,
     },
-  };
+  });
 }
 
 export default async function ProjectPage({ params }: ProjectPageProps) {

@@ -29,6 +29,40 @@ function requirePageStructure(html, route) {
   if (!/<meta name="description" content="[^"]+"/.test(html)) throw new Error(`${route} is missing a meta description.`);
 }
 
+function getTag(html, tagName, attribute, value) {
+  return (html.match(new RegExp(`<${tagName}[^>]*>`, 'g')) || [])
+    .find((tag) => tag.includes(`${attribute}="${value}"`));
+}
+
+function getTagAttribute(tag, attribute) {
+  return tag?.match(new RegExp(`${attribute}="([^"]*)"`))?.[1];
+}
+
+function requireShareMetadata(html, route) {
+  const canonicalUrl = route === '/' ? baseUrl : new URL(route, `${baseUrl}/`).toString();
+  const canonicalTag = getTag(html, 'link', 'rel', 'canonical');
+  const openGraphUrlTag = getTag(html, 'meta', 'property', 'og:url');
+  const openGraphTitleTag = getTag(html, 'meta', 'property', 'og:title');
+  const twitterTitleTag = getTag(html, 'meta', 'name', 'twitter:title');
+  const documentTitle = html.match(/<title>([^<]+)<\/title>/)?.[1];
+
+  if (getTagAttribute(canonicalTag, 'href') !== canonicalUrl) {
+    throw new Error(`${route} canonical URL does not match ${canonicalUrl}.`);
+  }
+  if (getTagAttribute(openGraphUrlTag, 'content') !== canonicalUrl) {
+    throw new Error(`${route} Open Graph URL does not match ${canonicalUrl}.`);
+  }
+  if (getTagAttribute(openGraphTitleTag, 'content') !== documentTitle) {
+    throw new Error(`${route} Open Graph title does not match its document title.`);
+  }
+  if (getTagAttribute(twitterTitleTag, 'content') !== documentTitle) {
+    throw new Error(`${route} X card title does not match its document title.`);
+  }
+  if (!getTag(html, 'meta', 'property', 'og:image')) {
+    throw new Error(`${route} is missing an Open Graph image.`);
+  }
+}
+
 const pageExpectations = [
   ['/', 'Carl Welch'],
   ['/work', `${githubProjects.length} public repositories`],
@@ -43,11 +77,10 @@ await Promise.all(pageExpectations.map(async ([route, expectedText]) => {
   const response = await fetchRoute(route);
   const html = await response.text();
   requirePageStructure(html, route);
+  requireShareMetadata(html, route);
   requireText(html, expectedText, route);
 
   if (route === '/') {
-    requireText(html, `<link rel="canonical" href="${baseUrl}"`, route);
-    requireText(html, 'property="og:image"', route);
     requireText(html, 'href="/contact"', route);
     requireText(html, 'mailto:carlwelchdesign@gmail.com', route);
   }
