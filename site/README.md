@@ -58,6 +58,8 @@ The same-origin route at `/api/jolene/[operation]` is the future browser-to-serv
 
 The bottom-right development shell is disabled by default. Set `NEXT_PUBLIC_JOLENE_MODE=fixture` locally to enable it and choose a deterministic state with `NEXT_PUBLIC_JOLENE_FIXTURE_SCENARIO`: `success`, `partial_evidence`, `no_evidence`, `unavailable`, `rate_limited`, or `version_mismatch`. Do not enable fixture mode for the first public portfolio release.
 
+The fixture shell includes an ephemeral role-comparison view. It removes common contact, private-path, and credential-like values before comparison; rejects high-confidence disclosure instructions; clears its draft and results when the view unmounts; and renders direct, adjacent, missing, or unknown assessments without a fit score or blanket recommendation. Run `pnpm check:jolene-job-fit` for the deterministic policy and state checks.
+
 The fixture contact-intent flow collects only name, email, optional organization, and a short message. It requires a separate review step and explicit consent before calling the fixture adapter, clears the personal fields after a successful fixture receipt, and has no persistence or outbound capability. Closing the panel also discards the in-memory draft. Production retention, deletion, distributed abuse prevention, monitoring, and live transport remain release gates; the fixture UI must not be represented as a live contact channel.
 
 Set `NEXT_PUBLIC_SITE_URL` to the approved production origin before publication.

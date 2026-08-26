@@ -10,6 +10,7 @@ const outputRoot = await mkdtemp(join(tmpdir(), 'portfolio-jolene-bff-'));
 const sourceFiles = [
   'bff-policy.ts',
   'bff-handler.ts',
+  'job-description-policy.ts',
   'public-contract.ts',
   'public-contract-error.ts',
   'public-compatibility.ts',
