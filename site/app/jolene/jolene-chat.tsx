@@ -11,6 +11,7 @@ import {
 import { JoleneEvidence, type JoleneAnswerEvidence } from './jolene-evidence';
 import { PublicJoleneContractError } from './public-validation';
 import { JoleneContactIntent } from './jolene-contact-intent';
+import { JoleneJobFit } from './jolene-job-fit';
 
 type ChatMessage = {
   id: string;
@@ -68,7 +69,7 @@ export function JoleneFixtureChat({ scenario: scenarioValue }: { scenario: strin
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messageSequence = useRef(0);
   const [open, setOpen] = useState(false);
-  const [mode, setMode] = useState<'chat' | 'contact'>('chat');
+  const [mode, setMode] = useState<'chat' | 'job' | 'contact'>('chat');
   const [draft, setDraft] = useState('');
   const [waiting, setWaiting] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([initialMessage]);
@@ -148,6 +149,11 @@ export function JoleneFixtureChat({ scenario: scenarioValue }: { scenario: strin
     void sendQuestion(draft);
   }
 
+  function askFromComparison(question: string) {
+    setMode('chat');
+    void sendQuestion(question);
+  }
+
   return (
     <div className="jolene-fixture" data-jolene-fixture>
       {open ? (
@@ -158,11 +164,14 @@ export function JoleneFixtureChat({ scenario: scenarioValue }: { scenario: strin
           aria-modal="false"
           aria-labelledby="jolene-panel-title"
           aria-describedby="jolene-panel-description"
+          data-mode={mode}
         >
           <header className="jolene-panel-header">
             <div>
               <p>Portfolio guide / Development fixture</p>
-              <h2 id="jolene-panel-title">{mode === 'contact' ? 'Contact Carl' : 'Ask Jolene'}</h2>
+              <h2 id="jolene-panel-title">
+                {mode === 'contact' ? 'Contact Carl' : mode === 'job' ? 'Compare a role' : 'Ask Jolene'}
+              </h2>
             </div>
             <button ref={closeRef} type="button" onClick={closePanel} aria-label="Close Jolene chat">
               Close
@@ -175,6 +184,7 @@ export function JoleneFixtureChat({ scenario: scenarioValue }: { scenario: strin
 
           <nav className="jolene-mode-switch" aria-label="Jolene panel sections">
             <button type="button" aria-pressed={mode === 'chat'} onClick={() => setMode('chat')}>Questions</button>
+            <button type="button" aria-pressed={mode === 'job'} onClick={() => setMode('job')}>Compare role</button>
             <button type="button" aria-pressed={mode === 'contact'} onClick={() => setMode('contact')}>Request contact</button>
           </nav>
 
@@ -226,8 +236,10 @@ export function JoleneFixtureChat({ scenario: scenarioValue }: { scenario: strin
                 {waiting ? 'Checking…' : 'Ask Jolene'}
               </button>
             </div>
-          </form></> : (
+          </form></> : mode === 'contact' ? (
             <JoleneContactIntent adapter={adapter} onReturnToChat={() => setMode('chat')} />
+          ) : (
+            <JoleneJobFit adapter={adapter} onAskQuestion={askFromComparison} />
           )}
         </section>
       ) : null}

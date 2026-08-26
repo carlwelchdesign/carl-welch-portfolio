@@ -31,11 +31,21 @@ const maturityLabels: Record<ProjectMaturity, string> = {
   released_product: 'Released product',
 };
 
-function CitationLink({ citation, evidence }: { citation: PublicEvidenceCitation; evidence: JoleneAnswerEvidence }) {
+export function JoleneCitationLink({
+  citation,
+  corpusVersion,
+  expectedCorpusVersion,
+  revokedEvidenceIds,
+}: {
+  citation: PublicEvidenceCitation;
+  corpusVersion: string;
+  expectedCorpusVersion?: string;
+  revokedEvidenceIds?: string[];
+}) {
   const resolution = resolvePublicEvidenceTarget(citation.evidenceId, {
-    corpusVersion: evidence.corpusVersion,
-    expectedCorpusVersion: evidence.expectedCorpusVersion,
-    revokedEvidenceIds: evidence.revokedEvidenceIds,
+    corpusVersion,
+    expectedCorpusVersion,
+    revokedEvidenceIds,
   });
   const details = (
     <>
@@ -106,7 +116,13 @@ export function JoleneEvidence({ evidence }: JoleneEvidenceProps) {
                   <div className="jolene-claim-sources">
                     <strong>Supporting sources</strong>
                     {claimCitations.map((citation) => (
-                      <CitationLink citation={citation} evidence={evidence} key={citation.evidenceId} />
+                      <JoleneCitationLink
+                        citation={citation}
+                        corpusVersion={evidence.corpusVersion}
+                        expectedCorpusVersion={evidence.expectedCorpusVersion}
+                        revokedEvidenceIds={evidence.revokedEvidenceIds}
+                        key={citation.evidenceId}
+                      />
                     ))}
                   </div>
 

@@ -10,6 +10,7 @@ import {
   parseJobFitRequest,
   parsePortfolioAnswerRequest,
 } from './public-validation.js';
+import { containsHighConfidenceDisclosureRequest } from './job-description-policy.js';
 
 export const bffOperations = ['manifest', 'answer', 'jobFit', 'contactIntent'] as const;
 export type BffOperation = (typeof bffOperations)[number];
@@ -46,13 +47,6 @@ export const operationPolicy: Record<BffOperation, {
   jobFit: { method: 'POST', endpoint: PUBLIC_JOLENE_ENDPOINTS.jobFit, costUnits: 12, maximumBodyBytes: 14_000 },
   contactIntent: { method: 'POST', endpoint: PUBLIC_JOLENE_ENDPOINTS.contactIntent, costUnits: 2, maximumBodyBytes: 3_500 },
 };
-
-const injectionIndicators = [
-  /ignore\s+(?:all\s+)?(?:previous|prior)\s+instructions?/i,
-  /(?:reveal|show|print|return|expose).{0,30}(?:system|developer)\s+(?:prompt|message|instructions?)/i,
-  /(?:reveal|show|print|return|expose).{0,30}(?:secret|token|credential|private\s+memory)/i,
-  /(?:obsidian:\/\/|file:\/\/|\/Users\/|private\s+jolene\s+api)/i,
-];
 
 const unsafeEgressIndicators = [
   /(?:obsidian:\/\/|file:\/\/|\/Users\/|\/home\/[^/\s]+\/)/i,
@@ -169,7 +163,7 @@ export function parseOperationRequest(
 
 export function assertUntrustedInputSafe(value: unknown): void {
   for (const text of stringValues(value)) {
-    if (injectionIndicators.some((indicator) => indicator.test(text))) {
+    if (containsHighConfidenceDisclosureRequest(text)) {
       throw new BffPolicyError('request_rejected');
     }
   }
