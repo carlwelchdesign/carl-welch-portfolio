@@ -8,6 +8,7 @@ Motion-led portfolio site for Carl Welch. The application is intentionally kept 
 - `pnpm check` runs lint, content-integrity checks, the public Jolene contract checks, and the production build.
 - `pnpm check:jolene-contract` compiles and exercises the proposed public Jolene v1 contract, deterministic fixtures, runtime validation, citation integrity, and failure states.
 - `pnpm check:jolene-bff` exercises the disabled-by-default same-origin BFF, request/response gates, admission budgets, kill switches, safe retries, and sanitized observability.
+- `pnpm check:analytics` verifies the closed analytics event dictionary, prohibited-field rejection, privacy signals, product-area separation, and disabled default.
 - `pnpm check:github` compares the checked-in public-repository snapshot with Carl's current public GitHub repositories.
 - `pnpm check:github-sync` tests deterministic GitHub drift review, stable rename detection, stale-source rejection, protected editorial fields, media failures, and explicit decisions.
 - `pnpm sync:github` prints a read-only Markdown review of current GitHub drift. It never changes portfolio content by default.
@@ -61,5 +62,9 @@ The bottom-right development shell is disabled by default. Set `NEXT_PUBLIC_JOLE
 The fixture shell includes an ephemeral role-comparison view. It removes common contact, private-path, and credential-like values before comparison; rejects high-confidence disclosure instructions; clears its draft and results when the view unmounts; and renders direct, adjacent, missing, or unknown assessments without a fit score or blanket recommendation. Run `pnpm check:jolene-job-fit` for the deterministic policy and state checks.
 
 The fixture contact-intent flow collects only name, email, optional organization, and a short message. It requires a separate review step and explicit consent before calling the fixture adapter, clears the personal fields after a successful fixture receipt, and has no persistence or outbound capability. Closing the panel also discards the in-memory draft. Production retention, deletion, distributed abuse prevention, monitoring, and live transport remain release gates; the fixture UI must not be represented as a live contact channel.
+
+## Privacy-safe analytics boundary
+
+Analytics is disabled by default and is not a launch requirement. `NEXT_PUBLIC_PORTFOLIO_ANALYTICS_MODE=development` enables an in-memory on-page verifier with no network or durable storage. Its closed event dictionary accepts only coarse enum values, separates Portfolio and Jolene aggregates, honors DNT/GPC, and rejects transcripts, pasted job descriptions, contact content, URLs, query strings, evidence IDs, identifiers, credentials, and arbitrary text. Production provider selection and activation require Carl's separate approval and the gates documented in [`docs/PORTFOLIO_ANALYTICS_POLICY.md`](docs/PORTFOLIO_ANALYTICS_POLICY.md).
 
 Set `NEXT_PUBLIC_SITE_URL` to the approved production origin before publication.

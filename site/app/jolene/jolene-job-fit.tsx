@@ -16,6 +16,7 @@ import {
 } from './job-description-policy';
 import { JoleneCitationLink } from './jolene-evidence';
 import { PublicJoleneContractError } from './public-validation';
+import { trackAnalytics } from '../analytics/analytics-client';
 
 const assessmentLabels: Record<JobRequirementAssessment, string> = {
   direct: 'Direct evidence',
@@ -91,9 +92,17 @@ export function JoleneJobFit({
       const prepared = prepareJobDescription({ jobDescription: draft });
       setWaiting(true);
       const response = await adapter.compareJob({ jobDescription: prepared.jobDescription });
+      trackAnalytics('jolene_response', {
+        operation: 'job_fit',
+        state: response.citations.length > 0 ? 'success' : 'no_evidence',
+      });
       setComparison({ response, redactions: prepared.redactions });
       setDraft('');
     } catch (comparisonError) {
+      trackAnalytics('jolene_response', {
+        operation: 'job_fit',
+        state: comparisonError instanceof PublicJoleneAdapterError && comparisonError.code === 'unavailable' ? 'unavailable' : 'error',
+      });
       setError(describeError(comparisonError));
     } finally {
       setWaiting(false);

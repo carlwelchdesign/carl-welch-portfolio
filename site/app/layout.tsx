@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { JoleneShell } from './jolene/jolene-shell';
 import { EvidenceTargetObserver } from './jolene/evidence-target-observer';
+import { AnalyticsRuntime } from './analytics/analytics-runtime';
+import { analyticsModes, type AnalyticsMode } from './analytics/analytics-contract';
 import {
   buildPageMetadata,
   defaultDescription,
@@ -49,9 +51,15 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  const requestedAnalyticsMode = process.env.NEXT_PUBLIC_PORTFOLIO_ANALYTICS_MODE;
+  const analyticsMode: AnalyticsMode = analyticsModes.includes(requestedAnalyticsMode as AnalyticsMode)
+    ? requestedAnalyticsMode as AnalyticsMode
+    : 'disabled';
+
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body>
+        <AnalyticsRuntime mode={analyticsMode} />
         <EvidenceTargetObserver />
         {children}
         <JoleneShell />
