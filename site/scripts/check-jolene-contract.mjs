@@ -174,6 +174,9 @@ try {
   });
   assert.equal(contact.status, 'pending_review');
   assert.match(contact.message, /No outbound action was taken/);
+  assert.ok(!JSON.stringify(contact).includes('visitor@example.com'));
+  assert.ok(!JSON.stringify(contact).includes('Fixture visitor'));
+  assert.ok(!JSON.stringify(contact).includes('I would like Carl to review this contact request.'));
 
   await assert.rejects(
     success.answer({ question: '' }),

@@ -238,7 +238,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .jolene-launcher > span:last-child { display: grid; gap: 2px; }
 .jolene-launcher small { color: var(--muted); font: 9px var(--font-geist-mono), monospace; letter-spacing: 0.1em; text-transform: uppercase; }
 .jolene-launcher:hover small { color: #565d54; }
-.jolene-panel { position: absolute; right: 0; bottom: 76px; width: min(430px, calc(100vw - 40px)); max-height: min(720px, calc(100svh - 122px)); display: grid; grid-template-rows: auto auto minmax(160px, 1fr) auto auto; overflow: hidden; border: 1px solid rgba(242, 242, 235, 0.72); background: var(--ink); box-shadow: 0 24px 80px rgba(0, 0, 0, 0.42); }
+.jolene-panel { position: absolute; right: 0; bottom: 76px; width: min(430px, calc(100vw - 40px)); max-height: min(720px, calc(100svh - 122px)); display: grid; grid-template-rows: auto auto auto minmax(160px, 1fr) auto auto; overflow: hidden; border: 1px solid rgba(242, 242, 235, 0.72); background: var(--ink); box-shadow: 0 24px 80px rgba(0, 0, 0, 0.42); }
 .jolene-panel-header { min-height: 104px; padding: 20px; display: flex; justify-content: space-between; gap: 20px; align-items: flex-start; background: var(--jolene-accent); color: var(--ink); }
 .jolene-panel-header p, .jolene-panel-header h2 { margin: 0; }
 .jolene-panel-header p { font: 9px var(--font-geist-mono), monospace; letter-spacing: 0.1em; text-transform: uppercase; }
@@ -246,6 +246,10 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .jolene-panel-header button { min-width: 44px; min-height: 44px; padding: 0 10px; border: 1px solid currentColor; border-radius: 0; background: transparent; color: inherit; cursor: pointer; font: 700 9px var(--font-geist-mono), monospace; letter-spacing: 0.09em; text-transform: uppercase; }
 .jolene-panel-header button:hover { background: var(--ink); color: var(--paper); }
 .jolene-fixture-notice { margin: 0; padding: 10px 20px; border-bottom: 1px solid var(--line); color: var(--muted); font: 9px/1.45 var(--font-geist-mono), monospace; letter-spacing: 0.045em; text-transform: uppercase; }
+.jolene-mode-switch { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--line); }
+.jolene-mode-switch button { min-height: 44px; border: 0; border-right: 1px solid var(--line); background: #0d100d; color: var(--muted); cursor: pointer; font: 700 9px var(--font-geist-mono), monospace; letter-spacing: 0.08em; text-transform: uppercase; }
+.jolene-mode-switch button:last-child { border-right: 0; }
+.jolene-mode-switch button:hover, .jolene-mode-switch button[aria-pressed='true'] { background: var(--paper); color: var(--ink); }
 .jolene-messages { padding: 18px 20px; overflow-y: auto; overscroll-behavior: contain; scrollbar-color: var(--muted) transparent; }
 .jolene-message { margin: 0 0 18px; padding: 14px; border: 1px solid var(--line); background: #11150f; }
 .jolene-message[data-role='visitor'] { margin-left: 40px; border-color: rgba(255, 104, 0, 0.72); background: rgba(255, 104, 0, 0.1); }
@@ -291,6 +295,31 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .jolene-form button { min-width: 44px; min-height: 44px; padding: 0 13px; border: 1px solid var(--jolene-accent); border-radius: 0; background: var(--jolene-accent); color: var(--ink); cursor: pointer; font: 700 9px var(--font-geist-mono), monospace; letter-spacing: 0.09em; text-transform: uppercase; }
 .jolene-form button:hover:not(:disabled) { background: var(--paper); border-color: var(--paper); }
 .jolene-form button:disabled, .jolene-starters button:disabled { cursor: not-allowed; opacity: 0.48; }
+.jolene-contact { grid-row: 4 / 7; padding: 20px; overflow-y: auto; overscroll-behavior: contain; background: #0d100d; }
+.jolene-contact h3 { margin: 7px 0 10px; font-size: 27px; line-height: 1; letter-spacing: -0.045em; }
+.jolene-contact-kicker { margin: 0; color: var(--jolene-accent); font: 9px var(--font-geist-mono), monospace; letter-spacing: 0.1em; text-transform: uppercase; }
+.jolene-contact-policy { margin: 0 0 18px; color: var(--muted); font-size: 11px; line-height: 1.45; }
+.jolene-contact > label:not(.jolene-contact-consent) { display: grid; gap: 7px; margin-top: 13px; color: var(--muted); font: 9px var(--font-geist-mono), monospace; letter-spacing: 0.08em; text-transform: uppercase; }
+.jolene-contact > label > span { justify-self: end; margin-top: -16px; }
+.jolene-contact input:not([type='checkbox']), .jolene-contact textarea { width: 100%; padding: 11px; border: 1px solid var(--line); border-radius: 0; background: var(--ink); color: var(--paper); font: 14px/1.45 var(--font-geist-sans), sans-serif; }
+.jolene-contact textarea { min-height: 94px; resize: vertical; }
+.jolene-contact label small { justify-self: end; color: var(--muted); font: 8px var(--font-geist-mono), monospace; }
+.jolene-contact > button, .jolene-contact-actions button { min-height: 44px; padding: 0 13px; border: 1px solid var(--jolene-accent); border-radius: 0; background: var(--jolene-accent); color: var(--ink); cursor: pointer; font: 700 9px var(--font-geist-mono), monospace; letter-spacing: 0.08em; text-transform: uppercase; }
+.jolene-contact > button { width: 100%; margin-top: 16px; }
+.jolene-contact button:hover:not(:disabled) { border-color: var(--paper); background: var(--paper); }
+.jolene-contact button:disabled { cursor: not-allowed; opacity: 0.48; }
+.jolene-contact-summary { margin: 18px 0; border-top: 1px solid var(--line); }
+.jolene-contact-summary > div { padding: 11px 0; border-bottom: 1px solid var(--line); }
+.jolene-contact-summary dt { color: var(--muted); font: 8px var(--font-geist-mono), monospace; letter-spacing: 0.08em; text-transform: uppercase; }
+.jolene-contact-summary dd { margin: 5px 0 0; overflow-wrap: anywhere; white-space: pre-wrap; font-size: 13px; line-height: 1.45; }
+.jolene-contact-consent { display: grid; grid-template-columns: 20px 1fr; gap: 10px; align-items: start; margin: 16px 0; color: var(--paper); font-size: 12px; line-height: 1.4; }
+.jolene-contact-consent input { width: 18px; height: 18px; margin: 0; accent-color: var(--jolene-accent); }
+.jolene-contact-consent span { margin: 0; }
+.jolene-contact-error { margin: 12px 0; padding: 10px; border: 1px solid var(--red); color: var(--paper); font-size: 11px; }
+.jolene-contact-actions { display: grid; grid-template-columns: 1fr 1.5fr; gap: 8px; }
+.jolene-contact-actions button:first-child { border-color: var(--line); background: transparent; color: var(--paper); }
+.jolene-contact-receipt { display: block; }
+.jolene-contact-receipt-id { margin: 18px 0; color: var(--muted); font: 8px var(--font-geist-mono), monospace; letter-spacing: 0.06em; text-transform: uppercase; }
 
 @media (max-width: 1000px) {
   .site-header { grid-template-columns: 1fr auto auto; }

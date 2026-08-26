@@ -10,6 +10,7 @@ import {
 } from './public-fixtures';
 import { JoleneEvidence, type JoleneAnswerEvidence } from './jolene-evidence';
 import { PublicJoleneContractError } from './public-validation';
+import { JoleneContactIntent } from './jolene-contact-intent';
 
 type ChatMessage = {
   id: string;
@@ -67,6 +68,7 @@ export function JoleneFixtureChat({ scenario: scenarioValue }: { scenario: strin
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messageSequence = useRef(0);
   const [open, setOpen] = useState(false);
+  const [mode, setMode] = useState<'chat' | 'contact'>('chat');
   const [draft, setDraft] = useState('');
   const [waiting, setWaiting] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([initialMessage]);
@@ -89,6 +91,7 @@ export function JoleneFixtureChat({ scenario: scenarioValue }: { scenario: strin
 
   function closePanel() {
     setOpen(false);
+    setMode('chat');
     requestAnimationFrame(() => launcherRef.current?.focus());
   }
 
@@ -159,7 +162,7 @@ export function JoleneFixtureChat({ scenario: scenarioValue }: { scenario: strin
           <header className="jolene-panel-header">
             <div>
               <p>Portfolio guide / Development fixture</p>
-              <h2 id="jolene-panel-title">Ask Jolene</h2>
+              <h2 id="jolene-panel-title">{mode === 'contact' ? 'Contact Carl' : 'Ask Jolene'}</h2>
             </div>
             <button ref={closeRef} type="button" onClick={closePanel} aria-label="Close Jolene chat">
               Close
@@ -170,7 +173,12 @@ export function JoleneFixtureChat({ scenario: scenarioValue }: { scenario: strin
             Fixture responses only. No live agent, private memory, Obsidian access, or transcript retention.
           </p>
 
-          <div className="jolene-messages" role="log" aria-live="polite" aria-busy={waiting}>
+          <nav className="jolene-mode-switch" aria-label="Jolene panel sections">
+            <button type="button" aria-pressed={mode === 'chat'} onClick={() => setMode('chat')}>Questions</button>
+            <button type="button" aria-pressed={mode === 'contact'} onClick={() => setMode('contact')}>Request contact</button>
+          </nav>
+
+          {mode === 'chat' ? <><div className="jolene-messages" role="log" aria-live="polite" aria-busy={waiting}>
             {messages.map((message) => (
               <article className="jolene-message" data-role={message.role} key={message.id}>
                 <p className="jolene-message-role">{message.role === 'assistant' ? 'Jolene' : 'You'}</p>
@@ -218,7 +226,9 @@ export function JoleneFixtureChat({ scenario: scenarioValue }: { scenario: strin
                 {waiting ? 'Checking…' : 'Ask Jolene'}
               </button>
             </div>
-          </form>
+          </form></> : (
+            <JoleneContactIntent adapter={adapter} onReturnToChat={() => setMode('chat')} />
+          )}
         </section>
       ) : null}
 
