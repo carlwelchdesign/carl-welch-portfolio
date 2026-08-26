@@ -1,3 +1,4 @@
+import assert from 'node:assert/strict';
 import { access, readFile, stat } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { loadTypescriptData } from './load-typescript-data.mjs';
@@ -54,7 +55,7 @@ async function requirePng(relativePath) {
 }
 
 const [
-  { githubProjects },
+  { githubProjects, githubRepositoryIds, githubSnapshotReview },
   { projects, experience, recommendationReview },
   { recommendations },
   { capabilities },
@@ -72,6 +73,15 @@ const [
 if (projects.length < 3) throw new Error('At least three detailed case studies are required.');
 requireUnique(projects.map((project) => project.slug), 'Case-study slugs');
 requireUnique(githubProjects.map((project) => project.name), 'GitHub repository names');
+assert(githubSnapshotReview?.reviewer, 'GitHub snapshot review must name a reviewer.');
+assert(Number.isInteger(githubSnapshotReview?.appliedVersion), 'GitHub snapshot review must carry an applied version.');
+assert(!Number.isNaN(Date.parse(githubSnapshotReview?.sourceObservedAt)), 'GitHub snapshot review must carry a valid source timestamp.');
+assert.deepEqual(
+  Object.keys(githubRepositoryIds).sort(),
+  githubProjects.map((project) => project.name).sort(),
+  'Stable GitHub repository IDs must exactly cover the reviewed archive.',
+);
+requireUnique(Object.values(githubRepositoryIds), 'GitHub repository IDs');
 requireUnique(recommendations.map((item) => `${item.name}:${item.date}`), 'Recommendation attributions');
 requireUnique(recommendations.map((item) => item.id), 'Recommendation IDs');
 requireUnique(capabilities.map((capability) => capability.id), 'Capability IDs');

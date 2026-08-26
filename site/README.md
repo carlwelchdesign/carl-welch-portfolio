@@ -8,6 +8,8 @@ Motion-led portfolio site for Carl Welch. The application is intentionally kept 
 - `pnpm check` runs lint, content-integrity checks, the public Jolene contract checks, and the production build.
 - `pnpm check:jolene-contract` compiles and exercises the proposed public Jolene v1 contract, deterministic fixtures, runtime validation, citation integrity, and failure states.
 - `pnpm check:github` compares the checked-in public-repository snapshot with Carl's current public GitHub repositories.
+- `pnpm check:github-sync` tests deterministic GitHub drift review, stable rename detection, stale-source rejection, protected editorial fields, media failures, and explicit decisions.
+- `pnpm sync:github` prints a read-only Markdown review of current GitHub drift. It never changes portfolio content by default.
 - `pnpm check:routes` checks the running local site's page structure, metadata, indexing gates, sitemap, archive images, and résumé response.
 
 The application requires Node.js 22.13 or newer.
@@ -30,6 +32,18 @@ Docker is a reproducibility and CI path. Sites/Cloudflare remains the intended p
 - `app/github-projects.ts` contains the curated public GitHub archive snapshot. Repository descriptions and verified live links remain hand-reviewed; a live check reports repository-list, language, URL, and update-date drift but does not overwrite copy.
 - `app/recommendations-data.ts` contains recommendation candidates from the working LinkedIn fixture. The route remains excluded from search until it is reconciled with an official export and approved.
 - `public/github/` contains local copies of GitHub preview imagery so the archive does not depend on GitHub's image rate limits at runtime.
+
+### Reviewed GitHub content sync
+
+The GitHub sync has a deliberately narrow trust boundary. GitHub may propose changes only to observed repository identity, name, language, URL, update timestamp, and local archive-image health. It cannot propose or alter descriptions, live product links, topics, project maturity, ownership, evidence strength, or public approval.
+
+1. Run `pnpm sync:github` for a deterministic, readable dry run.
+2. Freeze the exact review with `pnpm sync:github -- --write-review <new-review.json>`. The output path must not already exist.
+3. Create a decision document with `schemaVersion: 1`, the review's exact `reviewHash`, a named `reviewer`, and one `accept` or `reject` decision for every `changeId`. Missing, duplicate, stale, or unknown decisions fail closed.
+4. Apply only reviewed metadata with `pnpm sync:github -- --review <review.json> --apply <decisions.json>`.
+5. Run `pnpm check`, `pnpm check:routes`, and review the resulting source diff before merging.
+
+Accepted additions, removals, renames, and broken assets are reported as requiring editorial review; they are not automatically published, unpublished, renamed, or replaced. An apply records the source timestamp, named reviewer, and incremented applied version only when a safe metadata field actually changes. Publication remains a separate approval gate.
 
 ## Public Jolene development boundary
 
