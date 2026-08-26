@@ -20,7 +20,8 @@ ENV NEXT_PUBLIC_SITE_URL=${NEXT_PUBLIC_SITE_URL}
 ENV NEXT_PUBLIC_JOLENE_MODE=${NEXT_PUBLIC_JOLENE_MODE}
 ENV NEXT_PUBLIC_JOLENE_FIXTURE_SCENARIO=${NEXT_PUBLIC_JOLENE_FIXTURE_SCENARIO}
 
-RUN pnpm check
+RUN pnpm check \
+  && pnpm prune --prod
 
 FROM node:${NODE_VERSION}-bookworm-slim AS runtime
 
@@ -30,6 +31,7 @@ ENV HOSTNAME=0.0.0.0
 WORKDIR /app
 
 COPY --from=build --chown=node:node /app/dist ./dist
+COPY --from=build --chown=node:node /app/node_modules ./node_modules
 
 USER node
 EXPOSE 3000
