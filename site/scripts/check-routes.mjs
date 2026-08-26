@@ -55,6 +55,8 @@ await Promise.all(pageExpectations.map(async ([route, expectedText]) => {
   if (route === '/recommendations' && !/<meta name="robots" content="[^"]*noindex/.test(html)) {
     throw new Error('/recommendations must remain excluded from search indexing until publication approval.');
   }
+
+  if (route.startsWith('/work/')) requireText(html, 'id="evidence"', route);
 }));
 
 await fetchRoute('/work/not-a-project', 404);

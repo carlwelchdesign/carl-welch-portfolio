@@ -69,7 +69,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             <ArchitectureDiagram nodes={project.architecture} tone={project.tone} />
           </section>
 
-          <section className="evidence-grid" aria-label="Project evidence and boundaries">
+          <section id="evidence" className="evidence-grid" aria-label="Project evidence and boundaries">
             <div>
               <p className="eyebrow">What is implemented</p>
               <ul>
