@@ -64,6 +64,7 @@ try {
   assert.ok(answer.claims.length > 0);
   assert.ok(answer.citations.length > 0);
   assert.equal(answer.corpusVersion, manifest.corpusVersion);
+  assert.ok(answer.citations.every((citation) => /^\/work\/[a-z0-9-]+#evidence$/.test(citation.href)));
 
   const partialAnswer = await fixtures
     .createFixturePublicJoleneAdapter('partial_evidence')

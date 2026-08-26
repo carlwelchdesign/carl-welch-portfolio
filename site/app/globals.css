@@ -248,8 +248,32 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .jolene-message .jolene-message-role { margin-bottom: 8px; color: var(--jolene-accent); font: 9px var(--font-geist-mono), monospace; letter-spacing: 0.11em; text-transform: uppercase; }
 .jolene-message[data-role='visitor'] .jolene-message-role { color: var(--paper); }
 .jolene-message .jolene-message-note { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; }
+.jolene-evidence { margin-top: 12px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.jolene-evidence summary { min-height: 44px; display: grid; grid-template-columns: 1fr auto auto; gap: 10px; align-items: center; color: var(--paper); cursor: pointer; font: 700 9px var(--font-geist-mono), monospace; letter-spacing: 0.07em; list-style: none; text-transform: uppercase; }
+.jolene-evidence summary::-webkit-details-marker { display: none; }
+.jolene-evidence summary::after { content: '+'; color: var(--jolene-accent); font-size: 15px; }
+.jolene-evidence[open] summary::after { content: '−'; }
+.jolene-evidence summary small { color: var(--muted); font: inherit; font-weight: 400; }
+.jolene-evidence-body { padding: 4px 0 14px; }
+.jolene-claims { margin: 0; padding: 0; display: grid; gap: 10px; list-style: none; }
+.jolene-claims > li { padding: 12px; border: 1px solid var(--line); background: #0d100d; }
+.jolene-claims header { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
+.jolene-claims header span { padding: 4px 6px; border: 1px solid var(--line); color: var(--muted); font: 8px var(--font-geist-mono), monospace; letter-spacing: 0.07em; text-transform: uppercase; }
+.jolene-claims header span:first-child { margin-right: auto; border-color: transparent; padding-left: 0; color: var(--jolene-accent); }
+.jolene-strength-note { margin-top: 9px !important; color: var(--muted); font-size: 11px !important; }
+.jolene-claim-sources, .jolene-claim-limitations, .jolene-response-limitations { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--line); }
+.jolene-claim-sources > strong, .jolene-claim-limitations > strong, .jolene-response-limitations > strong { display: block; margin-bottom: 7px; color: var(--muted); font: 8px var(--font-geist-mono), monospace; letter-spacing: 0.08em; text-transform: uppercase; }
+.jolene-citation { min-height: 52px; margin-top: 6px; padding: 8px; display: grid; gap: 4px; border: 1px solid var(--line); color: var(--paper); text-decoration: none; }
+.jolene-citation:hover { border-color: var(--jolene-accent); background: rgba(255, 104, 0, 0.08); }
+.jolene-citation span { font-size: 11px; font-weight: 700; }
+.jolene-citation small, .jolene-citation code { color: var(--muted); font: 8px/1.35 var(--font-geist-mono), monospace; overflow-wrap: anywhere; text-transform: uppercase; }
+.jolene-claim-limitations ul, .jolene-response-limitations ul { margin: 0; padding-left: 16px; }
+.jolene-claim-limitations li, .jolene-response-limitations li { margin-top: 5px; color: var(--muted); font-size: 11px; line-height: 1.4; }
+.jolene-no-evidence { padding: 12px; border: 1px solid var(--jolene-accent); background: rgba(255, 104, 0, 0.08); }
+.jolene-corpus-version { margin-top: 12px !important; color: var(--muted); font: 8px var(--font-geist-mono), monospace !important; letter-spacing: 0.06em; text-transform: uppercase; }
 .jolene-waiting { margin: 0; color: var(--muted); font: 10px var(--font-geist-mono), monospace; letter-spacing: 0.06em; }
 .jolene-starters { padding: 0 20px 16px; display: grid; gap: 7px; }
+.jolene-starters > p { margin: 0; color: var(--muted); font: 8px var(--font-geist-mono), monospace; letter-spacing: 0.08em; text-transform: uppercase; }
 .jolene-starters button { min-height: 44px; padding: 9px 12px; border: 1px solid var(--line); border-radius: 0; background: transparent; color: var(--paper); cursor: pointer; font: 12px/1.35 var(--font-geist-sans), sans-serif; text-align: left; }
 .jolene-starters button:hover { border-color: var(--jolene-accent); background: rgba(255, 104, 0, 0.1); }
 .jolene-form { padding: 16px 20px 18px; border-top: 1px solid var(--line); background: #0d100d; }

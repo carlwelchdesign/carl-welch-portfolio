@@ -39,7 +39,7 @@ const citations: PublicEvidenceCitation[] = [
   {
     evidenceId: 'fixture:project:job-search-os:approval-boundary',
     title: 'Fixture evidence — Job Search OS approval boundary',
-    href: '/work/job-search-os',
+    href: '/work/job-search-os#evidence',
     sourceType: 'portfolio_page',
     strength: 'strong',
     maturity: 'production',
@@ -48,7 +48,7 @@ const citations: PublicEvidenceCitation[] = [
   {
     evidenceId: 'fixture:project:flight-tracker-ai:typed-system',
     title: 'Fixture evidence — Flight Tracker AI typed system',
-    href: '/work/flight-tracker-ai',
+    href: '/work/flight-tracker-ai#evidence',
     sourceType: 'portfolio_page',
     strength: 'moderate',
     maturity: 'deployed_demo',

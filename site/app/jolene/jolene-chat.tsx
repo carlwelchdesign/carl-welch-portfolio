@@ -7,6 +7,7 @@ import {
   publicJoleneFixtureScenarios,
   type PublicJoleneFixtureScenario,
 } from './public-fixtures';
+import { JoleneEvidence, type JoleneAnswerEvidence } from './jolene-evidence';
 import { PublicJoleneContractError } from './public-validation';
 
 type ChatMessage = {
@@ -14,6 +15,7 @@ type ChatMessage = {
   role: 'assistant' | 'visitor';
   text: string;
   note?: string;
+  evidence?: JoleneAnswerEvidence;
 };
 
 const conversationStarters = [
@@ -45,6 +47,17 @@ function describeError(error: unknown): string {
   return 'The preview could not complete that request.';
 }
 
+function getSuggestedQuestions(messages: ChatMessage[]): string[] {
+  if (messages.length === 1) return conversationStarters;
+
+  for (let index = messages.length - 1; index >= 0; index -= 1) {
+    const questions = messages[index].evidence?.suggestedFollowUpQuestions;
+    if (questions) return questions;
+  }
+
+  return [];
+}
+
 export function JoleneFixtureChat({ scenario: scenarioValue }: { scenario: string }) {
   const scenario = normalizeScenario(scenarioValue);
   const adapter = useMemo(() => createFixturePublicJoleneAdapter(scenario), [scenario]);
@@ -56,6 +69,7 @@ export function JoleneFixtureChat({ scenario: scenarioValue }: { scenario: strin
   const [draft, setDraft] = useState('');
   const [waiting, setWaiting] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([initialMessage]);
+  const suggestedQuestions = getSuggestedQuestions(messages);
 
   useEffect(() => {
     if (!open) return;
@@ -99,6 +113,13 @@ export function JoleneFixtureChat({ scenario: scenarioValue }: { scenario: strin
           role: 'assistant',
           text: response.answer,
           note: response.limitations[0],
+          evidence: {
+            claims: response.claims,
+            citations: response.citations,
+            limitations: response.limitations,
+            suggestedFollowUpQuestions: response.suggestedFollowUpQuestions,
+            corpusVersion: response.corpusVersion,
+          },
         },
       ]);
     } catch (error) {
@@ -152,6 +173,9 @@ export function JoleneFixtureChat({ scenario: scenarioValue }: { scenario: strin
                 <p className="jolene-message-role">{message.role === 'assistant' ? 'Jolene' : 'You'}</p>
                 <p>{message.text}</p>
                 {message.note ? <p className="jolene-message-note">{message.note}</p> : null}
+                {message.evidence ? (
+                  <JoleneEvidence evidence={message.evidence} />
+                ) : null}
               </article>
             ))}
             {waiting ? (
@@ -162,10 +186,11 @@ export function JoleneFixtureChat({ scenario: scenarioValue }: { scenario: strin
             <div ref={messagesEndRef} aria-hidden="true" />
           </div>
 
-          {messages.length === 1 ? (
+          {suggestedQuestions.length > 0 ? (
             <div className="jolene-starters" aria-label="Suggested questions">
-              {conversationStarters.map((question) => (
-                <button type="button" key={question} onClick={() => void sendQuestion(question)}>
+              {messages.length > 1 ? <p>Ask next</p> : null}
+              {suggestedQuestions.map((question) => (
+                <button type="button" disabled={waiting} key={question} onClick={() => void sendQuestion(question)}>
                   {question}
                 </button>
               ))}
