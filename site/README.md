@@ -55,4 +55,6 @@ The portfolio must never call Jolene's private API, mount or read Obsidian, acce
 
 The bottom-right development shell is disabled by default. Set `NEXT_PUBLIC_JOLENE_MODE=fixture` locally to enable it and choose a deterministic state with `NEXT_PUBLIC_JOLENE_FIXTURE_SCENARIO`: `success`, `partial_evidence`, `no_evidence`, `unavailable`, `rate_limited`, or `version_mismatch`. Do not enable fixture mode for the first public portfolio release.
 
+The fixture contact-intent flow collects only name, email, optional organization, and a short message. It requires a separate review step and explicit consent before calling the fixture adapter, clears the personal fields after a successful fixture receipt, and has no persistence or outbound capability. Closing the panel also discards the in-memory draft. Production retention, deletion, abuse prevention, rate limiting, and live transport remain gated by `PORT-JOL-008` and `PORT-JOL-009`; the fixture UI must not be represented as a live contact channel.
+
 Set `NEXT_PUBLIC_SITE_URL` to the approved production origin before publication.
