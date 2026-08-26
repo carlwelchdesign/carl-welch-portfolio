@@ -1,4 +1,4 @@
-ARG NODE_VERSION=22.18.0
+ARG NODE_VERSION=22.22.0
 
 FROM node:${NODE_VERSION}-bookworm-slim AS build
 
@@ -29,6 +29,12 @@ ENV NODE_ENV=production
 ENV PORT=3000
 ENV HOSTNAME=0.0.0.0
 WORKDIR /app
+
+RUN apt-get update \
+  && apt-get upgrade --yes --no-install-recommends \
+  && rm -rf /var/lib/apt/lists/* /usr/local/lib/node_modules/npm \
+  && rm -f /usr/local/bin/npm /usr/local/bin/npx /usr/local/bin/corepack \
+    /usr/local/bin/pnpm /usr/local/bin/pnpx
 
 COPY --from=build --chown=node:node /app/dist ./dist
 COPY --from=build --chown=node:node /app/node_modules ./node_modules
