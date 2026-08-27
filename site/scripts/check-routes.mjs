@@ -84,7 +84,7 @@ const pageExpectations = [
   ['/about', 'The engineer I am now was built over time'],
   ['/capabilities', 'What I do, and the work behind it'],
   ['/experience', 'A practice built across different kinds of work'],
-  ['/recommendations', 'Source-verified LinkedIn recommendations'],
+  ['/recommendations', 'What people say'],
   ['/contact', 'carlwelchdesign@gmail.com'],
   ...projects.map((project) => [`/work/${project.slug}`, project.name]),
 ];
@@ -134,7 +134,12 @@ await Promise.all(pageExpectations.map(async ([route, expectedText]) => {
     }
   }
 
-  if (route.startsWith('/work/')) requireText(html, 'id="evidence"', route);
+  if (route.startsWith('/work/')) {
+    requireText(html, 'id="evidence"', route);
+    const project = projects.find((item) => route === `/work/${item.slug}`);
+    requireText(html, 'id="project-gallery"', route);
+    for (const item of project?.gallery ?? []) requireText(html, item.src, route);
+  }
 }));
 
 await Promise.all([...shareImageUrls].map(async (imageUrl) => {

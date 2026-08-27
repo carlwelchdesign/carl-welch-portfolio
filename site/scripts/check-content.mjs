@@ -109,6 +109,16 @@ const publicEvidenceIds = [];
 for (const project of projects) {
   if (!allowedMaturities.has(project.maturity)) throw new Error(`${project.name} has an invalid project maturity.`);
   requireStableId(project.sourceId, `${project.name} source`);
+  if (!Array.isArray(project.gallery) || project.gallery.length === 0) {
+    throw new Error(`${project.name} must include an image-rich project gallery.`);
+  }
+  requireUnique([project.image.src, ...project.gallery.map((item) => item.src)], `${project.name} media paths`);
+  for (const item of project.gallery) {
+    assert(item.alt?.trim(), `${project.name} gallery media must include useful alternative text.`);
+    assert(item.label?.trim(), `${project.name} gallery media must include a label.`);
+    assert(item.caption?.trim(), `${project.name} gallery media must include a caption.`);
+    assert(item.width > 0 && item.height > 0, `${project.name} gallery media must include intrinsic dimensions.`);
+  }
   for (const evidence of project.evidence) {
     requirePublicEvidence(evidence, `${project.name} evidence ${evidence.id || '(missing ID)'}`);
     if (evidence.maturity !== project.maturity) {
@@ -120,6 +130,9 @@ for (const project of projects) {
     publicEvidenceIds.push(evidence.id);
   }
 }
+
+assert(projects.find((project) => project.slug === 'job-search-os')?.gallery.length >= 4, 'Job Search OS must retain its multi-surface product tour.');
+assert(projects.find((project) => project.slug === 'wave-factory-essentials')?.gallery.length >= 4, 'Wave Factory Essentials must retain its multi-image product-family gallery.');
 
 for (const capability of capabilities) {
   if (capability.evidence.length < 2) throw new Error(`${capability.name} does not contain enough supporting evidence.`);
@@ -223,6 +236,7 @@ if (contact.resumeUrl !== '/carl-welch-resume.pdf') throw new Error('Résumé co
 
 await Promise.all([
   ...projects.map((project) => requirePng(`public${project.image.src}`)),
+  ...projects.flatMap((project) => project.gallery.map((item) => requirePng(`public${item.src}`))),
   ...githubProjects.map((project) => requirePng(`public/github/${project.name}.png`)),
   requireFile('public/carl-welch-resume.pdf', 10_000),
 ]);

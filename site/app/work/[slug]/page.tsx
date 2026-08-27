@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { MotionRuntime, Reveal } from '../../motion-elements';
 import { getProject, projects } from '../../portfolio-data';
-import { ArchitectureDiagram, PageFrame } from '../../site-components';
+import { ArchitectureDiagram, PageFrame, ProjectGallery } from '../../site-components';
 import { buildPageMetadata } from '../../site-metadata';
 import { publicEvidenceAnchorId } from '../../jolene/public-evidence-navigation-core';
 
@@ -72,6 +72,8 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               sizes="100vw"
             />
           </Reveal>
+
+          <ProjectGallery project={project} />
 
           <section className="project-detail-section" aria-labelledby="architecture-title">
             <p className="eyebrow">Technical view</p>

@@ -260,6 +260,21 @@ export function ProjectChapter({ project, priority = false }: { project: Portfol
         </ImageDrift>
       </div>
 
+      <div className="project-media-preview" aria-label={`${project.name} additional project images`}>
+        {project.gallery.slice(0, 3).map((item) => (
+          <Link key={item.src} href={`/work/${project.slug}#project-gallery`}>
+            <Image
+              src={item.src}
+              alt=""
+              width={item.width}
+              height={item.height}
+              sizes="(max-width: 720px) 82vw, 30vw"
+            />
+            <span>{item.label}</span>
+          </Link>
+        ))}
+      </div>
+
       <div className="project-layout">
         <Reveal className="project-overview">
           <p>{project.summary}</p>
@@ -274,6 +289,46 @@ export function ProjectChapter({ project, priority = false }: { project: Portfol
         </Reveal>
 
         <ArchitectureDiagram nodes={project.architecture} tone={project.tone} compact />
+      </div>
+    </section>
+  );
+}
+
+export function ProjectGallery({ project }: { project: PortfolioProject }) {
+  return (
+    <section id="project-gallery" className="project-gallery" aria-labelledby="project-gallery-title">
+      <Reveal className="project-gallery-heading">
+        <p className="eyebrow">Inside the work / {String(project.gallery.length + 1).padStart(2, '0')} views</p>
+        <h2 id="project-gallery-title">{project.galleryTitle}</h2>
+        <p>{project.gallerySummary}</p>
+      </Reveal>
+
+      <div className="project-gallery-grid">
+        {project.gallery.map((item, index) => (
+          <Reveal
+            key={item.src}
+            className={`project-gallery-item project-gallery-item-${item.layout ?? 'standard'} ${index === 0 ? 'project-gallery-item-first' : ''}`}
+          >
+            <figure>
+              <div className="project-gallery-image">
+                <Image
+                  src={item.src}
+                  alt={item.alt}
+                  width={item.width}
+                  height={item.height}
+                  sizes={item.layout === 'portrait' ? '(max-width: 720px) 84vw, 38vw' : '(max-width: 900px) 100vw, 88vw'}
+                />
+              </div>
+              <figcaption>
+                <span>{String(index + 2).padStart(2, '0')}</span>
+                <div>
+                  <strong>{item.label}</strong>
+                  <p>{item.caption}</p>
+                </div>
+              </figcaption>
+            </figure>
+          </Reveal>
+        ))}
       </div>
     </section>
   );
