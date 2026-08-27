@@ -3,6 +3,7 @@ import tailwindcss from '@tailwindcss/postcss';
 import vinext from 'vinext';
 import { defineConfig } from 'vite';
 import hostingConfig from './.openai/hosting.json';
+import { readSentryReleaseUploadConfig } from './app/observability/sentry-release-config.mjs';
 
 const SITE_CREATOR_PLACEHOLDER_DATABASE_ID =
   '00000000-0000-4000-8000-000000000000';
@@ -43,8 +44,29 @@ export default defineConfig(async () => {
 
   // Wrangler snapshots its log path while the Cloudflare plugin is imported.
   const { cloudflare } = await import('@cloudflare/vite-plugin');
+  const sentryRelease = readSentryReleaseUploadConfig(process.env);
+  const sentryPlugins = sentryRelease.enabled
+    ? (await import('@sentry/vite-plugin')).sentryVitePlugin({
+        authToken: sentryRelease.authToken,
+        org: sentryRelease.org,
+        project: sentryRelease.project,
+        telemetry: false,
+        release: {
+          name: sentryRelease.release,
+          inject: true,
+          create: true,
+          finalize: true,
+          setCommits: false,
+        },
+        sourcemaps: {
+          assets: ['./dist/**/*.js', './dist/**/*.js.map'],
+          filesToDeleteAfterUpload: ['./dist/**/*.map'],
+        },
+      })
+    : [];
 
   return {
+    build: { sourcemap: sentryRelease.enabled ? ('hidden' as const) : false },
     css: { postcss: { plugins: [tailwindcss()] } },
     server: isCodexSeatbeltSandbox
       ? { watch: { useFsEvents: false, usePolling: true } }
@@ -56,6 +78,7 @@ export default defineConfig(async () => {
         viteEnvironment: { name: 'rsc', childEnvironments: ['ssr'] },
         config: localBindingConfig,
       }),
+      ...sentryPlugins,
     ],
   };
 });
