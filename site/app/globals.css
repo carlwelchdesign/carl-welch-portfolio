@@ -170,6 +170,11 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .page-intro { min-height: 68svh; padding: clamp(92px, 13vw, 190px) var(--page-padding) clamp(72px, 9vw, 130px); display: flex; flex-direction: column; justify-content: flex-end; background: rgba(242, 242, 235, 0.93); color: var(--ink); }
 .page-intro h1 { max-width: 1100px; margin: 26px 0 34px; font-size: clamp(70px, 12vw, 178px); line-height: 0.9; letter-spacing: -0.045em; }
 .page-intro > p:last-child { max-width: 780px; margin: 0; font-size: clamp(18px, 2vw, 28px); line-height: 1.45; letter-spacing: -0.025em; }
+.recovery-intro { min-height: 72svh; }
+.recovery-intro h1 { max-width: 980px; font-size: clamp(64px, 10vw, 146px); }
+.recovery-intro > p:not(.eyebrow) { max-width: 780px; margin: 0; font-size: clamp(18px, 2vw, 28px); line-height: 1.45; letter-spacing: -0.025em; }
+.recovery-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 36px; }
+.recovery-actions .primary-action { min-width: 184px; border-radius: 0; background: transparent; color: inherit; cursor: pointer; }
 
 .about-story { padding: clamp(82px, 10vw, 150px) var(--page-padding); background: rgba(9, 12, 9, 0.94); color: var(--paper); }
 .about-story-heading { display: grid; grid-template-columns: minmax(160px, 0.3fr) 1fr; gap: 48px; }

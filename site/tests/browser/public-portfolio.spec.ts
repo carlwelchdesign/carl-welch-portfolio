@@ -120,6 +120,22 @@ test('server-rendered navigation and content remain available without JavaScript
   await context.close();
 });
 
+test('unknown routes return an accessible recovery page', async ({ page }) => {
+  const response = await page.goto('/this-route-does-not-exist');
+  expect(response?.status()).toBe(404);
+  await expectCorePageContract(page);
+  await expect(page.getByRole('heading', { level: 1, name: 'That route isn’t part of the portfolio.' })).toBeVisible();
+  await expect(page.getByRole('navigation', { name: 'Page recovery' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Return home' })).toHaveAttribute('href', '/');
+  await expect(page.getByRole('link', { name: 'View selected work' })).toHaveAttribute('href', '/work');
+  await expect(page.getByRole('link', { name: 'Contact Carl' })).toHaveAttribute('href', '/contact');
+
+  const results = await new AxeBuilder({ page })
+    .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+    .analyze();
+  expect(results.violations.filter(({ impact }) => impact === 'serious' || impact === 'critical')).toEqual([]);
+});
+
 test('Sentry remains fail-closed without explicit production configuration', async ({ page, request }) => {
   const telemetryRequests: string[] = [];
   page.on('request', (request) => {

@@ -1,6 +1,7 @@
 'use client';
 
 import * as Sentry from '@sentry/browser';
+import Link from 'next/link';
 import { useEffect } from 'react';
 
 export default function AppError({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
@@ -14,15 +15,22 @@ export default function AppError({ error, reset }: { error: Error & { digest?: s
 
   return (
     <main className="page-shell" id="main-content">
-      <section className="page-intro" aria-labelledby="error-title">
+      <section className="page-intro recovery-intro" aria-labelledby="error-title">
         <p className="eyebrow">Temporary interruption</p>
         <h1 id="error-title">This page hit an unexpected problem.</h1>
-        <p>The error has been prepared for review. You can retry without losing any portfolio data.</p>
-        <button className="button button-primary" type="button" onClick={reset}>
-          Try again
-        </button>
+        <p>You can retry the page or return to a known route. No form response or visitor message is stored here.</p>
+        <div className="recovery-actions">
+          <button className="primary-action" type="button" onClick={reset}>
+            Try again <span aria-hidden="true">↻</span>
+          </button>
+          <Link className="primary-action" href="/">
+            Return home <span aria-hidden="true">→</span>
+          </Link>
+          <Link className="primary-action" href="/contact">
+            Contact Carl <span aria-hidden="true">→</span>
+          </Link>
+        </div>
       </section>
     </main>
   );
 }
-
