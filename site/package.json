@@ -22,6 +22,7 @@
     "check:analytics": "node scripts/check-analytics.mjs",
     "check:container": "node scripts/check-container.mjs",
     "check:routes": "node scripts/check-routes.mjs",
+    "check:browser": "playwright test",
     "check": "pnpm lint && pnpm check:metadata && pnpm check:content && pnpm check:github-sync && pnpm check:jolene-contract && pnpm check:jolene-job-fit && pnpm check:jolene-bff && pnpm check:analytics && pnpm build"
   },
   "dependencies": {
@@ -36,9 +37,11 @@
     "vite": "8.0.16"
   },
   "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
     "@cloudflare/vite-plugin": "1.37.1",
     "@cloudflare/workers-types": "4.20260515.1",
     "@openai/sites-vite-plugin": "^0.1.0 || ^0.2.0",
+    "@playwright/test": "1.62.1",
     "@tailwindcss/postcss": "4.2.1",
     "@types/node": "22.19.19",
     "@types/react": "19.2.14",
