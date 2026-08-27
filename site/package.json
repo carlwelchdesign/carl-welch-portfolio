@@ -36,6 +36,7 @@
     "check:sentry-operations": "node scripts/check-sentry-operations.mjs",
     "check:research-protocol": "node scripts/check-research-protocol.mjs",
     "check:recovery": "node scripts/check-recovery-boundaries.mjs",
+    "check:repository-security": "node scripts/check-repository-security.mjs",
     "check:security-headers": "node scripts/check-security-headers.mjs",
     "check:no-public-sourcemaps": "node scripts/check-no-public-sourcemaps.mjs",
     "check:release-readiness": "node scripts/check-release-readiness.mjs",
