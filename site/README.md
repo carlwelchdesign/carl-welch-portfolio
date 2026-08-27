@@ -6,9 +6,10 @@ Motion-led portfolio site for Carl Welch. The application is intentionally kept 
 
 - `pnpm dev` starts the local site.
 - `pnpm check` runs lint, content-integrity checks, the public Jolene contract checks, and the production build.
-- `pnpm check:jolene-contract` compiles and exercises the proposed public Jolene v1 contract, deterministic fixtures, runtime validation, citation integrity, and failure states.
+- `pnpm check:jolene-contract` compiles and exercises the frozen public Jolene v1 contract, deterministic fixtures, runtime validation, citation integrity, and failure states.
 - `pnpm check:jolene-bff` exercises the disabled-by-default same-origin BFF, request/response gates, admission budgets, kill switches, safe retries, and sanitized observability.
 - `pnpm check:analytics` verifies the closed analytics event dictionary, prohibited-field rejection, privacy signals, product-area separation, and disabled default.
+- `pnpm check:release-readiness` verifies that the recorded public-corpus manifest, architecture status, release-gate register, and local-only/public-disabled boundaries remain internally consistent.
 - `pnpm check:github` compares the checked-in public-repository snapshot with Carl's current public GitHub repositories.
 - `pnpm check:github-sync` tests deterministic GitHub drift review, stable rename detection, stale-source rejection, protected editorial fields, media failures, and explicit decisions.
 - `pnpm sync:github` prints a read-only Markdown review of current GitHub drift. It never changes portfolio content by default.
@@ -18,7 +19,7 @@ The application requires Node.js 22.13 or newer.
 
 Repository changes follow the pull-request, verification, secret-boundary, and deployment-approval rules in [`DELIVERY_POLICY.md`](../DELIVERY_POLICY.md).
 
-The proposed live Jolene topology, trust boundaries, observability policy, failure ownership, and MCP/RAG/graph decisions are documented in [`PUBLIC_JOLENE_DEPLOYMENT_ARCHITECTURE.md`](../PUBLIC_JOLENE_DEPLOYMENT_ARCHITECTURE.md). It is an approval-gated design, not a live integration or deployment authorization.
+The Jolene topology, trust boundaries, observability policy, failure ownership, and MCP/RAG/graph decisions are documented in [`PUBLIC_JOLENE_DEPLOYMENT_ARCHITECTURE.md`](../PUBLIC_JOLENE_DEPLOYMENT_ARCHITECTURE.md). The local integration is implemented and verified; deployment and public enablement remain approval-gated.
 
 ## Docker development and CI
 
@@ -51,11 +52,13 @@ Accepted additions, removals, renames, and broken assets are reported as requiri
 
 ## Public Jolene development boundary
 
-The files under `app/jolene/` define a proposed public v1 contract, runtime validation, a narrow portfolio-side adapter, and deterministic development fixtures. They do not call a live Jolene service and do not imply that the proposed public endpoints exist.
+The files under `app/jolene/` define the frozen public v1 contract, runtime validation, a narrow portfolio-side adapter, deterministic development fixtures, and a disabled-by-default same-origin BFF. Explicit local integration can call the isolated public Jolene delegate on `127.0.0.1:8431`; the browser never receives that origin or an upstream credential. No public delegate URL is deployed or implied.
 
 The frozen portfolio-consumer wire contract and privacy/identifier semantics are reviewable in [`contracts/public-jolene-v1.openapi.json`](contracts/public-jolene-v1.openapi.json) and [`contracts/README.md`](contracts/README.md). Schema version `1.0.0` deliberately omits session continuity and restricts citations to portfolio-relative links.
 
-The portfolio must never call Jolene's private API, mount or read Obsidian, access private durable memory, or invoke private MCP tools. A future live adapter may consume only the reviewed, content-minimized public evidence export and public delegate created by `JOL-CAREER-004` and `JOL-CAREER-005`. Until those dependencies pass their own security and evaluation gates, UI work must remain in fixture mode.
+The locally validated reviewed manifest contains 41 public claims and zero revocations at corpus `career:3d3b0d7361be5cfae3c634013bc48b73983388d3207d8f9b7bb1aaf50fa5c5de`. This pins compatibility evidence; it is not a public service URL or deployment record.
+
+The portfolio must never call Jolene's private API, mount or read Obsidian, access private durable memory, or invoke private MCP tools. The live adapter may consume only the reviewed, content-minimized public evidence export and isolated public delegate created by `JOL-CAREER-004` and `JOL-CAREER-005`. Those dependencies are merged and verified for local integration; production configuration remains disabled until the deployment, operations, human-review, and launch gates pass.
 
 The contract path surface and bounds are checked against the TypeScript adapter contract in CI. The portfolio accepts additive changes within schema major version 1, rejects incompatible major versions and missing required fields, and fails closed when a response uses a stale corpus version or cites evidence revoked by the reviewed manifest. The OpenAPI document is a compatibility artifact, not evidence of a deployed service.
 
