@@ -1,9 +1,17 @@
 import type { Metadata, Viewport } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { JoleneShell } from './jolene/jolene-shell';
+import { EvidenceTargetObserver } from './jolene/evidence-target-observer';
+import { AnalyticsRuntime } from './analytics/analytics-runtime';
+import { analyticsModes, type AnalyticsMode } from './analytics/analytics-contract';
+import {
+  buildPageMetadata,
+  defaultDescription,
+  defaultTitle,
+  siteName,
+  siteUrl,
+} from './site-metadata';
 import './globals.css';
-
-const siteUrl = new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000');
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -18,43 +26,21 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  ...buildPageMetadata({
+    title: defaultTitle,
+    description: defaultDescription,
+    path: '/',
+  }),
   metadataBase: siteUrl,
   title: {
-    default: 'Carl Welch — Product Engineer',
+    default: defaultTitle,
     template: '%s | Carl Welch',
   },
-  description:
-    'Selected work, architecture, and experience from product engineer Carl Welch.',
-  applicationName: 'Carl Welch Portfolio',
+  applicationName: siteName,
   authors: [{ name: 'Carl Welch' }],
   creator: 'Carl Welch',
-  alternates: { canonical: '/' },
   manifest: '/manifest.webmanifest',
   icons: { icon: '/favicon.svg' },
-  openGraph: {
-    type: 'website',
-    locale: 'en_US',
-    siteName: 'Carl Welch Portfolio',
-    title: 'Carl Welch — Product Engineer',
-    description:
-      'Selected work, architecture, and experience from product engineer Carl Welch.',
-    url: '/',
-    images: [
-      {
-        url: '/opengraph-image',
-        width: 1200,
-        height: 630,
-        alt: 'Carl Welch — Product Engineer',
-      },
-    ],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Carl Welch — Product Engineer',
-    description:
-      'Selected work, architecture, and experience from product engineer Carl Welch.',
-    images: ['/opengraph-image'],
-  },
 };
 
 export const viewport: Viewport = {
@@ -65,9 +51,16 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  const requestedAnalyticsMode = process.env.NEXT_PUBLIC_PORTFOLIO_ANALYTICS_MODE;
+  const analyticsMode: AnalyticsMode = analyticsModes.includes(requestedAnalyticsMode as AnalyticsMode)
+    ? requestedAnalyticsMode as AnalyticsMode
+    : 'disabled';
+
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body>
+        <AnalyticsRuntime mode={analyticsMode} />
+        <EvidenceTargetObserver />
         {children}
         <JoleneShell />
       </body>

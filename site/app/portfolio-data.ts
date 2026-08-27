@@ -1,3 +1,5 @@
+import type { ProjectMaturity, PublicEvidenceRecord } from './evidence-types';
+
 export type ProjectTone = 'red' | 'orange' | 'green';
 
 export type ArchitectureNode = {
@@ -22,7 +24,9 @@ export type PortfolioProject = {
   };
   stack: string[];
   architecture: ArchitectureNode[];
-  evidence: string[];
+  maturity: ProjectMaturity;
+  sourceId: `portfolio:source:project:${string}`;
+  evidence: PublicEvidenceRecord[];
   boundaries: string[];
   repositoryUrl: string;
   liveUrl?: string;
@@ -52,10 +56,27 @@ export const projects: PortfolioProject[] = [
       { id: 'review', label: 'Review workspace', detail: 'Fit, materials, blockers, and approval state' },
       { id: 'actions', label: 'External actions', detail: 'Manual or explicitly approval-gated' },
     ],
+    maturity: 'production',
+    sourceId: 'portfolio:source:project:job-search-os',
     evidence: [
-      'Combines job discovery, fit review, application materials, tracking, email operations, and LinkedIn content workflows in one product.',
-      'Uses structured model outputs, source-backed career evidence, and deterministic fallbacks where model output is not sufficient.',
-      'Keeps submissions and other consequential external actions behind explicit human approval.',
+      {
+        id: 'portfolio:claim:job-search-os:integrated-workflow',
+        sourceIds: ['portfolio:source:project:job-search-os'],
+        text: 'Combines job discovery, fit review, application materials, tracking, email operations, and LinkedIn content workflows in one product.',
+        strength: 'strong', maturity: 'production', limitations: ['Protected single-user scope.'], reviewState: 'approved', publicApproved: true,
+      },
+      {
+        id: 'portfolio:claim:job-search-os:evidence-fallbacks',
+        sourceIds: ['portfolio:source:project:job-search-os'],
+        text: 'Uses structured model outputs, source-backed career evidence, and deterministic fallbacks where model output is not sufficient.',
+        strength: 'strong', maturity: 'production', limitations: ['Model-assisted recommendations remain review inputs.'], reviewState: 'approved', publicApproved: true,
+      },
+      {
+        id: 'portfolio:claim:job-search-os:approval-boundary',
+        sourceIds: ['portfolio:source:project:job-search-os'],
+        text: 'Keeps submissions and other consequential external actions behind explicit human approval.',
+        strength: 'strong', maturity: 'production', limitations: ['Approval controls do not authorize autonomous submission.'], reviewState: 'approved', publicApproved: true,
+      },
     ],
     boundaries: [
       'This is a protected single-user application, not a public applicant-submission service.',
@@ -86,10 +107,24 @@ export const projects: PortfolioProject[] = [
       { id: 'spatial', label: 'Spatial store', detail: 'PostgreSQL and PostGIS for geospatial queries' },
       { id: 'explain', label: 'Attention layer', detail: 'Explainable cues and constrained draft assistance' },
     ],
+    maturity: 'deployed_demo',
+    sourceId: 'portfolio:source:project:flight-tracker-ai',
     evidence: [
-      'Supports both live and deterministic replay modes so product behavior can be reviewed without depending on current air traffic.',
-      'Connects aircraft, trajectory, weather, and hazard context in a single geospatial product surface.',
-      'Uses a typed browser-to-service architecture with a Rust API and a spatial database.',
+      {
+        id: 'portfolio:claim:flight-tracker-ai:live-replay', sourceIds: ['portfolio:source:project:flight-tracker-ai'],
+        text: 'Supports both live and deterministic replay modes so product behavior can be reviewed without depending on current air traffic.',
+        strength: 'strong', maturity: 'deployed_demo', limitations: ['Replay mode is a review aid, not live operational evidence.'], reviewState: 'approved', publicApproved: true,
+      },
+      {
+        id: 'portfolio:claim:flight-tracker-ai:geospatial-context', sourceIds: ['portfolio:source:project:flight-tracker-ai'],
+        text: 'Connects aircraft, trajectory, weather, and hazard context in a single geospatial product surface.',
+        strength: 'strong', maturity: 'deployed_demo', limitations: ['Not certified for aviation operations.'], reviewState: 'approved', publicApproved: true,
+      },
+      {
+        id: 'portfolio:claim:flight-tracker-ai:typed-system', sourceIds: ['portfolio:source:project:flight-tracker-ai'],
+        text: 'Uses a typed browser-to-service architecture with a Rust API and a spatial database.',
+        strength: 'strong', maturity: 'deployed_demo', limitations: ['Portfolio deployment does not establish production traffic scale.'], reviewState: 'approved', publicApproved: true,
+      },
     ],
     boundaries: [
       'The product is a portfolio demonstration, not a certified aviation system.',
@@ -121,10 +156,24 @@ export const projects: PortfolioProject[] = [
       { id: 'interface', label: 'Custom UI', detail: 'Purpose-built controls, metering, and help surfaces' },
       { id: 'validation', label: 'Release gates', detail: 'Host, listening, automation, signing, and packaging checks' },
     ],
+    maturity: 'pre_release',
+    sourceId: 'portfolio:source:project:wave-factory-essentials',
     evidence: [
-      'Targets AU, VST3, and CLAP rather than substituting a standalone demonstration for a host-loadable product.',
-      'Keeps signal processing offline and local, with no accounts, uploads, telemetry, or model service dependency.',
-      'Treats build output, host validation, listening tests, signing, and packaging as separate release gates.',
+      {
+        id: 'portfolio:claim:wave-factory-essentials:plugin-formats', sourceIds: ['portfolio:source:project:wave-factory-essentials'],
+        text: 'Targets AU, VST3, and CLAP rather than substituting a standalone demonstration for a host-loadable product.',
+        strength: 'strong', maturity: 'pre_release', limitations: ['Host-loadable builds are not equivalent to public release.'], reviewState: 'approved', publicApproved: true,
+      },
+      {
+        id: 'portfolio:claim:wave-factory-essentials:local-dsp', sourceIds: ['portfolio:source:project:wave-factory-essentials'],
+        text: 'Keeps signal processing offline and local, with no accounts, uploads, telemetry, or model service dependency.',
+        strength: 'strong', maturity: 'pre_release', limitations: ['Applies to the current plug-in architecture.'], reviewState: 'approved', publicApproved: true,
+      },
+      {
+        id: 'portfolio:claim:wave-factory-essentials:release-gates', sourceIds: ['portfolio:source:project:wave-factory-essentials'],
+        text: 'Treats build output, host validation, listening tests, signing, and packaging as separate release gates.',
+        strength: 'strong', maturity: 'pre_release', limitations: ['Several release gates remain open.'], reviewState: 'approved', publicApproved: true,
+      },
     ],
     boundaries: [
       'Current artifacts are pre-release tester builds and are not represented as publicly released products.',
@@ -136,6 +185,7 @@ export const projects: PortfolioProject[] = [
 
 export type ExperienceRole = {
   id: string;
+  sourceId: `portfolio:source:experience:${string}`;
   company: string;
   role: string;
   dates: string;
@@ -146,6 +196,7 @@ export type ExperienceRole = {
 export const experience: ExperienceRole[] = [
   {
     id: 'yubico',
+    sourceId: 'portfolio:source:experience:yubico',
     company: 'Yubico',
     role: 'Senior Software Engineer',
     dates: 'Jul 2022 — Mar 2026',
@@ -155,6 +206,7 @@ export const experience: ExperienceRole[] = [
   },
   {
     id: 'revenue-io',
+    sourceId: 'portfolio:source:experience:revenue-io',
     company: 'Revenue.io',
     role: 'Senior Software Engineer',
     dates: 'Mar 2020 — Jul 2022',
@@ -164,6 +216,7 @@ export const experience: ExperienceRole[] = [
   },
   {
     id: 'bosch',
+    sourceId: 'portfolio:source:experience:bosch',
     company: 'Bosch',
     role: 'Lead Frontend Developer',
     dates: 'Jul 2018 — Mar 2020',
@@ -173,6 +226,7 @@ export const experience: ExperienceRole[] = [
   },
   {
     id: 'bridg',
+    sourceId: 'portfolio:source:experience:bridg',
     company: 'Bridg',
     role: 'Senior Frontend Engineer',
     dates: 'Dec 2017 — Aug 2018',
@@ -182,6 +236,7 @@ export const experience: ExperienceRole[] = [
   },
   {
     id: 'grindr',
+    sourceId: 'portfolio:source:experience:grindr',
     company: 'Grindr',
     role: 'Senior Web Developer / Manager',
     dates: 'Apr 2016 — Aug 2017',

@@ -4,16 +4,22 @@ import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react';
 import { PublicJoleneAdapterError } from './public-adapter';
 import {
   createFixturePublicJoleneAdapter,
+  PUBLIC_JOLENE_FIXTURE_CORPUS_VERSION,
   publicJoleneFixtureScenarios,
   type PublicJoleneFixtureScenario,
 } from './public-fixtures';
+import { JoleneEvidence, type JoleneAnswerEvidence } from './jolene-evidence';
 import { PublicJoleneContractError } from './public-validation';
+import { JoleneContactIntent } from './jolene-contact-intent';
+import { JoleneJobFit } from './jolene-job-fit';
+import { trackAnalytics } from '../analytics/analytics-client';
 
 type ChatMessage = {
   id: string;
   role: 'assistant' | 'visitor';
   text: string;
   note?: string;
+  evidence?: JoleneAnswerEvidence;
 };
 
 const conversationStarters = [
@@ -45,6 +51,17 @@ function describeError(error: unknown): string {
   return 'The preview could not complete that request.';
 }
 
+function getSuggestedQuestions(messages: ChatMessage[]): string[] {
+  if (messages.length === 1) return conversationStarters;
+
+  for (let index = messages.length - 1; index >= 0; index -= 1) {
+    const questions = messages[index].evidence?.suggestedFollowUpQuestions;
+    if (questions) return questions;
+  }
+
+  return [];
+}
+
 export function JoleneFixtureChat({ scenario: scenarioValue }: { scenario: string }) {
   const scenario = normalizeScenario(scenarioValue);
   const adapter = useMemo(() => createFixturePublicJoleneAdapter(scenario), [scenario]);
@@ -53,9 +70,11 @@ export function JoleneFixtureChat({ scenario: scenarioValue }: { scenario: strin
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messageSequence = useRef(0);
   const [open, setOpen] = useState(false);
+  const [mode, setMode] = useState<'chat' | 'job' | 'contact'>('chat');
   const [draft, setDraft] = useState('');
   const [waiting, setWaiting] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([initialMessage]);
+  const suggestedQuestions = getSuggestedQuestions(messages);
 
   useEffect(() => {
     if (!open) return;
@@ -74,6 +93,7 @@ export function JoleneFixtureChat({ scenario: scenarioValue }: { scenario: strin
 
   function closePanel() {
     setOpen(false);
+    setMode('chat');
     requestAnimationFrame(() => launcherRef.current?.focus());
   }
 
@@ -92,6 +112,10 @@ export function JoleneFixtureChat({ scenario: scenarioValue }: { scenario: strin
 
     try {
       const response = await adapter.answer({ question: normalizedQuestion });
+      trackAnalytics('jolene_response', {
+        operation: 'answer',
+        state: response.claims.length > 0 ? 'success' : 'no_evidence',
+      });
       setMessages((current) => [
         ...current,
         {
@@ -99,9 +123,22 @@ export function JoleneFixtureChat({ scenario: scenarioValue }: { scenario: strin
           role: 'assistant',
           text: response.answer,
           note: response.limitations[0],
+          evidence: {
+            claims: response.claims,
+            citations: response.citations,
+            limitations: response.limitations,
+            suggestedFollowUpQuestions: response.suggestedFollowUpQuestions,
+            corpusVersion: response.corpusVersion,
+            expectedCorpusVersion: PUBLIC_JOLENE_FIXTURE_CORPUS_VERSION,
+            revokedEvidenceIds: [],
+          },
         },
       ]);
     } catch (error) {
+      trackAnalytics('jolene_response', {
+        operation: 'answer',
+        state: error instanceof PublicJoleneAdapterError && error.code === 'unavailable' ? 'unavailable' : 'error',
+      });
       setMessages((current) => [
         ...current,
         {
@@ -121,6 +158,11 @@ export function JoleneFixtureChat({ scenario: scenarioValue }: { scenario: strin
     void sendQuestion(draft);
   }
 
+  function askFromComparison(question: string) {
+    setMode('chat');
+    void sendQuestion(question);
+  }
+
   return (
     <div className="jolene-fixture" data-jolene-fixture>
       {open ? (
@@ -131,11 +173,14 @@ export function JoleneFixtureChat({ scenario: scenarioValue }: { scenario: strin
           aria-modal="false"
           aria-labelledby="jolene-panel-title"
           aria-describedby="jolene-panel-description"
+          data-mode={mode}
         >
           <header className="jolene-panel-header">
             <div>
               <p>Portfolio guide / Development fixture</p>
-              <h2 id="jolene-panel-title">Ask Jolene</h2>
+              <h2 id="jolene-panel-title">
+                {mode === 'contact' ? 'Contact Carl' : mode === 'job' ? 'Compare a role' : 'Ask Jolene'}
+              </h2>
             </div>
             <button ref={closeRef} type="button" onClick={closePanel} aria-label="Close Jolene chat">
               Close
@@ -146,12 +191,21 @@ export function JoleneFixtureChat({ scenario: scenarioValue }: { scenario: strin
             Fixture responses only. No live agent, private memory, Obsidian access, or transcript retention.
           </p>
 
-          <div className="jolene-messages" role="log" aria-live="polite" aria-busy={waiting}>
+          <nav className="jolene-mode-switch" aria-label="Jolene panel sections">
+            <button type="button" aria-pressed={mode === 'chat'} onClick={() => setMode('chat')}>Questions</button>
+            <button type="button" aria-pressed={mode === 'job'} onClick={() => setMode('job')}>Compare role</button>
+            <button type="button" aria-pressed={mode === 'contact'} onClick={() => setMode('contact')}>Request contact</button>
+          </nav>
+
+          {mode === 'chat' ? <><div className="jolene-messages" role="log" aria-live="polite" aria-busy={waiting}>
             {messages.map((message) => (
               <article className="jolene-message" data-role={message.role} key={message.id}>
                 <p className="jolene-message-role">{message.role === 'assistant' ? 'Jolene' : 'You'}</p>
                 <p>{message.text}</p>
                 {message.note ? <p className="jolene-message-note">{message.note}</p> : null}
+                {message.evidence ? (
+                  <JoleneEvidence evidence={message.evidence} />
+                ) : null}
               </article>
             ))}
             {waiting ? (
@@ -162,10 +216,11 @@ export function JoleneFixtureChat({ scenario: scenarioValue }: { scenario: strin
             <div ref={messagesEndRef} aria-hidden="true" />
           </div>
 
-          {messages.length === 1 ? (
+          {suggestedQuestions.length > 0 ? (
             <div className="jolene-starters" aria-label="Suggested questions">
-              {conversationStarters.map((question) => (
-                <button type="button" key={question} onClick={() => void sendQuestion(question)}>
+              {messages.length > 1 ? <p>Ask next</p> : null}
+              {suggestedQuestions.map((question) => (
+                <button type="button" disabled={waiting} key={question} onClick={() => void sendQuestion(question)}>
                   {question}
                 </button>
               ))}
@@ -190,7 +245,11 @@ export function JoleneFixtureChat({ scenario: scenarioValue }: { scenario: strin
                 {waiting ? 'Checking…' : 'Ask Jolene'}
               </button>
             </div>
-          </form>
+          </form></> : mode === 'contact' ? (
+            <JoleneContactIntent adapter={adapter} onReturnToChat={() => setMode('chat')} />
+          ) : (
+            <JoleneJobFit adapter={adapter} onAskQuestion={askFromComparison} />
+          )}
         </section>
       ) : null}
 
@@ -200,7 +259,13 @@ export function JoleneFixtureChat({ scenario: scenarioValue }: { scenario: strin
         type="button"
         aria-expanded={open}
         aria-controls="jolene-fixture-panel"
-        onClick={() => (open ? closePanel() : setOpen(true))}
+        onClick={() => {
+          if (open) closePanel();
+          else {
+            trackAnalytics('jolene_open', { source: 'launcher' });
+            setOpen(true);
+          }
+        }}
         data-jolene-fixture-launcher
       >
         <span className="jolene-launcher-mark" aria-hidden="true">J</span>

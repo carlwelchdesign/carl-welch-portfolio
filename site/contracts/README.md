@@ -15,3 +15,9 @@ Citation links are site-relative in v1. The portfolio adapter resolves them agai
 `direct` and `adjacent` job-fit assessments require public evidence. `missing` and `unknown` carry no evidence IDs: absence of public evidence is never presented as evidence that Carl lacks a qualification.
 
 Errors use a bounded, non-disclosing schema. `version_mismatch` advertises supported schema versions; retryable errors may include `retryAfterSeconds`, which the BFF maps to the HTTP `Retry-After` header. Error messages must not include submitted content, private identifiers, provider details, stack traces, or evidence excerpts.
+
+## Provider compatibility evidence
+
+The proposed Jolene provider alignment is reviewable in [`jolene-ai` PR #29](https://github.com/carlwelchdesign/jolene-ai/pull/29). Its branch reports compatibility tests for this contract's safe error envelope, bounds, site-relative citations, evidence-free `missing` and `unknown` assessments, omitted session continuity, and empty-corpus semantics.
+
+That provider PR is review evidence only. It is not merged to Jolene `main`, does not make an endpoint publicly reachable, and does not authorize portfolio activation or deployment.

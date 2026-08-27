@@ -2,11 +2,13 @@ import type { Metadata } from 'next';
 import { contact } from '../contact-data';
 import { MotionRuntime, Reveal } from '../motion-elements';
 import { PageFrame, PageIntro } from '../site-components';
+import { buildPageMetadata } from '../site-metadata';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
   title: 'Contact',
   description: 'Contact product engineer Carl Welch by email, LinkedIn, or GitHub.',
-};
+  path: '/contact',
+});
 
 export default function ContactPage() {
   return (

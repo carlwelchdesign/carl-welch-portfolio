@@ -4,11 +4,13 @@ import { githubProjects } from '../github-projects';
 import { MotionRuntime } from '../motion-elements';
 import { projects } from '../portfolio-data';
 import { PageFrame, PageIntro, ProjectChapter } from '../site-components';
+import { buildPageMetadata } from '../site-metadata';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
   title: 'Selected Work',
   description: 'Selected product engineering work by Carl Welch, with architecture and technical context.',
-};
+  path: '/work',
+});
 
 export default function WorkPage() {
   return (

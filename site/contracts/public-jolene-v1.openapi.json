@@ -110,7 +110,7 @@
       },
       "PublicEvidenceManifest": {
         "type": "object",
-        "additionalProperties": false,
+        "additionalProperties": true,
         "required": ["schemaVersion", "corpusVersion", "corpusHash", "generatedAt", "reviewedAt", "evidenceCount", "revokedEvidenceIds"],
         "properties": {
           "schemaVersion": { "$ref": "#/components/schemas/SchemaVersion" },
@@ -133,7 +133,7 @@
       },
       "PublicEvidenceCitation": {
         "type": "object",
-        "additionalProperties": false,
+        "additionalProperties": true,
         "required": ["evidenceId", "title", "href", "sourceType", "strength", "maturity", "lastReviewedAt"],
         "properties": {
           "evidenceId": { "$ref": "#/components/schemas/EvidenceId" },
@@ -147,7 +147,7 @@
       },
       "PublicClaim": {
         "type": "object",
-        "additionalProperties": false,
+        "additionalProperties": true,
         "required": ["claimId", "text", "evidenceIds", "evidenceStrength", "maturity", "limitations"],
         "properties": {
           "claimId": { "$ref": "#/components/schemas/ClaimId" },
@@ -166,7 +166,7 @@
       },
       "PortfolioAnswerResponse": {
         "type": "object",
-        "additionalProperties": false,
+        "additionalProperties": true,
         "required": ["schemaVersion", "answer", "claims", "citations", "limitations", "suggestedFollowUpQuestions", "corpusVersion"],
         "properties": {
           "schemaVersion": { "$ref": "#/components/schemas/SchemaVersion" },
@@ -186,7 +186,7 @@
       },
       "JobRequirementResult": {
         "type": "object",
-        "additionalProperties": false,
+        "additionalProperties": true,
         "required": ["requirementId", "requirement", "assessment", "explanation", "evidenceIds", "limitations"],
         "properties": {
           "requirementId": { "type": "string", "pattern": "^req:[a-f0-9]{16}$" },
@@ -199,7 +199,7 @@
       },
       "JobFitResponse": {
         "type": "object",
-        "additionalProperties": false,
+        "additionalProperties": true,
         "required": ["schemaVersion", "requirements", "citations", "caveats", "suggestedFollowUpQuestions", "corpusVersion"],
         "properties": {
           "schemaVersion": { "$ref": "#/components/schemas/SchemaVersion" },
@@ -224,7 +224,7 @@
       },
       "ContactIntentResponse": {
         "type": "object",
-        "additionalProperties": false,
+        "additionalProperties": true,
         "required": ["schemaVersion", "intentId", "status", "submittedAt", "message"],
         "properties": {
           "schemaVersion": { "$ref": "#/components/schemas/SchemaVersion" },
@@ -236,7 +236,7 @@
       },
       "PublicJoleneErrorResponse": {
         "type": "object",
-        "additionalProperties": false,
+        "additionalProperties": true,
         "required": ["schemaVersion", "code", "message", "requestId"],
         "properties": {
           "schemaVersion": { "$ref": "#/components/schemas/SchemaVersion" },

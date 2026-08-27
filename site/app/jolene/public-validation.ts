@@ -22,19 +22,14 @@ import {
   type PublicEvidenceSourceType,
   type PublicJoleneErrorCode,
   type PublicJoleneErrorResponse,
+  type PublicJoleneSchemaVersion,
 } from './public-contract.js';
+import { requireCompatibleSchemaVersion } from './public-compatibility.js';
+import { PublicJoleneContractError } from './public-contract-error.js';
+
+export { PublicJoleneContractError } from './public-contract-error.js';
 
 type JsonRecord = Record<string, unknown>;
-
-export class PublicJoleneContractError extends Error {
-  readonly path: string;
-
-  constructor(path: string, message: string) {
-    super(`${path}: ${message}`);
-    this.name = 'PublicJoleneContractError';
-    this.path = path;
-  }
-}
 
 function readRecord(value: unknown, path: string): JsonRecord {
   if (typeof value !== 'object' || value === null || Array.isArray(value)) {
@@ -117,16 +112,21 @@ function requireUnique(values: readonly string[], path: string): void {
   }
 }
 
-function readSchemaVersion(value: unknown, path: string): typeof PUBLIC_JOLENE_SCHEMA_VERSION {
-  if (value !== PUBLIC_JOLENE_SCHEMA_VERSION) {
-    throw new PublicJoleneContractError(path, `requires schema version ${PUBLIC_JOLENE_SCHEMA_VERSION}`);
+function readSchemaVersion(value: unknown, path: string): PublicJoleneSchemaVersion {
+  requireCompatibleSchemaVersion(value, path);
+  return value as PublicJoleneSchemaVersion;
+}
+
+function readFrozenSchemaVersion(value: unknown, path: string): typeof PUBLIC_JOLENE_SCHEMA_VERSION {
+  const version = readSchemaVersion(value, path);
+  if (version !== PUBLIC_JOLENE_SCHEMA_VERSION) {
+    throw new PublicJoleneContractError(path, `must equal ${PUBLIC_JOLENE_SCHEMA_VERSION}`);
   }
   return PUBLIC_JOLENE_SCHEMA_VERSION;
 }
 
 function parseCitation(value: unknown, path: string): PublicEvidenceCitation {
   const item = readRecord(value, path);
-  requireOnlyKeys(item, ['evidenceId', 'title', 'href', 'sourceType', 'strength', 'maturity', 'lastReviewedAt'], path);
   const href = readString(item.href, `${path}.href`, PUBLIC_JOLENE_LIMITS.citationHrefCharacters);
   if (!href.startsWith('/') || href.startsWith('//')) {
     throw new PublicJoleneContractError(`${path}.href`, 'must be a site-relative URL');
@@ -149,7 +149,6 @@ function parseCitation(value: unknown, path: string): PublicEvidenceCitation {
 
 function parseClaim(value: unknown, path: string): PublicClaim {
   const item = readRecord(value, path);
-  requireOnlyKeys(item, ['claimId', 'text', 'evidenceIds', 'evidenceStrength', 'maturity', 'limitations'], path);
   const evidenceIds = readStringArray(
     item.evidenceIds,
     `${path}.evidenceIds`,
@@ -229,7 +228,6 @@ function validateClaimMaturity(citations: readonly PublicEvidenceCitation[], cla
 
 function parseRequirement(value: unknown, path: string): JobRequirementResult {
   const item = readRecord(value, path);
-  requireOnlyKeys(item, ['requirementId', 'requirement', 'assessment', 'explanation', 'evidenceIds', 'limitations'], path);
   const assessment = readEnum(
     item.assessment,
     jobRequirementAssessments,
@@ -272,11 +270,6 @@ function parseRequirement(value: unknown, path: string): JobRequirementResult {
 
 export function parsePublicEvidenceManifest(value: unknown): PublicEvidenceManifest {
   const item = readRecord(value, 'manifest');
-  requireOnlyKeys(
-    item,
-    ['schemaVersion', 'corpusVersion', 'corpusHash', 'generatedAt', 'reviewedAt', 'evidenceCount', 'revokedEvidenceIds'],
-    'manifest',
-  );
   const corpusHash = readString(item.corpusHash, 'manifest.corpusHash');
   if (!/^sha256:[a-f0-9]{64}$/.test(corpusHash)) {
     throw new PublicJoleneContractError('manifest.corpusHash', 'must be a lowercase sha256 digest');
@@ -324,11 +317,6 @@ export function parsePortfolioAnswerRequest(value: unknown): PortfolioAnswerRequ
 
 export function parsePortfolioAnswerResponse(value: unknown): PortfolioAnswerResponse {
   const item = readRecord(value, 'answerResponse');
-  requireOnlyKeys(
-    item,
-    ['schemaVersion', 'answer', 'claims', 'citations', 'limitations', 'suggestedFollowUpQuestions', 'corpusVersion'],
-    'answerResponse',
-  );
   const claims = readArray(item.claims, 'answerResponse.claims', parseClaim, PUBLIC_JOLENE_LIMITS.answerClaims);
   const citations = readArray(
     item.citations,
@@ -380,11 +368,6 @@ export function parseJobFitRequest(value: unknown): JobFitRequest {
 
 export function parseJobFitResponse(value: unknown): JobFitResponse {
   const item = readRecord(value, 'jobFitResponse');
-  requireOnlyKeys(
-    item,
-    ['schemaVersion', 'requirements', 'citations', 'caveats', 'suggestedFollowUpQuestions', 'corpusVersion'],
-    'jobFitResponse',
-  );
   const requirements = readArray(
     item.requirements,
     'jobFitResponse.requirements',
@@ -452,7 +435,6 @@ export function parseContactIntentRequest(value: unknown): ContactIntentRequest 
 
 export function parseContactIntentResponse(value: unknown): ContactIntentResponse {
   const item = readRecord(value, 'contactIntentResponse');
-  requireOnlyKeys(item, ['schemaVersion', 'intentId', 'status', 'submittedAt', 'message'], 'contactIntentResponse');
   if (item.status !== 'pending_review') {
     throw new PublicJoleneContractError('contactIntentResponse.status', 'must be pending_review');
   }
@@ -476,11 +458,6 @@ export function parseContactIntentResponse(value: unknown): ContactIntentRespons
 
 export function parsePublicJoleneErrorResponse(value: unknown): PublicJoleneErrorResponse {
   const item = readRecord(value, 'errorResponse');
-  requireOnlyKeys(
-    item,
-    ['schemaVersion', 'code', 'message', 'requestId', 'retryAfterSeconds', 'supportedSchemaVersions'],
-    'errorResponse',
-  );
   const retryAfterSeconds = item.retryAfterSeconds;
   if (retryAfterSeconds !== undefined && (!Number.isInteger(retryAfterSeconds) || (retryAfterSeconds as number) < 1)) {
     throw new PublicJoleneContractError('errorResponse.retryAfterSeconds', 'must be a positive integer');
@@ -500,7 +477,7 @@ export function parsePublicJoleneErrorResponse(value: unknown): PublicJoleneErro
     );
   }
   const response: PublicJoleneErrorResponse = {
-    schemaVersion: readSchemaVersion(item.schemaVersion, 'errorResponse.schemaVersion'),
+    schemaVersion: readFrozenSchemaVersion(item.schemaVersion, 'errorResponse.schemaVersion'),
     code,
     message: readString(item.message, 'errorResponse.message', PUBLIC_JOLENE_LIMITS.errorMessageCharacters),
     requestId: readPattern(item.requestId, 'errorResponse.requestId', /^req:[a-f0-9]{32}$/, 'public request ID') as `req:${string}`,

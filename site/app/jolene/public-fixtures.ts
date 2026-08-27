@@ -32,7 +32,8 @@ export const publicJoleneFixtureScenarios = [
 
 export type PublicJoleneFixtureScenario = (typeof publicJoleneFixtureScenarios)[number];
 
-const fixtureCorpusVersion = `career:${'a8'.repeat(32)}`;
+export const PUBLIC_JOLENE_FIXTURE_CORPUS_VERSION = `career:${'a8'.repeat(32)}`;
+const fixtureCorpusVersion = PUBLIC_JOLENE_FIXTURE_CORPUS_VERSION;
 const fixtureGeneratedAt = '2026-08-25T20:00:00.000Z';
 const fixtureReviewedAt = '2026-08-25T19:30:00.000Z';
 
@@ -40,7 +41,7 @@ const citations: PublicEvidenceCitation[] = [
   {
     evidenceId: 'career:00000000-0000-4000-8000-000000000001',
     title: 'Fixture evidence — Job Search OS approval boundary',
-    href: '/work/job-search-os',
+    href: '/work/job-search-os#evidence--portfolio--claim--job-search-os--approval-boundary',
     sourceType: 'portfolio_page',
     strength: 'strong',
     maturity: 'production',
@@ -49,7 +50,7 @@ const citations: PublicEvidenceCitation[] = [
   {
     evidenceId: 'career:00000000-0000-4000-8000-000000000002',
     title: 'Fixture evidence — Flight Tracker AI typed system',
-    href: '/work/flight-tracker-ai',
+    href: '/work/flight-tracker-ai#evidence--portfolio--claim--flight-tracker-ai--typed-system',
     sourceType: 'portfolio_page',
     strength: 'moderate',
     maturity: 'deployed_demo',

@@ -2,11 +2,14 @@ import type { Metadata } from 'next';
 import { MotionRuntime, Reveal } from '../motion-elements';
 import { earlierExperience, experience } from '../portfolio-data';
 import { PageFrame, PageIntro } from '../site-components';
+import { buildPageMetadata } from '../site-metadata';
+import { publicEvidenceAnchorId } from '../jolene/public-evidence-navigation-core';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
   title: 'Experience',
   description: 'Professional product engineering experience for Carl Welch.',
-};
+  path: '/experience',
+});
 
 export default function ExperiencePage() {
   return (
@@ -20,21 +23,31 @@ export default function ExperiencePage() {
           />
           <ol className="experience-list">
             {experience.map((item, index) => (
-              <li key={item.company} id={item.id}>
-                <Reveal className="experience-card">
-                  <span className="experience-number">{String(index + 1).padStart(2, '0')}</span>
-                  <div>
-                    <p className="eyebrow">{item.dates}</p>
-                    <h2>{item.company}</h2>
-                    <h3>{item.role}</h3>
-                  </div>
-                  <div>
-                    <p>{item.summary}</p>
-                    <ul className="inline-tags" aria-label={`${item.company} skills`}>
-                      {item.stack.map((skill) => <li key={skill}>{skill}</li>)}
-                    </ul>
-                  </div>
-                </Reveal>
+              <li
+                key={item.company}
+                id={item.id}
+              >
+                <div
+                  id={publicEvidenceAnchorId(item.sourceId)}
+                  data-evidence-target
+                  tabIndex={-1}
+                  aria-label={`${item.company} — ${item.role}`}
+                >
+                  <Reveal className="experience-card">
+                    <span className="experience-number">{String(index + 1).padStart(2, '0')}</span>
+                    <div>
+                      <p className="eyebrow">{item.dates}</p>
+                      <h2>{item.company}</h2>
+                      <h3>{item.role}</h3>
+                    </div>
+                    <div>
+                      <p>{item.summary}</p>
+                      <ul className="inline-tags" aria-label={`${item.company} skills`}>
+                        {item.stack.map((skill) => <li key={skill}>{skill}</li>)}
+                      </ul>
+                    </div>
+                  </Reveal>
+                </div>
               </li>
             ))}
           </ol>

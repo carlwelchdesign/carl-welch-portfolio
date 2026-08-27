@@ -1,4 +1,5 @@
 export const PUBLIC_JOLENE_SCHEMA_VERSION = '1.0.0' as const;
+export type PublicJoleneSchemaVersion = `${number}.${number}.${number}`;
 
 export const PUBLIC_JOLENE_ENDPOINTS = {
   manifest: '/v1/public-evidence/manifest',
@@ -86,7 +87,7 @@ export const publicJoleneErrorCodes = [
 export type PublicJoleneErrorCode = (typeof publicJoleneErrorCodes)[number];
 
 export type PublicEvidenceManifest = {
-  schemaVersion: typeof PUBLIC_JOLENE_SCHEMA_VERSION;
+  schemaVersion: PublicJoleneSchemaVersion;
   corpusVersion: string;
   corpusHash: `sha256:${string}`;
   generatedAt: string;
@@ -119,7 +120,7 @@ export type PortfolioAnswerRequest = {
 };
 
 export type PortfolioAnswerResponse = {
-  schemaVersion: typeof PUBLIC_JOLENE_SCHEMA_VERSION;
+  schemaVersion: PublicJoleneSchemaVersion;
   answer: string;
   claims: PublicClaim[];
   citations: PublicEvidenceCitation[];
@@ -142,7 +143,7 @@ export type JobRequirementResult = {
 };
 
 export type JobFitResponse = {
-  schemaVersion: typeof PUBLIC_JOLENE_SCHEMA_VERSION;
+  schemaVersion: PublicJoleneSchemaVersion;
   requirements: JobRequirementResult[];
   citations: PublicEvidenceCitation[];
   caveats: string[];
@@ -159,7 +160,7 @@ export type ContactIntentRequest = {
 };
 
 export type ContactIntentResponse = {
-  schemaVersion: typeof PUBLIC_JOLENE_SCHEMA_VERSION;
+  schemaVersion: PublicJoleneSchemaVersion;
   intentId: string;
   status: 'pending_review';
   submittedAt: string;
