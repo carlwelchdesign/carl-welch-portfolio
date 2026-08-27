@@ -38,7 +38,7 @@ function reconciledRecommendation(candidate: ReconciledRecommendation): Recommen
   };
 }
 
-export const recommendations: Recommendation[] = [
+export const recommendations: Recommendation[] = ([
   {
     id: 'portfolio:recommendation:sree-sankara-2026-06-02',
     name: 'Sree Sankara',
@@ -156,4 +156,4 @@ export const recommendations: Recommendation[] = [
     authorProfileUrl: 'https://www.linkedin.com/in/laura-baran-b6786b5/',
     quote: 'Carl worked on the cutting edge design for a 3D hologram program that broke new ground for commercial and military applications. He was instrumental in the programming of the application software. He is a very focused individual and during his time at General Dynamics I think he surpassed all management expectations with the product he created.',
   },
-].map(reconciledRecommendation);
+] satisfies ReconciledRecommendation[]).map(reconciledRecommendation);
