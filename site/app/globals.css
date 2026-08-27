@@ -29,15 +29,15 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .skip-link:focus { transform: translateY(0); }
 
 .site-header { position: sticky; z-index: 50; top: 0; min-height: 76px; padding: 0 var(--page-padding); display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; border-bottom: 1px solid var(--line); background: rgba(9, 12, 9, 0.96); backdrop-filter: blur(18px); }
-.wordmark { display: inline-flex; align-items: center; gap: 12px; width: max-content; font-size: 15px; font-weight: 700; letter-spacing: -0.02em; }
+.wordmark { min-height: 44px; display: inline-flex; align-items: center; gap: 12px; width: max-content; font-size: 15px; font-weight: 700; letter-spacing: -0.02em; }
 .wordmark-mark { display: flex; gap: 4px; transform: skewX(-22deg); }
 .wordmark-mark i { display: block; width: 4px; height: 22px; background: var(--paper); }
 .site-header nav { display: flex; gap: clamp(18px, 3vw, 42px); font-family: var(--font-geist-mono), monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; }
-.site-header nav a, .site-footer a, .text-action { color: var(--muted); transition: color 180ms ease; }
+.site-header nav a, .site-footer a, .text-action { min-height: 44px; display: inline-flex; align-items: center; color: var(--muted); transition: color 180ms ease; }
 .site-header nav a:hover, .site-footer a:hover, .text-action:hover { color: var(--paper); }
 .mobile-navigation { display: none; }
 .build-label, .eyebrow, .project-meta, .architecture-card figcaption, .architecture-step small, .stack-list, .site-footer a, .experience-preview-list, .experience-number, .inline-tags { font-family: var(--font-geist-mono), monospace; font-size: 11px; letter-spacing: 0.13em; text-transform: uppercase; }
-.build-label { justify-self: end; color: var(--muted); }
+.build-label { min-height: 44px; display: inline-flex; align-items: center; justify-self: end; color: var(--muted); }
 
 .hero { position: relative; min-height: calc(100svh - 76px); display: grid; grid-template-columns: minmax(0, 0.92fr) minmax(420px, 1.08fr); background: var(--red); color: var(--ink); overflow: hidden; }
 .hero-copy { position: relative; z-index: 2; padding: clamp(78px, 11vh, 136px) var(--page-padding) 64px; display: flex; flex-direction: column; justify-content: center; background: var(--ink); color: var(--paper); }
@@ -214,12 +214,13 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .archive-card-body { flex: 1; padding: clamp(20px, 2.4vw, 32px); display: flex; flex-direction: column; }
 .archive-card-meta { display: flex; justify-content: space-between; gap: 20px; color: var(--muted); font-family: var(--font-geist-mono), monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; }
 .archive-card h3 { margin: 28px 0 14px; overflow-wrap: anywhere; font-size: clamp(25px, 2.3vw, 38px); line-height: 0.98; letter-spacing: -0.045em; }
+.archive-card h3 a { min-height: 44px; display: inline-flex; align-items: center; }
 .archive-card h3 a:hover { color: var(--orange); }
 .archive-card-body > p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.52; }
 .archive-card-body > ul { margin: 28px 0; padding: 0; display: flex; flex-wrap: wrap; gap: 7px; list-style: none; }
 .archive-card-body > ul li { padding: 6px 8px; border: 1px solid var(--line); color: var(--muted); font-family: var(--font-geist-mono), monospace; font-size: 9px; letter-spacing: 0.07em; text-transform: uppercase; }
 .archive-card-links { margin-top: auto; padding-top: 18px; display: flex; gap: 20px; border-top: 1px solid var(--line); }
-.archive-card-links a { color: var(--muted); font-family: var(--font-geist-mono), monospace; font-size: 10px; letter-spacing: 0.09em; text-transform: uppercase; }
+.archive-card-links a { min-height: 44px; display: inline-flex; align-items: center; color: var(--muted); font-family: var(--font-geist-mono), monospace; font-size: 10px; letter-spacing: 0.09em; text-transform: uppercase; }
 .archive-card-links a:hover { color: var(--paper); }
 .archive-empty { min-height: 320px; display: grid; place-items: center; align-content: center; gap: 24px; border: 1px solid var(--line); text-align: center; }
 .archive-empty h3 { margin: 0; font-size: clamp(28px, 4vw, 54px); letter-spacing: -0.045em; }
