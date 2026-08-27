@@ -10,7 +10,7 @@ Carl approved the recommended static-first path and directed completion. The man
 
 ## Recommended first-release path
 
-Ship a **static portfolio first** with current work, experience, capabilities, approved recommendations, professional metadata, and a concise About route. Keep live Jolene, contact intent, the avatar, analytics, and unapproved historical work disabled. This makes a credible portfolio releasable without pretending unfinished operations or rejected avatar art are ready.
+Ship a **static portfolio first** with current work, experience, capabilities, approved recommendations, professional metadata, a concise About route, and the approved historical-work gallery. Keep live Jolene, contact intent, the avatar, analytics, and separately protected historical material disabled. This makes a credible portfolio releasable without pretending unfinished operations or rejected avatar art are ready.
 
 ## Approved decisions
 
@@ -23,7 +23,7 @@ Ship a **static portfolio first** with current work, experience, capabilities, a
 | `PORT-DEC-005` | Recommendations | `publish_all_13` | All 13 received records have been reconciled; publication still needs explicit approval |
 | `PORT-DEC-006` | Recommendation indexing | `index_after_publication_approval` | Makes the professional evidence discoverable only after the exact set is approved |
 | `PORT-DEC-007` | Historical work | `selected_archive_after_current_work` | Adds depth without making old technology the first impression |
-| `PORT-DEC-008` | First archive item | `yuco_after_rights_review` | Strongest combined artifact, contribution evidence, and team recognition |
+| `PORT-DEC-008` | First archive item | `yuco_public_archive` | Strongest combined artifact, contribution evidence, and team recognition; public display approved August 27, 2026 |
 | `PORT-DEC-009` | Teaching evidence | `text_only_after_source_recheck` | Supports mentoring without publishing classroom photographs |
 | `PORT-DEC-010` | Jolene/avatar in first release | `defer_both` | Avoids coupling launch to missing service operations and unapproved art |
 | `PORT-DEC-011` | Production origin | `managed_host_subdomain` | Allows a verified release now; a custom domain can be attached later |
@@ -38,7 +38,7 @@ Ship a **static portfolio first** with current work, experience, capabilities, a
 - The portfolio never accesses private Jolene APIs, Obsidian, MCP tools, or durable memory.
 - Job descriptions remain untrusted ephemeral input.
 - Contact intent cannot autonomously email, apply, schedule, negotiate, or contact recruiters.
-- TASER evidence imagery and Ignite classroom photographs remain private-only unless their separate gates are cleared.
+- Ten historical project visuals are approved for bounded archival display. TASER evidence imagery and Ignite classroom photographs remain private-only unless their separate confidentiality and subject-privacy gates are cleared.
 - The yU+co site and team may be described as a **2006 Webby Awards Honoree**; Carl may not be described as a personal Webby winner.
 
 ## Evidence after approval

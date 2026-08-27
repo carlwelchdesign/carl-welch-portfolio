@@ -1,0 +1,69 @@
+import Image from 'next/image';
+import { legacyArchiveProjects } from './legacy-archive-data';
+import { Reveal } from './motion-elements';
+
+export function LegacyArchiveGallery() {
+  return (
+    <section className="legacy-gallery" data-tone="paper" aria-labelledby="legacy-gallery-title">
+      <header className="legacy-gallery-heading">
+        <div>
+          <p className="eyebrow">Selected professional archive</p>
+          <Reveal>
+            <h2 id="legacy-gallery-title">More visual work across the years.</h2>
+          </Reveal>
+        </div>
+        <p>
+          These surviving artifacts show the range behind the current practice: interactive
+          development, visual systems, mobile UI, campaigns, and product storytelling. Every
+          caption names Carl’s supported role without turning team work into sole authorship.
+        </p>
+      </header>
+
+      <ol className="legacy-gallery-grid">
+        {legacyArchiveProjects.slice(1).map((project, index) => (
+          <li
+            key={project.id}
+            id={project.id}
+            className={`legacy-gallery-item legacy-gallery-item-${project.display}`}
+          >
+            <Reveal className="legacy-gallery-card">
+              <figure className="legacy-gallery-figure">
+                <div className="legacy-gallery-image">
+                  <Image
+                    src={project.image.src}
+                    alt={project.image.alt}
+                    width={project.image.width}
+                    height={project.image.height}
+                    sizes={project.display === 'feature'
+                      ? '(max-width: 760px) 100vw, 66vw'
+                      : '(max-width: 760px) 100vw, 50vw'}
+                    unoptimized={project.display === 'thumbnail'}
+                  />
+                </div>
+                <figcaption>
+                  <span>{String(index + 2).padStart(2, '0')}</span>
+                  <span>{project.period}</span>
+                  <span>Historical work</span>
+                </figcaption>
+              </figure>
+              <div className="legacy-gallery-copy">
+                <p className="eyebrow">{project.role}</p>
+                <h3>{project.project}</h3>
+                <p>{project.contribution}</p>
+                <ul aria-label={`${project.project} technologies and disciplines`}>
+                  {project.technology.map((item) => <li key={item}>{item}</li>)}
+                </ul>
+                <p className="legacy-gallery-evidence">{project.evidenceNote}</p>
+              </div>
+            </Reveal>
+          </li>
+        ))}
+      </ol>
+
+      <p className="legacy-gallery-boundary">
+        Additional historical records remain private where confidentiality or subject privacy—not
+        copyright—still requires separate review.
+      </p>
+    </section>
+  );
+}

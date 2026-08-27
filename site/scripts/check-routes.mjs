@@ -2,9 +2,10 @@ import { resolve } from 'node:path';
 import { loadTypescriptData } from './load-typescript-data.mjs';
 
 const baseUrl = (process.env.PORTFOLIO_BASE_URL || 'http://localhost:3000').replace(/\/$/, '');
-const [{ projects, experience }, { githubProjects }, { capabilities }, { recommendations }] = await Promise.all([
+const [{ projects, experience }, { githubProjects }, { legacyArchiveProjects }, { capabilities }, { recommendations }] = await Promise.all([
   loadTypescriptData(resolve(process.cwd(), 'app/portfolio-data.ts')),
   loadTypescriptData(resolve(process.cwd(), 'app/github-projects.ts')),
+  loadTypescriptData(resolve(process.cwd(), 'app/legacy-archive-data.ts')),
   loadTypescriptData(resolve(process.cwd(), 'app/capabilities-data.ts')),
   loadTypescriptData(resolve(process.cwd(), 'app/recommendations-data.ts')),
 ]);
@@ -124,6 +125,15 @@ await Promise.all(pageExpectations.map(async ([route, expectedText]) => {
     throw new Error('/recommendations must be indexable after publication approval.');
   }
 
+  if (route === '/archive') {
+    for (const project of legacyArchiveProjects) {
+      requireText(html, project.id === 'archive-yuco-2006' ? 'id="yuco"' : `id="${project.id}"`, route);
+      requireText(html, project.project, route);
+      requireText(html, project.image.src, route);
+    }
+    requireText(html, 'confidentiality or subject privacy', route);
+  }
+
   if (route.startsWith('/work/')) requireText(html, 'id="evidence"', route);
 }));
 
@@ -158,11 +168,18 @@ await Promise.all(githubProjects.map(async (project) => {
   }
 }));
 
+await Promise.all(legacyArchiveProjects.map(async (project) => {
+  const response = await fetchRoute(project.image.src);
+  if (!response.headers.get('content-type')?.startsWith('image/')) {
+    throw new Error(`${project.image.src} did not return an image content type.`);
+  }
+}));
+
 const resume = await fetchRoute('/carl-welch-resume.pdf');
 if (!resume.headers.get('content-type')?.startsWith('application/pdf')) {
   throw new Error('/carl-welch-resume.pdf did not return application/pdf.');
 }
 
 console.log(
-  `Route checks passed: ${pageExpectations.length} pages, ${githubProjects.length} archive images, evidence anchors, metadata, indexing gates, sitemap, and résumé.`,
+  `Route checks passed: ${pageExpectations.length} pages, ${githubProjects.length} GitHub images, ${legacyArchiveProjects.length} historical images, evidence anchors, metadata, indexing gates, sitemap, and résumé.`,
 );

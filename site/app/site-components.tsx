@@ -124,9 +124,16 @@ export function SelectedArchive({ showArchiveLink = true }: { showArchiveLink?: 
         </p>
       </div>
       <div className="selected-archive-record">
-        <div className="selected-archive-art" aria-hidden="true">
-          <span>AS2</span><span>XML</span><span>VIDEO</span><span>MULTI-USER</span>
-        </div>
+        <figure className="selected-archive-art">
+          <Image
+            src="/archive/yuco-studio-site.png"
+            alt="Minimal white yU+co website interface with branching navigation labeled Work, Clients, and News."
+            width={620}
+            height={400}
+            sizes="(max-width: 1000px) 100vw, 58vw"
+          />
+          <figcaption>Archived interface / privacy-safe crop</figcaption>
+        </figure>
         <div>
           <p className="eyebrow">Carl’s contribution</p>
           <p>
