@@ -105,6 +105,9 @@ test('career portrait connects the homepage to the selected archive and earlier 
   await expect(page.getByRole('heading', { name: 'TASER AXON / Evidence.com interface' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Beatnik mobile UI concepts' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Ignite Creative Learning programming instruction' })).toBeVisible();
+  await expect(page.locator('#archive-ignite-class-2012')).toContainText('Scratch (MIT)');
+  await expect(page.locator('#archive-ignite-class-2012')).toContainText('JavaScript');
+  await expect(page.locator('body')).not.toContainText(/preserved source material|preserved portfolio/i);
   await expect(page.getByText('SapientNitro', { exact: true })).toBeVisible();
   await expect(page.getByText('General Dynamics', { exact: true })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Archive', exact: true }).first()).toBeVisible();

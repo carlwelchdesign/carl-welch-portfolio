@@ -58,7 +58,6 @@ export function LegacyArchiveGallery() {
                 <ul aria-label={`${project.project} technologies and disciplines`}>
                   {project.technology.map((item) => <li key={item}>{item}</li>)}
                 </ul>
-                <p className="legacy-gallery-evidence">{project.evidenceNote}</p>
               </div>
             </Reveal>
           </li>

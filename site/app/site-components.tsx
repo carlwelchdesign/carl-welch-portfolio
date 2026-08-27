@@ -138,8 +138,8 @@ export function SelectedArchive({ showArchiveLink = true }: { showArchiveLink?: 
         <div>
           <p className="eyebrow">Carl’s contribution</p>
           <p>
-            Interactive development documented in Carl’s preserved portfolio. This record
-            describes a team project; the two awards recognize the site and its team rather than
+            Carl contributed interactive development using ActionScript 2, video, XML, and
+            multi-user technology. The two awards recognize the site and its team rather than
             sole authorship by any one contributor.
           </p>
           {showArchiveLink ? (

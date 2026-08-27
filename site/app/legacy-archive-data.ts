@@ -17,7 +17,6 @@ export type LegacyArchiveProject = {
     width: number;
     height: number;
   }>;
-  evidenceNote: string;
   display: 'feature' | 'standard' | 'thumbnail';
 };
 
@@ -36,8 +35,6 @@ export const legacyArchiveProjects: LegacyArchiveProject[] = [
       width: 620,
       height: 400,
     },
-    evidenceNote:
-      'Documented in Carl’s preserved portfolio and corroborated by historical correspondence. The site received a 2006 Graphic Design USA Certificate of Excellence in Communication and Graphic Design and was named a 2006 Webby Awards Honoree.',
     display: 'feature',
   },
   {
@@ -54,8 +51,6 @@ export const legacyArchiveProjects: LegacyArchiveProject[] = [
       width: 836,
       height: 525,
     },
-    evidenceNote:
-      'Carl’s preserved portfolio records the technology and interface work; Carl confirms this was a working, finished Evidence.com interface.',
     display: 'feature',
   },
   {
@@ -72,8 +67,6 @@ export const legacyArchiveProjects: LegacyArchiveProject[] = [
       width: 420,
       height: 726,
     },
-    evidenceNote:
-      'The senior-design assignment is documented in Carl’s preserved portfolio and corroborated by historical correspondence.',
     display: 'feature',
   },
   {
@@ -90,8 +83,6 @@ export const legacyArchiveProjects: LegacyArchiveProject[] = [
       width: 647,
       height: 649,
     },
-    evidenceNote:
-      'The implementation assignment is documented in Carl’s preserved portfolio and corroborated by historical correspondence.',
     display: 'standard',
   },
   {
@@ -108,8 +99,6 @@ export const legacyArchiveProjects: LegacyArchiveProject[] = [
       width: 240,
       height: 162,
     },
-    evidenceNote:
-      'The contribution is documented in Carl’s preserved portfolio and corroborated by historical correspondence.',
     display: 'thumbnail',
   },
   {
@@ -126,8 +115,6 @@ export const legacyArchiveProjects: LegacyArchiveProject[] = [
       width: 620,
       height: 569,
     },
-    evidenceNote:
-      'The team contribution is documented in Carl’s preserved portfolio and corroborated by historical correspondence.',
     display: 'standard',
   },
   {
@@ -144,8 +131,6 @@ export const legacyArchiveProjects: LegacyArchiveProject[] = [
       width: 920,
       height: 528,
     },
-    evidenceNote:
-      'The design contribution is documented in Carl’s preserved portfolio and corroborated by historical correspondence.',
     display: 'feature',
   },
   {
@@ -162,8 +147,6 @@ export const legacyArchiveProjects: LegacyArchiveProject[] = [
       width: 1072,
       height: 420,
     },
-    evidenceNote:
-      'These are design concepts, not claimed as shipped application screens. The work is documented in Carl’s preserved portfolio and corroborated by historical correspondence.',
     display: 'feature',
   },
   {
@@ -180,8 +163,6 @@ export const legacyArchiveProjects: LegacyArchiveProject[] = [
       width: 240,
       height: 162,
     },
-    evidenceNote:
-      'The technology record comes from Carl’s preserved portfolio. The archival image is shown as project context, not a claim of character-art ownership.',
     display: 'thumbnail',
   },
   {
@@ -198,8 +179,6 @@ export const legacyArchiveProjects: LegacyArchiveProject[] = [
       width: 240,
       height: 162,
     },
-    evidenceNote:
-      'The implementation record comes from Carl’s preserved portfolio. The image is shown as historical project context, not a claim of campaign strategy or character-art ownership.',
     display: 'thumbnail',
   },
   {
@@ -216,8 +195,6 @@ export const legacyArchiveProjects: LegacyArchiveProject[] = [
       width: 240,
       height: 162,
     },
-    evidenceNote:
-      'The technology record comes from Carl’s preserved portfolio. The surviving source does not establish an exact date or sole authorship.',
     display: 'thumbnail',
   },
   {
@@ -226,8 +203,8 @@ export const legacyArchiveProjects: LegacyArchiveProject[] = [
     period: '2012',
     role: 'Programming instructor',
     contribution:
-      'Hands-on programming instruction using Scratch, helping students turn ideas into working interactive projects.',
-    technology: ['Scratch', 'Programming instruction', 'Creative learning'],
+      'Hands-on programming instruction using Scratch (MIT) and JavaScript, helping students turn ideas into working interactive projects.',
+    technology: ['Scratch (MIT)', 'JavaScript', 'Programming instruction', 'Creative learning'],
     image: {
       src: '/archive/ignite-class-01.jpg',
       alt: 'Ignite Creative Learning classroom photograph 1 of 8 showing hands-on programming instruction at computers.',
@@ -240,8 +217,6 @@ export const legacyArchiveProjects: LegacyArchiveProject[] = [
       width: 170,
       height: 170,
     })),
-    evidenceNote:
-      'The 2012 instruction record and Scratch work are supported by preserved source material; eight archived classroom photographs document the teaching environment.',
     display: 'feature',
   },
 ];
