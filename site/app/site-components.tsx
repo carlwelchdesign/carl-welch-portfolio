@@ -119,7 +119,8 @@ export function SelectedArchive({ showArchiveLink = true }: { showArchiveLink?: 
         </div>
         <p>
           An early interactive-development project built with ActionScript 2, video, XML,
-          and multi-user technology. The studio site and its team were recognized as a
+          and multi-user technology. The studio site received a 2006 Graphic Design USA
+          Certificate of Excellence in Communication and Graphic Design and was named a
           2006 Webby Awards Honoree.
         </p>
       </div>
@@ -138,7 +139,8 @@ export function SelectedArchive({ showArchiveLink = true }: { showArchiveLink?: 
           <p className="eyebrow">Carl’s contribution</p>
           <p>
             Interactive development documented in Carl’s preserved portfolio. This record
-            describes a team project; it does not claim sole authorship or a personal Webby win.
+            describes a team project; the two awards recognize the site and its team rather than
+            sole authorship by any one contributor.
           </p>
           {showArchiveLink ? (
             <Link className="primary-action dark-action selected-archive-link" href="/archive">

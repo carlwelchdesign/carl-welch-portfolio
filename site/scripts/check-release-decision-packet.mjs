@@ -48,6 +48,7 @@ for (const text of [source, packet]) {
 assert.match(packet, /approved for a verified static release/i);
 assert.match(packet, /A green repository alone does not satisfy/i);
 assert.match(packet, /2006 Webby Awards Honoree/);
-assert.match(packet, /may not be described as a personal Webby winner/i);
+assert.match(packet, /2006 Graphic Design USA Certificate of Excellence in Communication and Graphic Design/);
+assert.match(packet, /neither may be presented as Carl’s individual award/i);
 
 console.log('Release decision checks passed: 12 approved selections, owning gates, non-decisions, and verification boundaries are intact.');
