@@ -125,7 +125,7 @@ export const recommendations: Recommendation[] = ([
     name: 'David Allen',
     headline: 'Founder, David Allen Company',
     date: 'June 23, 2011',
-    relationship: 'David was Carl’s client',
+    relationship: 'David was Carl’s employer',
     authorProfileUrl: 'https://www.linkedin.com/in/davidallengtd/',
     quote: 'Carl did great work for us in web design and multimedia production. Super good guy to work with.',
   },
