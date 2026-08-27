@@ -39,8 +39,22 @@ try {
   const serious = accessibility.violations.filter(({ impact }) => impact === 'serious' || impact === 'critical');
   assert.deepEqual(serious, [], JSON.stringify(serious, null, 2));
   assert.deepEqual(browserErrors, []);
+
+  await page.getByRole('button', { name: 'Questions' }).click();
+  await page.getByText('Review supporting evidence').click();
+  const citation = page.locator('.jolene-citation').first();
+  const citationHref = await citation.getAttribute('href');
+  assert.match(citationHref, /^\/[a-z0-9/-]+#[a-z0-9-]+$/);
+  await citation.click();
+  await page.waitForURL((url) => url.hash.length > 1);
+  const targetFocused = await page.evaluate(() => {
+    const target = document.querySelector(':target[data-evidence-target]');
+    return target instanceof HTMLElement && document.activeElement === target;
+  });
+  assert.equal(targetFocused, true, 'citation target must resolve and receive focus');
+  await page.getByText(/^Supporting evidence:/).waitFor();
   await page.screenshot({ path: '/tmp/port-jol-009-live-mobile.png', fullPage: true });
-  console.log('Live Jolene browser check passed: mobile launcher, answer evidence, job-fit, accessibility, and console health.');
+  console.log('Live Jolene browser check passed: mobile launcher, answer evidence, job-fit, citation focus, accessibility, and console health.');
 } finally {
   await context.close();
   await browser.close();

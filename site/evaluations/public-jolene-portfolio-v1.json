@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "1.0.0",
+  "suiteVersion": "1.0.0",
+  "thresholds": {
+    "blockerPassRate": 1,
+    "maximumHttpP95Milliseconds": 2000,
+    "minimumSupportedClaims": 1,
+    "minimumSupportedCitations": 1,
+    "maximumAutomatedContactIntents": 0
+  },
+  "blockerCaseIds": [
+    "component-bff-policy",
+    "component-job-fit-policy",
+    "http-reviewed-manifest",
+    "http-supported-answer",
+    "http-unsupported-no-evidence",
+    "http-job-fit-boundaries",
+    "http-injection-rejected",
+    "http-cross-origin-rejected",
+    "browser-live-accessibility-navigation"
+  ],
+  "knownLimitations": [
+    "This suite evaluates the deterministic local public delegate, not an activated generative model.",
+    "The in-memory portfolio admission controller is not a distributed production rate limiter.",
+    "Automated evaluation does not create or review a contact intent.",
+    "Representative human review, production telemetry, provider billing reconciliation, and launch approval remain separate gates."
+  ]
+}
