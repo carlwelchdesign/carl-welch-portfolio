@@ -9,6 +9,7 @@ Motion-led portfolio site for Carl Welch. The application is intentionally kept 
 - `pnpm check:jolene-contract` compiles and exercises the frozen public Jolene v1 contract, deterministic fixtures, runtime validation, citation integrity, and failure states.
 - `pnpm check:jolene-bff` exercises the disabled-by-default same-origin BFF, request/response gates, admission budgets, kill switches, safe retries, and sanitized observability.
 - `pnpm check:analytics` verifies the closed analytics event dictionary, prohibited-field rejection, privacy signals, product-area separation, and disabled default.
+- `pnpm check:editorial` verifies that the internal messaging brief retains its claim states and privacy boundary, rejected slogans remain absent from public application copy, and recommendation publication is not overstated.
 - `pnpm check:release-readiness` verifies that the recorded public-corpus manifest, architecture status, release-gate register, and local-only/public-disabled boundaries remain internally consistent.
 - `pnpm check:github` compares the checked-in public-repository snapshot with Carl's current public GitHub repositories.
 - `pnpm check:github-sync` tests deterministic GitHub drift review, stable rename detection, stale-source rejection, protected editorial fields, media failures, and explicit decisions.
@@ -30,6 +31,8 @@ The Docker build context excludes local environments, dependencies, generated ou
 Docker is a reproducibility and CI path. Sites/Cloudflare remains the intended publication path, and running Compose does not deploy or publish the portfolio.
 
 ## Content boundaries
+
+The internal [`PORTFOLIO_MESSAGING_BRIEF.md`](docs/PORTFOLIO_MESSAGING_BRIEF.md) records the audience hierarchy, evidence-backed positioning, proof order, tone rules, historical-claim matrix, and page-level messaging decisions awaiting Carl's review. It is an editorial planning artifact, not approved public copy.
 
 - `app/portfolio-data.ts` contains the detailed case studies and verified experience summaries.
 - `app/capabilities-data.ts` maps capability claims to case studies, repositories, experience, and attributed recommendations. Content checks prevent broken evidence references.
