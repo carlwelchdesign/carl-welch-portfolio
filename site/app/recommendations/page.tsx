@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import { MotionRuntime, Reveal } from '../motion-elements';
-import { recommendationReview } from '../portfolio-data';
 import { recommendations } from '../recommendations-data';
 import { PageFrame, PageIntro } from '../site-components';
 import { buildPageMetadata } from '../site-metadata';
@@ -22,23 +21,15 @@ export default function RecommendationsPage() {
             title="The people I worked with"
             summary="A dedicated place for recommendations from colleagues, managers, and clients."
           />
-          <section className="recommendation-review" aria-labelledby="review-state-title">
-            <p className="recommendation-count" aria-hidden="true">{recommendationReview.candidateCount}</p>
+          <section className="recommendation-review" aria-labelledby="recommendation-collection-title">
+            <p className="recommendation-count" aria-hidden="true">{recommendations.length}</p>
             <div>
-              <p className="eyebrow">Source-verified collection</p>
-              <h2 id="review-state-title">13 received recommendations</h2>
-              <p>{recommendationReview.description}</p>
-              <p className="review-note">
-                Verified from{' '}
-                <a href={recommendationReview.sourceUrl} target="_blank" rel="noreferrer">
-                  LinkedIn
-                </a>{' '}
-                on <time dateTime={recommendationReview.sourceObservedAt}>August 26, 2026</time>, and approved by Carl for publication on August 27, 2026.
-                To request a correction or removal, <a href="/contact">contact Carl</a>.
-              </p>
+              <p className="eyebrow">Across teams and years</p>
+              <h2 id="recommendation-collection-title">What people say</h2>
+              <p>Recommendations from managers, teammates, direct reports, and clients who worked with me.</p>
             </div>
           </section>
-          <ol className="recommendation-list" aria-label="Source-verified LinkedIn recommendations">
+          <ol className="recommendation-list" aria-label="Professional recommendations">
             {recommendations.map((recommendation, index) => (
               <li
                 key={recommendation.id}

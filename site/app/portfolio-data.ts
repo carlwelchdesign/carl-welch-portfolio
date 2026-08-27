@@ -262,8 +262,6 @@ export const recommendationReview = {
   sourceObservedAt: '2026-08-27T02:40:37Z',
   sourceUrl: 'https://www.linkedin.com/in/carlwelch/details/recommendations/',
   reconciliationState: 'source_verified_publication_approved',
-  description:
-    'All thirteen received recommendations were reconciled against Carl’s authenticated LinkedIn profile, including attribution, current headline, relationship, date, exact wording, and public visibility. Carl approved publication of the complete set on August 27, 2026.',
 };
 
 export function getProject(slug: string) {
