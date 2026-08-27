@@ -38,6 +38,8 @@ The internal [`PORTFOLIO_ARCHIVE_INVENTORY.md`](docs/PORTFOLIO_ARCHIVE_INVENTORY
 
 The internal [`PORTFOLIO_LEGACY_ASSET_RECOVERY.md`](docs/PORTFOLIO_LEGACY_ASSET_RECOVERY.md) and [`legacy-asset-recovery.v1.json`](docs/legacy-asset-recovery.v1.json) record stronger-source searches, unresolved resolution gaps, and a do-not-execute boundary for legacy SWF/FLV material. Run `pnpm check:archive-recovery` to verify the recovery and quarantine decisions.
 
+The internal [`PORTFOLIO_RELEASE_DECISION_PACKET.md`](docs/PORTFOLIO_RELEASE_DECISION_PACKET.md) and [`release-decisions.v1.json`](docs/release-decisions.v1.json) consolidate the remaining Carl-owned choices and later release-candidate authorization into one response format. Run `pnpm check:release-decisions` to verify that recommendations remain pending, every owning gate is represented, and fixed privacy boundaries cannot be presented as choices.
+
 - `app/portfolio-data.ts` contains the detailed case studies and verified experience summaries.
 - `app/capabilities-data.ts` maps capability claims to case studies, repositories, experience, and attributed recommendations. Content checks prevent broken evidence references.
 - `app/contact-data.ts` contains the résumé-verified public contact routes used by the header, footer, and contact page.
