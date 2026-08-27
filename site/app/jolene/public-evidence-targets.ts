@@ -1,4 +1,4 @@
-import type { PublicEvidenceTargetStatus } from './public-evidence-navigation-core';
+import type { PublicEvidenceTargetStatus } from './public-evidence-navigation-core.js';
 
 export type PublicEvidenceTargetRecord = readonly [
   evidenceId: string,

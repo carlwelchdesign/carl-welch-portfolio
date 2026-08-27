@@ -24,6 +24,7 @@ export const publicJoleneFixtureScenarios = [
   'success',
   'partial_evidence',
   'no_evidence',
+  'empty_corpus',
   'unavailable',
   'rate_limited',
   'version_mismatch',
@@ -31,14 +32,14 @@ export const publicJoleneFixtureScenarios = [
 
 export type PublicJoleneFixtureScenario = (typeof publicJoleneFixtureScenarios)[number];
 
-export const PUBLIC_JOLENE_FIXTURE_CORPUS_VERSION = 'fixture-2026-08-25.1';
+export const PUBLIC_JOLENE_FIXTURE_CORPUS_VERSION = `career:${'a8'.repeat(32)}`;
 const fixtureCorpusVersion = PUBLIC_JOLENE_FIXTURE_CORPUS_VERSION;
 const fixtureGeneratedAt = '2026-08-25T20:00:00.000Z';
 const fixtureReviewedAt = '2026-08-25T19:30:00.000Z';
 
 const citations: PublicEvidenceCitation[] = [
   {
-    evidenceId: 'portfolio:claim:job-search-os:approval-boundary',
+    evidenceId: 'career:00000000-0000-4000-8000-000000000001',
     title: 'Fixture evidence — Job Search OS approval boundary',
     href: '/work/job-search-os#evidence--portfolio--claim--job-search-os--approval-boundary',
     sourceType: 'portfolio_page',
@@ -47,7 +48,7 @@ const citations: PublicEvidenceCitation[] = [
     lastReviewedAt: fixtureReviewedAt,
   },
   {
-    evidenceId: 'portfolio:claim:flight-tracker-ai:typed-system',
+    evidenceId: 'career:00000000-0000-4000-8000-000000000002',
     title: 'Fixture evidence — Flight Tracker AI typed system',
     href: '/work/flight-tracker-ai#evidence--portfolio--claim--flight-tracker-ai--typed-system',
     sourceType: 'portfolio_page',
@@ -67,8 +68,16 @@ const manifest: PublicEvidenceManifest = {
   revokedEvidenceIds: [],
 };
 
-function createAnswerResponse(scenario: PublicJoleneFixtureScenario, sessionToken?: string): PortfolioAnswerResponse {
-  if (scenario === 'no_evidence') {
+const emptyManifest: PublicEvidenceManifest = {
+  ...manifest,
+  corpusVersion: `career:${'00'.repeat(32)}`,
+  corpusHash: `sha256:${'00'.repeat(32)}`,
+  reviewedAt: null,
+  evidenceCount: 0,
+};
+
+function createAnswerResponse(scenario: PublicJoleneFixtureScenario): PortfolioAnswerResponse {
+  if (scenario === 'no_evidence' || scenario === 'empty_corpus') {
     return {
       schemaVersion: PUBLIC_JOLENE_SCHEMA_VERSION,
       answer: 'Fixture response: the public evidence set does not support a reliable answer to that question.',
@@ -76,8 +85,7 @@ function createAnswerResponse(scenario: PublicJoleneFixtureScenario, sessionToke
       citations: [],
       limitations: ['No matching public-approved fixture evidence was available.'],
       suggestedFollowUpQuestions: ['Would you like to ask about a published project or professional role instead?'],
-      corpusVersion: fixtureCorpusVersion,
-      sessionToken,
+      corpusVersion: scenario === 'empty_corpus' ? emptyManifest.corpusVersion : fixtureCorpusVersion,
     };
   }
 
@@ -90,7 +98,7 @@ function createAnswerResponse(scenario: PublicJoleneFixtureScenario, sessionToke
         : 'Fixture response: Carl has built typed product systems that keep consequential AI-assisted actions behind explicit review boundaries.',
     claims: [
       {
-        claimId: 'fixture:claim:bounded-product-systems',
+        claimId: '10000000-0000-4000-8000-000000000001',
         text:
           scenario === 'partial_evidence'
             ? 'Job Search OS demonstrates an explicit approval boundary for consequential external actions.'
@@ -114,17 +122,16 @@ function createAnswerResponse(scenario: PublicJoleneFixtureScenario, sessionToke
       'What limitations remain in the cited work?',
     ],
     corpusVersion: fixtureCorpusVersion,
-    sessionToken,
   };
 }
 
-function createJobFitResponse(scenario: PublicJoleneFixtureScenario, sessionToken?: string): JobFitResponse {
-  if (scenario === 'no_evidence') {
+function createJobFitResponse(scenario: PublicJoleneFixtureScenario): JobFitResponse {
+  if (scenario === 'no_evidence' || scenario === 'empty_corpus') {
     return {
       schemaVersion: PUBLIC_JOLENE_SCHEMA_VERSION,
       requirements: [
         {
-          requirementId: 'fixture:requirement:unresolved',
+          requirementId: 'req:0000000000000001',
           requirement: 'The supplied role requirement',
           assessment: 'unknown',
           explanation: 'The public fixture evidence is insufficient to classify this requirement.',
@@ -135,14 +142,13 @@ function createJobFitResponse(scenario: PublicJoleneFixtureScenario, sessionToke
       citations: [],
       caveats: ['This fixture cannot support a blanket fit conclusion.'],
       suggestedFollowUpQuestions: ['Which requirement should be clarified with Carl directly?'],
-      corpusVersion: fixtureCorpusVersion,
-      sessionToken,
+      corpusVersion: scenario === 'empty_corpus' ? emptyManifest.corpusVersion : fixtureCorpusVersion,
     };
   }
 
   const requirements: JobFitResponse['requirements'] = [
     {
-      requirementId: 'fixture:requirement:typed-product-ui',
+      requirementId: 'req:0000000000000002',
       requirement: 'Build typed product interfaces',
       assessment: 'direct',
       explanation: 'The fixture cites a typed browser-to-service product implementation.',
@@ -150,7 +156,7 @@ function createJobFitResponse(scenario: PublicJoleneFixtureScenario, sessionToke
       limitations: ['A portfolio project does not establish experience in every product domain.'],
     },
     {
-      requirementId: 'fixture:requirement:bounded-ai',
+      requirementId: 'req:0000000000000003',
       requirement: 'Design safe AI-assisted workflows',
       assessment: scenario === 'partial_evidence' ? 'adjacent' : 'direct',
       explanation:
@@ -161,7 +167,7 @@ function createJobFitResponse(scenario: PublicJoleneFixtureScenario, sessionToke
       limitations: scenario === 'partial_evidence' ? ['Production scale and team context are not established.'] : [],
     },
     {
-      requirementId: 'fixture:requirement:kubernetes',
+      requirementId: 'req:0000000000000004',
       requirement: 'Operate Kubernetes in production',
       assessment: 'missing',
       explanation: 'No supporting Kubernetes evidence appears in the fixture corpus.',
@@ -182,14 +188,13 @@ function createJobFitResponse(scenario: PublicJoleneFixtureScenario, sessionToke
       'Which missing requirement should be discussed in an interview?',
     ],
     corpusVersion: fixtureCorpusVersion,
-    sessionToken,
   };
 }
 
 function createContactIntentResponse(): ContactIntentResponse {
   return {
     schemaVersion: PUBLIC_JOLENE_SCHEMA_VERSION,
-    intentId: 'fixture:contact-intent:001',
+    intentId: '20000000-0000-4000-8000-000000000001',
     status: 'pending_review',
     submittedAt: fixtureGeneratedAt,
     message: 'Fixture response: the contact request is pending Carl’s review. No outbound action was taken.',
@@ -217,17 +222,17 @@ export function createFixturePublicJoleneAdapter(
   return {
     async getManifest() {
       enforceOperationalScenario(scenario);
-      return parsePublicEvidenceManifest(manifest);
+      return parsePublicEvidenceManifest(scenario === 'empty_corpus' ? emptyManifest : manifest);
     },
     async answer(request) {
-      const normalizedRequest = parsePortfolioAnswerRequest(request);
+      parsePortfolioAnswerRequest(request);
       enforceOperationalScenario(scenario);
-      return parsePortfolioAnswerResponse(createAnswerResponse(scenario, normalizedRequest.sessionToken));
+      return parsePortfolioAnswerResponse(createAnswerResponse(scenario));
     },
     async compareJob(request) {
-      const normalizedRequest = parseJobFitRequest(request);
+      parseJobFitRequest(request);
       enforceOperationalScenario(scenario);
-      return parseJobFitResponse(createJobFitResponse(scenario, normalizedRequest.sessionToken));
+      return parseJobFitResponse(createJobFitResponse(scenario));
     },
     async submitContactIntent(request) {
       parseContactIntentRequest(request);

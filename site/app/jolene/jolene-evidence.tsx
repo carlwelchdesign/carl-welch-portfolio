@@ -6,7 +6,7 @@ import {
   type ProjectMaturity,
   type PublicEvidenceCitation,
 } from './public-contract';
-import { resolvePublicEvidenceTarget } from './public-evidence-navigation';
+import { resolvePublicEvidenceCitation } from './public-evidence-navigation';
 
 export type JoleneAnswerEvidence = Pick<
   PortfolioAnswerResponse,
@@ -42,7 +42,7 @@ export function JoleneCitationLink({
   expectedCorpusVersion?: string;
   revokedEvidenceIds?: string[];
 }) {
-  const resolution = resolvePublicEvidenceTarget(citation.evidenceId, {
+  const resolution = resolvePublicEvidenceCitation(citation, {
     corpusVersion,
     expectedCorpusVersion,
     revokedEvidenceIds,

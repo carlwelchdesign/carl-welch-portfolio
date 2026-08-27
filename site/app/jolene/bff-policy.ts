@@ -54,7 +54,7 @@ const unsafeEgressIndicators = [
   /-----BEGIN [A-Z ]+PRIVATE KEY-----/,
   /(?:sk|ghp|github_pat|xox[baprs])[-_][A-Za-z0-9_-]{10,}/,
   /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i,
-  /(?:\+?1[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}/,
+  /(?<![a-f0-9-])(?:\+?1[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}(?![a-f0-9-])/i,
 ];
 
 export function readBffConfig(environment: NodeJS.ProcessEnv): BffConfig {

@@ -5,10 +5,11 @@ import {
   type PublicEvidenceResolution,
   type PublicEvidenceTargetStatus,
   type ResolvePublicEvidenceOptions,
-} from './public-evidence-navigation-core';
-import { publicEvidenceTargetRecords } from './public-evidence-targets';
+} from './public-evidence-navigation-core.js';
+import type { PublicEvidenceCitation } from './public-contract.js';
+import { publicEvidenceTargetRecords } from './public-evidence-targets.js';
 
-export { publicEvidenceAnchorId } from './public-evidence-navigation-core';
+export { publicEvidenceAnchorId } from './public-evidence-navigation-core.js';
 
 function target(evidenceId: string, path: string, label: string, status: PublicEvidenceTargetStatus): PublicEvidenceTarget {
   const anchorId = publicEvidenceAnchorId(evidenceId);
@@ -20,7 +21,9 @@ const targets: PublicEvidenceTarget[] = publicEvidenceTargetRecords.map(([eviden
 );
 
 const targetsById = new Map(targets.map((item) => [item.evidenceId, item]));
+const targetsByHref = new Map(targets.map((item) => [item.href, item]));
 if (targetsById.size !== targets.length) throw new Error('Public evidence navigation contains duplicate IDs.');
+if (targetsByHref.size !== targets.length) throw new Error('Public evidence navigation contains duplicate targets.');
 if (targets.some((item) => !/^\/[a-z0-9/-]+#evidence--portfolio--/.test(item.href))) {
   throw new Error('Public evidence navigation targets must remain site-relative portfolio anchors.');
 }
@@ -39,4 +42,17 @@ export function resolvePublicEvidenceTarget(
   options: ResolvePublicEvidenceOptions = {},
 ): PublicEvidenceResolution {
   return resolveEvidenceTarget(evidenceId, targetsById, supersededEvidenceIds, options);
+}
+
+export function resolvePublicEvidenceCitation(
+  citation: Pick<PublicEvidenceCitation, 'evidenceId' | 'href'>,
+  options: ResolvePublicEvidenceOptions = {},
+): PublicEvidenceResolution {
+  const direct = resolvePublicEvidenceTarget(citation.evidenceId, options);
+  if (direct.status !== 'unavailable') return direct;
+
+  const target = targetsByHref.get(citation.href);
+  if (!target) return direct;
+  if (target.status === 'review_required') return { status: 'review_required', evidenceId: citation.evidenceId };
+  return { status: 'available', target };
 }

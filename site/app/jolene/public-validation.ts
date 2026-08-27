@@ -1,9 +1,11 @@
 import {
   PUBLIC_JOLENE_LIMITS,
+  PUBLIC_JOLENE_SCHEMA_VERSION,
   evidenceStrengths,
   jobRequirementAssessments,
   projectMaturities,
   publicEvidenceSourceTypes,
+  publicJoleneErrorCodes,
   type ContactIntentRequest,
   type ContactIntentResponse,
   type EvidenceStrength,
@@ -18,6 +20,8 @@ import {
   type PublicEvidenceCitation,
   type PublicEvidenceManifest,
   type PublicEvidenceSourceType,
+  type PublicJoleneErrorCode,
+  type PublicJoleneErrorResponse,
   type PublicJoleneSchemaVersion,
 } from './public-contract.js';
 import { requireCompatibleSchemaVersion } from './public-compatibility.js';
@@ -32,6 +36,14 @@ function readRecord(value: unknown, path: string): JsonRecord {
     throw new PublicJoleneContractError(path, 'must be an object');
   }
   return value as JsonRecord;
+}
+
+function requireOnlyKeys(item: JsonRecord, allowedKeys: readonly string[], path: string): void {
+  const allowed = new Set(allowedKeys);
+  const unexpected = Object.keys(item).filter((key) => !allowed.has(key));
+  if (unexpected.length > 0) {
+    throw new PublicJoleneContractError(path, `contains unsupported field ${unexpected[0]}`);
+  }
 }
 
 function readString(value: unknown, path: string, maximumCharacters?: number): string {
@@ -49,13 +61,29 @@ function readOptionalString(value: unknown, path: string, maximumCharacters: num
   return readString(value, path, maximumCharacters);
 }
 
-function readStringArray(value: unknown, path: string): string[] {
+function readStringArray(
+  value: unknown,
+  path: string,
+  maximumItems?: number,
+  maximumCharacters?: number,
+): string[] {
   if (!Array.isArray(value)) throw new PublicJoleneContractError(path, 'must be an array');
-  return value.map((item, index) => readString(item, `${path}[${index}]`));
+  if (maximumItems !== undefined && value.length > maximumItems) {
+    throw new PublicJoleneContractError(path, `must contain at most ${maximumItems} items`);
+  }
+  return value.map((item, index) => readString(item, `${path}[${index}]`, maximumCharacters));
 }
 
-function readArray<T>(value: unknown, path: string, parse: (item: unknown, path: string) => T): T[] {
+function readArray<T>(
+  value: unknown,
+  path: string,
+  parse: (item: unknown, path: string) => T,
+  maximumItems?: number,
+): T[] {
   if (!Array.isArray(value)) throw new PublicJoleneContractError(path, 'must be an array');
+  if (maximumItems !== undefined && value.length > maximumItems) {
+    throw new PublicJoleneContractError(path, `must contain at most ${maximumItems} items`);
+  }
   return value.map((item, index) => parse(item, `${path}[${index}]`));
 }
 
@@ -72,6 +100,12 @@ function readIsoDate(value: unknown, path: string): string {
   return date;
 }
 
+function readPattern(value: unknown, path: string, pattern: RegExp, label: string): string {
+  const normalized = readString(value, path);
+  if (!pattern.test(normalized)) throw new PublicJoleneContractError(path, `must be a ${label}`);
+  return normalized;
+}
+
 function requireUnique(values: readonly string[], path: string): void {
   if (new Set(values).size !== values.length) {
     throw new PublicJoleneContractError(path, 'must not contain duplicate identifiers');
@@ -83,15 +117,28 @@ function readSchemaVersion(value: unknown, path: string): PublicJoleneSchemaVers
   return value as PublicJoleneSchemaVersion;
 }
 
+function readFrozenSchemaVersion(value: unknown, path: string): typeof PUBLIC_JOLENE_SCHEMA_VERSION {
+  const version = readSchemaVersion(value, path);
+  if (version !== PUBLIC_JOLENE_SCHEMA_VERSION) {
+    throw new PublicJoleneContractError(path, `must equal ${PUBLIC_JOLENE_SCHEMA_VERSION}`);
+  }
+  return PUBLIC_JOLENE_SCHEMA_VERSION;
+}
+
 function parseCitation(value: unknown, path: string): PublicEvidenceCitation {
   const item = readRecord(value, path);
-  const href = readString(item.href, `${path}.href`);
-  if ((!href.startsWith('/') || href.startsWith('//')) && !href.startsWith('https://')) {
-    throw new PublicJoleneContractError(`${path}.href`, 'must be a site-relative or HTTPS URL');
+  const href = readString(item.href, `${path}.href`, PUBLIC_JOLENE_LIMITS.citationHrefCharacters);
+  if (!href.startsWith('/') || href.startsWith('//')) {
+    throw new PublicJoleneContractError(`${path}.href`, 'must be a site-relative URL');
   }
   return {
-    evidenceId: readString(item.evidenceId, `${path}.evidenceId`),
-    title: readString(item.title, `${path}.title`),
+    evidenceId: readPattern(
+      item.evidenceId,
+      `${path}.evidenceId`,
+      /^career:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/,
+      'public career evidence ID',
+    ),
+    title: readString(item.title, `${path}.title`, PUBLIC_JOLENE_LIMITS.citationTitleCharacters),
     href,
     sourceType: readEnum(item.sourceType, publicEvidenceSourceTypes, `${path}.sourceType`) as PublicEvidenceSourceType,
     strength: readEnum(item.strength, evidenceStrengths, `${path}.strength`) as EvidenceStrength,
@@ -102,18 +149,32 @@ function parseCitation(value: unknown, path: string): PublicEvidenceCitation {
 
 function parseClaim(value: unknown, path: string): PublicClaim {
   const item = readRecord(value, path);
-  const evidenceIds = readStringArray(item.evidenceIds, `${path}.evidenceIds`);
+  const evidenceIds = readStringArray(
+    item.evidenceIds,
+    `${path}.evidenceIds`,
+    PUBLIC_JOLENE_LIMITS.evidenceIdsPerClaim,
+  );
   requireUnique(evidenceIds, `${path}.evidenceIds`);
   if (evidenceIds.length === 0) {
     throw new PublicJoleneContractError(`${path}.evidenceIds`, 'public claims require cited evidence');
   }
   return {
-    claimId: readString(item.claimId, `${path}.claimId`),
-    text: readString(item.text, `${path}.text`),
+    claimId: readPattern(
+      item.claimId,
+      `${path}.claimId`,
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/,
+      'public claim UUID',
+    ),
+    text: readString(item.text, `${path}.text`, PUBLIC_JOLENE_LIMITS.claimCharacters),
     evidenceIds,
     evidenceStrength: readEnum(item.evidenceStrength, evidenceStrengths, `${path}.evidenceStrength`) as EvidenceStrength,
     maturity: readEnum(item.maturity, projectMaturities, `${path}.maturity`) as ProjectMaturity,
-    limitations: readStringArray(item.limitations, `${path}.limitations`),
+    limitations: readStringArray(
+      item.limitations,
+      `${path}.limitations`,
+      PUBLIC_JOLENE_LIMITS.claimLimitations,
+      PUBLIC_JOLENE_LIMITS.limitationCharacters,
+    ),
   };
 }
 
@@ -132,6 +193,39 @@ function validateEvidenceReferences(
   }
 }
 
+const maturityRank: Readonly<Partial<Record<ProjectMaturity, number>>> = {
+  planning: 0,
+  prototype: 1,
+  development: 2,
+  pre_release: 3,
+  deployed_demo: 4,
+  production: 5,
+  released_product: 6,
+};
+
+function validateClaimMaturity(citations: readonly PublicEvidenceCitation[], claims: readonly PublicClaim[]): void {
+  const citationById = new Map(citations.map((citation) => [citation.evidenceId, citation]));
+  claims.forEach((claim, index) => {
+    const citedMaturities = claim.evidenceIds
+      .map((evidenceId) => citationById.get(evidenceId)?.maturity)
+      .filter((maturity): maturity is ProjectMaturity => maturity !== undefined);
+    const applicable = citedMaturities.filter((maturity) => maturity !== 'not_applicable');
+    const expected = applicable.length === 0
+      ? 'not_applicable'
+      : applicable.reduce((least, maturity) =>
+          (maturityRank[maturity] ?? Number.POSITIVE_INFINITY) < (maturityRank[least] ?? Number.POSITIVE_INFINITY)
+            ? maturity
+            : least,
+        );
+    if (claim.maturity !== expected) {
+      throw new PublicJoleneContractError(
+        `answerResponse.claims[${index}].maturity`,
+        `must use the least mature applicable citation (${expected})`,
+      );
+    }
+  });
+}
+
 function parseRequirement(value: unknown, path: string): JobRequirementResult {
   const item = readRecord(value, path);
   const assessment = readEnum(
@@ -139,18 +233,38 @@ function parseRequirement(value: unknown, path: string): JobRequirementResult {
     jobRequirementAssessments,
     `${path}.assessment`,
   ) as JobRequirementAssessment;
-  const evidenceIds = readStringArray(item.evidenceIds, `${path}.evidenceIds`);
+  const evidenceIds = readStringArray(
+    item.evidenceIds,
+    `${path}.evidenceIds`,
+    PUBLIC_JOLENE_LIMITS.evidenceIdsPerRequirement,
+  );
   requireUnique(evidenceIds, `${path}.evidenceIds`);
   if ((assessment === 'direct' || assessment === 'adjacent') && evidenceIds.length === 0) {
     throw new PublicJoleneContractError(`${path}.evidenceIds`, `${assessment} assessments require cited evidence`);
   }
+  if ((assessment === 'missing' || assessment === 'unknown') && evidenceIds.length > 0) {
+    throw new PublicJoleneContractError(`${path}.evidenceIds`, `${assessment} assessments must not cite evidence`);
+  }
   return {
-    requirementId: readString(item.requirementId, `${path}.requirementId`),
-    requirement: readString(item.requirement, `${path}.requirement`),
+    requirementId: readPattern(item.requirementId, `${path}.requirementId`, /^req:[a-f0-9]{16}$/, 'public requirement ID'),
+    requirement: readString(
+      item.requirement,
+      `${path}.requirement`,
+      PUBLIC_JOLENE_LIMITS.jobRequirementCharacters,
+    ),
     assessment,
-    explanation: readString(item.explanation, `${path}.explanation`),
+    explanation: readString(
+      item.explanation,
+      `${path}.explanation`,
+      PUBLIC_JOLENE_LIMITS.jobRequirementExplanationCharacters,
+    ),
     evidenceIds,
-    limitations: readStringArray(item.limitations, `${path}.limitations`),
+    limitations: readStringArray(
+      item.limitations,
+      `${path}.limitations`,
+      PUBLIC_JOLENE_LIMITS.requirementLimitations,
+      PUBLIC_JOLENE_LIMITS.limitationCharacters,
+    ),
   };
 }
 
@@ -163,100 +277,142 @@ export function parsePublicEvidenceManifest(value: unknown): PublicEvidenceManif
   if (!Number.isInteger(item.evidenceCount) || (item.evidenceCount as number) < 0) {
     throw new PublicJoleneContractError('manifest.evidenceCount', 'must be a non-negative integer');
   }
-  const revokedEvidenceIds = readStringArray(item.revokedEvidenceIds, 'manifest.revokedEvidenceIds');
+  const revokedEvidenceIds = readStringArray(
+    item.revokedEvidenceIds,
+    'manifest.revokedEvidenceIds',
+    PUBLIC_JOLENE_LIMITS.revokedEvidenceIds,
+  );
+  revokedEvidenceIds.forEach((evidenceId, index) => {
+    readPattern(
+      evidenceId,
+      `manifest.revokedEvidenceIds[${index}]`,
+      /^career:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/,
+      'public career evidence ID',
+    );
+  });
   requireUnique(revokedEvidenceIds, 'manifest.revokedEvidenceIds');
+  const evidenceCount = item.evidenceCount as number;
+  const reviewedAt = item.reviewedAt === null ? null : readIsoDate(item.reviewedAt, 'manifest.reviewedAt');
+  if (evidenceCount > 0 && reviewedAt === null) {
+    throw new PublicJoleneContractError('manifest.reviewedAt', 'may be null only for an empty corpus');
+  }
   return {
     schemaVersion: readSchemaVersion(item.schemaVersion, 'manifest.schemaVersion'),
-    corpusVersion: readString(item.corpusVersion, 'manifest.corpusVersion'),
+    corpusVersion: readPattern(item.corpusVersion, 'manifest.corpusVersion', /^career:[a-f0-9]{64}$/, 'corpus version'),
     corpusHash: corpusHash as `sha256:${string}`,
     generatedAt: readIsoDate(item.generatedAt, 'manifest.generatedAt'),
-    reviewedAt: readIsoDate(item.reviewedAt, 'manifest.reviewedAt'),
-    evidenceCount: item.evidenceCount as number,
+    reviewedAt,
+    evidenceCount,
     revokedEvidenceIds,
   };
 }
 
 export function parsePortfolioAnswerRequest(value: unknown): PortfolioAnswerRequest {
   const item = readRecord(value, 'answerRequest');
+  requireOnlyKeys(item, ['question'], 'answerRequest');
   return {
     question: readString(item.question, 'answerRequest.question', PUBLIC_JOLENE_LIMITS.questionCharacters),
-    sessionToken: readOptionalString(
-      item.sessionToken,
-      'answerRequest.sessionToken',
-      PUBLIC_JOLENE_LIMITS.sessionTokenCharacters,
-    ),
   };
 }
 
 export function parsePortfolioAnswerResponse(value: unknown): PortfolioAnswerResponse {
   const item = readRecord(value, 'answerResponse');
-  const claims = readArray(item.claims, 'answerResponse.claims', parseClaim);
-  const citations = readArray(item.citations, 'answerResponse.citations', parseCitation);
+  const claims = readArray(item.claims, 'answerResponse.claims', parseClaim, PUBLIC_JOLENE_LIMITS.answerClaims);
+  const citations = readArray(
+    item.citations,
+    'answerResponse.citations',
+    parseCitation,
+    PUBLIC_JOLENE_LIMITS.answerCitations,
+  );
   requireUnique(claims.map((claim) => claim.claimId), 'answerResponse.claims');
   requireUnique(citations.map((citation) => citation.evidenceId), 'answerResponse.citations');
   validateEvidenceReferences(citations, claims, 'answerResponse.claims');
+  validateClaimMaturity(citations, claims);
   return {
     schemaVersion: readSchemaVersion(item.schemaVersion, 'answerResponse.schemaVersion'),
-    answer: readString(item.answer, 'answerResponse.answer'),
+    answer: readString(item.answer, 'answerResponse.answer', PUBLIC_JOLENE_LIMITS.answerCharacters),
     claims,
     citations,
-    limitations: readStringArray(item.limitations, 'answerResponse.limitations'),
+    limitations: readStringArray(
+      item.limitations,
+      'answerResponse.limitations',
+      PUBLIC_JOLENE_LIMITS.responseLimitations,
+      PUBLIC_JOLENE_LIMITS.limitationCharacters,
+    ),
     suggestedFollowUpQuestions: readStringArray(
       item.suggestedFollowUpQuestions,
       'answerResponse.suggestedFollowUpQuestions',
+      PUBLIC_JOLENE_LIMITS.followUpQuestions,
+      PUBLIC_JOLENE_LIMITS.followUpQuestionCharacters,
     ),
-    corpusVersion: readString(item.corpusVersion, 'answerResponse.corpusVersion'),
-    sessionToken: readOptionalString(
-      item.sessionToken,
-      'answerResponse.sessionToken',
-      PUBLIC_JOLENE_LIMITS.sessionTokenCharacters,
+    corpusVersion: readPattern(
+      item.corpusVersion,
+      'answerResponse.corpusVersion',
+      /^career:[a-f0-9]{64}$/,
+      'corpus version',
     ),
   };
 }
 
 export function parseJobFitRequest(value: unknown): JobFitRequest {
   const item = readRecord(value, 'jobFitRequest');
+  requireOnlyKeys(item, ['jobDescription'], 'jobFitRequest');
   return {
     jobDescription: readString(
       item.jobDescription,
       'jobFitRequest.jobDescription',
       PUBLIC_JOLENE_LIMITS.jobDescriptionCharacters,
     ),
-    sessionToken: readOptionalString(
-      item.sessionToken,
-      'jobFitRequest.sessionToken',
-      PUBLIC_JOLENE_LIMITS.sessionTokenCharacters,
-    ),
   };
 }
 
 export function parseJobFitResponse(value: unknown): JobFitResponse {
   const item = readRecord(value, 'jobFitResponse');
-  const requirements = readArray(item.requirements, 'jobFitResponse.requirements', parseRequirement);
-  const citations = readArray(item.citations, 'jobFitResponse.citations', parseCitation);
+  const requirements = readArray(
+    item.requirements,
+    'jobFitResponse.requirements',
+    parseRequirement,
+    PUBLIC_JOLENE_LIMITS.jobRequirements,
+  );
+  if (requirements.length === 0) {
+    throw new PublicJoleneContractError('jobFitResponse.requirements', 'must contain at least one item');
+  }
+  const citations = readArray(item.citations, 'jobFitResponse.citations', parseCitation, PUBLIC_JOLENE_LIMITS.jobCitations);
   requireUnique(requirements.map((requirement) => requirement.requirementId), 'jobFitResponse.requirements');
   requireUnique(citations.map((citation) => citation.evidenceId), 'jobFitResponse.citations');
   validateEvidenceReferences(citations, requirements, 'jobFitResponse.requirements');
+  const caveats = readStringArray(
+    item.caveats,
+    'jobFitResponse.caveats',
+    PUBLIC_JOLENE_LIMITS.jobCaveats,
+    PUBLIC_JOLENE_LIMITS.limitationCharacters,
+  );
+  if (caveats.length === 0) {
+    throw new PublicJoleneContractError('jobFitResponse.caveats', 'must contain at least one item');
+  }
   return {
     schemaVersion: readSchemaVersion(item.schemaVersion, 'jobFitResponse.schemaVersion'),
     requirements,
     citations,
-    caveats: readStringArray(item.caveats, 'jobFitResponse.caveats'),
+    caveats,
     suggestedFollowUpQuestions: readStringArray(
       item.suggestedFollowUpQuestions,
       'jobFitResponse.suggestedFollowUpQuestions',
+      PUBLIC_JOLENE_LIMITS.followUpQuestions,
+      PUBLIC_JOLENE_LIMITS.followUpQuestionCharacters,
     ),
-    corpusVersion: readString(item.corpusVersion, 'jobFitResponse.corpusVersion'),
-    sessionToken: readOptionalString(
-      item.sessionToken,
-      'jobFitResponse.sessionToken',
-      PUBLIC_JOLENE_LIMITS.sessionTokenCharacters,
+    corpusVersion: readPattern(
+      item.corpusVersion,
+      'jobFitResponse.corpusVersion',
+      /^career:[a-f0-9]{64}$/,
+      'corpus version',
     ),
   };
 }
 
 export function parseContactIntentRequest(value: unknown): ContactIntentRequest {
   const item = readRecord(value, 'contactIntentRequest');
+  requireOnlyKeys(item, ['name', 'email', 'organization', 'message', 'consent'], 'contactIntentRequest');
   const email = readString(item.email, 'contactIntentRequest.email', PUBLIC_JOLENE_LIMITS.contactEmailCharacters);
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     throw new PublicJoleneContractError('contactIntentRequest.email', 'must be a valid email address');
@@ -284,9 +440,49 @@ export function parseContactIntentResponse(value: unknown): ContactIntentRespons
   }
   return {
     schemaVersion: readSchemaVersion(item.schemaVersion, 'contactIntentResponse.schemaVersion'),
-    intentId: readString(item.intentId, 'contactIntentResponse.intentId'),
+    intentId: readPattern(
+      item.intentId,
+      'contactIntentResponse.intentId',
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/,
+      'public contact intent ID',
+    ),
     status: 'pending_review',
     submittedAt: readIsoDate(item.submittedAt, 'contactIntentResponse.submittedAt'),
-    message: readString(item.message, 'contactIntentResponse.message'),
+    message: readString(
+      item.message,
+      'contactIntentResponse.message',
+      PUBLIC_JOLENE_LIMITS.contactResponseMessageCharacters,
+    ),
   };
+}
+
+export function parsePublicJoleneErrorResponse(value: unknown): PublicJoleneErrorResponse {
+  const item = readRecord(value, 'errorResponse');
+  const retryAfterSeconds = item.retryAfterSeconds;
+  if (retryAfterSeconds !== undefined && (!Number.isInteger(retryAfterSeconds) || (retryAfterSeconds as number) < 1)) {
+    throw new PublicJoleneContractError('errorResponse.retryAfterSeconds', 'must be a positive integer');
+  }
+  const supportedSchemaVersions = item.supportedSchemaVersions === undefined
+    ? undefined
+    : readStringArray(
+        item.supportedSchemaVersions,
+        'errorResponse.supportedSchemaVersions',
+        PUBLIC_JOLENE_LIMITS.supportedSchemaVersions,
+      );
+  const code = readEnum(item.code, publicJoleneErrorCodes, 'errorResponse.code') as PublicJoleneErrorCode;
+  if (code === 'version_mismatch' && !supportedSchemaVersions?.includes(PUBLIC_JOLENE_SCHEMA_VERSION)) {
+    throw new PublicJoleneContractError(
+      'errorResponse.supportedSchemaVersions',
+      `version mismatch errors must advertise ${PUBLIC_JOLENE_SCHEMA_VERSION}`,
+    );
+  }
+  const response: PublicJoleneErrorResponse = {
+    schemaVersion: readFrozenSchemaVersion(item.schemaVersion, 'errorResponse.schemaVersion'),
+    code,
+    message: readString(item.message, 'errorResponse.message', PUBLIC_JOLENE_LIMITS.errorMessageCharacters),
+    requestId: readPattern(item.requestId, 'errorResponse.requestId', /^req:[a-f0-9]{32}$/, 'public request ID') as `req:${string}`,
+  };
+  if (retryAfterSeconds !== undefined) response.retryAfterSeconds = retryAfterSeconds as number;
+  if (supportedSchemaVersions !== undefined) response.supportedSchemaVersions = supportedSchemaVersions;
+  return response;
 }

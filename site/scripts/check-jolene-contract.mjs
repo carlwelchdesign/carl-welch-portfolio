@@ -13,7 +13,9 @@ const sourceFiles = [
   'public-adapter.ts',
   'public-validation.ts',
   'public-fixtures.ts',
+  'public-evidence-targets.ts',
   'public-evidence-navigation-core.ts',
+  'public-evidence-navigation.ts',
 ].map((file) => resolve(sourceRoot, file));
 const outputRoot = await mkdtemp(join(tmpdir(), 'portfolio-jolene-contract-'));
 
@@ -53,8 +55,41 @@ try {
   const validation = await import(pathToFileURL(resolve(outputRoot, 'public-validation.js')).href);
   const fixtures = await import(pathToFileURL(resolve(outputRoot, 'public-fixtures.js')).href);
   const navigation = await import(pathToFileURL(resolve(outputRoot, 'public-evidence-navigation-core.js')).href);
+  const publicNavigation = await import(pathToFileURL(resolve(outputRoot, 'public-evidence-navigation.js')).href);
   const compatibility = await import(pathToFileURL(resolve(outputRoot, 'public-compatibility.js')).href);
-  const openApi = JSON.parse(await readFile(resolve(process.cwd(), 'contracts/public-jolene-v1.openapi.json'), 'utf8'));
+  const openApi = JSON.parse(
+    await readFile(resolve(process.cwd(), 'contracts/public-jolene-v1.openapi.json'), 'utf8'),
+  );
+  const validatedProviderManifest = JSON.parse(
+    await readFile(resolve(process.cwd(), 'contracts/validated-public-evidence-manifest.json'), 'utf8'),
+  );
+
+  assert.equal(openApi.openapi, '3.1.0');
+  assert.equal(openApi.info.version, contract.PUBLIC_JOLENE_SCHEMA_VERSION);
+  assert.equal(openApi['x-portfolio-runtime'], 'fixture-only');
+  assert.equal(openApi['x-public-deployment'], false);
+  assert.deepEqual(Object.keys(openApi.paths).sort(), Object.values(contract.PUBLIC_JOLENE_ENDPOINTS).sort());
+  assert.equal(
+    openApi.components.schemas.PortfolioAnswerRequest.properties.question.maxLength,
+    contract.PUBLIC_JOLENE_LIMITS.questionCharacters,
+  );
+  assert.equal(
+    openApi.components.schemas.JobFitRequest.properties.jobDescription.maxLength,
+    contract.PUBLIC_JOLENE_LIMITS.jobDescriptionCharacters,
+  );
+  assert.equal(
+    openApi.components.schemas.PortfolioAnswerResponse.properties.claims.maxItems,
+    contract.PUBLIC_JOLENE_LIMITS.answerClaims,
+  );
+  assert.equal(
+    openApi.components.schemas.JobFitResponse.properties.requirements.maxItems,
+    contract.PUBLIC_JOLENE_LIMITS.jobRequirements,
+  );
+  assert.ok(!('sessionToken' in openApi.components.schemas.PortfolioAnswerRequest.properties));
+  assert.ok(!('sessionToken' in openApi.components.schemas.JobFitRequest.properties));
+  assert.deepEqual(validation.parsePublicEvidenceManifest(validatedProviderManifest), validatedProviderManifest);
+  assert.equal(validatedProviderManifest.evidenceCount, 41);
+  assert.equal(validatedProviderManifest.revokedEvidenceIds.length, 0);
 
   const success = fixtures.createFixturePublicJoleneAdapter('success');
   assert.equal(contract.PUBLIC_JOLENE_ENDPOINTS.manifest, '/v1/public-evidence/manifest');
@@ -68,6 +103,15 @@ try {
   assert.equal(manifest.schemaVersion, contract.PUBLIC_JOLENE_SCHEMA_VERSION);
   assert.match(manifest.corpusHash, /^sha256:[a-f0-9]{64}$/);
   assert.ok(manifest.evidenceCount > 0);
+  assert.ok(manifest.reviewedAt);
+
+  const emptyManifest = await fixtures.createFixturePublicJoleneAdapter('empty_corpus').getManifest();
+  assert.equal(emptyManifest.evidenceCount, 0);
+  assert.equal(emptyManifest.reviewedAt, null);
+  assert.deepEqual(
+    validation.parsePublicEvidenceManifest(openApi.components.schemas.PublicEvidenceManifest.examples[0]),
+    openApi.components.schemas.PublicEvidenceManifest.examples[0],
+  );
 
   const answer = await success.answer({ question: 'What kind of systems does Carl build?' });
   assert.ok(answer.claims.length > 0);
@@ -103,7 +147,7 @@ try {
   const navigationTarget = {
     evidenceId: answer.citations[0].evidenceId,
     href: answer.citations[0].href,
-    anchorId: navigation.publicEvidenceAnchorId(answer.citations[0].evidenceId),
+    anchorId: new URL(answer.citations[0].href, 'https://portfolio.invalid').hash.slice(1),
     label: answer.citations[0].title,
     status: 'available',
   };
@@ -119,6 +163,14 @@ try {
   const supersededEvidence = new Map([['fixture:legacy:evidence', navigationTarget.evidenceId]]);
   assert.equal(
     navigation.resolveEvidenceTarget(navigationTarget.evidenceId, navigationTargets, supersededEvidence).status,
+    'available',
+  );
+  assert.equal(
+    publicNavigation.resolvePublicEvidenceCitation(answer.citations[0], {
+      corpusVersion: answer.corpusVersion,
+      expectedCorpusVersion: manifest.corpusVersion,
+      revokedEvidenceIds: manifest.revokedEvidenceIds,
+    }).status,
     'available',
   );
   assert.equal(
@@ -157,6 +209,10 @@ try {
     .answer({ question: 'Tell me something unsupported.' });
   assert.equal(noEvidenceAnswer.claims.length, 0);
   assert.equal(noEvidenceAnswer.citations.length, 0);
+  assert.equal(
+    (await fixtures.createFixturePublicJoleneAdapter('empty_corpus').answer({ question: 'What is public?' })).claims.length,
+    0,
+  );
 
   const jobFit = await success.compareJob({ jobDescription: 'React, safe AI workflows, and Kubernetes.' });
   assert.deepEqual(
@@ -164,6 +220,11 @@ try {
     ['direct', 'direct', 'missing'],
   );
   assert.ok(jobFit.caveats.some((caveat) => caveat.includes('not a recommendation')));
+  assert.ok(
+    jobFit.requirements
+      .filter((requirement) => requirement.assessment === 'missing' || requirement.assessment === 'unknown')
+      .every((requirement) => requirement.evidenceIds.length === 0),
+  );
 
   const contact = await success.submitContactIntent({
     name: 'Fixture visitor',
@@ -178,9 +239,16 @@ try {
   assert.ok(!JSON.stringify(contact).includes('Fixture visitor'));
   assert.ok(!JSON.stringify(contact).includes('I would like Carl to review this contact request.'));
 
+  const safeErrorExample = openApi.components.schemas.PublicJoleneErrorResponse.examples[0];
+  assert.deepEqual(validation.parsePublicJoleneErrorResponse(safeErrorExample), safeErrorExample);
+
   await assert.rejects(
     success.answer({ question: '' }),
     (error) => error instanceof validation.PublicJoleneContractError && error.path === 'answerRequest.question',
+  );
+  await assert.rejects(
+    success.answer({ question: 'Question', sessionToken: 'v1-does-not-retain-continuity' }),
+    (error) => error instanceof validation.PublicJoleneContractError && error.path === 'answerRequest',
   );
   await assert.rejects(
     success.compareJob({ jobDescription: 'x'.repeat(contract.PUBLIC_JOLENE_LIMITS.jobDescriptionCharacters + 1) }),
@@ -198,7 +266,7 @@ try {
   );
 
   const brokenAnswer = structuredClone(answer);
-  brokenAnswer.claims[0].evidenceIds = ['fixture:missing-evidence'];
+  brokenAnswer.claims[0].evidenceIds = ['career:00000000-0000-4000-8000-000000009999'];
   assert.throws(
     () => validation.parsePortfolioAnswerResponse(brokenAnswer),
     (error) => error instanceof validation.PublicJoleneContractError && /missing citation/.test(error.message),
@@ -209,9 +277,45 @@ try {
     () => validation.parsePortfolioAnswerResponse(uncitedAnswer),
     (error) => error instanceof validation.PublicJoleneContractError && /require cited evidence/.test(error.message),
   );
+  const inflatedMaturity = structuredClone(answer);
+  inflatedMaturity.claims[0].maturity = 'released_product';
+  assert.throws(
+    () => validation.parsePortfolioAnswerResponse(inflatedMaturity),
+    (error) => error instanceof validation.PublicJoleneContractError && /least mature applicable citation/.test(error.message),
+  );
+  const externalCitation = structuredClone(answer);
+  externalCitation.citations[0].href = 'https://unreviewed.example/evidence';
+  assert.throws(
+    () => validation.parsePortfolioAnswerResponse(externalCitation),
+    (error) => error instanceof validation.PublicJoleneContractError && error.path.endsWith('.href'),
+  );
+  const unsupportedMissingEvidence = structuredClone(jobFit);
+  unsupportedMissingEvidence.requirements[2].evidenceIds = [jobFit.citations[0].evidenceId];
+  assert.throws(
+    () => validation.parseJobFitResponse(unsupportedMissingEvidence),
+    (error) => error instanceof validation.PublicJoleneContractError && /must not cite evidence/.test(error.message),
+  );
+  const oversizedAnswer = structuredClone(answer);
+  oversizedAnswer.answer = 'x'.repeat(contract.PUBLIC_JOLENE_LIMITS.answerCharacters + 1);
+  assert.throws(
+    () => validation.parsePortfolioAnswerResponse(oversizedAnswer),
+    (error) => error instanceof validation.PublicJoleneContractError && error.path === 'answerResponse.answer',
+  );
+  assert.throws(
+    () => validation.parsePublicEvidenceManifest({ ...manifest, reviewedAt: null }),
+    (error) => error instanceof validation.PublicJoleneContractError && error.path === 'manifest.reviewedAt',
+  );
   assert.throws(
     () => validation.parsePublicEvidenceManifest({ ...manifest, schemaVersion: '2.0.0' }),
     (error) => error instanceof validation.PublicJoleneContractError && error.path === 'manifest.schemaVersion',
+  );
+
+  assert.throws(
+    () => validation.parsePublicJoleneErrorResponse({
+      ...safeErrorExample,
+      supportedSchemaVersions: [],
+    }),
+    (error) => error instanceof validation.PublicJoleneContractError && error.path === 'errorResponse.supportedSchemaVersions',
   );
 
   await assert.rejects(
@@ -230,7 +334,7 @@ try {
     (error) => error instanceof adapterModule.PublicJoleneAdapterError && error.code === 'version_mismatch',
   );
 
-  console.log('Public Jolene contract checks passed: OpenAPI, additive compatibility, fixtures, corpus/revocation gates, evidence references, and failure states.');
+  console.log('Public Jolene contract checks passed: frozen OpenAPI bounds, additive compatibility, fixtures, corpus/revocation gates, evidence references, and safe failures.');
 } finally {
   await rm(outputRoot, { recursive: true, force: true });
 }

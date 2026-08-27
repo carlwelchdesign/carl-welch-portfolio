@@ -66,10 +66,7 @@ export function prepareJobDescription(value: unknown): PreparedJobDescription {
     throw new JobDescriptionPolicyError('request_rejected');
   }
 
-  const sanitized = parseJobFitRequest({
-    jobDescription,
-    sessionToken: parsed.sessionToken,
-  });
+  const sanitized = parseJobFitRequest({ jobDescription });
   return {
     ...sanitized,
     redactions: redactionPatterns.flatMap(({ type }) => {
