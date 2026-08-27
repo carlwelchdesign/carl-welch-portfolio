@@ -116,7 +116,7 @@ test('server-rendered navigation and content remain available without JavaScript
   await context.close();
 });
 
-test('Sentry remains fail-closed without explicit production configuration', async ({ page }) => {
+test('Sentry remains fail-closed without explicit production configuration', async ({ page, request }) => {
   const telemetryRequests: string[] = [];
   page.on('request', (request) => {
     if (/\.ingest\.sentry\.io|\/api\/\d+\/envelope/i.test(request.url())) {
@@ -129,4 +129,9 @@ test('Sentry remains fail-closed without explicit production configuration', asy
   await page.waitForTimeout(250);
 
   expect(telemetryRequests).toEqual([]);
+  const intake = await request.post('/api/ops/sentry', {
+    data: { issue: { id: 'fixture-issue' } },
+    headers: { 'x-servicehook-signature': '0'.repeat(64) },
+  });
+  expect(intake.status()).toBe(404);
 });
