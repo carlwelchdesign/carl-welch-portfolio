@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "1.0.0",
+  "status": "awaiting_carl_approval",
+  "nativeFrame": { "width": 48, "height": 56 },
+  "occupiedBounds": { "maxWidth": 44, "maxHeight": 54, "edgePadding": 2 },
+  "displayScales": [3, 4],
+  "opaqueColorLimit": 15,
+  "partialAlphaAllowed": false,
+  "requiredStudies": ["cabinet_portrait", "country_host", "glam_close_up", "porch_wave_host"],
+  "requiredStates": ["idle", "blink", "greet", "listen", "think", "speak", "evidence", "boundary", "offline"],
+  "requiredReviewBackgrounds": ["transparent", "portfolio_light", "portfolio_red", "portfolio_orange", "portfolio_green", "mobile_390x844"],
+  "rendering": {
+    "integerScaleOnly": true,
+    "cssImageRendering": "pixelated",
+    "canvasImageSmoothing": false,
+    "staticFallback": "idle",
+    "reducedMotionDefault": "idle"
+  },
+  "approval": {
+    "masterSelected": false,
+    "productionAuthorized": false,
+    "publicUseAuthorized": false
+  }
+}

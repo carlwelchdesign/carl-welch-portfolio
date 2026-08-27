@@ -27,6 +27,7 @@
     "check:jolene-bff": "node scripts/check-jolene-bff.mjs",
     "check:jolene-live": "JOLENE_LIVE_CONTRACT_ORIGIN=http://127.0.0.1:8431 node scripts/check-jolene-bff.mjs",
     "check:jolene-browser-live": "node scripts/check-jolene-browser-live.mjs",
+    "check:jolene-avatar-brief": "node scripts/check-jolene-avatar-brief.mjs",
     "evaluate:jolene": "node scripts/evaluate-public-jolene.mjs",
     "check:analytics": "node scripts/check-analytics.mjs",
     "check:sentry-privacy": "node scripts/check-sentry-privacy.mjs",
@@ -41,7 +42,7 @@
     "check:routes": "node scripts/check-routes.mjs",
     "check:production": "node scripts/check-production-origin.mjs",
     "check:browser": "playwright test",
-    "check": "pnpm typecheck && pnpm lint && pnpm check:metadata && pnpm check:content && pnpm check:editorial && pnpm check:archive && pnpm check:archive-recovery && pnpm check:release-decisions && pnpm check:github-sync && pnpm check:jolene-contract && pnpm check:jolene-job-fit && pnpm check:jolene-bff && pnpm check:analytics && pnpm check:sentry-privacy && pnpm check:sentry-asana && pnpm check:sentry-release && pnpm check:sentry-operations && pnpm check:research-protocol && pnpm check:security-headers && pnpm check:release-readiness && pnpm build && pnpm check:no-public-sourcemaps"
+    "check": "pnpm typecheck && pnpm lint && pnpm check:metadata && pnpm check:content && pnpm check:editorial && pnpm check:archive && pnpm check:archive-recovery && pnpm check:release-decisions && pnpm check:github-sync && pnpm check:jolene-contract && pnpm check:jolene-job-fit && pnpm check:jolene-bff && pnpm check:jolene-avatar-brief && pnpm check:analytics && pnpm check:sentry-privacy && pnpm check:sentry-asana && pnpm check:sentry-release && pnpm check:sentry-operations && pnpm check:research-protocol && pnpm check:security-headers && pnpm check:release-readiness && pnpm build && pnpm check:no-public-sourcemaps"
   },
   "dependencies": {
     "@sentry/browser": "10.71.0",
