@@ -1,0 +1,151 @@
+{
+  "schemaVersion": "1.0.0",
+  "status": "internal_review_only",
+  "generatedAt": "2026-08-26",
+  "sourceBoundary": "Legacy portfolio assets plus content-minimized findings from a private correspondence review. No message bodies, addresses, message identifiers, or private filesystem paths are included.",
+  "publicationRule": "No candidate is licensed or approved for public use. Carl must approve the claim, attribution, visual, and rights basis before an asset is copied into the public site.",
+  "items": [
+    {
+      "id": "archive-yuco-2006", "rank": 1, "project": "yU+co studio website", "period": "2006-2007", "role": "Interactive developer",
+      "contribution": "The legacy portfolio records Flash AS2, video, a multi-user server, and XML. Private correspondence review corroborates later restoration and streaming work, but not sole authorship of the full site.",
+      "technology": ["ActionScript 2", "Flash video", "XML", "multi-user server"], "evidenceLevel": "first_party_plus_private_corroboration",
+      "independentRecognition": "The studio site was a 2006 Webby Awards Honoree; the recognition belongs to the site and team, not to Carl individually.",
+      "publicationState": "needs_permission", "rightsNote": "Confirm studio and client display rights and team attribution before publication.",
+      "asset": {"sourceLocator": "legacy:carlsite/images/samples/YUCO-SCREENSHOTS-sm.gif", "sha256": "7e173ec2297bcbbfb498db2aa5633a0ac3b0f370e121133103bcba54c10317ed", "width": 620, "height": 462, "bytes": 38531, "format": "gif"},
+      "captionDraft": "An archived frame from the yU+co studio website, where Carl contributed interactive development using ActionScript 2, video, XML, and multi-user technology.",
+      "altTextDraft": "Minimal white yU+co website interface with branching navigation labeled Work, Clients, and News.",
+      "presentationNote": "Inspect every GIF frame before use; preserve the restrained white composition and avoid upscaling.",
+      "prohibitedInference": "Do not say Carl won a Webby, designed the entire site, or was its sole developer."
+    },
+    {
+      "id": "archive-taser-axon-2009", "rank": 2, "project": "TASER AXON / Evidence.com prototype", "period": "2009", "role": "Interactive prototype contributor",
+      "contribution": "The legacy portfolio records ActionScript 3, ASP, JavaScript, and Google APIs. Private correspondence review corroborates prototype workflow involvement.",
+      "technology": ["ActionScript 3", "ASP", "JavaScript", "Google APIs"], "evidenceLevel": "first_party_plus_private_corroboration", "independentRecognition": null,
+      "publicationState": "private_only", "rightsNote": "Keep private unless a specific security, confidentiality, and client-rights review clears the interface and imagery.",
+      "asset": {"sourceLocator": "legacy:carlsite/images/samples/taser.jpg", "sha256": "e480bea22c5d5efd11462dd72a0636f58cd1775b6faa7d8c41d8c05c5a65348e", "width": 836, "height": 525, "bytes": 198418, "format": "jpg"},
+      "captionDraft": "Archived prototype screens exploring evidence review, event organization, clipping, and controlled sharing workflows.",
+      "altTextDraft": "Dark blue interface studies showing video evidence timelines, event folders, clip editing, case members, and sharing panels.",
+      "presentationNote": "Do not publish or crop individual frames until their content passes a dedicated sensitivity review.",
+      "prohibitedInference": "Do not claim production deployment, sole product ownership, or current endorsement by TASER or Axon."
+    },
+    {
+      "id": "archive-magento-go-2011", "rank": 3, "project": "Magento Go homepage", "period": "2011", "role": "Freelance senior designer",
+      "contribution": "The legacy portfolio identifies the homepage work. Private correspondence review corroborates the homepage redesign assignment and senior-design role.",
+      "technology": ["web design", "art direction", "e-commerce"], "evidenceLevel": "first_party_plus_private_corroboration", "independentRecognition": null,
+      "publicationState": "needs_permission", "rightsNote": "Confirm Magento or Adobe archival-display rights and distinguish the delivered page from underlying product ownership.",
+      "asset": {"sourceLocator": "legacy:carlsite/images/samples/magentogohome.jpg", "sha256": "c1eb6b93af07740c8fc534656674b03a50fda5c29f761d412b083d5736615cfc", "width": 420, "height": 726, "bytes": 182875, "format": "jpg"},
+      "captionDraft": "Archived Magento Go homepage work focused on explaining the hosted-commerce offer and moving visitors toward a free trial.",
+      "altTextDraft": "Tall Magento Go homepage with a blue trial banner, merchant testimonial, product benefits, and repeated calls to action.",
+      "presentationNote": "Use a readable vertical crop or scroll treatment; do not stretch the 420-pixel source.",
+      "prohibitedInference": "Do not claim ownership of Magento Go, business outcomes, or implementation beyond the supported design assignment."
+    },
+    {
+      "id": "archive-fox-million-moments-2010", "rank": 4, "project": "Fox A Year of a Million Moments", "period": "2010", "role": "Interactive developer",
+      "contribution": "The legacy portfolio records ActionScript 3, PHP, and MySQL. Private correspondence review corroborates assigned and completed implementation work.",
+      "technology": ["ActionScript 3", "PHP", "MySQL"], "evidenceLevel": "first_party_plus_private_corroboration", "independentRecognition": null,
+      "publicationState": "needs_permission", "rightsNote": "Confirm Fox and agency archival-display rights and credit the agency and team context.",
+      "asset": {"sourceLocator": "legacy:carlsite/images/samples/foxEnt.jpg", "sha256": "f0643a5aaf4a2e75a8ea872d40f720734a006df3d46c01bb887e713be6a81ada", "width": 647, "height": 649, "bytes": 199740, "format": "jpg"},
+      "captionDraft": "An archived promotional experience combining a movie-matchup interface, voting, monthly winners, and social sharing.",
+      "altTextDraft": "Fox movie promotion with a bracket-style musical movie showdown, voting prompt, monthly winners, and sharing controls.",
+      "presentationNote": "A square crop works without removing the campaign title or primary interaction.",
+      "prohibitedInference": "Do not claim campaign strategy, award recognition, or sole authorship."
+    },
+    {
+      "id": "archive-darksiders-ii-2011", "rank": 5, "project": "Darksiders II promotional site", "period": "2011-2012", "role": "Front-end contributor",
+      "contribution": "The legacy portfolio records HTML, JavaScript, and jQuery. Private correspondence review corroborates implementation and revision work.",
+      "technology": ["HTML", "JavaScript", "jQuery"], "evidenceLevel": "first_party_plus_private_corroboration", "independentRecognition": null,
+      "publicationState": "needs_permission", "rightsNote": "Confirm publisher, studio, and agency archival-display rights before use.",
+      "asset": {"sourceLocator": "legacy:carlsite/images/webdesign/darksiders.jpg", "sha256": "740b6298c778525a16dc0c25ad8817918ee233cc88c39a46fc97ae0ac0ef0bd1", "width": 240, "height": 162, "bytes": 31448, "format": "jpg"},
+      "captionDraft": "A surviving thumbnail from front-end implementation work on the Darksiders II promotional site.",
+      "altTextDraft": "Dark Darksiders II website thumbnail with a character portrait, video panel, navigation, and screenshot rail.",
+      "presentationNote": "The source is too small for a hero image; use as an archival thumbnail or replace it with a verified larger asset.",
+      "prohibitedInference": "Do not imply game-development credit or ownership of the visual campaign."
+    },
+    {
+      "id": "archive-almost-alice-2010", "rank": 6, "project": "Almost Alice music experience", "period": "2010", "role": "Interactive team contributor",
+      "contribution": "The legacy portfolio records ActionScript 3, animation, and design. Private correspondence review corroborates positive team feedback, not sole authorship.",
+      "technology": ["ActionScript 3", "animation", "interactive design"], "evidenceLevel": "first_party_plus_private_corroboration", "independentRecognition": null,
+      "publicationState": "needs_permission", "rightsNote": "Confirm Disney Records and agency archival-display rights and retain team attribution.",
+      "asset": {"sourceLocator": "legacy:carlsite/images/samples/disneyalmostalice.jpg", "sha256": "a270e59e415623912462920fed111e6ac3cd3edb81cf4e84743871dbf7543fdf", "width": 620, "height": 569, "bytes": 167309, "format": "jpg"},
+      "captionDraft": "An archived interactive music experience for Almost Alice, created within the Oniracom team.",
+      "altTextDraft": "Dark textured Almost Alice landing screen with Disney and Alice in Wonderland lettering and a Ship to Rise link.",
+      "presentationNote": "Preserve the title and agency mark; avoid crops that suggest standalone visual authorship.",
+      "prohibitedInference": "Do not claim ownership of the Disney artwork, campaign, or full experience."
+    },
+    {
+      "id": "archive-dlf-music-2011", "rank": 7, "project": "David Lynch Foundation Music", "period": "2011", "role": "Art direction and design contributor",
+      "contribution": "The legacy portfolio identifies art direction and design. Private correspondence review corroborates iterative design revisions and comps.",
+      "technology": ["art direction", "web design", "visual systems"], "evidenceLevel": "first_party_plus_private_corroboration", "independentRecognition": null,
+      "publicationState": "needs_permission", "rightsNote": "Confirm foundation, artist-photography, and agency archival-display rights before use.",
+      "asset": {"sourceLocator": "legacy:carlsite/images/samples/DLF_MUSIC.jpg", "sha256": "b7c2d1884bf5d7ae9406d36738cea055d5daf1d5868735bfc7553c1f8de40883", "width": 920, "height": 528, "bytes": 224464, "format": "jpg"},
+      "captionDraft": "Archived homepage and interior-page comps for the David Lynch Foundation Music initiative.",
+      "altTextDraft": "Two blue, black, and white music-site comps featuring artist stories, charitable messaging, news, and donation pathways.",
+      "presentationNote": "The side-by-side source can support a wide archival strip; retain both page states.",
+      "prohibitedInference": "Do not claim the foundation mission, photography, artist relationships, or full site delivery as Carl's work."
+    },
+    {
+      "id": "archive-beatnik-2011", "rank": 8, "project": "Beatnik mobile UI concepts", "period": "2011", "role": "Mobile UI designer",
+      "contribution": "The legacy portfolio identifies mobile UI design. Private correspondence review corroborates the design-comps and feedback loop.",
+      "technology": ["mobile UI design", "interaction design", "visual design"], "evidenceLevel": "first_party_plus_private_corroboration", "independentRecognition": null,
+      "publicationState": "needs_permission", "rightsNote": "Confirm product, music-artwork, and agency archival-display rights before use.",
+      "asset": {"sourceLocator": "legacy:carlsite/images/webdesign/beatnik_app.jpg", "sha256": "daedcc2353a0951c2b6de5ee75f53211f58860be9259545da1fa47f076c5d033", "width": 1072, "height": 420, "bytes": 161977, "format": "jpg"},
+      "captionDraft": "Archived mobile UI directions exploring social listening, conversation, and music playback.",
+      "altTextDraft": "Five early smartphone interface concepts combining music players, profile avatars, comment threads, and colorful themes.",
+      "presentationNote": "Use as a wide strip and retain the five-concept sequence to show exploration rather than one final product.",
+      "prohibitedInference": "Do not call these shipped application screens or claim ownership of music imagery."
+    },
+    {
+      "id": "archive-superman-75-2013", "rank": 9, "project": "Superman 75th Anniversary DVD experience", "period": "2013", "role": "Front-end contributor",
+      "contribution": "The legacy portfolio records HTML, JavaScript, jQuery, Canvas, CSS, and social integration for work attributed to Axis Studios.",
+      "technology": ["HTML", "JavaScript", "jQuery", "Canvas", "CSS"], "evidenceLevel": "first_party_only", "independentRecognition": null,
+      "publicationState": "needs_permission", "rightsNote": "Confirm Warner Bros., DC, and studio archival-display rights and seek stronger contribution evidence.",
+      "asset": {"sourceLocator": "legacy:carlsite/images/webdesign/superman.jpg", "sha256": "555f88cfb6553ce863ce58289aa363c6d361fe77df7ea6f3dda256e403e21d36", "width": 240, "height": 162, "bytes": 5815, "format": "jpg"},
+      "captionDraft": "A surviving thumbnail from an interactive Superman 75th Anniversary DVD experience.",
+      "altTextDraft": "Light gray Superman interface thumbnail with a central character figure and a vertical timeline.",
+      "presentationNote": "The source is too small for featured placement; locate a verified larger artifact first.",
+      "prohibitedInference": "Do not claim character art, campaign ownership, or contribution beyond the legacy technology record."
+    },
+    {
+      "id": "archive-bolthouse-frozen-2013", "rank": 10, "project": "Bolthouse Frozen rebate experience", "period": "2013", "role": "Web contributor",
+      "contribution": "The legacy portfolio records CoffeeScript, Node.js, Jade, HTML, JavaScript, jQuery, Canvas, CSS, and social integration.",
+      "technology": ["CoffeeScript", "Node.js", "Jade", "JavaScript", "Canvas", "CSS"], "evidenceLevel": "first_party_only", "independentRecognition": null,
+      "publicationState": "needs_permission", "rightsNote": "Confirm brand, Disney, and agency archival-display rights and obtain stronger contribution evidence.",
+      "asset": {"sourceLocator": "legacy:carlsite/images/webdesign/frozen.jpg", "sha256": "fc4636081af6efced6d48473aa2547d9e9329e7f69424572ec70b35df76789a6", "width": 240, "height": 162, "bytes": 8210, "format": "jpg"},
+      "captionDraft": "A surviving thumbnail from a Bolthouse Farms and Frozen promotional rebate experience.",
+      "altTextDraft": "Bright blue promotional page with Frozen characters, a savings headline, product packaging, and a rebate-download button.",
+      "presentationNote": "Reserve only; the thumbnail is too small for featured placement and contains licensed character art.",
+      "prohibitedInference": "Do not claim campaign strategy, visual authorship, or results."
+    },
+    {
+      "id": "archive-primaloft-downblends", "rank": 11, "project": "PrimaLoft Down Blend experience", "period": "date_requires_review", "role": "Web contributor",
+      "contribution": "The legacy portfolio records parallax, HTML, JavaScript, jQuery, Canvas, CSS, and social-media integration.",
+      "technology": ["HTML", "JavaScript", "jQuery", "Canvas", "CSS", "parallax"], "evidenceLevel": "first_party_only", "independentRecognition": null,
+      "publicationState": "needs_permission", "rightsNote": "Confirm date, agency context, contribution scope, and brand archival-display rights.",
+      "asset": {"sourceLocator": "legacy:carlsite/images/webdesign/primaloft.jpg", "sha256": "56eb2d435d1def273c93d892ce666a64013a1acb31cb5c6a00818c6f67168a67", "width": 240, "height": 162, "bytes": 7224, "format": "jpg"},
+      "captionDraft": "A surviving thumbnail from a parallax product-storytelling experience for PrimaLoft Down Blend.",
+      "altTextDraft": "Dark PrimaLoft product page with a skier emerging from a cloud of down insulation and snow.",
+      "presentationNote": "Reserve only until a higher-resolution asset and stronger provenance are found.",
+      "prohibitedInference": "Do not infer a date, business result, employer relationship, or sole authorship."
+    },
+    {
+      "id": "archive-ignite-class-2012", "rank": 12, "project": "Ignite Creative Learning programming instruction", "period": "2012", "role": "Programming instructor",
+      "contribution": "Private source review supports hands-on programming instruction and Scratch use. The legacy archive includes eight small classroom photographs.",
+      "technology": ["Scratch", "programming instruction"], "evidenceLevel": "private_source_corroboration", "independentRecognition": null,
+      "publicationState": "private_only", "rightsNote": "The photographs may depict minors. Keep private unless original messages, consent, subject privacy, and image permissions are explicitly rechecked.",
+      "assets": [
+        {"sourceLocator": "legacy:carlsite/img/ignite-class/1.jpg", "sha256": "3e41c809f668027684d97c61d049803a502132167516be7136dd496e96e68b23", "width": 170, "height": 170, "bytes": 30070, "format": "jpg"},
+        {"sourceLocator": "legacy:carlsite/img/ignite-class/2.jpg", "sha256": "90bdbb304c9bd22dacecd02219d9b547d97e2e6e068bfc047786c0486ddf70a4", "width": 170, "height": 170, "bytes": 30946, "format": "jpg"},
+        {"sourceLocator": "legacy:carlsite/img/ignite-class/3.jpg", "sha256": "b5a0b5e4b238de7d275e6ab34d8ca2d5e7d2f74ee0c78e2c99442c1293869b2a", "width": 170, "height": 170, "bytes": 28216, "format": "jpg"},
+        {"sourceLocator": "legacy:carlsite/img/ignite-class/4.jpg", "sha256": "b43fe59fb2df9c91acd4e4a5165c217240eaecc25f184038ed84caa10224b347", "width": 170, "height": 170, "bytes": 30169, "format": "jpg"},
+        {"sourceLocator": "legacy:carlsite/img/ignite-class/5.jpg", "sha256": "b2c7bcd2c145432f0ff42a90e48b13bf3942aae2bcb78f52ade0f8562544e16d", "width": 170, "height": 170, "bytes": 28283, "format": "jpg"},
+        {"sourceLocator": "legacy:carlsite/img/ignite-class/6.jpg", "sha256": "167b68c01ff49fe938878f5369faf265acf7c3ddf88d14696b9dc3dc05e6a42c", "width": 170, "height": 170, "bytes": 31584, "format": "jpg"},
+        {"sourceLocator": "legacy:carlsite/img/ignite-class/7.jpg", "sha256": "0297ccffa2069677bd55782f38d2522ca4bb40c9e5d79666fb1bf1a86b7bd1e8", "width": 170, "height": 170, "bytes": 28153, "format": "jpg"},
+        {"sourceLocator": "legacy:carlsite/img/ignite-class/8.jpg", "sha256": "8a277db373d9b1031df78423b07297e6ebf2bda75f849f038ced828298e83307", "width": 170, "height": 170, "bytes": 26478, "format": "jpg"}
+      ],
+      "captionDraft": "Private classroom documentation from programming instruction in 2012.",
+      "altTextDraft": "Not written for publication because the classroom photographs remain private.",
+      "presentationNote": "Do not copy into the public repository or produce public derivatives without explicit permission review.",
+      "prohibitedInference": "Do not infer a formal job title, attendance count, curriculum ownership, student outcomes, or permission to publish the photographs."
+    }
+  ]
+}
