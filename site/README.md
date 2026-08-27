@@ -34,6 +34,8 @@ Docker is a reproducibility and CI path. Sites/Cloudflare remains the intended p
 
 The internal [`PORTFOLIO_MESSAGING_BRIEF.md`](docs/PORTFOLIO_MESSAGING_BRIEF.md) records the audience hierarchy, evidence-backed positioning, proof order, tone rules, historical-claim matrix, and page-level messaging decisions awaiting Carl's review. It is an editorial planning artifact, not approved public copy.
 
+The internal [`PORTFOLIO_ARCHIVE_INVENTORY.md`](docs/PORTFOLIO_ARCHIVE_INVENTORY.md) and machine-readable [`archive-candidates.v1.json`](docs/archive-candidates.v1.json) manifest rank legacy-work candidates with exact asset fingerprints, evidence strength, rights states, captions, and prohibited inferences. Run `pnpm check:archive` to verify those boundaries. The records do not authorize publication.
+
 - `app/portfolio-data.ts` contains the detailed case studies and verified experience summaries.
 - `app/capabilities-data.ts` maps capability claims to case studies, repositories, experience, and attributed recommendations. Content checks prevent broken evidence references.
 - `app/contact-data.ts` contains the résumé-verified public contact routes used by the header, footer, and contact page.
