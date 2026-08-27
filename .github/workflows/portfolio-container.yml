@@ -90,6 +90,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Verify Vercel Next.js runtime
+        env:
+          NEXT_PUBLIC_SITE_URL: https://carl-welch-portfolio.vercel.app
+        run: pnpm build:vercel
+
       - name: Install Chromium
         run: pnpm exec playwright install --with-deps chromium
 

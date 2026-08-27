@@ -6,7 +6,9 @@ export const defaultDescription =
   'Senior product engineer Carl Welch: current systems, professional experience, and a selected archive tracing two decades of interactive and product work.';
 
 function resolveSiteUrl() {
-  const configuredUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+  const vercelProductionHost = process.env.VERCEL_PROJECT_PRODUCTION_URL;
+  const configuredUrl = process.env.NEXT_PUBLIC_SITE_URL
+    || (vercelProductionHost ? `https://${vercelProductionHost}` : 'http://localhost:3000');
   const url = new URL(configuredUrl);
 
   if (!['http:', 'https:'].includes(url.protocol)) {
