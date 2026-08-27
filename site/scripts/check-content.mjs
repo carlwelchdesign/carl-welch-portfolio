@@ -143,8 +143,8 @@ for (const project of projects) {
   }
 }
 
-assert(projects.find((project) => project.slug === 'job-search-os')?.gallery.length >= 4, 'Job Search OS must retain its multi-surface product tour.');
-assert(projects.find((project) => project.slug === 'wave-factory-essentials')?.gallery.length >= 4, 'Wave Factory Essentials must retain its multi-image product-family gallery.');
+assert(projects.find((project) => project.slug === 'job-search-os')?.gallery.length >= 7, 'Job Search OS must retain its expanded multi-surface product tour.');
+assert(projects.find((project) => project.slug === 'wave-factory-essentials')?.gallery.length >= 5, 'Wave Factory Essentials must retain its expanded product-family gallery.');
 
 for (const capability of capabilities) {
   if (capability.evidence.length < 2) throw new Error(`${capability.name} does not contain enough supporting evidence.`);
