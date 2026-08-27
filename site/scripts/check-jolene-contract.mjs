@@ -60,6 +60,9 @@ try {
   const openApi = JSON.parse(
     await readFile(resolve(process.cwd(), 'contracts/public-jolene-v1.openapi.json'), 'utf8'),
   );
+  const validatedProviderManifest = JSON.parse(
+    await readFile(resolve(process.cwd(), 'contracts/validated-public-evidence-manifest.json'), 'utf8'),
+  );
 
   assert.equal(openApi.openapi, '3.1.0');
   assert.equal(openApi.info.version, contract.PUBLIC_JOLENE_SCHEMA_VERSION);
@@ -84,6 +87,9 @@ try {
   );
   assert.ok(!('sessionToken' in openApi.components.schemas.PortfolioAnswerRequest.properties));
   assert.ok(!('sessionToken' in openApi.components.schemas.JobFitRequest.properties));
+  assert.deepEqual(validation.parsePublicEvidenceManifest(validatedProviderManifest), validatedProviderManifest);
+  assert.equal(validatedProviderManifest.evidenceCount, 41);
+  assert.equal(validatedProviderManifest.revokedEvidenceIds.length, 0);
 
   const success = fixtures.createFixturePublicJoleneAdapter('success');
   assert.equal(contract.PUBLIC_JOLENE_ENDPOINTS.manifest, '/v1/public-evidence/manifest');

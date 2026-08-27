@@ -21,3 +21,7 @@ Errors use a bounded, non-disclosing schema. `version_mismatch` advertises suppo
 The proposed Jolene provider alignment is reviewable in [`jolene-ai` PR #29](https://github.com/carlwelchdesign/jolene-ai/pull/29). Its branch reports compatibility tests for this contract's safe error envelope, bounds, site-relative citations, evidence-free `missing` and `unknown` assessments, omitted session continuity, and empty-corpus semantics.
 
 That provider PR is review evidence only. It is not merged to Jolene `main`, does not make an endpoint publicly reachable, and does not authorize portfolio activation or deployment.
+
+Carl approved the reviewed evidence set on 2026-08-26. The resulting public-safe manifest is pinned in [`validated-public-evidence-manifest.json`](validated-public-evidence-manifest.json): schema `1.0.0`, 41 public evidence records, zero revocations, and zero unresolved public conflicts at generation time. CI parses that manifest through the portfolio's runtime validator.
+
+The portfolio does not copy or read Jolene's local export at runtime. The current source artifact remains an ignored, permission-restricted development artifact inside the Jolene workspace; a live portfolio integration still requires a separately deployed public delegate origin, secrets, operational controls, evaluation approval, and explicit activation.
