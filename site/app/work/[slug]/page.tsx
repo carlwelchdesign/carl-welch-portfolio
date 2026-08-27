@@ -89,7 +89,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             aria-label={`${project.name} evidence and boundaries`}
           >
             <div>
-              <p className="eyebrow">What is implemented</p>
+              <p className="eyebrow">Built so far</p>
               <ul>
                 {project.evidence.map((item) => (
                   <li
@@ -110,7 +110,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               tabIndex={-1}
               aria-label={`${project.name} current boundaries`}
             >
-              <p className="eyebrow">Current boundaries</p>
+              <p className="eyebrow">Where it stands</p>
               <ul>
                 {project.boundaries.map((item) => <li key={item}>{item}</li>)}
               </ul>

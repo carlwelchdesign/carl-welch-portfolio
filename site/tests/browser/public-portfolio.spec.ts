@@ -148,6 +148,16 @@ test('recommendations read as professional testimony without publication audit c
   await expect(davidAllen).not.toContainText('David was Carl’s client');
 });
 
+test('contact page invites conversation without internal policy copy', async ({ page }) => {
+  await page.goto('/contact');
+  await expectCorePageContract(page);
+  await expect(page.getByRole('heading', { level: 1, name: 'Email Carl' })).toBeVisible();
+  await expect(page.getByText('Have a role, product, or difficult problem in mind?')).toBeVisible();
+  await expect(page.locator('body')).not.toContainText(
+    /current résumé|no form|message collection|visitor message is stored|reviewed public evidence only|public corpus/i,
+  );
+});
+
 test('reduced motion preserves content and suppresses looping animation', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');

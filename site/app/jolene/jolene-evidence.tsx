@@ -53,7 +53,6 @@ export function JoleneCitationLink({
       <small>
         {citation.sourceType.replaceAll('_', ' ')} · {citation.strength} · {maturityLabels[citation.maturity]}
       </small>
-      <code>{citation.evidenceId}</code>
     </>
   );
 
@@ -89,7 +88,7 @@ export function JoleneEvidence({ evidence }: JoleneEvidenceProps) {
   return (
     <details className="jolene-evidence" {...(!hasClaims ? { open: true } : {})}>
       <summary>
-        <span>{hasClaims ? 'Review supporting evidence' : 'No supporting evidence found'}</span>
+        <span>{hasClaims ? 'See what supports this answer' : 'No matching example found'}</span>
         <small>{sourceCount} {sourceCount === 1 ? 'source' : 'sources'}</small>
       </summary>
 
@@ -143,18 +142,17 @@ export function JoleneEvidence({ evidence }: JoleneEvidenceProps) {
           </ol>
         ) : (
           <p className="jolene-no-evidence">
-            Jolene did not find public-approved evidence that could support a substantive claim.
+            I couldn’t find a strong enough example in Carl’s portfolio to support that answer.
           </p>
         )}
 
         <div className="jolene-response-limitations">
-          <strong>Response limitations</strong>
+          <strong>Worth knowing</strong>
           <ul>
             {evidence.limitations.map((limitation) => <li key={limitation}>{limitation}</li>)}
           </ul>
         </div>
 
-        <p className="jolene-corpus-version">Public corpus · {evidence.corpusVersion}</p>
       </div>
     </details>
   );

@@ -18,7 +18,7 @@ export default function ContactPage() {
           <PageIntro
             eyebrow="Contact"
             title="Email Carl"
-            summary="Direct contact details from the current résumé. No form and no message collection on this site."
+            summary="Have a role, product, or difficult problem in mind? Email Carl directly, or connect through LinkedIn and GitHub."
           />
 
           <section className="contact-panel" aria-labelledby="contact-email-title">

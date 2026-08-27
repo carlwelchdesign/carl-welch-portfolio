@@ -23,15 +23,15 @@ try {
     'Which public project demonstrates Carl’s product engineering work?',
   );
   await page.getByRole('button', { name: 'Ask Jolene', exact: true }).click();
-  await page.getByText('Review supporting evidence').waitFor();
-  assert.match(await page.locator('.jolene-corpus-version').first().textContent(), /^Public corpus · career:/);
+  await page.getByText('See what supports this answer').waitFor();
+  assert.equal(await page.locator('.jolene-corpus-version').count(), 0);
 
   await page.getByRole('button', { name: 'Compare role' }).click();
   await page.getByRole('textbox', { name: 'Job description' }).fill(
     'Build typed product interfaces and evidence-grounded AI systems.',
   );
   await page.getByRole('button', { name: /Compare requirements/ }).click();
-  await page.getByRole('heading', { name: 'Comparison, not a verdict' }).waitFor();
+  await page.getByRole('heading', { name: 'How the role lines up' }).waitFor();
 
   const accessibility = await new AxeBuilder({ page })
     .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
@@ -41,7 +41,7 @@ try {
   assert.deepEqual(browserErrors, []);
 
   await page.getByRole('button', { name: 'Questions' }).click();
-  await page.getByText('Review supporting evidence').click();
+  await page.getByText('See what supports this answer').click();
   const citation = page.locator('.jolene-citation').first();
   const citationHref = await citation.getAttribute('href');
   assert.match(citationHref, /^\/[a-z0-9/-]+#[a-z0-9-]+$/);

@@ -14,6 +14,7 @@ for (const route of ['/', '/work', '/contact']) {
 assert.match(errorBoundary, /captureException\(error\)/);
 assert.match(errorBoundary, /onClick=\{reset\}/);
 assert.doesNotMatch(errorBoundary, /error\.message|error\.stack|error\.digest|prepared for review/i);
-assert.match(errorBoundary, /No form response or visitor message is stored here/);
+assert.match(errorBoundary, /use one of these links to keep exploring/i);
+assert.doesNotMatch(errorBoundary, /form response|visitor message|stored here/i);
 
 console.log('Recovery checks passed: accessible 404 routes and privacy-safe runtime-error boundary.');

@@ -44,9 +44,9 @@ export const evidenceStrengths = ['strong', 'moderate', 'limited'] as const;
 export type EvidenceStrength = (typeof evidenceStrengths)[number];
 
 export const evidenceStrengthDescriptions: Record<EvidenceStrength, string> = {
-  strong: 'Direct, reviewed public evidence supports the claim as written.',
-  moderate: 'Reviewed public evidence supports the claim with material context or qualification.',
-  limited: 'Reviewed public evidence supports only a narrower or adjacent statement.',
+  strong: 'This source directly supports the statement.',
+  moderate: 'This source supports the statement with some context.',
+  limited: 'This source supports a narrower or closely related point.',
 };
 
 export const projectMaturities = [

@@ -9,8 +9,8 @@ import { buildPageMetadata } from '../site-metadata';
 import { publicEvidenceAnchorId } from '../jolene/public-evidence-navigation-core';
 
 export const metadata: Metadata = buildPageMetadata({
-  title: 'Capabilities and Evidence',
-  description: 'A source-grounded map connecting Carl Welch’s capabilities to specific projects, repositories, experience, and recommendations.',
+  title: 'Capabilities',
+  description: 'Explore Carl Welch’s capabilities through specific projects, professional experience, and recommendations.',
   path: '/capabilities',
 });
 
@@ -34,8 +34,8 @@ export default function CapabilitiesPage() {
         >
           <PageIntro
             eyebrow="Capabilities"
-            title="What I do, and the work behind it"
-            summary="Each area below links to a project, repository, role, or recommendation. You can follow every claim back to its source."
+            title="What I bring to the work"
+            summary="Explore each strength through the projects, roles, and recommendations that shaped it."
           />
 
           <ol className="capability-list">
@@ -98,10 +98,10 @@ export default function CapabilitiesPage() {
           </ol>
 
           <section className="capability-method" data-tone="red">
-            <p className="eyebrow">Evidence model</p>
-            <h2>What the site can support today</h2>
+            <p className="eyebrow">Go deeper</p>
+            <h2>See the work behind each strength</h2>
             <p>
-              Case studies carry the deepest technical context. Repository records show public implementation evidence. Experience records establish professional context. Recommendations remain attributed third-party statements and are never rewritten as Carl’s own claims.
+              Open a case study for the full technical story, visit a repository to inspect the code, or read what managers, teammates, and clients have said about working with Carl.
             </p>
           </section>
         </main>

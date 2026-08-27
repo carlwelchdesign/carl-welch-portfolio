@@ -51,6 +51,14 @@ for (const rejectedLine of [
   'AI that shows its work',
   'Make the hard parts visible',
   'Code can have a point of view',
+  'Direct contact details from the current résumé',
+  'No form and no message collection on this site',
+  'No form response or visitor message is stored here',
+  'Public descriptions stay bounded',
+  'The public portfolio names the record',
+  'Reviewed public evidence only',
+  'No private memory, Obsidian access, or transcript retention',
+  'Public corpus ·',
 ]) {
   assert.equal(publicSource.includes(rejectedLine), false, `Rejected portfolio copy returned: ${rejectedLine}`);
 }

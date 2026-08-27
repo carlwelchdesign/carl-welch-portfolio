@@ -72,13 +72,13 @@ export const earlierPracticeGroups: EarlierPracticeGroup[] = [
     title: 'Studios, agencies, and client work',
     organizations: ['SapientNitro', 'Nezzoh', 'Trailer Park', 'BPG', 'Petrol'],
     summary:
-      'Earlier professional work crossed interactive production, web design, animation, and front-end implementation. Public descriptions stay bounded while the project-level visual archive is reviewed.',
+      'Earlier professional work crossed interactive production, web design, animation, and front-end development for studios, agencies, and client teams.',
   },
   {
     title: 'Technical foundations',
     organizations: ['TASER / AXON', 'General Dynamics', 'U.S. Army'],
     summary:
-      'Earlier technical environments broadened the work beyond commercial web products. The public portfolio names the record without exposing confidential systems or overstating individual ownership.',
+      'Work with TASER / AXON, General Dynamics, and the U.S. Army brought experience with demanding technical environments, operational workflows, and complex teams.',
   },
 ];
 

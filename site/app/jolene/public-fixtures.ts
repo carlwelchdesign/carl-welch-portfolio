@@ -40,7 +40,7 @@ const fixtureReviewedAt = '2026-08-25T19:30:00.000Z';
 const citations: PublicEvidenceCitation[] = [
   {
     evidenceId: 'career:00000000-0000-4000-8000-000000000001',
-    title: 'Fixture evidence — Job Search OS approval boundary',
+    title: 'Job Search OS — review workflow',
     href: '/work/job-search-os#evidence--portfolio--claim--job-search-os--approval-boundary',
     sourceType: 'portfolio_page',
     strength: 'strong',
@@ -49,7 +49,7 @@ const citations: PublicEvidenceCitation[] = [
   },
   {
     evidenceId: 'career:00000000-0000-4000-8000-000000000002',
-    title: 'Fixture evidence — Flight Tracker AI typed system',
+    title: 'Flight Tracker AI — typed product system',
     href: '/work/flight-tracker-ai#evidence--portfolio--claim--flight-tracker-ai--typed-system',
     sourceType: 'portfolio_page',
     strength: 'moderate',
@@ -80,10 +80,10 @@ function createAnswerResponse(scenario: PublicJoleneFixtureScenario): PortfolioA
   if (scenario === 'no_evidence' || scenario === 'empty_corpus') {
     return {
       schemaVersion: PUBLIC_JOLENE_SCHEMA_VERSION,
-      answer: 'Fixture response: the public evidence set does not support a reliable answer to that question.',
+      answer: 'I couldn’t find a reliable example for that question.',
       claims: [],
       citations: [],
-      limitations: ['No matching public-approved fixture evidence was available.'],
+      limitations: ['The available portfolio examples do not cover this question.'],
       suggestedFollowUpQuestions: ['Would you like to ask about a published project or professional role instead?'],
       corpusVersion: scenario === 'empty_corpus' ? emptyManifest.corpusVersion : fixtureCorpusVersion,
     };
@@ -94,21 +94,21 @@ function createAnswerResponse(scenario: PublicJoleneFixtureScenario): PortfolioA
     schemaVersion: PUBLIC_JOLENE_SCHEMA_VERSION,
     answer:
       scenario === 'partial_evidence'
-        ? 'Fixture response: the available public evidence supports part of the question, but not a complete conclusion.'
-        : 'Fixture response: Carl has built typed product systems that keep consequential AI-assisted actions behind explicit review boundaries.',
+        ? 'The available examples support part of the question, but not a complete conclusion.'
+        : 'Carl has built typed product systems that keep consequential AI-assisted actions behind explicit review boundaries.',
     claims: [
       {
         claimId: '10000000-0000-4000-8000-000000000001',
         text:
           scenario === 'partial_evidence'
             ? 'Job Search OS demonstrates an explicit approval boundary for consequential external actions.'
-            : 'The fixture evidence demonstrates typed product architecture and explicit approval boundaries across selected projects.',
+            : 'Selected projects demonstrate typed product architecture and explicit approval boundaries.',
         evidenceIds: selectedCitations.map((citation) => citation.evidenceId),
         evidenceStrength: scenario === 'partial_evidence' ? 'limited' : 'strong',
         maturity: scenario === 'partial_evidence' ? 'production' : 'deployed_demo',
         limitations:
           scenario === 'partial_evidence'
-            ? ['This fixture does not establish the broader qualification implied by the question.']
+            ? ['The available examples do not establish the broader qualification implied by the question.']
             : ['Project maturity differs between the cited systems.'],
       },
     ],
@@ -116,7 +116,7 @@ function createAnswerResponse(scenario: PublicJoleneFixtureScenario): PortfolioA
     limitations:
       scenario === 'partial_evidence'
         ? ['The evidence supports a narrower statement than the question requests.']
-        : ['These are deterministic development fixtures, not live public Jolene results.'],
+        : ['This preview uses sample answers while the live connection is off.'],
     suggestedFollowUpQuestions: [
       'Which project best demonstrates Carl’s approach to approval boundaries?',
       'What limitations remain in the cited work?',
@@ -134,13 +134,13 @@ function createJobFitResponse(scenario: PublicJoleneFixtureScenario): JobFitResp
           requirementId: 'req:0000000000000001',
           requirement: 'The supplied role requirement',
           assessment: 'unknown',
-          explanation: 'The public fixture evidence is insufficient to classify this requirement.',
+          explanation: 'The available portfolio examples are not enough to classify this requirement.',
           evidenceIds: [],
           limitations: ['Unknown is not evidence that the qualification is present or absent.'],
         },
       ],
       citations: [],
-      caveats: ['This fixture cannot support a blanket fit conclusion.'],
+      caveats: ['This comparison is not a recommendation to hire or a blanket fit score.'],
       suggestedFollowUpQuestions: ['Which requirement should be clarified with Carl directly?'],
       corpusVersion: scenario === 'empty_corpus' ? emptyManifest.corpusVersion : fixtureCorpusVersion,
     };
@@ -151,7 +151,7 @@ function createJobFitResponse(scenario: PublicJoleneFixtureScenario): JobFitResp
       requirementId: 'req:0000000000000002',
       requirement: 'Build typed product interfaces',
       assessment: 'direct',
-      explanation: 'The fixture cites a typed browser-to-service product implementation.',
+      explanation: 'A cited project shows a typed browser-to-service product implementation.',
       evidenceIds: [citations[1].evidenceId],
       limitations: ['A portfolio project does not establish experience in every product domain.'],
     },
@@ -161,8 +161,8 @@ function createJobFitResponse(scenario: PublicJoleneFixtureScenario): JobFitResp
       assessment: scenario === 'partial_evidence' ? 'adjacent' : 'direct',
       explanation:
         scenario === 'partial_evidence'
-          ? 'The fixture demonstrates an approval boundary but not the role’s full operating environment.'
-          : 'The fixture directly cites a system with approval-gated consequential actions.',
+          ? 'The example demonstrates an approval boundary but not the role’s full operating environment.'
+          : 'A cited system uses approval gates for consequential actions.',
       evidenceIds: [citations[0].evidenceId],
       limitations: scenario === 'partial_evidence' ? ['Production scale and team context are not established.'] : [],
     },
@@ -170,7 +170,7 @@ function createJobFitResponse(scenario: PublicJoleneFixtureScenario): JobFitResp
       requirementId: 'req:0000000000000004',
       requirement: 'Operate Kubernetes in production',
       assessment: 'missing',
-      explanation: 'No supporting Kubernetes evidence appears in the fixture corpus.',
+      explanation: 'The portfolio does not currently include a Kubernetes example.',
       evidenceIds: [],
       limitations: ['Missing public evidence does not prove the experience has never occurred.'],
     },
@@ -180,7 +180,7 @@ function createJobFitResponse(scenario: PublicJoleneFixtureScenario): JobFitResp
     requirements,
     citations,
     caveats: [
-      'This is a requirement-by-requirement fixture, not a recommendation to hire or a blanket fit score.',
+      'This comparison considers each requirement separately; it is not a recommendation to hire or a blanket fit score.',
       'A visitor should confirm missing or ambiguous requirements with Carl directly.',
     ],
     suggestedFollowUpQuestions: [
@@ -197,7 +197,7 @@ function createContactIntentResponse(): ContactIntentResponse {
     intentId: '20000000-0000-4000-8000-000000000001',
     status: 'pending_review',
     submittedAt: fixtureGeneratedAt,
-    message: 'Fixture response: the contact request is pending Carl’s review. No outbound action was taken.',
+    message: 'Your contact request is ready for Carl to review. No outbound action was taken.',
   };
 }
 
