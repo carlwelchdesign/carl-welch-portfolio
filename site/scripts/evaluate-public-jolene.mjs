@@ -168,6 +168,10 @@ function assertProviderCitationHref(href) {
     assert.equal(url.hash, '');
     return;
   }
+  if (url.pathname === '/recommendations') {
+    assert.equal(url.hash, '');
+    return;
+  }
   if (url.pathname === '/experience') {
     assert.match(url.hash, /^#[a-z0-9-]+$/);
     return;

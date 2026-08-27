@@ -23,6 +23,7 @@
     "This suite evaluates the deterministic local public delegate, not an activated generative model.",
     "The in-memory portfolio admission controller is not a distributed production rate limiter.",
     "Automated evaluation does not create or review a contact intent.",
+    "Recommendation citations remain visibly review-gated until PORT-REC-001 reconciles the official LinkedIn export and approves publication.",
     "Representative human review, production telemetry, provider billing reconciliation, and launch approval remain separate gates."
   ]
 }
