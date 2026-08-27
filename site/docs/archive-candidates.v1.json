@@ -21,16 +21,16 @@
       "prohibitedInference": "Do not say Carl won a Webby, designed the entire site, or was its sole developer."
     },
     {
-      "id": "archive-taser-axon-2009", "rank": 2, "project": "TASER AXON / Evidence.com prototype", "period": "2009", "role": "Interactive prototype contributor",
-      "contribution": "The legacy portfolio records ActionScript 3, ASP, JavaScript, and Google APIs. Private correspondence review corroborates prototype workflow involvement.",
+      "id": "archive-taser-axon-2009", "rank": 2, "project": "TASER AXON / Evidence.com interface", "period": "2009", "role": "Interactive developer",
+      "contribution": "Carl confirms this was a working, finished Evidence.com interface. The legacy portfolio records ActionScript 3, ASP, JavaScript, and Google APIs.",
       "technology": ["ActionScript 3", "ASP", "JavaScript", "Google APIs"], "evidenceLevel": "first_party_plus_private_corroboration", "independentRecognition": null,
-      "publicationState": "public_approved", "rightsNote": "Carl explicitly approved publication of this archived prototype image on 2026-08-27. Keep the contribution wording bounded to prototype work.",
+      "publicationState": "public_approved", "rightsNote": "Carl explicitly approved publication of this archived interface image on 2026-08-27. Describe the completed interface accurately without implying sole ownership of Evidence.com.",
       "asset": {"sourceLocator": "legacy:carlsite/images/samples/taser.jpg", "sha256": "e480bea22c5d5efd11462dd72a0636f58cd1775b6faa7d8c41d8c05c5a65348e", "width": 836, "height": 525, "bytes": 198418, "format": "jpg"},
-      "publicAsset": {"path": "/archive/taser-axon-prototype.jpg", "sha256": "e480bea22c5d5efd11462dd72a0636f58cd1775b6faa7d8c41d8c05c5a65348e", "width": 836, "height": 525, "format": "jpg"},
-      "captionDraft": "Archived prototype screens exploring evidence review, event organization, clipping, and controlled sharing workflows.",
+      "publicAsset": {"path": "/archive/taser-axon-evidence-interface.jpg", "sha256": "e480bea22c5d5efd11462dd72a0636f58cd1775b6faa7d8c41d8c05c5a65348e", "width": 836, "height": 525, "format": "jpg"},
+      "captionDraft": "Archived screens from the working Evidence.com interface spanning evidence review, event organization, clipping, and controlled sharing workflows.",
       "altTextDraft": "Dark blue interface studies showing video evidence timelines, event folders, clip editing, case members, and sharing panels.",
       "presentationNote": "Present the complete archived composite without cropping individual frames or implying current product status.",
-      "prohibitedInference": "Do not claim production deployment, sole product ownership, or current endorsement by TASER or Axon."
+      "prohibitedInference": "Do not claim sole product ownership or current endorsement by TASER or Axon."
     },
     {
       "id": "archive-magento-go-2011", "rank": 3, "project": "Magento Go homepage", "period": "2011", "role": "Freelance senior designer",

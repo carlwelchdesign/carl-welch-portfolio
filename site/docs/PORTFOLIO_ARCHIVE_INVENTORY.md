@@ -23,7 +23,7 @@ Private message bodies, sender names, addresses, message identifiers, and filesy
 | Rank | Candidate | Why it belongs in review | Current gate |
 | ---: | --- | --- | --- |
 | 1 | yU+co studio website | Strong interaction-engineering history, surviving artifact, private contribution corroboration, and team-level Webby recognition | Public approved; team attribution required |
-| 2 | TASER AXON / Evidence.com prototype | Early evidence-workflow and product-interface relevance | Public approved; prototype scope required |
+| 2 | TASER AXON / Evidence.com interface | Finished evidence-workflow and product-interface work | Public approved; completed interface wording required |
 | 3 | Magento Go homepage | Clear senior-design assignment and legible full-page artifact | Public approved; scope wording required |
 | 4 | Fox A Year of a Million Moments | Full surviving visual plus implementation corroboration | Public approved; team context required |
 | 5 | Darksiders II promotional site | Supported front-end implementation and revisions | Public approved as an archival thumbnail |
@@ -39,7 +39,7 @@ The Ignite Creative Learning record closes the archive with all eight classroom 
 
 - **Feature-ready:** yU+co, Magento Go, Fox Million Moments, Almost Alice, David Lynch Foundation Music, and Beatnik.
 - **Useful with constraints:** Darksiders II, Superman 75, Bolthouse Frozen, and PrimaLoft are 240 × 162 archival thumbnails and are intentionally not enlarged into hero images.
-- **Complete reviewed set:** TASER’s prototype composite and all eight Ignite classroom photographs are included under Carl’s explicit publication approval.
+- **Complete reviewed set:** TASER’s finished Evidence.com interface composite and all eight Ignite classroom photographs are included under Carl’s explicit publication approval.
 - **Public derivative:** yU+co is served as a reviewed 620 × 400 static crop, not as the original GIF containing obsolete contact information.
 
 Each manifest entry includes an exact SHA-256 fingerprint, source dimensions, byte size, caption draft, alt-text draft, presentation note, and prohibited inference. These details make later copying and approval auditable.
@@ -67,5 +67,5 @@ The yU+co item can carry the exact phrase **2006 Webby Awards Honoree** only whe
 - [x] Every source asset hash matched the reviewed manifest at copy time.
 - [x] Only approved assets or derivatives were copied; the legacy repository and unrelated files remain private.
 - [x] Low-resolution images are presented as archival thumbnails rather than enlarged feature art.
-- [x] TASER prototype imagery is published with bounded prototype wording.
+- [x] The working, finished Evidence.com interface is published with accurate contribution wording.
 - [x] All eight Ignite classroom photographs are published as one compact teaching record.

@@ -42,20 +42,20 @@ export const legacyArchiveProjects: LegacyArchiveProject[] = [
   },
   {
     id: 'archive-taser-axon-2009',
-    project: 'TASER AXON / Evidence.com prototype',
+    project: 'TASER AXON / Evidence.com interface',
     period: '2009',
-    role: 'Interactive prototype contributor',
+    role: 'Interactive developer',
     contribution:
-      'Prototype workflow work spanning evidence review, event organization, clip editing, case collaboration, and controlled sharing.',
+      'Developed a working, finished interface spanning evidence review, event organization, clip editing, case collaboration, and controlled sharing.',
     technology: ['ActionScript 3', 'ASP', 'JavaScript', 'Google APIs'],
     image: {
-      src: '/archive/taser-axon-prototype.jpg',
+      src: '/archive/taser-axon-evidence-interface.jpg',
       alt: 'Dark blue interface studies showing video evidence timelines, event folders, clip editing, case members, and sharing panels.',
       width: 836,
       height: 525,
     },
     evidenceNote:
-      'Carl’s preserved portfolio records the technology and prototype contribution; historical correspondence corroborates his involvement in the workflow prototype.',
+      'Carl’s preserved portfolio records the technology and interface work; Carl confirms this was a working, finished Evidence.com interface.',
     display: 'feature',
   },
   {
