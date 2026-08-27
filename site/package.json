@@ -33,6 +33,7 @@
     "check:sentry-asana": "node scripts/check-sentry-asana-intake.mjs",
     "check:sentry-release": "node scripts/check-sentry-release-config.mjs",
     "check:sentry-operations": "node scripts/check-sentry-operations.mjs",
+    "check:research-protocol": "node scripts/check-research-protocol.mjs",
     "check:security-headers": "node scripts/check-security-headers.mjs",
     "check:no-public-sourcemaps": "node scripts/check-no-public-sourcemaps.mjs",
     "check:release-readiness": "node scripts/check-release-readiness.mjs",
@@ -40,7 +41,7 @@
     "check:routes": "node scripts/check-routes.mjs",
     "check:production": "node scripts/check-production-origin.mjs",
     "check:browser": "playwright test",
-    "check": "pnpm typecheck && pnpm lint && pnpm check:metadata && pnpm check:content && pnpm check:editorial && pnpm check:archive && pnpm check:archive-recovery && pnpm check:release-decisions && pnpm check:github-sync && pnpm check:jolene-contract && pnpm check:jolene-job-fit && pnpm check:jolene-bff && pnpm check:analytics && pnpm check:sentry-privacy && pnpm check:sentry-asana && pnpm check:sentry-release && pnpm check:sentry-operations && pnpm check:security-headers && pnpm check:release-readiness && pnpm build && pnpm check:no-public-sourcemaps"
+    "check": "pnpm typecheck && pnpm lint && pnpm check:metadata && pnpm check:content && pnpm check:editorial && pnpm check:archive && pnpm check:archive-recovery && pnpm check:release-decisions && pnpm check:github-sync && pnpm check:jolene-contract && pnpm check:jolene-job-fit && pnpm check:jolene-bff && pnpm check:analytics && pnpm check:sentry-privacy && pnpm check:sentry-asana && pnpm check:sentry-release && pnpm check:sentry-operations && pnpm check:research-protocol && pnpm check:security-headers && pnpm check:release-readiness && pnpm build && pnpm check:no-public-sourcemaps"
   },
   "dependencies": {
     "@sentry/browser": "10.71.0",
