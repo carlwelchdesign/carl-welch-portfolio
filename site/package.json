@@ -50,8 +50,8 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "4.13.0",
-    "@cloudflare/vite-plugin": "1.37.1",
-    "@cloudflare/workers-types": "4.20260515.1",
+    "@cloudflare/vite-plugin": "1.54.0",
+    "@cloudflare/workers-types": "5.20260826.1",
     "@openai/sites-vite-plugin": "^0.1.0 || ^0.2.0",
     "@playwright/test": "1.62.1",
     "@tailwindcss/postcss": "4.2.1",
@@ -62,7 +62,7 @@
     "eslint-config-next": "16.3.3",
     "tailwindcss": "4.2.1",
     "typescript": "5.9.3",
-    "wrangler": "4.92.0"
+    "wrangler": "4.126.0"
   },
   "type": "module"
 }
