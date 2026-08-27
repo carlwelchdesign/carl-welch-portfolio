@@ -72,7 +72,7 @@ export function ArchiveExplorer() {
           <h2 id="archive-title">Public repositories</h2>
         </div>
         <p>
-          A complete public-repository snapshot from <time dateTime={githubSnapshotDate}>{githubSnapshotLabel}</time>. The selected case studies above carry the deeper product and architecture narrative.
+          A curated public-repository selection reviewed on <time dateTime={githubSnapshotDate}>{githubSnapshotLabel}</time>. The selected case studies above carry the deeper product and architecture narrative.
         </p>
       </header>
 

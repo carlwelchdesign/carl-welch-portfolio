@@ -55,6 +55,15 @@ const added = makeReview([liveAlpha, {
 }]);
 assert(added.changes.some((change) => change.type === 'added'));
 
+const excluded = makeReview([liveAlpha, {
+  id: 202,
+  name: 'excluded-project',
+  language: 'Go',
+  html_url: 'https://github.com/example/excluded-project',
+  updated_at: '2026-01-03T00:00:00Z',
+}], new Map([['alpha', 'valid']]), [202]);
+assert(!excluded.changes.some((change) => change.repositoryId === 202));
+
 const brokenMedia = makeReview([{ ...liveAlpha, language: 'TypeScript', updated_at: snapshotProjects[0].updatedAt }], new Map([['alpha', 'invalid']]));
 assert.equal(brokenMedia.changes[0].type, 'media');
 
@@ -119,12 +128,13 @@ assert.deepEqual(removalResult.requiresEditorial, [deleted.changes[0].changeId])
 
 console.log('GitHub content-sync checks passed: deterministic drift, rename, deletion, stale source, media, protected claims, and explicit decisions.');
 
-function makeReview(payload, mediaStatus = new Map([['alpha', 'valid']])) {
+function makeReview(payload, mediaStatus = new Map([['alpha', 'valid']]), excludedRepositoryIds = []) {
   return buildGitHubReview({
     snapshotProjects,
     repositoryIds,
     snapshotReview,
     liveRepositories: normalizeLiveRepositories(payload),
+    excludedRepositoryIds,
     mediaStatus,
     sourceObservedAt: '2026-01-04T00:00:00Z',
   });

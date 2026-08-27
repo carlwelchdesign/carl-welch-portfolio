@@ -2,7 +2,7 @@ import { resolve } from 'node:path';
 import { loadTypescriptData } from './load-typescript-data.mjs';
 
 const baseUrl = (process.env.PORTFOLIO_BASE_URL || 'http://localhost:3000').replace(/\/$/, '');
-const [{ projects, experience }, { githubProjects }, { legacyArchiveProjects }, { capabilities }, { recommendations }] = await Promise.all([
+const [{ projects, experience }, { githubProjects, githubPortfolioExclusions }, { legacyArchiveProjects }, { capabilities }, { recommendations }] = await Promise.all([
   loadTypescriptData(resolve(process.cwd(), 'app/portfolio-data.ts')),
   loadTypescriptData(resolve(process.cwd(), 'app/github-projects.ts')),
   loadTypescriptData(resolve(process.cwd(), 'app/legacy-archive-data.ts')),
@@ -24,6 +24,10 @@ async function fetchRoute(path, expectedStatus = 200) {
 
 function requireText(html, text, route) {
   if (!html.includes(text)) throw new Error(`${route} is missing expected content: ${text}`);
+}
+
+function requireAbsentText(html, text, route) {
+  if (html.includes(text)) throw new Error(`${route} contains excluded content: ${text}`);
 }
 
 function requirePageStructure(html, route) {
@@ -79,7 +83,7 @@ function requireShareMetadata(html, route) {
 
 const pageExpectations = [
   ['/', 'Carl Welch'],
-  ['/work', `${githubProjects.length} public repositories`],
+  ['/work', `${githubProjects.length} selected public repositories`],
   ['/archive', 'The work behind the current work'],
   ['/about', 'The engineer I am now was built over time'],
   ['/capabilities', 'What I do, and the work behind it'],
@@ -114,6 +118,12 @@ await Promise.all(pageExpectations.map(async ([route, expectedText]) => {
   }
   if (route === '/experience') {
     for (const role of experience) requireText(html, `id="${role.id}"`, route);
+  }
+
+  if (route === '/work') {
+    for (const project of githubPortfolioExclusions) {
+      requireAbsentText(html, `href="https://github.com/carlwelchdesign/${project.name}"`, route);
+    }
   }
 
   if (route === '/') {

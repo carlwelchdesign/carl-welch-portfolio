@@ -55,7 +55,7 @@ async function requirePng(relativePath) {
 }
 
 const [
-  { githubProjects, githubRepositoryIds, githubSnapshotReview },
+  { githubProjects, githubPortfolioExclusions, githubRepositoryIds, githubSnapshotReview },
   { projects, experience, recommendationReview },
   { recommendations },
   { capabilities },
@@ -75,6 +75,13 @@ const [
 if (projects.length < 3) throw new Error('At least three detailed case studies are required.');
 requireUnique(projects.map((project) => project.slug), 'Case-study slugs');
 requireUnique(githubProjects.map((project) => project.name), 'GitHub repository names');
+requireUnique(githubPortfolioExclusions.map((project) => project.name), 'GitHub portfolio exclusion names');
+requireUnique(githubPortfolioExclusions.map((project) => project.repositoryId), 'GitHub portfolio exclusion IDs');
+assert.equal(
+  githubPortfolioExclusions.filter(({ name }) => githubProjects.some((project) => project.name === name)).length,
+  0,
+  'Excluded GitHub repositories must not appear in the public archive.',
+);
 assert(githubSnapshotReview?.reviewer, 'GitHub snapshot review must name a reviewer.');
 assert(Number.isInteger(githubSnapshotReview?.appliedVersion), 'GitHub snapshot review must carry an applied version.');
 assert(!Number.isNaN(Date.parse(githubSnapshotReview?.sourceObservedAt)), 'GitHub snapshot review must carry a valid source timestamp.');
