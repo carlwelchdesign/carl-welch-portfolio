@@ -90,6 +90,9 @@ jobs:
       - name: Install Chromium
         run: pnpm exec playwright install --with-deps chromium
 
+      - name: Verify release-readiness register
+        run: pnpm check:release-readiness
+
       - name: Run browser regression suite
         run: pnpm check:browser
 

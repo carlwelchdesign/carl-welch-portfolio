@@ -10,13 +10,13 @@ export type GitHubProject = {
   kind: 'application' | 'library' | 'legacy' | 'profile';
 };
 
-export const githubSnapshotDate = '2026-08-26';
-export const githubSnapshotLabel = 'August 26, 2026';
+export const githubSnapshotDate = '2026-08-27';
+export const githubSnapshotLabel = 'August 27, 2026';
 
 export const githubSnapshotReview = {
-  sourceObservedAt: '2026-08-26T20:49:01.000Z',
-  reviewer: 'Carl Welch',
-  appliedVersion: 1,
+  sourceObservedAt: '2026-08-27T02:20:04.000Z',
+  reviewer: 'Codex release-readiness audit',
+  appliedVersion: 2,
 } as const;
 
 // Stable GitHub repository IDs make renames detectable without treating a
@@ -68,7 +68,7 @@ export const githubProjects: GitHubProject[] = [
     language: 'TypeScript',
     url: 'https://github.com/carlwelchdesign/jolene-ai',
     homepage: null,
-    updatedAt: '2026-08-26T01:18:42Z',
+    updatedAt: '2026-08-27T02:07:53Z',
     topics: ['AI agents', 'Slack', 'approvals', 'memory'],
     stars: 0,
     kind: 'application',

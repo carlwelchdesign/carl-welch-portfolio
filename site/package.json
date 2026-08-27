@@ -23,10 +23,11 @@
     "check:jolene-browser-live": "node scripts/check-jolene-browser-live.mjs",
     "evaluate:jolene": "node scripts/evaluate-public-jolene.mjs",
     "check:analytics": "node scripts/check-analytics.mjs",
+    "check:release-readiness": "node scripts/check-release-readiness.mjs",
     "check:container": "node scripts/check-container.mjs",
     "check:routes": "node scripts/check-routes.mjs",
     "check:browser": "playwright test",
-    "check": "pnpm lint && pnpm check:metadata && pnpm check:content && pnpm check:github-sync && pnpm check:jolene-contract && pnpm check:jolene-job-fit && pnpm check:jolene-bff && pnpm check:analytics && pnpm build"
+    "check": "pnpm lint && pnpm check:metadata && pnpm check:content && pnpm check:github-sync && pnpm check:jolene-contract && pnpm check:jolene-job-fit && pnpm check:jolene-bff && pnpm check:analytics && pnpm check:release-readiness && pnpm build"
   },
   "dependencies": {
     "@vitejs/plugin-react": "6.0.2",
