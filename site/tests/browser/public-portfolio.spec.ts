@@ -203,6 +203,7 @@ test('work overview shows every flagship gallery preview without broken media', 
 
   for (const project of projects) {
     const chapter = page.getByRole('heading', { level: 2, name: project.name }).locator('xpath=ancestor::section');
+    await expect(chapter.getByRole('link', { name: `View ${project.name} case study` })).toHaveAttribute('href', /\/work\//);
     const previews = chapter.locator('.project-media-preview img');
     await expect(previews).toHaveCount(project.previews);
     await previews.first().scrollIntoViewIfNeeded();
@@ -210,6 +211,20 @@ test('work overview shows every flagship gallery preview without broken media', 
       images.every((image) => (image as HTMLImageElement).naturalWidth > 0)
     ))).toBe(true);
   }
+});
+
+test('Flight Tracker leads with the dense live regional traffic workspace', async ({ page }) => {
+  await page.goto('/work');
+  const chapter = page.getByRole('heading', { level: 2, name: 'Flight Tracker AI' }).locator('xpath=ancestor::section');
+  const leadImage = chapter.locator('.project-image');
+  await expect(leadImage).toHaveAttribute('src', /live-traffic-weather\.png/);
+  await expect(leadImage).toHaveAttribute('alt', /158 aircraft/);
+  await expect.poll(() => leadImage.evaluate((image) => (image as HTMLImageElement).naturalWidth)).toBeGreaterThanOrEqual(1200);
+
+  await page.goto('/work/flight-tracker-ai');
+  const caseStudyLead = page.locator('.project-detail-image img');
+  await expect(caseStudyLead).toHaveAttribute('src', /live-traffic-weather\.png/);
+  await expect(page.getByText('Deterministic replay workspace', { exact: true })).toBeVisible();
 });
 
 test('reduced motion preserves content and suppresses looping animation', async ({ page }) => {

@@ -250,15 +250,22 @@ export function ProjectChapter({ project, priority = false }: { project: Portfol
 
       <div className="project-image-wrap">
         <ImageDrift>
-          <Image
-            className="project-image"
-            src={project.image.src}
-            alt={project.image.alt}
-            width={project.image.width}
-            height={project.image.height}
-            priority={priority}
-            sizes="(max-width: 1000px) 100vw, 88vw"
-          />
+          <Link
+            className="project-image-link"
+            href={`/work/${project.slug}`}
+            aria-label={`View ${project.name} case study`}
+          >
+            <Image
+              className="project-image"
+              src={project.image.src}
+              alt={project.image.alt}
+              width={project.image.width}
+              height={project.image.height}
+              priority={priority}
+              sizes="(max-width: 1000px) 100vw, 88vw"
+            />
+            <span className="project-image-link-label" aria-hidden="true">View case study →</span>
+          </Link>
         </ImageDrift>
       </div>
 

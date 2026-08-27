@@ -171,8 +171,8 @@ export const projects: PortfolioProject[] = [
     summary:
       'A browser-based aviation intelligence system that brings live or replayed traffic, weather, hazards, trajectories, and explainable attention cues into one map-led interface.',
     image: {
-      src: '/projects/flight-tracker-desktop.png',
-      alt: 'Flight Tracker AI desktop interface showing aircraft, weather, and airspace data on a dark map',
+      src: '/projects/flight-tracker-ai/live-traffic-weather.png',
+      alt: 'Flight Tracker AI live San Francisco traffic workspace showing 158 aircraft, weather layers, a selected aircraft, and the regional flight list',
       width: 1440,
       height: 1000,
     },
@@ -181,12 +181,12 @@ export const projects: PortfolioProject[] = [
       'The map-led workspace brings regional traffic and weather together, deterministic replay makes the same interface reviewable on demand, and focused comparisons explain route tradeoffs without leaving the product.',
     gallery: [
       {
-        src: '/projects/flight-tracker-ai/live-traffic-weather.png',
-        alt: 'Flight Tracker AI live San Francisco traffic map with aircraft positions, weather layers, a selected aircraft, and a regional flight list',
+        src: '/projects/flight-tracker-desktop.png',
+        alt: 'Flight Tracker AI deterministic replay workspace showing scenario controls, telemetry, weather evidence, and aircraft attention scoring',
         width: 1440,
         height: 1000,
-        label: 'Live regional traffic',
-        caption: 'Live aircraft positions, observed trails, weather imagery, and the selected-aircraft view share one regional workspace.',
+        label: 'Deterministic replay workspace',
+        caption: 'A repeatable scenario combines the replay clock, telemetry, weather evidence, route context, and explainable attention scoring in one reviewable state.',
         layout: 'wide',
       },
       {
