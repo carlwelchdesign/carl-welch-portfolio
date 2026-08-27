@@ -63,8 +63,8 @@ export default function ArchivePage() {
               <h2 id="earlier-practice-title">Studios, agencies, client teams, and technical environments.</h2>
               <p>
                 The public record spans studios, agencies, client teams, software organizations,
-                and technical environments. The visual archive above shows the public-cleared
-                project record while confidential systems and private subjects remain protected.
+                and technical environments. The visual archive above presents the complete
+                reviewed image record Carl selected to tell that story.
               </p>
             </header>
             <div className="earlier-practice-grid">

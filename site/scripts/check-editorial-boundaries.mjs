@@ -26,7 +26,7 @@ for (const section of requiredSections) {
   assert.ok(brief.includes(section), `Messaging brief is missing ${section}.`);
 }
 
-for (const state of ['Review required', 'Not ready for publication', 'Not for public use']) {
+for (const state of ['Review required', 'Not ready for publication']) {
   assert.ok(brief.includes(state), `Messaging claim matrix is missing the ${state} state.`);
 }
 

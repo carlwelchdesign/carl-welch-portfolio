@@ -11,6 +11,12 @@ export type LegacyArchiveProject = {
     width: number;
     height: number;
   };
+  additionalImages?: Array<{
+    src: `/archive/${string}`;
+    alt: string;
+    width: number;
+    height: number;
+  }>;
   evidenceNote: string;
   display: 'feature' | 'standard' | 'thumbnail';
 };
@@ -32,6 +38,24 @@ export const legacyArchiveProjects: LegacyArchiveProject[] = [
     },
     evidenceNote:
       'Documented in Carl’s preserved portfolio and corroborated by historical correspondence. The site and team were a 2006 Webby Awards Honoree.',
+    display: 'feature',
+  },
+  {
+    id: 'archive-taser-axon-2009',
+    project: 'TASER AXON / Evidence.com prototype',
+    period: '2009',
+    role: 'Interactive prototype contributor',
+    contribution:
+      'Prototype workflow work spanning evidence review, event organization, clip editing, case collaboration, and controlled sharing.',
+    technology: ['ActionScript 3', 'ASP', 'JavaScript', 'Google APIs'],
+    image: {
+      src: '/archive/taser-axon-prototype.jpg',
+      alt: 'Dark blue interface studies showing video evidence timelines, event folders, clip editing, case members, and sharing panels.',
+      width: 836,
+      height: 525,
+    },
+    evidenceNote:
+      'Carl’s preserved portfolio records the technology and prototype contribution; historical correspondence corroborates his involvement in the workflow prototype.',
     display: 'feature',
   },
   {
@@ -195,5 +219,29 @@ export const legacyArchiveProjects: LegacyArchiveProject[] = [
     evidenceNote:
       'The technology record comes from Carl’s preserved portfolio. The surviving source does not establish an exact date or sole authorship.',
     display: 'thumbnail',
+  },
+  {
+    id: 'archive-ignite-class-2012',
+    project: 'Ignite Creative Learning programming instruction',
+    period: '2012',
+    role: 'Programming instructor',
+    contribution:
+      'Hands-on programming instruction using Scratch, helping students turn ideas into working interactive projects.',
+    technology: ['Scratch', 'Programming instruction', 'Creative learning'],
+    image: {
+      src: '/archive/ignite-class-01.jpg',
+      alt: 'Ignite Creative Learning classroom photograph 1 of 8 showing hands-on programming instruction at computers.',
+      width: 170,
+      height: 170,
+    },
+    additionalImages: [2, 3, 4, 5, 6, 7, 8].map((number) => ({
+      src: `/archive/ignite-class-0${number}.jpg`,
+      alt: `Ignite Creative Learning classroom photograph ${number} of 8 showing students and an instructor working at computers.`,
+      width: 170,
+      height: 170,
+    })),
+    evidenceNote:
+      'The 2012 instruction record and Scratch work are supported by preserved source material; eight archived classroom photographs document the teaching environment.',
+    display: 'feature',
   },
 ];

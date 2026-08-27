@@ -1,11 +1,11 @@
 {
   "schemaVersion": "1.0.0",
-  "status": "public_selection_approved",
+  "status": "complete_public_archive_approved",
   "generatedAt": "2026-08-26",
   "approvedAt": "2026-08-27",
-  "approvalSource": "Carl explicitly authorized display of his historical-work images and confirmed that copyright does not block their archival use.",
+  "approvalSource": "Carl explicitly authorized publication of the complete historical-work image set on 2026-08-27.",
   "sourceBoundary": "Legacy portfolio assets plus content-minimized findings from a private correspondence review. No message bodies, addresses, message identifiers, or private filesystem paths are included.",
-  "publicationRule": "The ten public_approved project records may be displayed with their bounded contribution wording. TASER imagery and Ignite classroom photographs remain private because confidentiality and subject privacy are separate from copyright clearance.",
+  "publicationRule": "All twelve public_approved project records and their nineteen selected images may be displayed with their bounded contribution wording.",
   "items": [
     {
       "id": "archive-yuco-2006", "rank": 1, "project": "yU+co studio website", "period": "2006-2007", "role": "Interactive developer",
@@ -24,11 +24,12 @@
       "id": "archive-taser-axon-2009", "rank": 2, "project": "TASER AXON / Evidence.com prototype", "period": "2009", "role": "Interactive prototype contributor",
       "contribution": "The legacy portfolio records ActionScript 3, ASP, JavaScript, and Google APIs. Private correspondence review corroborates prototype workflow involvement.",
       "technology": ["ActionScript 3", "ASP", "JavaScript", "Google APIs"], "evidenceLevel": "first_party_plus_private_corroboration", "independentRecognition": null,
-      "publicationState": "private_only", "rightsNote": "Keep private unless a specific security, confidentiality, and client-rights review clears the interface and imagery.",
+      "publicationState": "public_approved", "rightsNote": "Carl explicitly approved publication of this archived prototype image on 2026-08-27. Keep the contribution wording bounded to prototype work.",
       "asset": {"sourceLocator": "legacy:carlsite/images/samples/taser.jpg", "sha256": "e480bea22c5d5efd11462dd72a0636f58cd1775b6faa7d8c41d8c05c5a65348e", "width": 836, "height": 525, "bytes": 198418, "format": "jpg"},
+      "publicAsset": {"path": "/archive/taser-axon-prototype.jpg", "sha256": "e480bea22c5d5efd11462dd72a0636f58cd1775b6faa7d8c41d8c05c5a65348e", "width": 836, "height": 525, "format": "jpg"},
       "captionDraft": "Archived prototype screens exploring evidence review, event organization, clipping, and controlled sharing workflows.",
       "altTextDraft": "Dark blue interface studies showing video evidence timelines, event folders, clip editing, case members, and sharing panels.",
-      "presentationNote": "Do not publish or crop individual frames until their content passes a dedicated sensitivity review.",
+      "presentationNote": "Present the complete archived composite without cropping individual frames or implying current product status.",
       "prohibitedInference": "Do not claim production deployment, sole product ownership, or current endorsement by TASER or Axon."
     },
     {
@@ -143,7 +144,7 @@
       "id": "archive-ignite-class-2012", "rank": 12, "project": "Ignite Creative Learning programming instruction", "period": "2012", "role": "Programming instructor",
       "contribution": "Private source review supports hands-on programming instruction and Scratch use. The legacy archive includes eight small classroom photographs.",
       "technology": ["Scratch", "programming instruction"], "evidenceLevel": "private_source_corroboration", "independentRecognition": null,
-      "publicationState": "private_only", "rightsNote": "The photographs may depict minors. Keep private unless original messages, consent, subject privacy, and image permissions are explicitly rechecked.",
+      "publicationState": "public_approved", "rightsNote": "Carl explicitly approved publication of all eight archived classroom photographs on 2026-08-27.",
       "assets": [
         {"sourceLocator": "legacy:carlsite/img/ignite-class/1.jpg", "sha256": "3e41c809f668027684d97c61d049803a502132167516be7136dd496e96e68b23", "width": 170, "height": 170, "bytes": 30070, "format": "jpg"},
         {"sourceLocator": "legacy:carlsite/img/ignite-class/2.jpg", "sha256": "90bdbb304c9bd22dacecd02219d9b547d97e2e6e068bfc047786c0486ddf70a4", "width": 170, "height": 170, "bytes": 30946, "format": "jpg"},
@@ -154,9 +155,19 @@
         {"sourceLocator": "legacy:carlsite/img/ignite-class/7.jpg", "sha256": "0297ccffa2069677bd55782f38d2522ca4bb40c9e5d79666fb1bf1a86b7bd1e8", "width": 170, "height": 170, "bytes": 28153, "format": "jpg"},
         {"sourceLocator": "legacy:carlsite/img/ignite-class/8.jpg", "sha256": "8a277db373d9b1031df78423b07297e6ebf2bda75f849f038ced828298e83307", "width": 170, "height": 170, "bytes": 26478, "format": "jpg"}
       ],
-      "captionDraft": "Private classroom documentation from programming instruction in 2012.",
-      "altTextDraft": "Not written for publication because the classroom photographs remain private.",
-      "presentationNote": "Do not copy into the public repository or produce public derivatives without explicit permission review.",
+      "publicAssets": [
+        {"path": "/archive/ignite-class-01.jpg", "sha256": "3e41c809f668027684d97c61d049803a502132167516be7136dd496e96e68b23", "width": 170, "height": 170, "format": "jpg"},
+        {"path": "/archive/ignite-class-02.jpg", "sha256": "90bdbb304c9bd22dacecd02219d9b547d97e2e6e068bfc047786c0486ddf70a4", "width": 170, "height": 170, "format": "jpg"},
+        {"path": "/archive/ignite-class-03.jpg", "sha256": "b5a0b5e4b238de7d275e6ab34d8ca2d5e7d2f74ee0c78e2c99442c1293869b2a", "width": 170, "height": 170, "format": "jpg"},
+        {"path": "/archive/ignite-class-04.jpg", "sha256": "b43fe59fb2df9c91acd4e4a5165c217240eaecc25f184038ed84caa10224b347", "width": 170, "height": 170, "format": "jpg"},
+        {"path": "/archive/ignite-class-05.jpg", "sha256": "b2c7bcd2c145432f0ff42a90e48b13bf3942aae2bcb78f52ade0f8562544e16d", "width": 170, "height": 170, "format": "jpg"},
+        {"path": "/archive/ignite-class-06.jpg", "sha256": "167b68c01ff49fe938878f5369faf265acf7c3ddf88d14696b9dc3dc05e6a42c", "width": 170, "height": 170, "format": "jpg"},
+        {"path": "/archive/ignite-class-07.jpg", "sha256": "0297ccffa2069677bd55782f38d2522ca4bb40c9e5d79666fb1bf1a86b7bd1e8", "width": 170, "height": 170, "format": "jpg"},
+        {"path": "/archive/ignite-class-08.jpg", "sha256": "8a277db373d9b1031df78423b07297e6ebf2bda75f849f038ced828298e83307", "width": 170, "height": 170, "format": "jpg"}
+      ],
+      "captionDraft": "Eight archived classroom photographs documenting Carl’s hands-on programming instruction at Ignite Creative Learning.",
+      "altTextDraft": "Small classroom photographs showing students at computers and an instructor assisting with programming exercises.",
+      "presentationNote": "Display the eight-image set as a compact classroom-documentation grid.",
       "prohibitedInference": "Do not infer a formal job title, attendance count, curriculum ownership, student outcomes, or permission to publish the photographs."
     }
   ]

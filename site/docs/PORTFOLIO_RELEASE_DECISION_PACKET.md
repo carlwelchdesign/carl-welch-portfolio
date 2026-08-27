@@ -38,7 +38,7 @@ Ship a **static portfolio first** with current work, experience, capabilities, a
 - The portfolio never accesses private Jolene APIs, Obsidian, MCP tools, or durable memory.
 - Job descriptions remain untrusted ephemeral input.
 - Contact intent cannot autonomously email, apply, schedule, negotiate, or contact recruiters.
-- Ten historical project visuals are approved for bounded archival display. TASER evidence imagery and Ignite classroom photographs remain private-only unless their separate confidentiality and subject-privacy gates are cleared.
+- The complete reviewed archive—twelve historical project records and nineteen selected images—is approved for bounded display.
 - The yU+co site and team may be described as a **2006 Webby Awards Honoree**; Carl may not be described as a personal Webby winner.
 
 ## Evidence after approval

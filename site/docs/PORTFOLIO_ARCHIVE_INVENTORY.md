@@ -1,14 +1,12 @@
 # Portfolio archive inventory
 
-Status: **ten project visuals approved for public archival display on August 27, 2026**
+Status: **complete reviewed visual archive approved for public display on August 27, 2026**
 
 Ticket: `PORT-ARCHIVE-001`
 
 Machine-readable record: [`archive-candidates.v1.json`](./archive-candidates.v1.json)
 
-This inventory records the surviving legacy portfolio artifacts and the public selection now shown in the portfolio. Carl explicitly authorized display of his historical-work images and confirmed that copyright does not block their archival use. Ten bounded project records have been copied into `public/archive/`; the yU+co source was converted to a static privacy-safe crop that removes its obsolete studio contact footer.
-
-Copyright approval does not erase unrelated safeguards. TASER / Evidence.com imagery remains private pending security and confidentiality review. Ignite classroom photographs remain private because they may depict minors and require separate subject-privacy and consent review.
+This inventory records the surviving legacy portfolio artifacts and the complete reviewed selection now shown in the portfolio. Carl explicitly authorized publication of the full image set on August 27, 2026. Twelve bounded project records and nineteen selected images have been copied into `public/archive/`; the yU+co source is presented as a focused static crop.
 
 ## Evidence boundary
 
@@ -25,7 +23,7 @@ Private message bodies, sender names, addresses, message identifiers, and filesy
 | Rank | Candidate | Why it belongs in review | Current gate |
 | ---: | --- | --- | --- |
 | 1 | yU+co studio website | Strong interaction-engineering history, surviving artifact, private contribution corroboration, and team-level Webby recognition | Public approved; team attribution required |
-| 2 | TASER AXON / Evidence.com prototype | Early evidence-workflow and product-interface relevance | Private only pending security, confidentiality, and rights review |
+| 2 | TASER AXON / Evidence.com prototype | Early evidence-workflow and product-interface relevance | Public approved; prototype scope required |
 | 3 | Magento Go homepage | Clear senior-design assignment and legible full-page artifact | Public approved; scope wording required |
 | 4 | Fox A Year of a Million Moments | Full surviving visual plus implementation corroboration | Public approved; team context required |
 | 5 | Darksiders II promotional site | Supported front-end implementation and revisions | Public approved as an archival thumbnail |
@@ -35,13 +33,13 @@ Private message bodies, sender names, addresses, message identifiers, and filesy
 
 Three lower-resolution records—Superman 75, Bolthouse Frozen, and PrimaLoft—are public approved as small archival thumbnails. They do not displace the stronger feature material or serve as evidence of visual-asset ownership.
 
-The Ignite Creative Learning photo set is intentionally ranked last and marked `private_only`. The historical instruction claim may be useful, but the photographs may depict minors and require a separate consent and image-permission review.
+The Ignite Creative Learning record closes the archive with all eight classroom photographs and a bounded account of Carl’s hands-on Scratch instruction.
 
 ## Visual findings
 
 - **Feature-ready:** yU+co, Magento Go, Fox Million Moments, Almost Alice, David Lynch Foundation Music, and Beatnik.
 - **Useful with constraints:** Darksiders II, Superman 75, Bolthouse Frozen, and PrimaLoft are 240 × 162 archival thumbnails and are intentionally not enlarged into hero images.
-- **Not public by default:** TASER contains sensitive evidence-workflow imagery. Ignite classroom photographs remain private.
+- **Complete reviewed set:** TASER’s prototype composite and all eight Ignite classroom photographs are included under Carl’s explicit publication approval.
 - **Public derivative:** yU+co is served as a reviewed 620 × 400 static crop, not as the original GIF containing obsolete contact information.
 
 Each manifest entry includes an exact SHA-256 fingerprint, source dimensions, byte size, caption draft, alt-text draft, presentation note, and prohibited inference. These details make later copying and approval auditable.
@@ -63,11 +61,11 @@ The yU+co item can carry the exact phrase **2006 Webby Awards Honoree** only whe
 
 ## Recorded approval and remaining boundaries
 
-- [x] Carl approved archival display of the ten historical project images and their bounded project context.
+- [x] Carl approved archival display of all twelve historical project records and nineteen selected images.
 - [x] Team attribution remains explicit where the source does not prove sole authorship.
 - [x] Private correspondence is used only as an internal corroboration source and is not quoted.
 - [x] Every source asset hash matched the reviewed manifest at copy time.
 - [x] Only approved assets or derivatives were copied; the legacy repository and unrelated files remain private.
 - [x] Low-resolution images are presented as archival thumbnails rather than enlarged feature art.
-- [ ] TASER imagery requires a separate security and confidentiality decision.
-- [ ] Ignite classroom photographs require a separate subject-privacy and consent decision.
+- [x] TASER prototype imagery is published with bounded prototype wording.
+- [x] All eight Ignite classroom photographs are published as one compact teaching record.

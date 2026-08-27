@@ -234,9 +234,9 @@ The source labels below are intentionally content-minimized. Private mailbox ide
 | Carl contributed interactive development to the yU+co studio website using Flash AS2, video, a multi-user server, and XML. | Preserved personal portfolio entry and asset | Documented first-person | Publication approved August 27, 2026 | Selected archive with team attribution | Independent employer credit, sole ownership, or modern-stack evidence |
 | The yU+co site and team were recognized as a 2006 Webby Awards Honoree. | Preserved portfolio plus independent public recognition record | Corroborated award level | Publication approved August 27, 2026 | Pair with the bounded contribution claim | Webby Winner, personal award, or unsupported category claim |
 | A professional contact recognized Carl's portfolio motion work in ABC television advertising and remembered his game work before 2009. | Authenticated private historical message | Independent private corroboration | Review required; paraphrase only | About/archive context after approval | ABC employment, campaign ownership, SIGGRAPH speaking, audience, or outcome |
-| Carl designed project-based Scratch and JavaScript/HTML/Canvas programming instruction in 2012. | Historical correspondence plus preserved personal portfolio | Contemporaneous but original-message recheck required | Not ready for publication | Internal narrative planning only | Formal faculty role, exact attendance, universal completion, or recurring employment |
+| Carl provided hands-on Scratch programming instruction at Ignite Creative Learning in 2012. | Historical correspondence plus preserved personal portfolio | Contemporaneous source support | Publication approved August 27, 2026 | Selected archive teaching record | Formal faculty role, exact attendance, universal completion, or recurring employment |
 | Teaching families received positive feedback about Carl's instruction. | Private historical correspondence | Relayed third-party feedback | Not ready for publication | Internal proof of a mentoring pattern | Naming the child/family or claiming universal outcomes |
-| Ignite class photographs may be published. | Legacy local image files only | Rights and privacy unknown | Not for public use | Asset inventory and rights review only | Consent, ownership, or permission to identify minors |
+| Eight Ignite classroom photographs document Carl’s programming instruction. | Preserved legacy image set | First-party visual record | Publication approved August 27, 2026 | Compact eight-image archive grid | Student identity, attendance, or outcomes not established by the photographs |
 | Recommendations describe Carl as a mentor, calm problem-solver, senior developer, creative technologist, and dependable collaborator. | 13 source-reconciled LinkedIn recommendations | Exact attributed testimony | Publication approved August 27, 2026 | Recommendations route and later bounded excerpts | Converting praise into unattributed first-person facts |
 
 ## Historical placement recommendation
@@ -246,8 +246,8 @@ Use a **Selected archive** rather than "Older work." The latter makes the work s
 - Keep all three current case studies above it.
 - Start with the approved yU+co record, followed by the remaining public-cleared project visuals in a subordinate gallery.
 - Use the 2009 message only as a short source note attached to the creative-technology through-line.
-- Do not publish Ignite photographs unless ownership, consent, and the privacy of every identifiable child are resolved.
-- The ten approved project visuals may be shown when each entry explains something about Carl's current practice and carries its bounded role and evidence note.
+- Publish the eight Ignite photographs together as a compact teaching record without identifying individual participants.
+- The twelve approved project records and nineteen images may be shown when each entry explains something about Carl's current practice and carries its bounded role and evidence note.
 
 ## Decisions required from Carl before PORT-MSG-002
 
