@@ -29,7 +29,8 @@ if (architecture && gates) {
   assert.match(gates, /\| Public-approved career evidence .*\| passed \|/);
   assert.match(gates, /\| Portfolio live-Jolene integration .*\| passed \|/);
   assert.match(gates, /\| Public Jolene delegate availability .*\| not applicable \|/);
-  assert.match(gates, /\| Deployment configuration .*\| in progress \|/);
+  assert.match(gates, /\| Deployment configuration .*\| passed \|/);
+  assert.match(gates, /\| Rollback and kill-switch rehearsal .*\| passed \|/);
   assert.match(gates, /carl-welch-portfolio\.flakeysaturation\.chatgpt\.site/);
 }
 assert.match(readme, /production configuration remains disabled/i);

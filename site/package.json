@@ -30,6 +30,7 @@
     "check:release-readiness": "node scripts/check-release-readiness.mjs",
     "check:container": "node scripts/check-container.mjs",
     "check:routes": "node scripts/check-routes.mjs",
+    "check:production": "node scripts/check-production-origin.mjs",
     "check:browser": "playwright test",
     "check": "pnpm lint && pnpm check:metadata && pnpm check:content && pnpm check:editorial && pnpm check:archive && pnpm check:archive-recovery && pnpm check:release-decisions && pnpm check:github-sync && pnpm check:jolene-contract && pnpm check:jolene-job-fit && pnpm check:jolene-bff && pnpm check:analytics && pnpm check:release-readiness && pnpm build"
   },
