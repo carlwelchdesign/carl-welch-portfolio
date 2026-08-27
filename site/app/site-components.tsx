@@ -323,6 +323,41 @@ export function ProjectGallery({ project }: { project: PortfolioProject }) {
   );
 }
 
+export function ProjectStory({ project }: { project: PortfolioProject }) {
+  return (
+    <section id="case-study" className="project-story" aria-labelledby="project-story-title">
+      <Reveal className="project-story-heading">
+        <p className="eyebrow">Case study</p>
+        <h2 id="project-story-title">{project.story.heading}</h2>
+      </Reveal>
+
+      <div className="project-story-lead">
+        <article>
+          <p className="eyebrow">The problem</p>
+          <p>{project.story.problem}</p>
+        </article>
+        <article>
+          <p className="eyebrow">What I built</p>
+          <p>{project.story.contribution}</p>
+        </article>
+      </div>
+
+      <div className="project-story-decisions">
+        <p className="eyebrow">Key decisions</p>
+        <ol>
+          {project.story.decisions.map((decision, index) => (
+            <li key={decision.title}>
+              <span>{String(index + 1).padStart(2, '0')}</span>
+              <strong>{decision.title}</strong>
+              <p>{decision.detail}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+  );
+}
+
 export function PageIntro({ eyebrow, title, summary }: { eyebrow: string; title: string; summary: string }) {
   return (
     <header className="page-intro">

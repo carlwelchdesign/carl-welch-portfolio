@@ -18,6 +18,16 @@ export type ProjectMedia = {
   layout?: 'wide' | 'standard' | 'portrait';
 };
 
+export type ProjectStory = {
+  heading: string;
+  problem: string;
+  contribution: string;
+  decisions: Array<{
+    title: string;
+    detail: string;
+  }>;
+};
+
 export type PortfolioProject = {
   slug: string;
   name: string;
@@ -35,6 +45,7 @@ export type PortfolioProject = {
   galleryTitle: string;
   gallerySummary: string;
   gallery: ProjectMedia[];
+  story: ProjectStory;
   stack: string[];
   architecture: ArchitectureNode[];
   maturity: ProjectMaturity;
@@ -116,6 +127,27 @@ export const projects: PortfolioProject[] = [
         caption: 'A curated source registry keeps direct company pages, ATS feeds, marketplaces, and search adapters legible and controllable.',
       },
     ],
+    story: {
+      heading: 'Turning a fragmented search into one operating system.',
+      problem:
+        'A serious job search splinters across browser tabs, spreadsheets, drafts, inboxes, and repeated research. The difficult part is not producing more material. It is knowing what is credible, what needs review, and what can move forward.',
+      contribution:
+        'I designed and built a single-user product that joins role discovery, fit review, career evidence, application materials, tracking, email operations, and LinkedIn planning. Each workflow has visible state, and consequential actions stay in my hands.',
+      decisions: [
+        {
+          title: 'Review before action',
+          detail: 'The system can prepare work, but submissions and other external actions stop at an explicit approval gate.',
+        },
+        {
+          title: 'Evidence over invention',
+          detail: 'Career claims stay tied to source material, with structured outputs and deterministic fallbacks when model output is incomplete.',
+        },
+        {
+          title: 'Operations are part of the product',
+          detail: 'Search yield, filters, blockers, and agent handoffs stay visible so a failed run can be understood instead of blindly repeated.',
+        },
+      ],
+    },
     stack: ['Next.js', 'TypeScript', 'PostgreSQL + pgvector', 'OpenAI', 'LangGraph', 'MCP'],
     architecture: [
       { id: 'sources', label: 'Job sources', detail: 'Direct ATS, company, and review-only lead channels' },
@@ -199,6 +231,27 @@ export const projects: PortfolioProject[] = [
         layout: 'portrait',
       },
     ],
+    story: {
+      heading: 'Making a dense air picture understandable and reviewable.',
+      problem:
+        'Aircraft positions become useful only when traffic, weather, hazards, trajectories, and time are understood together. Live data also makes interface behavior difficult to review consistently from one session to the next.',
+      contribution:
+        'I built a map-led portfolio demo with live and replay traffic, regional weather context, selected-aircraft detail, route comparison, and explainable attention cues. A typed browser interface connects to a Rust service and spatial data layer.',
+      decisions: [
+        {
+          title: 'Live when available, repeatable when needed',
+          detail: 'The same workspace supports current regional traffic and deterministic scenarios that can be replayed during design and engineering review.',
+        },
+        {
+          title: 'Keep the primary question spatial',
+          detail: 'Traffic, weather, trails, and route context stay anchored to the map while supporting detail remains close enough to inspect without losing place.',
+        },
+        {
+          title: 'Explain why something needs attention',
+          detail: 'Priority cues expose the contributing conditions and rule result instead of presenting an unexplained score or model judgment.',
+        },
+      ],
+    },
     stack: ['Next.js', 'TypeScript', 'Rust + Axum', 'PostgreSQL + PostGIS', 'NOAA data', 'Vercel'],
     architecture: [
       { id: 'traffic', label: 'Traffic + weather', detail: 'Live or replay data with NOAA weather and hazard sources' },
@@ -296,6 +349,27 @@ export const projects: PortfolioProject[] = [
         layout: 'wide',
       },
     ],
+    story: {
+      heading: 'Treating every plug-in as a product, not a demo.',
+      problem:
+        'An audio effect can sound interesting and still feel unfinished if it lives in a standalone prototype or a generic control panel. The signal path, host behavior, automation, interface, and release process all shape the instrument musicians actually use.',
+      contribution:
+        'I am building a family of host-loadable AU, VST3, and CLAP effects in C++ and iPlug2, pairing local signal processing with custom interfaces and distinct visual identities. The current builds are for testing while the remaining host and release gates are worked through.',
+      decisions: [
+        {
+          title: 'Build for the host from the start',
+          detail: 'The products use real plug-in formats, stable parameters, saved state, and automation boundaries rather than postponing host integration.',
+        },
+        {
+          title: 'Keep the signal path local',
+          detail: 'DSP runs deterministically on the machine with no account, upload, telemetry, or network service required to process audio.',
+        },
+        {
+          title: 'One family, distinct instruments',
+          detail: 'Shared engineering discipline supports interfaces with their own control language, atmosphere, help, metering, and performance states.',
+        },
+      ],
+    },
     stack: ['C++', 'iPlug2', 'AU', 'VST3', 'CLAP', 'DSP'],
     architecture: [
       { id: 'host', label: 'DAW host', detail: 'Audio Unit, VST3, or CLAP plug-in host' },

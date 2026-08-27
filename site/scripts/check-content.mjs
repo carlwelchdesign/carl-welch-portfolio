@@ -124,6 +124,21 @@ for (const project of projects) {
   if (!Array.isArray(project.gallery) || project.gallery.length === 0) {
     throw new Error(`${project.name} must include an image-rich project gallery.`);
   }
+  assert(project.story?.heading?.trim(), `${project.name} must include a case-study heading.`);
+  assert(project.story?.problem?.trim(), `${project.name} must explain the product problem.`);
+  assert(project.story?.contribution?.trim(), `${project.name} must explain Carl's contribution.`);
+  assert.equal(project.story?.decisions?.length, 3, `${project.name} must include exactly three key decisions.`);
+  for (const decision of project.story.decisions) {
+    assert(decision.title?.trim(), `${project.name} case-study decisions must include a title.`);
+    assert(decision.detail?.trim(), `${project.name} case-study decisions must include a concrete explanation.`);
+  }
+  const storyCopy = [
+    project.story.heading,
+    project.story.problem,
+    project.story.contribution,
+    ...project.story.decisions.flatMap((decision) => [decision.title, decision.detail]),
+  ].join(' ');
+  assert(!/verified from|approved for publication|preserved source material|public corpus|repository-grounded/i.test(storyCopy), `${project.name} case-study narrative contains internal editorial language.`);
   requireUnique([project.image.src, ...project.gallery.map((item) => item.src)], `${project.name} media paths`);
   for (const item of project.gallery) {
     assert(item.alt?.trim(), `${project.name} gallery media must include useful alternative text.`);

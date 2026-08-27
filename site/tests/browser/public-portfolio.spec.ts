@@ -151,6 +151,27 @@ test('Job Search OS uses the native architecture flow instead of the rejected to
   await expect(architecture).toContainText('Manual or explicitly approval-gated');
 });
 
+for (const [route, heading, decision] of [
+  ['/work/job-search-os', 'Turning a fragmented search into one operating system.', 'Evidence over invention'],
+  ['/work/flight-tracker-ai', 'Making a dense air picture understandable and reviewable.', 'Live when available, repeatable when needed'],
+  ['/work/wave-factory-essentials', 'Treating every plug-in as a product, not a demo.', 'Build for the host from the start'],
+] as const) {
+  test(`${route} explains the problem, contribution, and product decisions`, async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto(`${route}#case-study`);
+
+    const story = page.locator('#case-study');
+    await expect(story.getByRole('heading', { name: heading })).toBeVisible();
+    await expect(story.getByText('The problem', { exact: true })).toBeVisible();
+    await expect(story.getByText('What I built', { exact: true })).toBeVisible();
+    await expect(story.getByText(decision, { exact: true })).toBeVisible();
+    await expect(story.locator('.project-story-decisions li')).toHaveCount(3);
+
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+    expect(overflow).toBeLessThanOrEqual(0);
+  });
+}
+
 test('career portrait connects the homepage to the selected archive and earlier record', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByRole('heading', { name: 'The current work has a history.' })).toBeVisible();
