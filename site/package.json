@@ -10,6 +10,7 @@
     "dev": "vinext dev",
     "build": "vinext build",
     "start": "vinext start",
+    "typecheck": "tsc --noEmit",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
     "check:metadata": "node scripts/check-metadata.mjs",
     "check:content": "node scripts/check-content.mjs",
@@ -33,7 +34,7 @@
     "check:routes": "node scripts/check-routes.mjs",
     "check:production": "node scripts/check-production-origin.mjs",
     "check:browser": "playwright test",
-    "check": "pnpm lint && pnpm check:metadata && pnpm check:content && pnpm check:editorial && pnpm check:archive && pnpm check:archive-recovery && pnpm check:release-decisions && pnpm check:github-sync && pnpm check:jolene-contract && pnpm check:jolene-job-fit && pnpm check:jolene-bff && pnpm check:analytics && pnpm check:sentry-privacy && pnpm check:release-readiness && pnpm build"
+    "check": "pnpm typecheck && pnpm lint && pnpm check:metadata && pnpm check:content && pnpm check:editorial && pnpm check:archive && pnpm check:archive-recovery && pnpm check:release-decisions && pnpm check:github-sync && pnpm check:jolene-contract && pnpm check:jolene-job-fit && pnpm check:jolene-bff && pnpm check:analytics && pnpm check:sentry-privacy && pnpm check:release-readiness && pnpm build"
   },
   "dependencies": {
     "@sentry/browser": "10.71.0",
