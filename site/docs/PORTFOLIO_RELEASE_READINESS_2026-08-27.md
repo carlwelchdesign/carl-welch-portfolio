@@ -28,7 +28,7 @@ This is a point-in-time engineering audit of portfolio commit `0a46b06e3467404b4
 ## Gates that still require non-engineering or production evidence
 
 - Carl's explicit approval of the final visible copy, imagery, motion, and project emphasis.
-- Official LinkedIn recommendation export reconciliation and publication approval under `PORT-REC-001`.
+- Carl’s authenticated LinkedIn received-recommendations page was reconciled under `PORT-REC-001`: 13 records, exact visible wording, attribution, relationship, current headline, author profile, and public visibility. Separate portfolio publication approval remains open.
 - An approved production origin and external Open Graph/X/share-preview validation.
 - Physical iPhone Safari, VoiceOver, OS Reduce Motion, zoom/reflow, and deployed-origin Core Web Vitals evidence.
 - Approved avatar master art before sprite production and chat-state integration.

@@ -35,7 +35,7 @@ Docker is a reproducibility and CI path. Sites/Cloudflare remains the intended p
 - `app/capabilities-data.ts` maps capability claims to case studies, repositories, experience, and attributed recommendations. Content checks prevent broken evidence references.
 - `app/contact-data.ts` contains the résumé-verified public contact routes used by the header, footer, and contact page.
 - `app/github-projects.ts` contains the curated public GitHub archive snapshot. Repository descriptions and verified live links remain hand-reviewed; a live check reports repository-list, language, URL, and update-date drift but does not overwrite copy.
-- `app/recommendations-data.ts` contains recommendation candidates from the working LinkedIn fixture. The route remains excluded from search until it is reconciled with an official export and approved.
+- `app/recommendations-data.ts` contains all 13 received recommendations reconciled against Carl’s authenticated LinkedIn profile on August 26, 2026. Stable source IDs, author links, observed visibility, and the reconciliation timestamp are retained. The route remains excluded from search until Carl separately approves portfolio publication.
 - `public/github/` contains local copies of GitHub preview imagery so the archive does not depend on GitHub's image rate limits at runtime.
 
 ### Reviewed GitHub content sync

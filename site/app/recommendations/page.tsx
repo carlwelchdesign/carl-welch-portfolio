@@ -26,13 +26,19 @@ export default function RecommendationsPage() {
           <section className="recommendation-review" aria-labelledby="review-state-title">
             <p className="recommendation-count" aria-hidden="true">{recommendationReview.candidateCount}</p>
             <div>
-              <p className="eyebrow">Working collection</p>
-              <h2 id="review-state-title">Candidate recommendations found</h2>
+              <p className="eyebrow">Source-verified collection</p>
+              <h2 id="review-state-title">13 received recommendations</h2>
               <p>{recommendationReview.description}</p>
-              <p className="review-note">This page is excluded from search indexing until that review is complete.</p>
+              <p className="review-note">
+                Verified from{' '}
+                <a href={recommendationReview.sourceUrl} target="_blank" rel="noreferrer">
+                  LinkedIn
+                </a>{' '}
+                on <time dateTime={recommendationReview.sourceObservedAt}>August 26, 2026</time>. Search indexing remains off until Carl approves publication.
+              </p>
             </div>
           </section>
-          <ol className="recommendation-list" aria-label="LinkedIn recommendation candidates">
+          <ol className="recommendation-list" aria-label="Source-verified LinkedIn recommendations">
             {recommendations.map((recommendation, index) => (
               <li
                 key={recommendation.id}
@@ -40,7 +46,7 @@ export default function RecommendationsPage() {
                 data-review-state={recommendation.reviewState}
                 data-evidence-target
                 tabIndex={-1}
-                aria-label={`${recommendation.name} recommendation candidate`}
+                aria-label={`${recommendation.name} recommendation`}
               >
                 <Reveal className="recommendation-card">
                   <div className="recommendation-index" aria-hidden="true">
@@ -50,7 +56,11 @@ export default function RecommendationsPage() {
                     <p>“{recommendation.quote}”</p>
                   </blockquote>
                   <footer>
-                    <strong>{recommendation.name}</strong>
+                    <strong>
+                      <a href={recommendation.authorProfileUrl} target="_blank" rel="noreferrer">
+                        {recommendation.name}
+                      </a>
+                    </strong>
                     {recommendation.headline ? <span>{recommendation.headline}</span> : null}
                     <span>{recommendation.relationship}</span>
                     <time>{recommendation.date}</time>

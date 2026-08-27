@@ -152,7 +152,22 @@ for (const recommendation of recommendations) {
   if (!Array.isArray(recommendation.limitations) || recommendation.limitations.length === 0) {
     throw new Error(`${recommendation.id} must retain its publication limitation.`);
   }
+  if (!recommendation.authorProfileUrl.startsWith('https://www.linkedin.com/in/')) {
+    throw new Error(`${recommendation.id} must retain its verified LinkedIn author profile.`);
+  }
+  if (recommendation.sourcePageUrl !== recommendationReview.sourceUrl) {
+    throw new Error(`${recommendation.id} must cite the reconciled LinkedIn source page.`);
+  }
+  if (recommendation.sourceObservedAt !== recommendationReview.sourceObservedAt) {
+    throw new Error(`${recommendation.id} must retain the reconciliation timestamp.`);
+  }
+  if (recommendation.sourceVisibility !== 'All LinkedIn members') {
+    throw new Error(`${recommendation.id} must retain its observed LinkedIn visibility.`);
+  }
 }
+
+assert.equal(recommendationReview.reconciliationState, 'source_verified_publication_pending');
+assert(!Number.isNaN(Date.parse(recommendationReview.sourceObservedAt)), 'Recommendation reconciliation must carry a valid source timestamp.');
 
 const expectedNavigationIds = [
   ...projects.flatMap((project) => [
