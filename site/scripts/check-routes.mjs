@@ -79,6 +79,7 @@ function requireShareMetadata(html, route) {
 const pageExpectations = [
   ['/', 'Carl Welch'],
   ['/work', `${githubProjects.length} public repositories`],
+  ['/about', 'Senior product engineer with a long creative-technology practice'],
   ['/capabilities', 'What I do, and the work behind it'],
   ['/experience', 'Professional history'],
   ['/recommendations', 'Source-verified LinkedIn recommendations'],
@@ -118,8 +119,8 @@ await Promise.all(pageExpectations.map(async ([route, expectedText]) => {
     requireText(html, 'mailto:carlwelchdesign@gmail.com', route);
   }
 
-  if (route === '/recommendations' && !/<meta name="robots" content="[^"]*noindex/.test(html)) {
-    throw new Error('/recommendations must remain excluded from search indexing until publication approval.');
+  if (route === '/recommendations' && /<meta name="robots" content="[^"]*noindex/.test(html)) {
+    throw new Error('/recommendations must be indexable after publication approval.');
   }
 
   if (route.startsWith('/work/')) requireText(html, 'id="evidence"', route);
@@ -138,14 +139,15 @@ await Promise.all([...shareImageUrls].map(async (imageUrl) => {
 await fetchRoute('/work/not-a-project', 404);
 
 const robots = await (await fetchRoute('/robots.txt')).text();
-requireText(robots, 'Disallow: /recommendations', '/robots.txt');
+if (robots.includes('Disallow: /recommendations')) throw new Error('/robots.txt still blocks approved recommendations.');
 
 const sitemap = await (await fetchRoute('/sitemap.xml')).text();
 for (const project of projects) requireText(sitemap, `/work/${project.slug}`, '/sitemap.xml');
 requireText(sitemap, '/capabilities', '/sitemap.xml');
+requireText(sitemap, '/about', '/sitemap.xml');
 requireText(sitemap, '/experience', '/sitemap.xml');
 requireText(sitemap, '/contact', '/sitemap.xml');
-if (sitemap.includes('/recommendations')) throw new Error('/recommendations must not appear in the sitemap before approval.');
+requireText(sitemap, '/recommendations', '/sitemap.xml');
 
 await Promise.all(githubProjects.map(async (project) => {
   const response = await fetchRoute(`/github/${project.name}.png`);

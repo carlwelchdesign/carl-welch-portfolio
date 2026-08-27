@@ -27,7 +27,7 @@ export function SiteHeader() {
 
       <nav aria-label="Primary navigation">
         <Link href="/work">Work</Link>
-        <Link href="/capabilities">Capabilities</Link>
+        <Link href="/about">About</Link>
         <Link href="/experience">Experience</Link>
         <Link href="/recommendations">Recommendations</Link>
       </nav>
@@ -36,6 +36,7 @@ export function SiteHeader() {
         <summary>Menu</summary>
         <nav aria-label="Mobile navigation">
           <Link href="/work">Work</Link>
+          <Link href="/about">About</Link>
           <Link href="/capabilities">Capabilities</Link>
           <Link href="/experience">Experience</Link>
           <Link href="/recommendations">Recommendations</Link>
@@ -45,6 +46,36 @@ export function SiteHeader() {
 
       <Link className="build-label" href="/contact">Contact →</Link>
     </header>
+  );
+}
+
+export function SelectedArchive() {
+  return (
+    <section className="selected-archive" data-tone="orange" aria-labelledby="selected-archive-title">
+      <div className="selected-archive-heading">
+        <div>
+          <p className="eyebrow">Selected archive / 2006–2007</p>
+          <h2 id="selected-archive-title">yU+co studio website</h2>
+        </div>
+        <p>
+          An early interactive-development project built with ActionScript 2, video, XML,
+          and multi-user technology. The studio site and its team were recognized as a
+          2006 Webby Awards Honoree.
+        </p>
+      </div>
+      <div className="selected-archive-record">
+        <div className="selected-archive-art" aria-hidden="true">
+          <span>AS2</span><span>XML</span><span>VIDEO</span><span>MULTI-USER</span>
+        </div>
+        <div>
+          <p className="eyebrow">Carl’s contribution</p>
+          <p>
+            Interactive development documented in Carl’s preserved portfolio. This record
+            describes a team project; it does not claim sole authorship or a personal Webby win.
+          </p>
+        </div>
+      </div>
+    </section>
   );
 }
 

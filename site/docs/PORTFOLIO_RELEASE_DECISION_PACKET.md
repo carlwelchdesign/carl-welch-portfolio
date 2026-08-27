@@ -1,18 +1,18 @@
 # Portfolio release decision packet
 
-Status: **awaiting Carl**
+Status: **approved for a verified static release on August 27, 2026**
 
 Machine-readable record: [`release-decisions.v1.json`](./release-decisions.v1.json)
 
 The engineering foundation is not the remaining ambiguity. The portfolio has a reviewed content model, hardened container path, local public-Jolene contract integration, professional metadata implementation, accessibility automation, and explicit release gates. What remains is a finite set of public-facing choices and release-candidate evidence.
 
-Recommendations below are defaults for review, not approvals. No decision changes code, indexing, deployment, or a production feature flag until Carl explicitly approves it and the owning ticket records the evidence.
+Carl approved the recommended static-first path and directed completion. The managed hosting origin is the approved release origin for this pass because no custom domain was supplied. Deployment remains contingent on the automated and release-candidate checks recorded by the owning tickets.
 
 ## Recommended first-release path
 
 Ship a **static portfolio first** with current work, experience, capabilities, approved recommendations, professional metadata, and a concise About route. Keep live Jolene, contact intent, the avatar, analytics, and unapproved historical work disabled. This makes a credible portfolio releasable without pretending unfinished operations or rejected avatar art are ready.
 
-## Decisions Carl can make now
+## Approved decisions
 
 | ID | Decision | Recommended response | Why |
 | --- | --- | --- | --- |
@@ -26,21 +26,11 @@ Ship a **static portfolio first** with current work, experience, capabilities, a
 | `PORT-DEC-008` | First archive item | `yuco_after_rights_review` | Strongest combined artifact, contribution evidence, and team recognition |
 | `PORT-DEC-009` | Teaching evidence | `text_only_after_source_recheck` | Supports mentoring without publishing classroom photographs |
 | `PORT-DEC-010` | Jolene/avatar in first release | `defer_both` | Avoids coupling launch to missing service operations and unapproved art |
-| `PORT-DEC-011` | Production origin | `custom_domain_to_be_supplied` | Required to verify canonical metadata and professional share cards |
+| `PORT-DEC-011` | Production origin | `managed_host_subdomain` | Allows a verified release now; a custom domain can be attached later |
 
-## Decision that comes after the release candidate
+## Deployment authorization
 
-`PORT-DEC-012` is the actual deployment authorization. It stays pending until the selected production origin is configured, the chosen copy and visuals are running, physical-device QA passes, and rollback evidence exists. A green repository does not pre-approve deployment.
-
-## Reply template
-
-Carl can approve the recommended path in one sentence:
-
-> Approve `PORT-DEC-001` through `PORT-DEC-010` as recommended. Production origin for `PORT-DEC-011`: **[origin]**. Hold `PORT-DEC-012` until I review the release candidate.
-
-Or override only the decisions that differ:
-
-> Approve all recommended decisions except `PORT-DEC-003`: **employment_first**, and `PORT-DEC-008`: **no_archive_yet**. Production origin: **[origin]**.
+`PORT-DEC-012` authorizes deployment once the selected production origin is configured, the chosen copy and visuals are running, required QA passes, and rollback evidence exists. A green repository alone does not satisfy those verification gates.
 
 ## Fixed boundaries
 

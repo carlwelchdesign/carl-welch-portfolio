@@ -13,9 +13,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     { url: siteUrl.origin, lastModified: new Date(), changeFrequency: 'monthly', priority: 1 },
     { url: `${siteUrl.origin}/work`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${siteUrl.origin}/about`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.8 },
     { url: `${siteUrl.origin}/capabilities`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.8 },
     { url: `${siteUrl.origin}/experience`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.7 },
     { url: `${siteUrl.origin}/contact`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.7 },
+    { url: `${siteUrl.origin}/recommendations`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.7 },
     ...projectRoutes,
   ];
 }

@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 
 export const siteName = 'Carl Welch Portfolio';
-export const defaultTitle = 'Carl Welch — Product Engineer';
+export const defaultTitle = 'Carl Welch — Senior Product Engineer';
 export const defaultDescription =
-  'Selected work, architecture, and experience from product engineer Carl Welch.';
+  'Selected work, architecture, and experience from senior product engineer Carl Welch.';
 
 function resolveSiteUrl() {
   const configuredUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';

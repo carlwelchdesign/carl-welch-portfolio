@@ -11,18 +11,18 @@ export function PortfolioHome() {
         <main id="main-content">
           <section id="top" className="hero" data-tone="red" aria-labelledby="hero-title">
             <div className="hero-copy">
-              <p className="eyebrow">Product Engineer</p>
+              <p className="eyebrow">Senior Product Engineer</p>
               <h1 id="hero-title">Carl Welch</h1>
               <p className="hero-summary">
-                Applied AI, product interfaces, and creative software. Selected projects,
-                architecture, and professional experience.
+                I build interfaces and product systems for complicated workflows. My recent work
+                spans React, TypeScript, applied AI, security products, analytics, and creative software.
               </p>
               <div className="hero-actions">
                 <a className="primary-action" href="#work">
                   View selected work <span aria-hidden="true">↓</span>
                 </a>
                 <Link className="text-action" href="/contact">
-                  Email Carl
+                  Discuss a role or project
                 </Link>
                 <a className="text-action" href="/carl-welch-resume.pdf" download>
                   Résumé ↓
@@ -101,7 +101,7 @@ export function PortfolioHome() {
             <div>
               <p>{recommendationReview.description}</p>
               <Link className="primary-action" href="/recommendations">
-                Review collection <span aria-hidden="true">→</span>
+                Read all 13 <span aria-hidden="true">→</span>
               </Link>
             </div>
           </section>

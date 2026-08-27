@@ -146,8 +146,8 @@ for (const recommendation of recommendations) {
   if ((recommendation.reviewState === 'approved') !== recommendation.publicApproved) {
     throw new Error(`${recommendation.id} has inconsistent review and public-approval state.`);
   }
-  if (recommendation.reviewState !== 'review_required' || recommendation.publicApproved !== false) {
-    throw new Error(`${recommendation.id} must remain review-only until the LinkedIn reconciliation ticket is complete.`);
+  if (recommendation.reviewState !== 'approved' || recommendation.publicApproved !== true) {
+    throw new Error(`${recommendation.id} must remain public-approved after Carl approved the reconciled collection.`);
   }
   if (!Array.isArray(recommendation.limitations) || recommendation.limitations.length === 0) {
     throw new Error(`${recommendation.id} must retain its publication limitation.`);
@@ -166,7 +166,7 @@ for (const recommendation of recommendations) {
   }
 }
 
-assert.equal(recommendationReview.reconciliationState, 'source_verified_publication_pending');
+assert.equal(recommendationReview.reconciliationState, 'source_verified_publication_approved');
 assert(!Number.isNaN(Date.parse(recommendationReview.sourceObservedAt)), 'Recommendation reconciliation must carry a valid source timestamp.');
 
 const expectedNavigationIds = [
