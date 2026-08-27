@@ -36,7 +36,11 @@ for (const route of routes) {
     });
     page.on('pageerror', (error) => browserErrors.push(error.message));
 
-    await page.goto(route);
+    const response = await page.goto(route);
+    expect(response).not.toBeNull();
+    expect(response?.headers()['content-security-policy']).toContain("default-src 'self'");
+    expect(response?.headers()['strict-transport-security']).toContain('max-age=31536000');
+    expect(response?.headers()['x-frame-options']).toBe('DENY');
     await expectCorePageContract(page);
 
     const results = await new AxeBuilder({ page })
@@ -134,4 +138,6 @@ test('Sentry remains fail-closed without explicit production configuration', asy
     headers: { 'x-servicehook-signature': '0'.repeat(64) },
   });
   expect(intake.status()).toBe(404);
+  expect(intake.headers()['content-security-policy']).toContain("frame-ancestors 'none'");
+  expect(intake.headers()['x-content-type-options']).toBe('nosniff');
 });
