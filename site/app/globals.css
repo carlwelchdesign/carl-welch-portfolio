@@ -78,8 +78,12 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .project-image-motion { overflow: hidden; transform-origin: center; }
 .project-image { display: block; width: 100%; height: auto; max-height: 78svh; object-fit: contain; }
 .project-media-preview { margin-top: 1px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: rgba(9, 12, 9, 0.35); border: 1px solid rgba(9, 12, 9, 0.35); border-top: 0; }
+.project-media-preview-1 { grid-template-columns: 1fr; }
+.project-media-preview-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.project-media-preview-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .project-media-preview > a { position: relative; min-height: clamp(150px, 19vw, 310px); overflow: hidden; background: var(--ink); color: var(--paper); }
 .project-media-preview img { width: 100%; height: 100%; object-fit: cover; opacity: 0.82; transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1), opacity 240ms ease; }
+.project-media-preview > a[data-layout='portrait'] img { object-fit: contain; }
 .project-media-preview span { position: absolute; right: 0; bottom: 0; left: 0; padding: 22px 18px 16px; background: linear-gradient(transparent, rgba(9, 12, 9, 0.88)); font: 10px var(--font-geist-mono), monospace; letter-spacing: 0.1em; text-transform: uppercase; }
 .project-media-preview a:hover img, .project-media-preview a:focus-visible img { transform: scale(1.035); opacity: 1; }
 .project-layout { display: grid; grid-template-columns: minmax(300px, 0.7fr) minmax(580px, 1.3fr); gap: clamp(32px, 5vw, 72px); padding-top: 48px; }

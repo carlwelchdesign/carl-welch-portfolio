@@ -166,6 +166,25 @@ test('visitor-facing routes avoid internal editorial and evidence-system languag
   }
 });
 
+test('work overview shows every flagship gallery preview without broken media', async ({ page }) => {
+  await page.goto('/work');
+  const projects = [
+    { name: 'Job Search OS', previews: 4 },
+    { name: 'Flight Tracker AI', previews: 1 },
+    { name: 'Wave Factory Essentials', previews: 4 },
+  ];
+
+  for (const project of projects) {
+    const chapter = page.getByRole('heading', { level: 2, name: project.name }).locator('xpath=ancestor::section');
+    const previews = chapter.locator('.project-media-preview img');
+    await expect(previews).toHaveCount(project.previews);
+    await previews.first().scrollIntoViewIfNeeded();
+    await expect.poll(() => previews.evaluateAll((images) => (
+      images.every((image) => (image as HTMLImageElement).naturalWidth > 0)
+    ))).toBe(true);
+  }
+});
+
 test('reduced motion preserves content and suppresses looping animation', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');

@@ -227,6 +227,7 @@ export function ArchitectureDiagram({
 
 export function ProjectChapter({ project, priority = false }: { project: PortfolioProject; priority?: boolean }) {
   const style = { '--chapter-tone': toneColors[project.tone] } as ToneStyle;
+  const previewMedia = project.gallery.slice(0, 4);
 
   return (
     <section
@@ -260,9 +261,16 @@ export function ProjectChapter({ project, priority = false }: { project: Portfol
         </ImageDrift>
       </div>
 
-      <div className="project-media-preview" aria-label={`${project.name} additional project images`}>
-        {project.gallery.slice(0, 3).map((item) => (
-          <Link key={item.src} href={`/work/${project.slug}#project-gallery`}>
+      <div
+        className={`project-media-preview project-media-preview-${previewMedia.length}`}
+        aria-label={`${project.name} additional project images`}
+      >
+        {previewMedia.map((item) => (
+          <Link
+            key={item.src}
+            href={`/work/${project.slug}#project-gallery`}
+            data-layout={item.layout ?? 'standard'}
+          >
             <Image
               src={item.src}
               alt=""
