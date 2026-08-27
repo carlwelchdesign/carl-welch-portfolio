@@ -124,6 +124,8 @@ for (const project of projects) {
   if (!Array.isArray(project.gallery) || project.gallery.length === 0) {
     throw new Error(`${project.name} must include an image-rich project gallery.`);
   }
+  assert(project.role?.trim(), `${project.name} must identify Carl's role.`);
+  assert(project.scope?.trim(), `${project.name} must identify Carl's project scope.`);
   assert(project.story?.heading?.trim(), `${project.name} must include a case-study heading.`);
   assert(project.story?.problem?.trim(), `${project.name} must explain the product problem.`);
   assert(project.story?.contribution?.trim(), `${project.name} must explain Carl's contribution.`);

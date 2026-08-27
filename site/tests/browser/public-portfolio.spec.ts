@@ -172,6 +172,27 @@ for (const [route, heading, decision] of [
   });
 }
 
+for (const [route, role, scope] of [
+  ['/work/job-search-os', 'Independent product engineer', 'Product strategy, interface design, and full-stack implementation'],
+  ['/work/flight-tracker-ai', 'Independent product engineer', 'Product design, frontend engineering, and Rust service integration'],
+  ['/work/wave-factory-essentials', 'Creator and plug-in engineer', 'DSP, plug-in architecture, interface design, and product direction'],
+] as const) {
+  test(`${route} presents recruiter-readable project facts above the fold`, async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 720 });
+    await page.goto(route);
+
+    const facts = page.getByRole('definition').first();
+    await expect(page.locator('.project-facts')).toContainText(role);
+    await expect(page.locator('.project-facts')).toContainText(scope);
+    await expect(page.locator('.project-facts dt')).toHaveCount(4);
+    await expect(page.locator('.project-facts dd')).toHaveCount(4);
+    await expect(facts).toBeAttached();
+
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+    expect(overflow).toBeLessThanOrEqual(0);
+  });
+}
+
 for (const [route, nextProject, nextHref] of [
   ['/work/job-search-os', 'Flight Tracker AI', '/work/flight-tracker-ai'],
   ['/work/flight-tracker-ai', 'Wave Factory Essentials', '/work/wave-factory-essentials'],

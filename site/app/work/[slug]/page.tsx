@@ -59,11 +59,25 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             <h1>{project.name}</h1>
             <div className="project-detail-deck">
               <p>{project.summary}</p>
-              <div className="project-meta">
-                <span>{project.category}</span>
-                <span>{project.status}</span>
-              </div>
             </div>
+            <dl className="project-facts" aria-label={`${project.name} project facts`}>
+              <div>
+                <dt>My role</dt>
+                <dd>{project.role}</dd>
+              </div>
+              <div>
+                <dt>Scope</dt>
+                <dd>{project.scope}</dd>
+              </div>
+              <div>
+                <dt>Stage</dt>
+                <dd>{project.status}</dd>
+              </div>
+              <div>
+                <dt>Core technologies</dt>
+                <dd>{project.stack.slice(0, 4).join(' · ')}</dd>
+              </div>
+            </dl>
           </header>
 
           <Reveal className="project-detail-image">

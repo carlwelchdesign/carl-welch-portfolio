@@ -36,6 +36,8 @@ export type PortfolioProject = {
   tone: ProjectTone;
   number: string;
   summary: string;
+  role: string;
+  scope: string;
   image: {
     src: string;
     alt: string;
@@ -66,6 +68,8 @@ export const projects: PortfolioProject[] = [
     number: '01',
     summary:
       'A private operating system for discovering roles, reviewing fit, assembling evidence-backed application materials, and tracking the work around a job search.',
+    role: 'Independent product engineer',
+    scope: 'Product strategy, interface design, and full-stack implementation',
     image: {
       src: '/projects/job-search-os-dashboard.png',
       alt: 'Job Search OS dashboard showing the daily review cockpit and application pipeline',
@@ -193,6 +197,8 @@ export const projects: PortfolioProject[] = [
     number: '02',
     summary:
       'A browser-based aviation intelligence system that brings live or replayed traffic, weather, hazards, trajectories, and explainable attention cues into one map-led interface.',
+    role: 'Independent product engineer',
+    scope: 'Product design, frontend engineering, and Rust service integration',
     image: {
       src: '/projects/flight-tracker-ai/live-traffic-weather.png',
       alt: 'Flight Tracker AI live San Francisco traffic workspace showing 158 aircraft, weather layers, a selected aircraft, and the regional flight list',
@@ -295,6 +301,8 @@ export const projects: PortfolioProject[] = [
     number: '03',
     summary:
       'A family of focused audio plug-ins designed as real AU, VST3, and CLAP products, with custom interfaces, local signal processing, and host-level validation gates.',
+    role: 'Creator and plug-in engineer',
+    scope: 'DSP, plug-in architecture, interface design, and product direction',
     image: {
       src: '/projects/wave-factory-threefold-palm.png',
       alt: 'Threefold Palm audio plug-in interface from the Wave Factory Essentials collection',
