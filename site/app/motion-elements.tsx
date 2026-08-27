@@ -99,7 +99,7 @@ export function ArchitectureFlow({ children, className }: { children: ReactNode;
   return (
     <m.div
       className={className}
-      initial={{ opacity: 0, clipPath: 'inset(0 100% 0 0)' }}
+      initial={false}
       whileInView={{ opacity: 1, clipPath: 'inset(0 0% 0 0)' }}
       viewport={{ once: true, amount: 0.35 }}
       transition={{ duration: 1.05, ease: [0.22, 1, 0.36, 1] }}

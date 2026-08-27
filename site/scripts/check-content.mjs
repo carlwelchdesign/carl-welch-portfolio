@@ -143,7 +143,10 @@ for (const project of projects) {
   }
 }
 
-assert(projects.find((project) => project.slug === 'job-search-os')?.gallery.length >= 7, 'Job Search OS must retain its expanded multi-surface product tour.');
+const jobSearchOs = projects.find((project) => project.slug === 'job-search-os');
+assert(jobSearchOs?.gallery.length >= 6, 'Job Search OS must retain its expanded multi-surface product tour.');
+assert(jobSearchOs?.architecture.length >= 5, 'Job Search OS must retain its native five-layer architecture flow.');
+assert(!jobSearchOs?.gallery.some((item) => item.src.includes('system-topology')), 'Job Search OS must not render the rejected topology artifact.');
 assert(projects.find((project) => project.slug === 'flight-tracker-ai')?.gallery.length >= 3, 'Flight Tracker AI must retain live, replay, and route-comparison views.');
 assert(projects.find((project) => project.slug === 'wave-factory-essentials')?.gallery.length >= 5, 'Wave Factory Essentials must retain its expanded product-family gallery.');
 

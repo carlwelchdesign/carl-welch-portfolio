@@ -92,7 +92,7 @@ for (const viewport of mobileViewports) {
 }
 
 for (const [route, expectedGalleryImages] of [
-  ['/work/job-search-os', 7],
+  ['/work/job-search-os', 6],
   ['/work/flight-tracker-ai', 3],
   ['/work/wave-factory-essentials', 5],
 ] as const) {
@@ -122,12 +122,12 @@ test('project media viewer supports full-size keyboard inspection on mobile', as
 
   const viewer = page.getByRole('dialog', { name: 'Job Search OS full-size image viewer' });
   await expect(viewer).toBeVisible();
-  await expect(viewer).toContainText('01 / 07');
+  await expect(viewer).toContainText('01 / 06');
   await expect(viewer.getByText('Application assistant', { exact: true })).toBeVisible();
   await expect.poll(() => viewer.locator('img').evaluate((image) => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
 
   await page.keyboard.press('ArrowRight');
-  await expect(viewer).toContainText('02 / 07');
+  await expect(viewer).toContainText('02 / 06');
   await expect(viewer.getByText('Search operations', { exact: true })).toBeVisible();
   await expect.poll(() => page.evaluate(() => document.body.style.overflow)).toBe('hidden');
 
@@ -138,6 +138,17 @@ test('project media viewer supports full-size keyboard inspection on mobile', as
   await expect(viewer).toBeHidden();
   await expect(firstTrigger).toBeFocused();
   await expect.poll(() => page.evaluate(() => document.body.style.overflow)).toBe('');
+});
+
+test('Job Search OS uses the native architecture flow instead of the rejected topology artifact', async ({ page }) => {
+  await page.goto('/work/job-search-os');
+  await expect(page.locator('img[src*="system-topology"]')).toHaveCount(0);
+  await expect(page.getByText('System topology', { exact: true })).toHaveCount(0);
+
+  const architecture = page.getByRole('figure', { name: 'System architecture flow' });
+  await expect(architecture.locator('.architecture-step')).toHaveCount(5);
+  await expect(architecture).toContainText('Direct ATS, company, and review-only lead channels');
+  await expect(architecture).toContainText('Manual or explicitly approval-gated');
 });
 
 test('career portrait connects the homepage to the selected archive and earlier record', async ({ page }) => {
@@ -246,9 +257,11 @@ test('server-rendered navigation and content remain available without JavaScript
   await expect(page.getByRole('link', { name: 'View selected work' })).toBeVisible();
 
   await page.goto('/work/job-search-os#project-gallery');
-  await expect(page.locator('#project-gallery img')).toHaveCount(7);
+  await expect(page.locator('#project-gallery img')).toHaveCount(6);
   await expect(page.getByText('Application assistant', { exact: true })).toBeVisible();
-  await expect(page.getByText('System topology', { exact: true })).toBeVisible();
+  await expect(page.getByText('System topology', { exact: true })).toHaveCount(0);
+  await expect(page.locator('.architecture-step')).toHaveCount(5);
+  await expect(page.getByText('External actions', { exact: true })).toBeVisible();
   await context.close();
 });
 

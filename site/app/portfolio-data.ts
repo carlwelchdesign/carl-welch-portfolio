@@ -63,7 +63,7 @@ export const projects: PortfolioProject[] = [
     },
     galleryTitle: 'A working product, end to end',
     gallerySummary:
-      'The system spans the daily cockpit, guarded application execution, live search diagnostics, human review, and the architecture connecting those surfaces.',
+      'The system spans the daily cockpit, guarded application execution, live search diagnostics, human review, resume operations, and reusable search strategy.',
     gallery: [
       {
         src: '/projects/job-search-os/application-assistant.png',
@@ -114,15 +114,6 @@ export const projects: PortfolioProject[] = [
         height: 860,
         label: 'Company sources',
         caption: 'A curated source registry keeps direct company pages, ATS feeds, marketplaces, and search adapters legible and controllable.',
-      },
-      {
-        src: '/projects/job-search-os/system-topology.png',
-        alt: 'Job Search OS system topology diagram connecting the interface, control plane, agent teams, memory, and approval gates',
-        width: 1600,
-        height: 953,
-        label: 'System topology',
-        caption: 'The product surface sits above a typed control plane, specialist agent teams, durable state, and explicit approval gates.',
-        layout: 'wide',
       },
     ],
     stack: ['Next.js', 'TypeScript', 'PostgreSQL + pgvector', 'OpenAI', 'LangGraph', 'MCP'],

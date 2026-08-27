@@ -198,30 +198,29 @@ export function ArchitectureDiagram({
   const style = { '--chapter-tone': toneColors[tone] } as ToneStyle;
 
   return (
-    <figure className={`architecture-card${compact ? ' architecture-card-compact' : ''}`} style={style}>
+    <figure
+      className={`architecture-card${compact ? ' architecture-card-compact' : ''}`}
+      style={style}
+      aria-label="System architecture flow"
+    >
       <figcaption>
-        <span>System architecture</span>
-        <span>Repository-grounded</span>
+        <span>System flow</span>
+        <span>{String(nodes.length).padStart(2, '0')} connected layers</span>
       </figcaption>
       <ArchitectureFlow>
-        <div className="architecture-track" aria-hidden="true">
+        <ol className="architecture-track">
           {nodes.map((node, index) => (
-            <div className="architecture-step" key={node.id}>
-              <NodePulse delay={index * 0.22} />
+            <li className="architecture-step" key={node.id}>
+              <div className="architecture-step-meta">
+                <small>Layer {String(index + 1).padStart(2, '0')}</small>
+                <NodePulse delay={index * 0.22} />
+              </div>
               <strong>{node.label}</strong>
-              <small>{String(index + 1).padStart(2, '0')}</small>
-            </div>
+              {compact ? null : <p>{node.detail}</p>}
+            </li>
           ))}
-        </div>
+        </ol>
       </ArchitectureFlow>
-      <ol className="architecture-legend">
-        {nodes.map((node) => (
-          <li key={node.id}>
-            <strong>{node.label}</strong>
-            <span>{node.detail}</span>
-          </li>
-        ))}
-      </ol>
     </figure>
   );
 }
