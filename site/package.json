@@ -19,6 +19,8 @@
     "check:jolene-contract": "node scripts/check-jolene-contract.mjs",
     "check:jolene-job-fit": "node scripts/check-jolene-job-fit.mjs",
     "check:jolene-bff": "node scripts/check-jolene-bff.mjs",
+    "check:jolene-live": "JOLENE_LIVE_CONTRACT_ORIGIN=http://127.0.0.1:8431 node scripts/check-jolene-bff.mjs",
+    "check:jolene-browser-live": "node scripts/check-jolene-browser-live.mjs",
     "check:analytics": "node scripts/check-analytics.mjs",
     "check:container": "node scripts/check-container.mjs",
     "check:routes": "node scripts/check-routes.mjs",

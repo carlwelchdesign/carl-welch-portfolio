@@ -1,7 +1,8 @@
-import { JoleneFixtureChat } from './jolene-chat';
+import { JoleneChat } from './jolene-chat';
 
 export function JoleneShell() {
-  if (process.env.NEXT_PUBLIC_JOLENE_MODE !== 'fixture') return null;
+  const mode = process.env.NEXT_PUBLIC_JOLENE_MODE;
+  if (mode !== 'fixture' && mode !== 'live') return null;
 
-  return <JoleneFixtureChat scenario={process.env.NEXT_PUBLIC_JOLENE_FIXTURE_SCENARIO || 'success'} />;
+  return <JoleneChat mode={mode} scenario={process.env.NEXT_PUBLIC_JOLENE_FIXTURE_SCENARIO || 'success'} />;
 }

@@ -20,6 +20,8 @@ export type BffConfig = {
   features: Record<BffOperation, boolean>;
   upstreamOrigin?: string;
   upstreamToken?: string;
+  allowLoopback: boolean;
+  expectedCorpusVersion?: string;
   clientHashSalt?: string;
   controlUrl?: string;
   controlToken?: string;
@@ -69,6 +71,8 @@ export function readBffConfig(environment: NodeJS.ProcessEnv): BffConfig {
     },
     upstreamOrigin: environment.JOLENE_PUBLIC_API_ORIGIN,
     upstreamToken: environment.JOLENE_PUBLIC_API_TOKEN,
+    allowLoopback: environment.JOLENE_PUBLIC_ALLOW_LOOPBACK === 'true',
+    expectedCorpusVersion: environment.JOLENE_PUBLIC_EXPECTED_CORPUS_VERSION,
     clientHashSalt: environment.JOLENE_BFF_CLIENT_HASH_SALT,
     controlUrl: environment.JOLENE_BFF_CONTROL_URL,
     controlToken: environment.JOLENE_BFF_CONTROL_TOKEN,
@@ -81,10 +85,13 @@ export function readBffConfig(environment: NodeJS.ProcessEnv): BffConfig {
   };
 
   if (enabled) {
-    if (!config.upstreamOrigin || !config.upstreamToken || !config.clientHashSalt) {
-      throw new Error('Enabled public Jolene BFF requires server-only origin, token, and client-hash salt configuration.');
+    if (!config.upstreamOrigin || !config.clientHashSalt || !config.expectedCorpusVersion) {
+      throw new Error('Enabled public Jolene BFF requires server-only origin, expected corpus version, and client-hash salt configuration.');
     }
-    assertSafeUpstreamOrigin(config.upstreamOrigin);
+    assertSafeUpstreamOrigin(config.upstreamOrigin, config.allowLoopback);
+    if (!config.upstreamToken && !isAllowedLoopbackOrigin(config.upstreamOrigin, config.allowLoopback)) {
+      throw new Error('Enabled public Jolene BFF requires a server-only upstream token outside explicit loopback testing.');
+    }
     if (config.controlUrl || config.controlToken) {
       if (!config.controlUrl || !config.controlToken) {
         throw new Error('Dynamic BFF control requires both a server-only URL and token.');
@@ -117,7 +124,7 @@ export function assertSafeControlUrl(value: string): void {
   }
 }
 
-export function assertSafeUpstreamOrigin(value: string): void {
+export function assertSafeUpstreamOrigin(value: string, allowLoopback = false): void {
   let url: URL;
   try {
     url = new URL(value);
@@ -125,6 +132,7 @@ export function assertSafeUpstreamOrigin(value: string): void {
     throw new Error('Public Jolene API origin must be a valid URL.');
   }
   const hostname = url.hostname.toLowerCase();
+  if (isAllowedLoopbackUrl(url, allowLoopback)) return;
   if (
     url.protocol !== 'https:' ||
     url.username ||
@@ -138,8 +146,28 @@ export function assertSafeUpstreamOrigin(value: string): void {
     /^172\.(?:1[6-9]|2\d|3[01])\./.test(hostname) ||
     hostname === '::1'
   ) {
-    throw new Error('Public Jolene API origin must be an HTTPS public origin without credentials or a path.');
+    throw new Error('Public Jolene API origin must be an HTTPS public origin without credentials or a path, unless explicit IP loopback testing is enabled.');
   }
+}
+
+function isAllowedLoopbackOrigin(value: string, allowLoopback: boolean): boolean {
+  try {
+    return isAllowedLoopbackUrl(new URL(value), allowLoopback);
+  } catch {
+    return false;
+  }
+}
+
+function isAllowedLoopbackUrl(url: URL, allowLoopback: boolean): boolean {
+  const hostname = url.hostname.toLowerCase();
+  return allowLoopback
+    && (hostname === '127.0.0.1' || hostname === '::1')
+    && url.protocol === 'http:'
+    && !url.username
+    && !url.password
+    && url.pathname === '/'
+    && !url.search
+    && !url.hash;
 }
 
 export function requireSameOrigin(request: Request): void {

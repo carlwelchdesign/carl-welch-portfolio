@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react';
 import { PublicJoleneAdapterError } from './public-adapter';
+import { createBrowserPublicJoleneAdapter } from './public-browser-adapter';
 import {
   createFixturePublicJoleneAdapter,
   PUBLIC_JOLENE_FIXTURE_CORPUS_VERSION,
@@ -28,12 +29,20 @@ const conversationStarters = [
   'What should I ask Carl about in an interview?',
 ];
 
-const initialMessage: ChatMessage = {
-  id: 'fixture-welcome',
-  role: 'assistant',
-  text: 'Hi. I’m Jolene. This development preview shows how I can answer questions about Carl from reviewed public evidence.',
-  note: 'Fixture mode only. No live agent is connected, and this preview does not retain a transcript.',
-};
+type JoleneMode = 'fixture' | 'live';
+
+function initialMessage(mode: JoleneMode): ChatMessage {
+  return {
+    id: `${mode}-welcome`,
+    role: 'assistant',
+    text: mode === 'live'
+      ? 'Hi. I’m Jolene. Ask me about Carl’s work, experience, or qualifications.'
+      : 'Hi. I’m Jolene. This development preview shows how I can answer questions about Carl from reviewed public evidence.',
+    note: mode === 'live'
+      ? 'Answers use reviewed public evidence. This panel does not retain a transcript.'
+      : 'Fixture mode only. No live agent is connected, and this preview does not retain a transcript.',
+  };
+}
 
 function normalizeScenario(value: string): PublicJoleneFixtureScenario {
   return publicJoleneFixtureScenarios.includes(value as PublicJoleneFixtureScenario)
@@ -62,9 +71,12 @@ function getSuggestedQuestions(messages: ChatMessage[]): string[] {
   return [];
 }
 
-export function JoleneFixtureChat({ scenario: scenarioValue }: { scenario: string }) {
+export function JoleneChat({ mode: connectionMode, scenario: scenarioValue = 'success' }: { mode: JoleneMode; scenario?: string }) {
   const scenario = normalizeScenario(scenarioValue);
-  const adapter = useMemo(() => createFixturePublicJoleneAdapter(scenario), [scenario]);
+  const adapter = useMemo(
+    () => connectionMode === 'live' ? createBrowserPublicJoleneAdapter() : createFixturePublicJoleneAdapter(scenario),
+    [connectionMode, scenario],
+  );
   const launcherRef = useRef<HTMLButtonElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -73,7 +85,7 @@ export function JoleneFixtureChat({ scenario: scenarioValue }: { scenario: strin
   const [mode, setMode] = useState<'chat' | 'job' | 'contact'>('chat');
   const [draft, setDraft] = useState('');
   const [waiting, setWaiting] = useState(false);
-  const [messages, setMessages] = useState<ChatMessage[]>([initialMessage]);
+  const [messages, setMessages] = useState<ChatMessage[]>([initialMessage(connectionMode)]);
   const suggestedQuestions = getSuggestedQuestions(messages);
 
   useEffect(() => {
@@ -129,7 +141,9 @@ export function JoleneFixtureChat({ scenario: scenarioValue }: { scenario: strin
             limitations: response.limitations,
             suggestedFollowUpQuestions: response.suggestedFollowUpQuestions,
             corpusVersion: response.corpusVersion,
-            expectedCorpusVersion: PUBLIC_JOLENE_FIXTURE_CORPUS_VERSION,
+            expectedCorpusVersion: connectionMode === 'fixture'
+              ? PUBLIC_JOLENE_FIXTURE_CORPUS_VERSION
+              : response.corpusVersion,
             revokedEvidenceIds: [],
           },
         },
@@ -164,7 +178,7 @@ export function JoleneFixtureChat({ scenario: scenarioValue }: { scenario: strin
   }
 
   return (
-    <div className="jolene-fixture" data-jolene-fixture>
+    <div className="jolene-fixture" data-jolene-mode={connectionMode} {...(connectionMode === 'fixture' ? { 'data-jolene-fixture': true } : {})}>
       {open ? (
         <section
           className="jolene-panel"
@@ -177,7 +191,7 @@ export function JoleneFixtureChat({ scenario: scenarioValue }: { scenario: strin
         >
           <header className="jolene-panel-header">
             <div>
-              <p>Portfolio guide / Development fixture</p>
+              <p>{connectionMode === 'live' ? 'Portfolio guide / Reviewed evidence' : 'Portfolio guide / Development fixture'}</p>
               <h2 id="jolene-panel-title">
                 {mode === 'contact' ? 'Contact Carl' : mode === 'job' ? 'Compare a role' : 'Ask Jolene'}
               </h2>
@@ -188,7 +202,9 @@ export function JoleneFixtureChat({ scenario: scenarioValue }: { scenario: strin
           </header>
 
           <p className="jolene-fixture-notice" id="jolene-panel-description">
-            Fixture responses only. No live agent, private memory, Obsidian access, or transcript retention.
+            {connectionMode === 'live'
+              ? 'Reviewed public evidence only. No private memory, Obsidian access, or transcript retention.'
+              : 'Fixture responses only. No live agent, private memory, Obsidian access, or transcript retention.'}
           </p>
 
           <nav className="jolene-mode-switch" aria-label="Jolene panel sections">
@@ -210,7 +226,7 @@ export function JoleneFixtureChat({ scenario: scenarioValue }: { scenario: strin
             ))}
             {waiting ? (
               <p className="jolene-waiting" role="status">
-                Checking the public fixture evidence…
+                Checking reviewed public evidence…
               </p>
             ) : null}
             <div ref={messagesEndRef} aria-hidden="true" />
@@ -248,7 +264,7 @@ export function JoleneFixtureChat({ scenario: scenarioValue }: { scenario: strin
           </form></> : mode === 'contact' ? (
             <JoleneContactIntent adapter={adapter} onReturnToChat={() => setMode('chat')} />
           ) : (
-            <JoleneJobFit adapter={adapter} onAskQuestion={askFromComparison} />
+            <JoleneJobFit adapter={adapter} mode={connectionMode} onAskQuestion={askFromComparison} />
           )}
         </section>
       ) : null}
@@ -266,14 +282,19 @@ export function JoleneFixtureChat({ scenario: scenarioValue }: { scenario: strin
             setOpen(true);
           }
         }}
-        data-jolene-fixture-launcher
+        data-jolene-launcher
+        {...(connectionMode === 'fixture' ? { 'data-jolene-fixture-launcher': true } : {})}
       >
         <span className="jolene-launcher-mark" aria-hidden="true">J</span>
         <span>
-          <small>Fixture preview</small>
+          <small>{connectionMode === 'live' ? 'Reviewed evidence' : 'Fixture preview'}</small>
           Ask Jolene
         </span>
       </button>
     </div>
   );
+}
+
+export function JoleneFixtureChat({ scenario }: { scenario: string }) {
+  return <JoleneChat mode="fixture" scenario={scenario} />;
 }

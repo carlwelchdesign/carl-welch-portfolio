@@ -124,7 +124,7 @@ async function callUpstream(
         method: policy.method,
         headers: {
           Accept: 'application/json',
-          Authorization: `Bearer ${config.upstreamToken}`,
+          ...(config.upstreamToken ? { Authorization: `Bearer ${config.upstreamToken}` } : {}),
           ...(policy.method === 'POST' ? { 'Content-Type': 'application/json' } : {}),
         },
         body: policy.method === 'POST' ? JSON.stringify(body) : undefined,
@@ -155,7 +155,7 @@ async function callUpstream(
       return parsed;
     }
     const parsed = operation === 'manifest'
-      ? parsePublicEvidenceManifest(payload)
+      ? assertExpectedManifest(parsePublicEvidenceManifest(payload), config)
       : parseContactIntentResponse(payload);
     assertSafePublicResponse(parsed);
     return parsed;
@@ -221,7 +221,10 @@ async function fetchManifest(config: BffConfig, fetchImpl: typeof fetch, signal:
     new URL(operationPolicy.manifest.endpoint, config.upstreamOrigin).href,
     {
       method: 'GET',
-      headers: { Accept: 'application/json', Authorization: `Bearer ${config.upstreamToken}` },
+      headers: {
+        Accept: 'application/json',
+        ...(config.upstreamToken ? { Authorization: `Bearer ${config.upstreamToken}` } : {}),
+      },
       cache: 'no-store',
       redirect: 'error',
       signal,
@@ -232,6 +235,13 @@ async function fetchManifest(config: BffConfig, fetchImpl: typeof fetch, signal:
   if (!response.ok) throw new UpstreamError(response.status === 429 ? 'rate_limited' : 'unavailable');
   const manifest = parsePublicEvidenceManifest(await readUpstreamJson(response, 64_000));
   assertSafePublicResponse(manifest);
+  return assertExpectedManifest(manifest, config);
+}
+
+function assertExpectedManifest<T extends { corpusVersion: string }>(manifest: T, config: BffConfig): T {
+  if (manifest.corpusVersion !== config.expectedCorpusVersion) {
+    throw new UpstreamError('version_mismatch');
+  }
   return manifest;
 }
 
@@ -328,7 +338,10 @@ function boundedRetryAfter(value: string | null): number | undefined {
 class BodyError extends Error {}
 
 class UpstreamError extends Error {
-  constructor(readonly code: 'unavailable' | 'timeout' | 'rate_limited', readonly retryAfterSeconds?: number) {
+  constructor(
+    readonly code: 'unavailable' | 'timeout' | 'rate_limited' | 'version_mismatch',
+    readonly retryAfterSeconds?: number,
+  ) {
     super(code);
     this.name = 'UpstreamError';
   }
