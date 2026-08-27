@@ -13,7 +13,7 @@ The standalone production build was served locally and exercised through a real 
 
 | Area | Coverage | Result |
 | --- | --- | --- |
-| Public routes | `/`, `/work`, `/about`, `/capabilities`, `/experience`, `/recommendations`, `/contact`, and all three selected-work detail routes | Pass |
+| Public routes | `/`, `/work`, `/archive`, `/about`, `/capabilities`, `/experience`, `/recommendations`, `/contact`, and all three selected-work detail routes | Pass |
 | Responsive layout | 320, 390, 430, and 1440 CSS-pixel widths | Pass; no horizontal overflow found |
 | Page structure | One `h1`, a named `main` target, and a skip link on every tested route | Pass |
 | Browser runtime | Meaningful rendered content, no framework error overlay, and no console errors | Pass |

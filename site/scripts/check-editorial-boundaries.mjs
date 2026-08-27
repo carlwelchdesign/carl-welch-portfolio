@@ -42,7 +42,7 @@ assert.equal(
 assert.match(brief, /Webby Awards Honoree/);
 assert.match(brief, /original Gmail threads and any image permissions must be rechecked before publication/i);
 if (releaseGates) {
-  assert.match(releaseGates, /\| LinkedIn recommendation provenance and publication .*\| approval required \|/);
+  assert.match(releaseGates, /\| LinkedIn recommendation provenance and publication .*\| passed \|/);
 }
 
 const publicSource = await readApplicationSource(resolve(siteRoot, 'app'));

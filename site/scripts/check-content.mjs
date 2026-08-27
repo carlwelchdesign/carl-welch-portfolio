@@ -61,6 +61,7 @@ const [
   { capabilities },
   { contact },
   { publicEvidenceTargetRecords },
+  { careerChapters, earlierPracticeGroups, characterSignals },
 ] = await Promise.all([
   loadTypescriptData(resolve(root, 'app/github-projects.ts')),
   loadTypescriptData(resolve(root, 'app/portfolio-data.ts')),
@@ -68,6 +69,7 @@ const [
   loadTypescriptData(resolve(root, 'app/capabilities-data.ts')),
   loadTypescriptData(resolve(root, 'app/contact-data.ts')),
   loadTypescriptData(resolve(root, 'app/jolene/public-evidence-targets.ts')),
+  loadTypescriptData(resolve(root, 'app/career-story-data.ts')),
 ]);
 
 if (projects.length < 3) throw new Error('At least three detailed case studies are required.');
@@ -85,6 +87,11 @@ requireUnique(Object.values(githubRepositoryIds), 'GitHub repository IDs');
 requireUnique(recommendations.map((item) => `${item.name}:${item.date}`), 'Recommendation attributions');
 requireUnique(recommendations.map((item) => item.id), 'Recommendation IDs');
 requireUnique(capabilities.map((capability) => capability.id), 'Capability IDs');
+assert.equal(careerChapters.length, 4, 'The public career portrait must contain four reviewed chapters.');
+requireUnique(careerChapters.map((chapter) => chapter.number), 'Career chapter numbers');
+assert.equal(earlierPracticeGroups.length, 2, 'Earlier practice must retain the two bounded public groups.');
+requireUnique(earlierPracticeGroups.flatMap((group) => group.organizations), 'Earlier practice organizations');
+requireUnique(characterSignals.map((signal) => signal.recommendationId), 'Character signal recommendation IDs');
 
 const projectSlugs = new Set(projects.map((project) => project.slug));
 const repositoryNames = new Set(githubProjects.map((project) => project.name));
@@ -169,6 +176,15 @@ for (const recommendation of recommendations) {
 assert.equal(recommendationReview.reconciliationState, 'source_verified_publication_approved');
 assert(!Number.isNaN(Date.parse(recommendationReview.sourceObservedAt)), 'Recommendation reconciliation must carry a valid source timestamp.');
 
+for (const signal of characterSignals) {
+  const recommendation = recommendations.find((item) => item.id === signal.recommendationId);
+  if (!recommendation) throw new Error(`${signal.label} references an unknown recommendation.`);
+  const normalizedRecommendation = recommendation.quote.replaceAll('_', '');
+  if (!normalizedRecommendation.includes(signal.quote)) {
+    throw new Error(`${signal.label} is not an exact excerpt of its approved recommendation.`);
+  }
+}
+
 const expectedNavigationIds = [
   ...projects.flatMap((project) => [
     project.sourceId,
@@ -212,5 +228,5 @@ await Promise.all([
 ]);
 
 console.log(
-  `Content checks passed: ${projects.length} case studies, ${githubProjects.length} public repositories, ${capabilities.length} capabilities, ${recommendations.length} recommendations, and verified contact routes.`,
+  `Content checks passed: ${projects.length} case studies, ${careerChapters.length} career chapters, ${githubProjects.length} public repositories, ${capabilities.length} capabilities, ${recommendations.length} recommendations, and verified contact routes.`,
 );
