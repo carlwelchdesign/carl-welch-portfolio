@@ -10,7 +10,6 @@ export const metadata: Metadata = buildPageMetadata({
   title: 'Recommendations',
   description: 'Professional recommendations for Carl Welch.',
   path: '/recommendations',
-  robots: { index: false, follow: true },
 });
 
 export default function RecommendationsPage() {
@@ -34,7 +33,8 @@ export default function RecommendationsPage() {
                 <a href={recommendationReview.sourceUrl} target="_blank" rel="noreferrer">
                   LinkedIn
                 </a>{' '}
-                on <time dateTime={recommendationReview.sourceObservedAt}>August 26, 2026</time>. Search indexing remains off until Carl approves publication.
+                on <time dateTime={recommendationReview.sourceObservedAt}>August 26, 2026</time>, and approved by Carl for publication on August 27, 2026.
+                To request a correction or removal, <a href="/contact">contact Carl</a>.
               </p>
             </div>
           </section>

@@ -1,6 +1,6 @@
 import { ImageResponse } from 'next/og';
 
-export const alt = 'Carl Welch — Product Engineer';
+export const alt = 'Carl Welch — Senior Product Engineer';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
@@ -21,7 +21,7 @@ export default function OpenGraphImage() {
         }}
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 20, letterSpacing: 3 }}>
-          <span>PRODUCT ENGINEER</span>
+          <span>SENIOR PRODUCT ENGINEER</span>
           <span>PORTFOLIO / 2026</span>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column' }}>

@@ -30,10 +30,10 @@ function reconciledRecommendation(candidate: ReconciledRecommendation): Recommen
     sourcePageUrl: 'https://www.linkedin.com/in/carlwelch/details/recommendations/',
     sourceObservedAt: '2026-08-27T02:40:37Z',
     sourceVisibility: 'All LinkedIn members',
-    reviewState: 'review_required',
-    publicApproved: false,
+    reviewState: 'approved',
+    publicApproved: true,
     limitations: [
-      'Exact attribution, current headline, relationship, date, wording, and LinkedIn visibility were reconciled against Carl’s authenticated received-recommendations page. Separate portfolio publication approval is still required.',
+      'Exact attribution, current headline, relationship, date, wording, and LinkedIn visibility were reconciled against Carl’s authenticated received-recommendations page. Carl approved publication of the complete set on August 27, 2026.',
     ],
   };
 }

@@ -8,17 +8,18 @@ const packet = await readFile(resolve(siteRoot, 'docs/PORTFOLIO_RELEASE_DECISION
 const decisions = JSON.parse(source);
 
 assert.equal(decisions.schemaVersion, '1.0.0');
-assert.equal(decisions.status, 'awaiting_carl');
+assert.equal(decisions.status, 'approved_for_verified_static_release');
+assert.equal(decisions.approvedAt, '2026-08-27');
 assert.equal(decisions.decisions.length, 12);
 assert.equal(new Set(decisions.decisions.map(({ id }) => id)).size, 12);
 
 for (const [index, decision] of decisions.decisions.entries()) {
   assert.equal(decision.id, `PORT-DEC-${String(index + 1).padStart(3, '0')}`);
-  assert.ok(['pending', 'pending_after_release_candidate_review'].includes(decision.status));
+  assert.ok(['approved', 'approved_with_gate', 'approved_with_verification_gate'].includes(decision.status));
   assert.ok(decision.options.length >= 2);
   assert.ok(decision.reason.length > 40);
   assert.ok(decision.owningTasks.length > 0);
-  assert.notEqual(decision.status, 'approved');
+  assert.ok(decision.options.includes(decision.selected));
   if (decision.recommended !== null) assert.ok(decision.options.includes(decision.recommended));
 }
 
@@ -44,9 +45,9 @@ for (const text of [source, packet]) {
   assert.equal(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i.test(text), false, 'Decision packet must not contain an email address.');
 }
 
-assert.match(packet, /Recommendations below are defaults for review, not approvals/i);
-assert.match(packet, /A green repository does not pre-approve deployment/i);
+assert.match(packet, /approved for a verified static release/i);
+assert.match(packet, /A green repository alone does not satisfy/i);
 assert.match(packet, /2006 Webby Awards Honoree/);
 assert.match(packet, /may not be described as a personal Webby winner/i);
 
-console.log('Release decision checks passed: 12 pending decisions, owning gates, non-decisions, and approval boundaries are intact.');
+console.log('Release decision checks passed: 12 approved selections, owning gates, non-decisions, and verification boundaries are intact.');

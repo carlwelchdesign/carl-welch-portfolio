@@ -1,9 +1,9 @@
 # Portfolio messaging brief
 
 **Ticket:** PORT-MSG-001
-**State:** Internal review draft; not approved public copy
+**State:** Approved narrative direction; public copy implemented for the verified static release
 **Prepared:** August 26, 2026
-**Publication boundary:** Nothing in this document changes a content record to `publicApproved`, authorizes recommendation indexing, or authorizes deployment.
+**Publication boundary:** Carl approved the recommended static-first direction on August 27, 2026. Source-specific rights and verification gates remain binding.
 
 ## The job of the site
 
@@ -237,7 +237,7 @@ The source labels below are intentionally content-minimized. Private mailbox ide
 | Carl designed project-based Scratch and JavaScript/HTML/Canvas programming instruction in 2012. | Historical correspondence plus preserved personal portfolio | Contemporaneous but original-message recheck required | Not ready for publication | Internal narrative planning only | Formal faculty role, exact attendance, universal completion, or recurring employment |
 | Teaching families received positive feedback about Carl's instruction. | Private historical correspondence | Relayed third-party feedback | Not ready for publication | Internal proof of a mentoring pattern | Naming the child/family or claiming universal outcomes |
 | Ignite class photographs may be published. | Legacy local image files only | Rights and privacy unknown | Not for public use | Asset inventory and rights review only | Consent, ownership, or permission to identify minors |
-| Recommendations describe Carl as a mentor, calm problem-solver, senior developer, creative technologist, and dependable collaborator. | 13 source-reconciled LinkedIn recommendations | Exact attributed testimony | Publication approval pending | Recommendations route and later bounded excerpts | Converting praise into unattributed first-person facts |
+| Recommendations describe Carl as a mentor, calm problem-solver, senior developer, creative technologist, and dependable collaborator. | 13 source-reconciled LinkedIn recommendations | Exact attributed testimony | Publication approved August 27, 2026 | Recommendations route and later bounded excerpts | Converting praise into unattributed first-person facts |
 
 ## Historical placement recommendation
 

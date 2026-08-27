@@ -11,7 +11,7 @@ The standalone production build was served locally and exercised through a real 
 
 | Area | Coverage | Result |
 | --- | --- | --- |
-| Public routes | `/`, `/work`, `/capabilities`, `/experience`, `/recommendations`, `/contact`, and all three selected-work detail routes | Pass |
+| Public routes | `/`, `/work`, `/about`, `/capabilities`, `/experience`, `/recommendations`, `/contact`, and all three selected-work detail routes | Pass |
 | Responsive layout | 320, 390, 430, and 1440 CSS-pixel widths | Pass; no horizontal overflow found |
 | Page structure | One `h1`, a named `main` target, and a skip link on every tested route | Pass |
 | Browser runtime | Meaningful rendered content, no framework error overlay, and no console errors | Pass |
@@ -20,7 +20,7 @@ The standalone production build was served locally and exercised through a real 
 | Mobile navigation | Native `details`/`summary` control and menu links | Pointer activation passes; physical keyboard and VoiceOver activation remain below |
 | Reduced motion | Global CSS fallback, Motion `reducedMotion="user"`, and explicit suppression of looping motion | Static implementation check passes; OS-level device check remains below |
 | Production boundaries | Jolene fixture launcher absent and the disabled public BFF returns its expected unavailable response | Covered by `check:container` |
-| Metadata and indexing | Titles, descriptions, canonical URLs, social metadata, share images, sitemap, robots, and recommendations `noindex` gate | Covered by `check:routes` and metadata checks |
+| Metadata and indexing | Titles, descriptions, canonical URLs, social metadata, share images, sitemap, robots, and approved recommendation indexing | Covered by `check:routes` and metadata checks |
 
 The complete repository gate (`pnpm check`), Playwright browser suite (`pnpm check:browser`), and container smoke test are required again in CI before this change can merge.
 
