@@ -36,6 +36,8 @@ The internal [`PORTFOLIO_MESSAGING_BRIEF.md`](docs/PORTFOLIO_MESSAGING_BRIEF.md)
 
 The internal [`PORTFOLIO_ARCHIVE_INVENTORY.md`](docs/PORTFOLIO_ARCHIVE_INVENTORY.md) and machine-readable [`archive-candidates.v1.json`](docs/archive-candidates.v1.json) manifest rank legacy-work candidates with exact asset fingerprints, evidence strength, rights states, captions, and prohibited inferences. Run `pnpm check:archive` to verify those boundaries. The records do not authorize publication.
 
+The internal [`PORTFOLIO_LEGACY_ASSET_RECOVERY.md`](docs/PORTFOLIO_LEGACY_ASSET_RECOVERY.md) and [`legacy-asset-recovery.v1.json`](docs/legacy-asset-recovery.v1.json) record stronger-source searches, unresolved resolution gaps, and a do-not-execute boundary for legacy SWF/FLV material. Run `pnpm check:archive-recovery` to verify the recovery and quarantine decisions.
+
 - `app/portfolio-data.ts` contains the detailed case studies and verified experience summaries.
 - `app/capabilities-data.ts` maps capability claims to case studies, repositories, experience, and attributed recommendations. Content checks prevent broken evidence references.
 - `app/contact-data.ts` contains the résumé-verified public contact routes used by the header, footer, and contact page.

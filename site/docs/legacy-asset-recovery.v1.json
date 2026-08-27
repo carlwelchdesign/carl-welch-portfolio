@@ -1,0 +1,70 @@
+{
+  "schemaVersion": "1.0.0",
+  "status": "internal_review_only",
+  "publicationRule": "Discovery and possession do not grant publication rights. No recovered source is copied into the public site by this manifest.",
+  "inspectionRule": "Legacy SWF and FLV files are fingerprinted and parsed as data only. They must not execute in the portfolio, a browser plugin, or a networked conversion environment.",
+  "recoveries": [
+    {
+      "id": "recovery-almost-alice-psd", "candidateId": "archive-almost-alice-2010", "sourceLocator": "legacy:carlsite/images/samples/disneyalmostalice.png",
+      "declaredExtension": "png", "detectedFormat": "Adobe Photoshop Image", "sha256": "cfc9057931990f970158f95ed5740c7dc1b9209198c5ade0ffa7d76d30d61983", "bytes": 3049295,
+      "media": {"width": 600, "height": 519, "colorSpace": "RGB"}, "inspection": "A temporary local JPEG preview confirmed the same landing-screen composition as the existing public-safe candidate; the source itself was not copied.",
+      "decision": "retain_private_source", "publicationState": "needs_permission", "safetyState": "do_not_serve_mislabeled_source",
+      "reason": "The mislabeled Photoshop file may preserve better editing data, but it is not larger than the existing JPEG and is not a web asset."
+    },
+    {
+      "id": "recovery-taser-lossless", "candidateId": "archive-taser-axon-2009", "sourceLocator": "legacy:carlsite/images/samples/taser.png",
+      "declaredExtension": "png", "detectedFormat": "PNG image", "sha256": "348cc7eda79a84faa07739c4f42d7580ae57dfaf9daa3f78bcfccf1e33e33d57", "bytes": 465438,
+      "media": {"width": 821, "height": 480}, "inspection": "Lossless alternate showing the same evidence-workflow interface family.",
+      "decision": "retain_private_source", "publicationState": "private_only", "safetyState": "sensitivity_review_required",
+      "reason": "The alternate improves source fidelity, not the security, confidentiality, or client-rights boundary."
+    },
+    {
+      "id": "recovery-fox-alternate-state", "candidateId": "archive-fox-million-moments-2010", "sourceLocator": "legacy:carlsite/images/samples/millionmoments.jpg",
+      "declaredExtension": "jpg", "detectedFormat": "JPEG image", "sha256": "8de253b86560886b33b7af40e12c0936c7f4d8ad702dcc2f05b9e8f1aa5be64e", "bytes": 129112,
+      "media": {"width": 561, "height": 521}, "inspection": "Alternate January bracket state with a distinct title set and empty monthly-winner cards.",
+      "decision": "retain_as_secondary_state", "publicationState": "needs_permission", "safetyState": "rights_review_required",
+      "reason": "Useful for showing interaction-state variation, but smaller and less complete than the ranked 647 by 649 source."
+    },
+    {
+      "id": "recovery-yuco-overview", "candidateId": "archive-yuco-2006", "sourceLocator": "legacy:carlsite/images/samples/yuco.png",
+      "declaredExtension": "png", "detectedFormat": "PNG image", "sha256": "26ac1ed5fa31c3a6a167fcc5531cdfa1e73a465c7222daa0675e7a152e3a17d4", "bytes": 46565,
+      "media": {"width": 562, "height": 214}, "inspection": "Static two-state overview of the branching navigation and project-detail system.",
+      "decision": "retain_as_secondary_state", "publicationState": "needs_permission", "safetyState": "rights_review_required",
+      "reason": "Provides more system context than the GIF first frame, but is too short for featured placement."
+    },
+    {
+      "id": "recovery-darksiders-alternate-thumbnail", "candidateId": "archive-darksiders-ii-2011", "sourceLocator": "legacy:carlsite/images/webdesign/darksiderstest.jpg",
+      "declaredExtension": "jpg", "detectedFormat": "JPEG image", "sha256": "0c5d78b81df1dc77c1e8d87da5be286f016852d2ac4b03ba1592f5f1e8f4f405", "bytes": 38532,
+      "media": {"width": 240, "height": 162}, "inspection": "Alternate thumbnail at the same dimensions as the ranked source.",
+      "decision": "reject_as_resolution_upgrade", "publicationState": "reject", "safetyState": "no_public_copy",
+      "reason": "It does not solve the resolution gap and should not create duplicate low-quality archive content."
+    },
+    {
+      "id": "recovery-jgwi-swf", "candidateId": null, "sourceLocator": "legacy:carlsite/images/samples/JGWI.swf",
+      "declaredExtension": "swf", "detectedFormat": "Compressed Macromedia Flash version 10", "sha256": "3007b7d534345df8b26d6c0923d59e3c1d5c98a4f6ad0ae6dac21285688346ee", "bytes": 41224,
+      "media": {"stageWidth": 300, "stageHeight": 250, "timelineFrameRate": 18, "timelineFrameCount": 1}, "inspection": "Header and compressed stage metadata parsed without executing ActionScript.",
+      "decision": "quarantine_pending_selection", "publicationState": "private_only", "safetyState": "do_not_execute",
+      "reason": "The legacy portfolio describes a Just Go With It banner using ActionScript 3 and design; restoration is not justified until Carl selects it."
+    },
+    {
+      "id": "recovery-jgwi-flv", "candidateId": null, "sourceLocator": "legacy:carlsite/images/samples/JGW_Kidding_Around_v4-C.flv",
+      "declaredExtension": "flv", "detectedFormat": "Flash Video", "sha256": "b84b391c19baa00b9b443f20c909a38c2dc935379e220218a3c57c25f06927cd", "bytes": 2266998,
+      "media": {"width": 300, "height": 250, "durationSeconds": 16.015, "frameRate": 23.97601318359375, "videoCodec": "VP6", "audioCodec": "MP3"}, "inspection": "FLV header and onMetaData values parsed without playback or transcoding.",
+      "decision": "quarantine_pending_selection", "publicationState": "private_only", "safetyState": "offline_media_inspection_only",
+      "reason": "This is a small licensed campaign asset; conversion is not justified until the project and rights basis are selected."
+    },
+    {
+      "id": "recovery-benhur-swf", "candidateId": null, "sourceLocator": "legacy:carlsite/images/samples/BenHur.swf",
+      "declaredExtension": "swf", "detectedFormat": "Compressed Macromedia Flash version 10", "sha256": "ca68a5008e30105e1330b344e6db8c77776ded3dd6dfa515b41890c97f458ad6", "bytes": 117120,
+      "media": {"stageWidth": 300, "stageHeight": 250, "timelineFrameRate": 24, "timelineFrameCount": 1}, "inspection": "Header and compressed stage metadata parsed without executing ActionScript.",
+      "decision": "quarantine_pending_selection", "publicationState": "private_only", "safetyState": "do_not_execute",
+      "reason": "The legacy portfolio describes a Ben Hur anniversary banner using ActionScript 3 and design; no stronger provenance or rights decision exists yet."
+    }
+  ],
+  "unrecovered": [
+    {"candidateId": "archive-darksiders-ii-2011", "target": "higher_resolution_visual", "decision": "keep_thumbnail_only_until_recovered"},
+    {"candidateId": "archive-superman-75-2013", "target": "higher_resolution_visual", "decision": "reserve_only"},
+    {"candidateId": "archive-bolthouse-frozen-2013", "target": "higher_resolution_visual", "decision": "reserve_only"},
+    {"candidateId": "archive-primaloft-downblends", "target": "higher_resolution_visual_and_date", "decision": "reserve_only"}
+  ]
+}
