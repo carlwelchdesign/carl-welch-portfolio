@@ -66,12 +66,144 @@ Run `pnpm check:sentry-privacy` whenever the scrubbing policy changes.
 Run `pnpm check:sentry-asana` whenever intake normalization, signature handling,
 or Asana mapping changes.
 
+## Trust and data flow
+
+```text
+portfolio browser ──technical exception──▶ Sentry browser project
+portfolio Worker  ──technical exception──▶ Sentry Worker project
+                                              │
+                                   sanitized alert transition
+                                              ▼
+Sentry service hook ──HMAC POST──▶ /api/ops/sentry ──least privilege──▶ Asana PORT-INC
+                                                                          │
+                                                            paused Codex heartbeat
+                                                                          ▼
+                                                              branch + test + PR
+```
+
+The intake has no route to Obsidian, private Jolene, private SQLite, durable
+memory, Slack, contact submissions, job descriptions, or portfolio evidence
+bodies. Asana is the durable issue-ID and transition ledger. The deployed site
+does not retain raw webhook bodies or full Sentry events.
+
+## Severity and response expectations
+
+| Severity | Condition | Owner action | Automation boundary |
+| --- | --- | --- | --- |
+| P0 | Confirmed private-data exposure, active credential compromise, destructive behavior, or broad production outage | Notify Carl immediately; disable affected intake or feature; preserve minimal evidence; begin rollback | Create/update a sanitized ticket and stop. Never investigate private data or rotate credentials autonomously. |
+| P1 | New or regressed production exception affecting a route, Worker boundary, contact flow, or public Jolene control | Notify Carl promptly; reproduce; prepare rollback recommendation and scoped fix | May prepare a branch, regression test, and PR. Never merge or deploy. |
+| P2 | Low-frequency technical error without privacy, security, or broad availability impact | Queue for bounded review; group duplicate evidence | May prepare a plan and PR when reproducible. Respect cooldown and concurrency limits. |
+
+Provider alert rules should target `production` only, distinguish browser from
+Worker service tags, alert on new/regressed issues, and add a sustained-rate
+rule after a real traffic baseline exists. No guessed user count or fabricated
+impact estimate belongs in notifications. After-hours P0 notification requires
+an owner-approved destination; P1/P2 can wait for the next bounded review.
+
+## Alert-to-ticket transition rules
+
+| Sentry transition | Asana behavior |
+| --- | --- |
+| First open event | Create one incomplete `PORT-INC` task in In progress. |
+| Identical delivery | Return success without a second task or comment. |
+| Changed frequency, route, release, or severity | Replace only the machine-managed intake block and preserve human remediation notes. |
+| Regression or reopen | Reopen the same task, move it to In progress, and add a sanitized transition comment. |
+| Sentry resolution | Record the state, but do not complete the task before an approved release is verified. |
+| Asana outage or timeout | Return a retryable failure; do not acknowledge a delivery that was not durably recorded. |
+
+Task names never include exception messages. Task notes allow only issue ID and
+provider URL, severity, state, service, environment, release, route path,
+frequency, and first/last-seen timestamps. Query strings and URL fragments are
+removed. A normalized delivery fingerprint makes replays idempotent.
+
+## Agent remediation playbook
+
+The installed `Portfolio Sentry incident triage` heartbeat remains paused until
+provider intake is validated. When Carl activates it, one run must:
+
+1. Select at most one incomplete `PORT-INC` task that is not already claimed.
+2. Record severity, scope, reproduction status, privacy/security implications,
+   rollback need, dedicated worktree, and branch before changing code.
+3. Stop and notify Carl for P0, uncertain ownership, destructive changes,
+   credential work, private-data access, or repeated reproduction failure.
+4. Reproduce against sanitized technical evidence. Never copy a raw Sentry
+   payload, visitor content, private Jolene context, or credentials locally.
+5. Add a regression test, implement the smallest scoped correction, and run
+   checks proportional to the affected boundary.
+6. Open a PR linked to the Asana incident and Sentry issue. Record verification
+   and remaining risk in Asana.
+7. Stop. The agent cannot merge, deploy, suppress alerts, resolve Sentry, or
+   complete the incident.
+8. After Carl approves deployment, verify the exact release in production and
+   Sentry before the incident is completed.
+
+Concurrency is one incident, one worktree, and one PR per heartbeat. Repeated
+failure, missing evidence, or exhausted time/cost limits ends the run safely and
+leaves a human-readable blocker. Pausing the heartbeat is the automation kill
+switch; disabling the signed intake is the ticket-creation kill switch.
+
+## Evidence matrix
+
+Evidence date: 2026-08-27.
+
+| Scenario | Automated evidence available | Provider evidence still required |
+| --- | --- | --- |
+| Browser exception | SDK initialization and fail-closed browser network test | Deliberate production event reaches the browser project and is scrubbed. |
+| Worker exception | Cloudflare SDK wrapper and build/runtime tests | Deliberate Worker event reaches the correct project and release. |
+| Duplicate delivery | Deterministic intake test creates one task and deduplicates replay | Real Sentry retry produces one Asana task. |
+| Regression | Deterministic intake test reopens/updates the same task | A resolved Sentry issue regresses and reaches the approved destination. |
+| Resolution | Deterministic test records resolution without premature completion | Provider transition arrives and remains incomplete until deployed verification. |
+| Sensitive synthetic payload | Scrubbing and intake tests exclude every seeded secret | Inspect an actual Sentry event, notification, and Asana task. |
+| Missing source map | Ordinary public build rejects maps and upload config fails closed | Authenticated build uploads maps and a minified error de-minifies. |
+| Bad signature, replay, oversize body | HMAC, idempotency, media-type, method, body-size, and timeout tests | Real service-hook signature and retry semantics match the configured project. |
+| Asana outage | Fake upstream failure returns a retryable 502 | Controlled provider retry after a temporary Asana failure. |
+| Sentry outage or quota exhaustion | Telemetry fails open for the visitor; application behavior remains intact | Provider notification/usage controls and owner response are exercised. |
+| Agent reproduction failure | Guardrail and escalation procedure documented | Activated heartbeat demonstrates bounded stop and human escalation. |
+
+Automated fixtures are not substitutes for real provider evidence. Attach the
+Sentry issue/event URL, exact release, sanitized Asana task, and dated result to
+PORT-OBS-008 for every provider scenario. Never attach screenshots containing
+credentials, visitor data, messages, stack-frame local paths, or raw payloads.
+
+## Activation sequence
+
+1. Carl confirms the Sentry organization, billing owner, retention, quota, and
+   owner-only notification destination.
+2. Create separate browser and Worker projects unless a reviewed provider plan
+   proves one project preserves ownership and alert clarity.
+3. Store DSNs in Sites and the CI token only in the approved release secret
+   store. Store the service-hook secret and least-privilege Asana token only in
+   server runtime secrets.
+4. Enable provider-side IP removal and data scrubbing before the first test.
+5. Run `pnpm build:sentry` for the exact release and confirm no source map is
+   retrievable from a public URL.
+6. Enable exception transmission for a private verification release and inspect
+   deliberate browser and Worker events.
+7. Create new/regressed and sustained-rate alert rules, then test P0, P1,
+   resolution, regression, duplicate, and retry transitions.
+8. Verify sanitized Asana intake. Only then enable and observe one heartbeat run.
+9. Carl reviews the complete evidence packet and explicitly approves production
+   activation. Monitoring readiness does not activate public Jolene.
+
+## Monthly review
+
+Carl or the designated owner reviews alert volume/noise, unresolved and stale
+incidents, quota and spend, retention/deletion, access membership, token age,
+provider-side scrubbing, false deduplication, missed deliveries, heartbeat cost,
+and whether any incident exposed a new prohibited-data category. Record the
+dated review in PORT-OBS-000. Rotate or disable credentials through provider
+secret stores; never paste values into Asana, GitHub, Slack, or logs.
+
 ## Disable and rollback
 
 1. Set `NEXT_PUBLIC_SENTRY_ENABLED=false` for the next browser build.
 2. Remove or rotate `SENTRY_DSN` in the Worker secret store to stop server transmission.
 3. Roll back the portfolio using `PRODUCTION_OPERATIONS_RUNBOOK.md` if monitoring changes affect runtime health.
 4. Do not delete Sentry issues or suppress alerts until the incident record is preserved and Carl approves the action.
+5. Set `SENTRY_ASANA_INTAKE_ENABLED=false` to make intake return 404 without
+   affecting the public portfolio.
+6. Pause `Portfolio Sentry incident triage` to stop agent remediation. This does
+   not disable Sentry alert collection or alter existing incidents.
 
 ## Still required before activation
 
