@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "1.0.0",
+  "status": "template",
+  "participantId": "HM-00",
+  "audienceClass": "hiring_manager",
+  "round": "formative",
+  "viewportClass": "desktop",
+  "siteVersion": 0,
+  "commitSha": "0000000000000000000000000000000000000000",
+  "corpusVersion": "fixture:public-career-evidence-v1",
+  "consent": false,
+  "tasks": [
+    {
+      "task": "positioning",
+      "outcome": "not_run",
+      "elapsedSeconds": 0,
+      "facilitatorHelp": false
+    }
+  ],
+  "findings": [],
+  "retention": {
+    "containsPersonalData": false,
+    "containsRawJobDescription": false,
+    "containsTranscript": false,
+    "workingNotesDeleteBy": "YYYY-MM-DD"
+  }
+}
