@@ -16,7 +16,7 @@ export function EvidenceTargetObserver() {
       const target = currentEvidenceTarget();
       if (!target) return;
       target.focus({ preventScroll: true });
-      setAnnouncement(`Supporting evidence: ${target.getAttribute('aria-label') || 'selected evidence'}`);
+      setAnnouncement(`Opened: ${target.getAttribute('aria-label') || 'selected example'}`);
     };
 
     focusTarget();

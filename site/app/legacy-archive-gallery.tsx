@@ -14,8 +14,8 @@ export function LegacyArchiveGallery() {
         </div>
         <p>
           These surviving artifacts show the range behind the current practice: interactive
-          development, visual systems, mobile UI, campaigns, and product storytelling. Every
-          caption names Carl’s supported role without turning team work into sole authorship.
+          development, visual systems, mobile UI, campaigns, and product storytelling. Together,
+          they trace the visual and technical instincts that still shape Carl’s work.
         </p>
       </header>
 

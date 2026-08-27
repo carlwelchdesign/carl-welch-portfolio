@@ -158,6 +158,14 @@ test('contact page invites conversation without internal policy copy', async ({ 
   );
 });
 
+test('visitor-facing routes avoid internal editorial and evidence-system language', async ({ page }) => {
+  const rejectedCopy = /supported role|reviewed image record|reviewed public evidence only|public corpus|evidence model|view evidence map|claim limitations|requirement evidence|current résumé|message collection/i;
+  for (const route of ['/', '/about', '/archive', '/capabilities', '/work', '/contact', '/recommendations']) {
+    await page.goto(route);
+    await expect(page.locator('body')).not.toContainText(rejectedCopy);
+  }
+});
+
 test('reduced motion preserves content and suppresses looping animation', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');

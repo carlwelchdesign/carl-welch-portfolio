@@ -162,7 +162,7 @@ export function JoleneJobFit({
 
                 {sources.length > 0 ? (
                   <div className="jolene-job-fit-evidence">
-                    <strong>Supporting evidence</strong>
+                    <strong>Open the sources</strong>
                     {sources.map((citation) => (
                       <JoleneCitationLink
                         citation={citation}
@@ -181,7 +181,7 @@ export function JoleneJobFit({
 
                 {requirement.limitations.length > 0 ? (
                   <div className="jolene-job-fit-limitations">
-                    <strong>Limitations</strong>
+                    <strong>What this doesn’t establish</strong>
                     <ul>{requirement.limitations.map((limitation) => <li key={limitation}>{limitation}</li>)}</ul>
                   </div>
                 ) : null}
@@ -239,7 +239,7 @@ export function JoleneJobFit({
         Email addresses, phone numbers, private file paths, and credential-like strings are removed before comparison. The description is not saved.
       </p>
       {error ? <p className="jolene-contact-error" role="alert">{error}</p> : null}
-      {waiting ? <p className="jolene-waiting" role="status">Checking requirement evidence…</p> : null}
+      {waiting ? <p className="jolene-waiting" role="status">Comparing the role with Carl’s work…</p> : null}
       <button type="submit" disabled={waiting || !draft.trim()}>{waiting ? 'Comparing…' : 'Compare requirements'}</button>
     </form>
   );

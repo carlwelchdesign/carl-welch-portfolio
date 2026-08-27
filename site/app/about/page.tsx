@@ -38,7 +38,7 @@ export default function AboutPage() {
                 Product teams added a different responsibility: shared systems, maintainable code,
                 testing, documentation, leadership, and the long life of a decision after launch.
                 My current work brings both sides together in applied AI, aviation, audio software,
-                and products with explicit operating boundaries.
+                and products where behavior, limits, and consequences have to be clear.
               </p>
             </div>
           </section>

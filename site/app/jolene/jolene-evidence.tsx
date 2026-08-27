@@ -31,6 +31,12 @@ const maturityLabels: Record<ProjectMaturity, string> = {
   released_product: 'Released product',
 };
 
+const strengthLabels = {
+  strong: 'Direct support',
+  moderate: 'Supporting context',
+  limited: 'Related context',
+} as const;
+
 export function JoleneCitationLink({
   citation,
   corpusVersion,
@@ -51,7 +57,7 @@ export function JoleneCitationLink({
     <>
       <span>{citation.title}</span>
       <small>
-        {citation.sourceType.replaceAll('_', ' ')} · {citation.strength} · {maturityLabels[citation.maturity]}
+        {citation.sourceType.replaceAll('_', ' ')} · {strengthLabels[citation.strength]} · {maturityLabels[citation.maturity]}
       </small>
     </>
   );
@@ -66,10 +72,10 @@ export function JoleneCitationLink({
   }
 
   const statusLabels = {
-    review_required: 'Not published — review required',
-    revoked: 'Evidence revoked',
-    version_mismatch: 'Evidence map needs an update',
-    unavailable: 'Evidence unavailable',
+    review_required: 'This source is not published',
+    revoked: 'This source is no longer available',
+    version_mismatch: 'This source link needs an update',
+    unavailable: 'Source unavailable',
   } as const;
 
   return (
@@ -104,9 +110,9 @@ export function JoleneEvidence({ evidence }: JoleneEvidenceProps) {
                 <li key={claim.claimId}>
                   <details className="jolene-claim">
                     <summary>
-                      <span>Claim {String(index + 1).padStart(2, '0')}</span>
+                      <span>Point {String(index + 1).padStart(2, '0')}</span>
                       <strong>{claim.text}</strong>
-                      <small>{claim.evidenceStrength} · {maturityLabels[claim.maturity]}</small>
+                      <small>{strengthLabels[claim.evidenceStrength]} · {maturityLabels[claim.maturity]}</small>
                     </summary>
                     <div className="jolene-claim-body">
                       <p className="jolene-strength-note">
@@ -114,7 +120,7 @@ export function JoleneEvidence({ evidence }: JoleneEvidenceProps) {
                       </p>
 
                       <div className="jolene-claim-sources">
-                        <strong>Supporting sources</strong>
+                        <strong>Open the sources</strong>
                         {claimCitations.map((citation) => (
                           <JoleneCitationLink
                             citation={citation}
@@ -128,7 +134,7 @@ export function JoleneEvidence({ evidence }: JoleneEvidenceProps) {
 
                       {claim.limitations.length > 0 ? (
                         <div className="jolene-claim-limitations">
-                          <strong>Claim limitations</strong>
+                          <strong>What this doesn’t establish</strong>
                           <ul>
                             {claim.limitations.map((limitation) => <li key={limitation}>{limitation}</li>)}
                           </ul>

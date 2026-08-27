@@ -73,7 +73,7 @@ export function PortfolioHome() {
               ))}
             </ol>
             <Link className="primary-action dark-action" href="/capabilities">
-              View evidence map <span aria-hidden="true">→</span>
+              Explore capabilities <span aria-hidden="true">→</span>
             </Link>
           </section>
 

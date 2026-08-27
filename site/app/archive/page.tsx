@@ -43,7 +43,7 @@ export default function ArchivePage() {
                     <p>{chapter.summary}</p>
                   </div>
                   <div className="career-chapter-proof">
-                    <ul aria-label={`${chapter.title} evidence themes`}>
+                    <ul aria-label={`${chapter.title} themes`}>
                       {chapter.proof.map((item) => <li key={item}>{item}</li>)}
                     </ul>
                     <Link href={chapter.href}>{chapter.linkLabel} <span aria-hidden="true">→</span></Link>
@@ -59,12 +59,12 @@ export default function ArchivePage() {
 
           <section className="earlier-practice-panel" data-tone="green" aria-labelledby="earlier-practice-title">
             <header>
-              <p className="eyebrow">Earlier professional record</p>
+              <p className="eyebrow">Earlier professional work</p>
               <h2 id="earlier-practice-title">Studios, agencies, client teams, and technical environments.</h2>
               <p>
-                The public record spans studios, agencies, client teams, software organizations,
-                and technical environments. The visual archive above presents the complete
-                reviewed image record Carl selected to tell that story.
+                The path spans studios, agencies, client teams, software organizations, and
+                technical environments. The work above shows how that range became the practice
+                Carl brings to products today.
               </p>
             </header>
             <div className="earlier-practice-grid">

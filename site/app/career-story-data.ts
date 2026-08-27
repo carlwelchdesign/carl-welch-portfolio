@@ -60,7 +60,7 @@ export const careerChapters: CareerChapter[] = [
     period: 'Current independent work',
     title: 'The threads now meet in the same products.',
     summary:
-      'Current work combines product engineering with applied AI, geospatial systems, audio software, evidence design, and explicit operating boundaries. The visual and technical decisions happen together.',
+      'Current work combines product engineering with applied AI, geospatial systems, and audio software. The same attention to interaction, clarity, and craft now operates across full product systems.',
     proof: ['Applied AI', 'Geospatial systems', 'Audio software + DSP'],
     href: '/work',
     linkLabel: 'Inspect current work',

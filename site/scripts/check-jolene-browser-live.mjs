@@ -52,7 +52,7 @@ try {
     return target instanceof HTMLElement && document.activeElement === target;
   });
   assert.equal(targetFocused, true, 'citation target must resolve and receive focus');
-  await page.getByText(/^Supporting evidence:/).waitFor();
+  await page.getByText(/^Opened:/).waitFor();
   await page.screenshot({ path: '/tmp/port-jol-010-live-mobile.png', fullPage: true });
   console.log('Live Jolene browser check passed: mobile launcher, answer evidence, job-fit, citation focus, accessibility, and console health.');
 } finally {

@@ -58,7 +58,7 @@ export default function CapabilitiesPage() {
                     </ul>
 
                     <div className="capability-evidence">
-                      <p className="eyebrow">Supporting evidence</p>
+                      <p className="eyebrow">See it in the work</p>
                       <ArchitectureFlow className="capability-evidence-links">
                         {capability.evidence.map((evidence) => {
                           const content = (

@@ -59,6 +59,12 @@ for (const rejectedLine of [
   'Reviewed public evidence only',
   'No private memory, Obsidian access, or transcript retention',
   'Public corpus ·',
+  'caption names Carl’s supported role',
+  'complete reviewed image record',
+  'A curated public-repository selection reviewed on',
+  'View evidence map',
+  'Claim limitations',
+  'Requirement evidence',
 ]) {
   assert.equal(publicSource.includes(rejectedLine), false, `Rejected portfolio copy returned: ${rejectedLine}`);
 }
