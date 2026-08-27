@@ -8,6 +8,17 @@ const origin = new URL(rawOrigin);
 assert.equal(origin.protocol, 'https:', 'Production verification requires HTTPS.');
 assert(!['localhost', '127.0.0.1', '::1'].includes(origin.hostname), 'Production verification cannot target loopback.');
 
+const productionResponse = await fetch(origin);
+assert.equal(productionResponse.status, 200, 'Production origin did not return 200.');
+const productionHeaders = productionResponse.headers;
+assert.match(productionHeaders.get('content-security-policy') ?? '', /default-src 'self'/);
+assert.match(productionHeaders.get('content-security-policy') ?? '', /frame-ancestors 'none'/);
+assert.match(productionHeaders.get('strict-transport-security') ?? '', /max-age=31536000/);
+assert.equal(productionHeaders.get('x-content-type-options'), 'nosniff');
+assert.equal(productionHeaders.get('x-frame-options'), 'DENY');
+assert.equal(productionHeaders.get('referrer-policy'), 'strict-origin-when-cross-origin');
+assert.match(productionHeaders.get('permissions-policy') ?? '', /camera=\(\)/);
+
 const profiles = [
   {
     name: 'desktop',

@@ -1,12 +1,23 @@
 import * as Sentry from '@sentry/cloudflare';
 import app from 'vinext/server/app-router-entry';
 import { scrubSentryBreadcrumb, scrubSentryEvent } from './app/observability/sentry-policy.mjs';
+import { applyPortfolioSecurityHeaders } from './app/security/response-policy.mjs';
 
 type PortfolioWorkerEnv = {
   ASSETS?: { fetch(request: Request): Promise<Response> | Response };
   SENTRY_DSN?: string;
   SENTRY_ENVIRONMENT?: string;
   SENTRY_RELEASE?: string;
+};
+
+const hardenedApp = {
+  async fetch(
+    request: Request,
+    env?: PortfolioWorkerEnv,
+    context?: Parameters<typeof app.fetch>[2],
+  ): Promise<Response> {
+    return applyPortfolioSecurityHeaders(await app.fetch(request, env, context));
+  },
 };
 
 export default Sentry.withSentry<PortfolioWorkerEnv>(
@@ -30,6 +41,5 @@ export default Sentry.withSentry<PortfolioWorkerEnv>(
       },
     };
   },
-  app,
+  hardenedApp,
 );
-
