@@ -259,8 +259,11 @@ export const earlierExperience = [
 
 export const recommendationReview = {
   candidateCount: 13,
+  sourceObservedAt: '2026-08-27T02:40:37Z',
+  sourceUrl: 'https://www.linkedin.com/in/carlwelch/details/recommendations/',
+  reconciliationState: 'source_verified_publication_pending',
   description:
-    'Thirteen candidate recommendations are present in the working evidence set and available on the review route. Public indexing remains off until the official LinkedIn export, attribution, wording, and publication approval are reconciled.',
+    'All thirteen received recommendations were reconciled against Carl’s authenticated LinkedIn profile, including attribution, current headline, relationship, date, exact wording, and public visibility. Portfolio publication approval remains a separate gate.',
 };
 
 export function getProject(slug: string) {

@@ -81,7 +81,7 @@ const pageExpectations = [
   ['/work', `${githubProjects.length} public repositories`],
   ['/capabilities', 'What I do, and the work behind it'],
   ['/experience', 'Professional history'],
-  ['/recommendations', 'LinkedIn recommendation candidates'],
+  ['/recommendations', 'Source-verified LinkedIn recommendations'],
   ['/contact', 'carlwelchdesign@gmail.com'],
   ...projects.map((project) => [`/work/${project.slug}`, project.name]),
 ];
