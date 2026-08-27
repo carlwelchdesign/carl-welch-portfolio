@@ -87,7 +87,8 @@ for (const source of [manifestSource, inventory]) {
 
 assert.equal(manifest.items.every(({ publicationState }) => publicationState === 'public_approved'), true);
 assert.match(inventory, /2006 Webby Awards Honoree/);
-assert.match(inventory, /must never say Carl personally won a Webby/i);
+assert.match(inventory, /2006 Graphic Design USA Certificate of Excellence in Communication and Graphic Design/);
+assert.match(inventory, /must not present either as Carl’s individual award/i);
 assert.match(inventory, /Twelve bounded project records and nineteen selected images have been copied into `public\/archive\/`/);
 assert.match(inventory, /complete reviewed visual archive/i);
 

@@ -97,6 +97,8 @@ test('career portrait connects the homepage to the selected archive and earlier 
   await expect(page).toHaveURL('/archive');
   await expect(page.getByRole('heading', { level: 1, name: 'The work behind the current work' })).toBeVisible();
   await expect(page.locator('#yuco')).toContainText('yU+co studio website');
+  await expect(page.locator('#yuco')).toContainText('Graphic Design USA Certificate of Excellence in Communication and Graphic Design');
+  await expect(page.locator('#yuco')).toContainText('2006 Webby Awards Honoree');
   await expect(page.getByRole('heading', { name: 'More visual work across the years.' })).toBeVisible();
   await expect(page.locator('.legacy-gallery-grid > li')).toHaveCount(11);
   await expect(page.locator('.selected-archive-art img, .legacy-gallery-grid img')).toHaveCount(19);

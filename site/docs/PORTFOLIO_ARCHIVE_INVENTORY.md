@@ -22,7 +22,7 @@ Private message bodies, sender names, addresses, message identifiers, and filesy
 
 | Rank | Candidate | Why it belongs in review | Current gate |
 | ---: | --- | --- | --- |
-| 1 | yU+co studio website | Strong interaction-engineering history, surviving artifact, private contribution corroboration, and team-level Webby recognition | Public approved; team attribution required |
+| 1 | yU+co studio website | Strong interaction-engineering history, surviving artifact, contribution corroboration, and two 2006 site/team recognitions | Public approved; team attribution required |
 | 2 | TASER AXON / Evidence.com interface | Finished evidence-workflow and product-interface work | Public approved; completed interface wording required |
 | 3 | Magento Go homepage | Clear senior-design assignment and legible full-page artifact | Public approved; scope wording required |
 | 4 | Fox A Year of a Million Moments | Full surviving visual plus implementation corroboration | Public approved; team context required |
@@ -57,7 +57,7 @@ Each approved archive card should contain:
 - one evidence note that distinguishes first-party, private-corroborated, and independently recognized facts; and
 - a visible historical-context label so visitors do not mistake old technology for Carl's current stack.
 
-The yU+co item can carry the exact phrase **2006 Webby Awards Honoree** only when the text makes clear that the site and team received the recognition. It must never say Carl personally won a Webby.
+The yU+co item records two separate recognitions: a **2006 Graphic Design USA Certificate of Excellence in Communication and Graphic Design** and **2006 Webby Awards Honoree** status. The recognitions belong to the site and team; the portfolio must not present either as Carl’s individual award.
 
 ## Recorded approval and remaining boundaries
 

@@ -40,6 +40,7 @@ assert.equal(
   'Messaging brief must not contain an email address.',
 );
 assert.match(brief, /Webby Awards Honoree/);
+assert.match(brief, /Graphic Design USA Certificate of Excellence in Communication and Graphic Design/);
 assert.match(brief, /original Gmail threads and any image permissions must be rechecked before publication/i);
 if (releaseGates) {
   assert.match(releaseGates, /\| LinkedIn recommendation provenance and publication .*\| passed \|/);

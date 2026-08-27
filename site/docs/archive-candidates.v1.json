@@ -11,14 +11,14 @@
       "id": "archive-yuco-2006", "rank": 1, "project": "yU+co studio website", "period": "2006-2007", "role": "Interactive developer",
       "contribution": "The legacy portfolio records Flash AS2, video, a multi-user server, and XML. Private correspondence review corroborates later restoration and streaming work, but not sole authorship of the full site.",
       "technology": ["ActionScript 2", "Flash video", "XML", "multi-user server"], "evidenceLevel": "first_party_plus_private_corroboration",
-      "independentRecognition": "The studio site was a 2006 Webby Awards Honoree; the recognition belongs to the site and team, not to Carl individually.",
-      "publicationState": "public_approved", "rightsNote": "Carl approved archival display on 2026-08-27. Preserve team attribution and do not imply sole authorship or a personal Webby win.",
+      "independentRecognition": "The studio site received a 2006 Graphic Design USA Certificate of Excellence in Communication and Graphic Design and was named a 2006 Webby Awards Honoree. Both recognitions belong to the site and team, not to Carl individually.",
+      "publicationState": "public_approved", "rightsNote": "Carl approved archival display on 2026-08-27. Preserve team attribution and do not imply sole authorship or personal receipt of either award.",
       "asset": {"sourceLocator": "legacy:carlsite/images/samples/YUCO-SCREENSHOTS-sm.gif", "sha256": "7e173ec2297bcbbfb498db2aa5633a0ac3b0f370e121133103bcba54c10317ed", "width": 620, "height": 462, "bytes": 38531, "format": "gif"},
       "publicAsset": {"path": "/archive/yuco-studio-site.png", "sha256": "bf7a8b141f6a12ee4627caaa74db91a56982def9403c75db0a6fa89566dfca40", "width": 620, "height": 400, "format": "png", "derivativeNote": "Static crop removes the obsolete studio contact footer."},
       "captionDraft": "An archived frame from the yU+co studio website, where Carl contributed interactive development using ActionScript 2, video, XML, and multi-user technology.",
       "altTextDraft": "Minimal white yU+co website interface with branching navigation labeled Work, Clients, and News.",
       "presentationNote": "Inspect every GIF frame before use; preserve the restrained white composition and avoid upscaling.",
-      "prohibitedInference": "Do not say Carl won a Webby, designed the entire site, or was its sole developer."
+      "prohibitedInference": "Do not say Carl personally received either award, designed the entire site, or was its sole developer."
     },
     {
       "id": "archive-taser-axon-2009", "rank": 2, "project": "TASER AXON / Evidence.com interface", "period": "2009", "role": "Interactive developer",

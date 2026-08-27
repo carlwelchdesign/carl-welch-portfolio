@@ -37,7 +37,7 @@ export const legacyArchiveProjects: LegacyArchiveProject[] = [
       height: 400,
     },
     evidenceNote:
-      'Documented in Carl’s preserved portfolio and corroborated by historical correspondence. The site and team were a 2006 Webby Awards Honoree.',
+      'Documented in Carl’s preserved portfolio and corroborated by historical correspondence. The site received a 2006 Graphic Design USA Certificate of Excellence in Communication and Graphic Design and was named a 2006 Webby Awards Honoree.',
     display: 'feature',
   },
   {
