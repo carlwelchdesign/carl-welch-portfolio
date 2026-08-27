@@ -54,6 +54,15 @@ export function applyPortfolioSecurityHeaders(response, requestUrl) {
   for (const [name, value] of Object.entries(portfolioSecurityHeadersForUrl(requestUrl))) {
     headers.set(name, value);
   }
+
+  // Each build fingerprints its CSS and JavaScript filenames. Revalidate HTML
+  // so a cached document cannot keep pointing at assets from an older build.
+  // Fingerprinted static assets retain the immutable cache policy set by the
+  // runtime.
+  if (headers.get('content-type')?.toLowerCase().includes('text/html')) {
+    headers.set('Cache-Control', 'no-cache');
+  }
+
   return new Response(response.body, {
     status: response.status,
     statusText: response.statusText,

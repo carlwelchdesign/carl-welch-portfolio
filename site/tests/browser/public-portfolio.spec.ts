@@ -43,6 +43,7 @@ for (const route of routes) {
     expect(responseHeaders['content-security-policy']).not.toContain('upgrade-insecure-requests');
     expect(responseHeaders['strict-transport-security']).toBeUndefined();
     expect(response?.headers()['x-frame-options']).toBe('DENY');
+    expect(responseHeaders['cache-control']).toBe('no-cache');
     await expectCorePageContract(page);
 
     const results = await new AxeBuilder({ page })
