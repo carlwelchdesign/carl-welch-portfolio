@@ -37,6 +37,9 @@ assert.match(readme, /production configuration remains disabled/i);
 assert.match(audit, /14\/14 Playwright/);
 assert.match(audit, /9\/9 blockers passed/);
 assert.match(audit, /zero automated contact intents/);
+assert.match(audit, /PR #63 adds bearer verification/);
+assert.match(audit, /managed production secret/);
+assert.match(readme, /server-only upstream token/);
 
 for (const staleClaim of [
   'proposed public evidence export and isolated public delegate endpoints are not verified live',
