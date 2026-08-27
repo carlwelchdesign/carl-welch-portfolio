@@ -260,6 +260,24 @@ try {
   assert.deepEqual(upstreamCalls.map((call) => call.method), ['POST', 'GET']);
   assert.ok(upstreamCalls.every((call) => call.authorization === 'Bearer fixture-server-token'));
 
+  let unauthorizedAttempts = 0;
+  const unauthorized = await handler.handlePublicJoleneBff(
+    request('answer', 'POST', { question: 'What does Carl build?' }),
+    'answer',
+    {
+      environment,
+      admission: admission(policy),
+      fetchImpl: async () => {
+        unauthorizedAttempts += 1;
+        return json({ error: 'unauthorized' }, 401);
+      },
+      logger: () => {},
+    },
+  );
+  assert.equal(unauthorized.status, 503);
+  assert.deepEqual(await unauthorized.json(), { error: 'unavailable' });
+  assert.equal(unauthorizedAttempts, 1, 'credential failures must not retry or disclose upstream authentication details');
+
   const stale = await handler.handlePublicJoleneBff(
     request('answer', 'POST', { question: 'What does Carl build?' }),
     'answer',
