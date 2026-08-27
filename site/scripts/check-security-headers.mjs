@@ -57,12 +57,24 @@ assert.equal(hardened.headers.get('x-frame-options'), 'DENY');
 assert.equal(await hardened.text(), 'preserved body');
 
 const localResponse = applyPortfolioSecurityHeaders(
-  new Response('local preview'),
+  new Response('local preview', { headers: { 'Content-Type': 'text/html; charset=utf-8' } }),
   'http://192.168.1.127:4173/',
 );
 assert.doesNotMatch(localResponse.headers.get('content-security-policy') ?? '', /upgrade-insecure-requests/);
 assert.equal(localResponse.headers.has('strict-transport-security'), false);
 assert.equal(localResponse.headers.has('cross-origin-opener-policy'), false);
+assert.equal(localResponse.headers.get('cache-control'), 'no-cache');
 assert.equal(await localResponse.text(), 'local preview');
+
+const staticResponse = applyPortfolioSecurityHeaders(
+  new Response('body { color: black; }', {
+    headers: {
+      'Cache-Control': 'public, max-age=31536000, immutable',
+      'Content-Type': 'text/css; charset=utf-8',
+    },
+  }),
+  'https://portfolio.example/_next/static/css/index.hash.css',
+);
+assert.equal(staticResponse.headers.get('cache-control'), 'public, max-age=31536000, immutable');
 
 console.log('Portfolio security-header policy passed');
