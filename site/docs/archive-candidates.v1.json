@@ -142,8 +142,8 @@
     },
     {
       "id": "archive-ignite-class-2012", "rank": 12, "project": "Ignite Creative Learning programming instruction", "period": "2012", "role": "Programming instructor",
-      "contribution": "Private source review supports hands-on programming instruction and Scratch use. The legacy archive includes eight small classroom photographs.",
-      "technology": ["Scratch", "programming instruction"], "evidenceLevel": "private_source_corroboration", "independentRecognition": null,
+      "contribution": "Carl provided hands-on programming instruction using Scratch (MIT) and JavaScript. The legacy archive includes eight small classroom photographs.",
+      "technology": ["Scratch (MIT)", "JavaScript", "programming instruction"], "evidenceLevel": "first_party_plus_private_corroboration", "independentRecognition": null,
       "publicationState": "public_approved", "rightsNote": "Carl explicitly approved publication of all eight archived classroom photographs on 2026-08-27.",
       "assets": [
         {"sourceLocator": "legacy:carlsite/img/ignite-class/1.jpg", "sha256": "3e41c809f668027684d97c61d049803a502132167516be7136dd496e96e68b23", "width": 170, "height": 170, "bytes": 30070, "format": "jpg"},
