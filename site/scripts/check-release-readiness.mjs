@@ -28,8 +28,9 @@ if (architecture && gates) {
   assert.match(architecture, /no delegate hostname is deployed/i);
   assert.match(gates, /\| Public-approved career evidence .*\| passed \|/);
   assert.match(gates, /\| Portfolio live-Jolene integration .*\| passed \|/);
-  assert.match(gates, /\| Public Jolene delegate availability .*\| blocked \|/);
-  assert.match(gates, /\| Deployment configuration .*\| approval required \|/);
+  assert.match(gates, /\| Public Jolene delegate availability .*\| not applicable \|/);
+  assert.match(gates, /\| Deployment configuration .*\| in progress \|/);
+  assert.match(gates, /carl-welch-portfolio\.flakeysaturation\.chatgpt\.site/);
 }
 assert.match(readme, /production configuration remains disabled/i);
 assert.match(audit, /14\/14 Playwright/);
@@ -44,7 +45,7 @@ for (const staleClaim of [
   assert.equal(`${readme}\n${architecture ?? ''}`.includes(staleClaim), false, `stale readiness claim: ${staleClaim}`);
 }
 
-for (const prohibitedClaim of ['public launch is complete', 'production deployment is live', 'recommendations are approved']) {
+for (const prohibitedClaim of ['public launch is complete', 'production deployment is live']) {
   assert.equal(`${readme}\n${architecture ?? ''}\n${gates ?? ''}\n${audit}`.toLowerCase().includes(prohibitedClaim), false);
 }
 

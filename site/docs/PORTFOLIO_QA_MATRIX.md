@@ -3,6 +3,8 @@
 Last updated: 2026-08-26  
 Ticket: `PORT-QA-001`
 
+Assigned production origin: `https://carl-welch-portfolio.flakeysaturation.chatgpt.site`. Exact-origin metadata and post-deployment smoke checks remain part of the final publish step.
+
 This record separates automated production checks from the physical-device and assistive-technology checks that still require human review.
 
 ## Automated production checks
