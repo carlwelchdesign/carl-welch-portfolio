@@ -176,10 +176,28 @@ export const projects: PortfolioProject[] = [
       width: 1440,
       height: 1000,
     },
-    galleryTitle: 'One system, two viewing modes',
+    galleryTitle: 'Live traffic, replay, and route context',
     gallerySummary:
-      'The map-led desktop workspace carries the full operational picture; the mobile view distills replay status and aircraft telemetry into a focused vertical surface.',
+      'The map-led workspace brings regional traffic and weather together, deterministic replay makes the same interface reviewable on demand, and focused comparisons explain route tradeoffs without leaving the product.',
     gallery: [
+      {
+        src: '/projects/flight-tracker-ai/live-traffic-weather.png',
+        alt: 'Flight Tracker AI live San Francisco traffic map with aircraft positions, weather layers, a selected aircraft, and a regional flight list',
+        width: 1440,
+        height: 1000,
+        label: 'Live regional traffic',
+        caption: 'Live aircraft positions, observed trails, weather imagery, and the selected-aircraft view share one regional workspace.',
+        layout: 'wide',
+      },
+      {
+        src: '/projects/flight-tracker-ai/route-comparison.png',
+        alt: 'Flight Tracker AI route comparison explaining the distance and hazard-clearance tradeoff for a sample route option',
+        width: 1412,
+        height: 334,
+        label: 'Route comparison',
+        caption: 'A focused comparison translates modeled hazard clearance and added distance into a concise, readable tradeoff.',
+        layout: 'wide',
+      },
       {
         src: '/projects/flight-tracker-ai/mobile-replay.png',
         alt: 'Flight Tracker AI mobile replay interface showing replay controls and aircraft telemetry charts',

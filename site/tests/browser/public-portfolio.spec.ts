@@ -93,7 +93,7 @@ for (const viewport of mobileViewports) {
 
 for (const [route, expectedGalleryImages] of [
   ['/work/job-search-os', 7],
-  ['/work/flight-tracker-ai', 1],
+  ['/work/flight-tracker-ai', 3],
   ['/work/wave-factory-essentials', 5],
 ] as const) {
   test(`${route} keeps its repository media gallery intact on mobile`, async ({ page }) => {
