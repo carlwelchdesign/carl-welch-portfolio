@@ -120,6 +120,25 @@ export function PortfolioHome() {
           </section>
 
           <CharacterSignals />
+
+          <section className="home-closing" data-tone="green" aria-labelledby="home-closing-title">
+            <p className="eyebrow">Next step</p>
+            <div className="home-closing-copy">
+              <h2 id="home-closing-title">Let’s talk about what you’re building.</h2>
+              <p>
+                If you’re hiring for senior product engineering, need a technical partner for a
+                difficult interface, or want to talk through the work, I’d be glad to hear from you.
+              </p>
+              <div className="home-closing-actions">
+                <Link className="primary-action dark-action" href="/contact">
+                  Start a conversation <span aria-hidden="true">→</span>
+                </Link>
+                <a className="home-closing-resume" href="/carl-welch-resume.pdf" download>
+                  Résumé <span aria-hidden="true">↓</span>
+                </a>
+              </div>
+            </div>
+          </section>
         </main>
       </PageFrame>
     </MotionRuntime>

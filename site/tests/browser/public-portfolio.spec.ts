@@ -107,6 +107,20 @@ test('homepage gives recruiters a synchronized proof summary', async ({ page }) 
   expect(overflow).toBeLessThanOrEqual(0);
 });
 
+test('homepage closes with a direct recruiter next step', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 720 });
+  await page.goto('/');
+
+  const closing = page.getByRole('region', { name: 'Let’s talk about what you’re building.' });
+  await expect(closing).toContainText('If you’re hiring for senior product engineering');
+  await expect(closing.getByRole('link', { name: 'Start a conversation' })).toHaveAttribute('href', '/contact');
+  await expect(closing.getByRole('link', { name: 'Résumé' })).toHaveAttribute('href', '/carl-welch-resume.pdf');
+  await expect(closing.getByRole('link', { name: 'Résumé' })).toHaveAttribute('download', '');
+
+  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+  expect(overflow).toBeLessThanOrEqual(0);
+});
+
 for (const [route, expectedGalleryImages] of [
   ['/work/job-search-os', 6],
   ['/work/flight-tracker-ai', 3],
@@ -332,6 +346,8 @@ test('server-rendered navigation and content remain available without JavaScript
   await page.goto('/');
   await expectCorePageContract(page);
   await expect(page.getByRole('link', { name: 'View selected work' })).toBeVisible();
+  await expect(page.getByRole('region', { name: 'Let’s talk about what you’re building.' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Start a conversation' })).toHaveAttribute('href', '/contact');
 
   await page.goto('/work/job-search-os#project-gallery');
   await expect(page.locator('#project-gallery img')).toHaveCount(6);
