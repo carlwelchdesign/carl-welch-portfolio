@@ -114,6 +114,15 @@ test('career portrait connects the homepage to the selected archive and earlier 
   await expect(page.getByRole('link', { name: 'Archive', exact: true }).first()).toBeVisible();
 });
 
+test('recommendations read as professional testimony without publication audit copy', async ({ page }) => {
+  await page.goto('/recommendations');
+  await expectCorePageContract(page);
+  await expect(page.getByRole('heading', { level: 2, name: 'What people say' })).toBeVisible();
+  await expect(page.locator('body')).not.toContainText(
+    /verified from|source-verified|approved by carl|approved for publication|correction or removal/i,
+  );
+});
+
 test('reduced motion preserves content and suppresses looping animation', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');
