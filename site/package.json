@@ -13,6 +13,7 @@
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
     "check:metadata": "node scripts/check-metadata.mjs",
     "check:content": "node scripts/check-content.mjs",
+    "check:editorial": "node scripts/check-editorial-boundaries.mjs",
     "check:github": "node scripts/check-github-archive.mjs",
     "check:github-sync": "node scripts/check-github-content-sync.mjs",
     "sync:github": "node scripts/sync-github-content.mjs",
@@ -27,7 +28,7 @@
     "check:container": "node scripts/check-container.mjs",
     "check:routes": "node scripts/check-routes.mjs",
     "check:browser": "playwright test",
-    "check": "pnpm lint && pnpm check:metadata && pnpm check:content && pnpm check:github-sync && pnpm check:jolene-contract && pnpm check:jolene-job-fit && pnpm check:jolene-bff && pnpm check:analytics && pnpm check:release-readiness && pnpm build"
+    "check": "pnpm lint && pnpm check:metadata && pnpm check:content && pnpm check:editorial && pnpm check:github-sync && pnpm check:jolene-contract && pnpm check:jolene-job-fit && pnpm check:jolene-bff && pnpm check:analytics && pnpm check:release-readiness && pnpm build"
   },
   "dependencies": {
     "@vitejs/plugin-react": "6.0.2",
