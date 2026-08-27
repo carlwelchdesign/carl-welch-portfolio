@@ -397,7 +397,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .jolene-launcher > span:last-child { display: grid; gap: 2px; }
 .jolene-launcher small { color: var(--muted); font: 9px var(--font-geist-mono), monospace; letter-spacing: 0.1em; text-transform: uppercase; }
 .jolene-launcher:hover small { color: #565d54; }
-.jolene-panel { position: absolute; right: 0; bottom: 0; width: min(430px, calc(100vw - 40px)); max-height: min(720px, calc(100svh - 40px)); display: grid; grid-template-rows: auto auto auto minmax(160px, 1fr) auto; overflow: hidden; border: 1px solid rgba(242, 242, 235, 0.72); background: var(--ink); box-shadow: 0 24px 80px rgba(0, 0, 0, 0.42); }
+.jolene-panel { position: absolute; right: 0; bottom: 0; width: min(430px, calc(100vw - 40px)); height: min(860px, calc(100svh - 40px)); max-height: calc(100svh - 40px); display: grid; grid-template-rows: auto auto auto minmax(160px, 1fr) auto; overflow: hidden; border: 1px solid rgba(242, 242, 235, 0.72); background: var(--ink); box-shadow: 0 24px 80px rgba(0, 0, 0, 0.42); }
 .jolene-panel[data-mode='job'] { width: min(580px, calc(100vw - 40px)); }
 .jolene-panel-header { min-height: 104px; padding: 20px; display: flex; justify-content: space-between; gap: 20px; align-items: flex-start; background: var(--jolene-accent); color: var(--ink); }
 .jolene-panel-header p, .jolene-panel-header h2 { margin: 0; }
@@ -633,7 +633,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .footer-links { align-items: flex-start; flex-direction: column; }
   .jolene-fixture { right: max(12px, env(safe-area-inset-right)); bottom: max(12px, env(safe-area-inset-bottom)); }
   .jolene-launcher { min-height: 54px; }
-  .jolene-panel { position: fixed; right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); left: 12px; width: auto; max-height: calc(100svh - 24px - env(safe-area-inset-top)); }
+  .jolene-panel { position: fixed; right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); left: 12px; width: auto; height: calc(100svh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); max-height: calc(100svh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); }
   .jolene-panel[data-mode='job'] { width: auto; }
   .jolene-panel-header { min-height: 92px; }
   .jolene-panel-header h2 { font-size: 30px; }
