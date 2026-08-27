@@ -62,9 +62,11 @@ function evidenceFor(
 
 export function JoleneJobFit({
   adapter,
+  mode,
   onAskQuestion,
 }: {
   adapter: Pick<PublicJoleneAdapter, 'compareJob'>;
+  mode: 'fixture' | 'live';
   onAskQuestion: (question: string) => void;
 }) {
   const [draft, setDraft] = useState('');
@@ -165,14 +167,16 @@ export function JoleneJobFit({
                       <JoleneCitationLink
                         citation={citation}
                         corpusVersion={response.corpusVersion}
-                        expectedCorpusVersion={PUBLIC_JOLENE_FIXTURE_CORPUS_VERSION}
+                        expectedCorpusVersion={mode === 'fixture'
+                          ? PUBLIC_JOLENE_FIXTURE_CORPUS_VERSION
+                          : response.corpusVersion}
                         revokedEvidenceIds={[]}
                         key={citation.evidenceId}
                       />
                     ))}
                   </div>
                 ) : (
-                  <p className="jolene-job-fit-no-source">No public-approved fixture evidence cited.</p>
+                  <p className="jolene-job-fit-no-source">No reviewed public evidence cited.</p>
                 )}
 
                 {requirement.limitations.length > 0 ? (
@@ -200,7 +204,7 @@ export function JoleneJobFit({
           </div>
         ) : null}
 
-        <p className="jolene-corpus-version">Public fixture corpus · {response.corpusVersion}</p>
+        <p className="jolene-corpus-version">Public {mode === 'fixture' ? 'fixture ' : ''}corpus · {response.corpusVersion}</p>
       </section>
     );
   }
@@ -210,7 +214,7 @@ export function JoleneJobFit({
       <p className="jolene-contact-kicker">Requirement evidence</p>
       <h3 id="jolene-job-fit-title">Paste a job description</h3>
       <p className="jolene-job-fit-policy">
-        Jolene will classify individual requirements against reviewed public fixture evidence. She will not invent a qualification or issue a fit score.
+        Jolene will classify individual requirements against reviewed public evidence. She will not invent a qualification or issue a fit score.
       </p>
       <label htmlFor="jolene-job-description">Job description</label>
       <textarea
