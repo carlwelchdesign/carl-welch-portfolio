@@ -42,6 +42,7 @@ export function buildGitHubReview({
   repositoryIds,
   snapshotReview,
   liveRepositories,
+  excludedRepositoryIds = [],
   mediaStatus = new Map(),
   sourceObservedAt,
 }) {
@@ -50,6 +51,11 @@ export function buildGitHubReview({
   }
   if (Date.parse(sourceObservedAt) <= Date.parse(snapshotReview.sourceObservedAt)) {
     throw new Error(`Refusing stale GitHub observation ${sourceObservedAt}; current snapshot was reviewed at ${snapshotReview.sourceObservedAt}.`);
+  }
+
+  const excludedIds = new Set(excludedRepositoryIds);
+  if (excludedIds.size !== excludedRepositoryIds.length || [...excludedIds].some((id) => !Number.isInteger(id))) {
+    throw new Error('Excluded repository IDs must be unique integers.');
   }
 
   const snapshotById = new Map();
@@ -99,7 +105,7 @@ export function buildGitHubReview({
   }
 
   for (const [repositoryId, live] of liveById) {
-    if (!snapshotById.has(repositoryId)) {
+    if (!snapshotById.has(repositoryId) && !excludedIds.has(repositoryId)) {
       changes.push(proposal('added', repositoryId, live.name, {
         after: live,
         publicationImpact: 'editorial-review-required',

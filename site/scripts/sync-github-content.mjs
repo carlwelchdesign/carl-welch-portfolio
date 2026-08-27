@@ -30,7 +30,7 @@ if (args.apply) {
   process.exit(0);
 }
 
-const { githubProjects, githubRepositoryIds, githubSnapshotReview } = await loadTypescriptData(contentPath);
+const { githubProjects, githubPortfolioExclusions, githubRepositoryIds, githubSnapshotReview } = await loadTypescriptData(contentPath);
 const { repositories, sourceObservedAt } = await fetchRepositories(owner);
 const mediaStatus = await inspectArchiveMedia(githubProjects);
 const review = buildGitHubReview({
@@ -38,6 +38,7 @@ const review = buildGitHubReview({
   repositoryIds: githubRepositoryIds,
   snapshotReview: githubSnapshotReview,
   liveRepositories: normalizeLiveRepositories(repositories),
+  excludedRepositoryIds: githubPortfolioExclusions.map(({ repositoryId }) => repositoryId),
   mediaStatus,
   sourceObservedAt,
 });

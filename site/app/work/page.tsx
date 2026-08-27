@@ -20,7 +20,7 @@ export default function WorkPage() {
           <PageIntro
             eyebrow="Work / 2026"
             title="Selected work"
-            summary={`Three detailed case studies, followed by all ${githubProjects.length} public repositories. Status, constraints, and older work remain visible instead of being rewritten as equal flagship projects.`}
+            summary={`Three detailed case studies, followed by ${githubProjects.length} selected public repositories. Status, constraints, and older work remain visible instead of being rewritten as equal flagship projects.`}
           />
           {projects.map((project, index) => (
             <ProjectChapter key={project.slug} project={project} priority={index === 0} />
