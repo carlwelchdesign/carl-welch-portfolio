@@ -5,6 +5,7 @@ import { careerChapters, characterSignals } from './career-story-data';
 import { contact } from './contact-data';
 import type { ArchitectureNode, PortfolioProject, ProjectTone } from './portfolio-data';
 import { ArchitectureFlow, ImageDrift, NodePulse, Reveal } from './motion-elements';
+import { ProjectMediaViewer } from './project-media-viewer';
 
 type ToneStyle = CSSProperties & { '--chapter-tone': string };
 
@@ -311,33 +312,7 @@ export function ProjectGallery({ project }: { project: PortfolioProject }) {
         <p>{project.gallerySummary}</p>
       </Reveal>
 
-      <div className="project-gallery-grid">
-        {project.gallery.map((item, index) => (
-          <Reveal
-            key={item.src}
-            className={`project-gallery-item project-gallery-item-${item.layout ?? 'standard'} ${index === 0 ? 'project-gallery-item-first' : ''}`}
-          >
-            <figure>
-              <div className="project-gallery-image">
-                <Image
-                  src={item.src}
-                  alt={item.alt}
-                  width={item.width}
-                  height={item.height}
-                  sizes={item.layout === 'portrait' ? '(max-width: 720px) 84vw, 38vw' : '(max-width: 900px) 100vw, 88vw'}
-                />
-              </div>
-              <figcaption>
-                <span>{String(index + 2).padStart(2, '0')}</span>
-                <div>
-                  <strong>{item.label}</strong>
-                  <p>{item.caption}</p>
-                </div>
-              </figcaption>
-            </figure>
-          </Reveal>
-        ))}
-      </div>
+      <ProjectMediaViewer projectName={project.name} media={project.gallery} />
     </section>
   );
 }

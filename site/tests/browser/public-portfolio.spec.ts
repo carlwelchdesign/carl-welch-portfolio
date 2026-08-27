@@ -113,6 +113,33 @@ for (const [route, expectedGalleryImages] of [
   });
 }
 
+test('project media viewer supports full-size keyboard inspection on mobile', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/work/job-search-os#project-gallery');
+
+  const firstTrigger = page.getByRole('button', { name: 'Open full-size view of Application assistant' });
+  await firstTrigger.click();
+
+  const viewer = page.getByRole('dialog', { name: 'Job Search OS full-size image viewer' });
+  await expect(viewer).toBeVisible();
+  await expect(viewer).toContainText('01 / 07');
+  await expect(viewer.getByText('Application assistant', { exact: true })).toBeVisible();
+  await expect.poll(() => viewer.locator('img').evaluate((image) => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+
+  await page.keyboard.press('ArrowRight');
+  await expect(viewer).toContainText('02 / 07');
+  await expect(viewer.getByText('Search operations', { exact: true })).toBeVisible();
+  await expect.poll(() => page.evaluate(() => document.body.style.overflow)).toBe('hidden');
+
+  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+  expect(overflow).toBeLessThanOrEqual(0);
+
+  await page.keyboard.press('Escape');
+  await expect(viewer).toBeHidden();
+  await expect(firstTrigger).toBeFocused();
+  await expect.poll(() => page.evaluate(() => document.body.style.overflow)).toBe('');
+});
+
 test('career portrait connects the homepage to the selected archive and earlier record', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByRole('heading', { name: 'The current work has a history.' })).toBeVisible();
@@ -170,7 +197,7 @@ test('work overview shows every flagship gallery preview without broken media', 
   await page.goto('/work');
   const projects = [
     { name: 'Job Search OS', previews: 4 },
-    { name: 'Flight Tracker AI', previews: 1 },
+    { name: 'Flight Tracker AI', previews: 3 },
     { name: 'Wave Factory Essentials', previews: 4 },
   ];
 
@@ -202,6 +229,11 @@ test('server-rendered navigation and content remain available without JavaScript
   await page.goto('/');
   await expectCorePageContract(page);
   await expect(page.getByRole('link', { name: 'View selected work' })).toBeVisible();
+
+  await page.goto('/work/job-search-os#project-gallery');
+  await expect(page.locator('#project-gallery img')).toHaveCount(7);
+  await expect(page.getByText('Application assistant', { exact: true })).toBeVisible();
+  await expect(page.getByText('System topology', { exact: true })).toBeVisible();
   await context.close();
 });
 
