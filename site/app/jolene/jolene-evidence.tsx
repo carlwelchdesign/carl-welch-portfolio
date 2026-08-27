@@ -103,37 +103,40 @@ export function JoleneEvidence({ evidence }: JoleneEvidenceProps) {
 
               return (
                 <li key={claim.claimId}>
-                  <header>
-                    <span>Claim {String(index + 1).padStart(2, '0')}</span>
-                    <span>{claim.evidenceStrength}</span>
-                    <span>{maturityLabels[claim.maturity]}</span>
-                  </header>
-                  <p>{claim.text}</p>
-                  <p className="jolene-strength-note">
-                    {evidenceStrengthDescriptions[claim.evidenceStrength]}
-                  </p>
+                  <details className="jolene-claim">
+                    <summary>
+                      <span>Claim {String(index + 1).padStart(2, '0')}</span>
+                      <strong>{claim.text}</strong>
+                      <small>{claim.evidenceStrength} · {maturityLabels[claim.maturity]}</small>
+                    </summary>
+                    <div className="jolene-claim-body">
+                      <p className="jolene-strength-note">
+                        {evidenceStrengthDescriptions[claim.evidenceStrength]}
+                      </p>
 
-                  <div className="jolene-claim-sources">
-                    <strong>Supporting sources</strong>
-                    {claimCitations.map((citation) => (
-                      <JoleneCitationLink
-                        citation={citation}
-                        corpusVersion={evidence.corpusVersion}
-                        expectedCorpusVersion={evidence.expectedCorpusVersion}
-                        revokedEvidenceIds={evidence.revokedEvidenceIds}
-                        key={citation.evidenceId}
-                      />
-                    ))}
-                  </div>
+                      <div className="jolene-claim-sources">
+                        <strong>Supporting sources</strong>
+                        {claimCitations.map((citation) => (
+                          <JoleneCitationLink
+                            citation={citation}
+                            corpusVersion={evidence.corpusVersion}
+                            expectedCorpusVersion={evidence.expectedCorpusVersion}
+                            revokedEvidenceIds={evidence.revokedEvidenceIds}
+                            key={citation.evidenceId}
+                          />
+                        ))}
+                      </div>
 
-                  {claim.limitations.length > 0 ? (
-                    <div className="jolene-claim-limitations">
-                      <strong>Claim limitations</strong>
-                      <ul>
-                        {claim.limitations.map((limitation) => <li key={limitation}>{limitation}</li>)}
-                      </ul>
+                      {claim.limitations.length > 0 ? (
+                        <div className="jolene-claim-limitations">
+                          <strong>Claim limitations</strong>
+                          <ul>
+                            {claim.limitations.map((limitation) => <li key={limitation}>{limitation}</li>)}
+                          </ul>
+                        </div>
+                      ) : null}
                     </div>
-                  ) : null}
+                  </details>
                 </li>
               );
             })}

@@ -91,6 +91,28 @@ for (const viewport of mobileViewports) {
   });
 }
 
+for (const [route, expectedGalleryImages] of [
+  ['/work/job-search-os', 4],
+  ['/work/flight-tracker-ai', 1],
+  ['/work/wave-factory-essentials', 4],
+] as const) {
+  test(`${route} keeps its repository media gallery intact on mobile`, async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto(`${route}#project-gallery`);
+
+    const images = page.locator('#project-gallery img');
+    await expect(images).toHaveCount(expectedGalleryImages);
+    for (let index = 0; index < expectedGalleryImages; index += 1) {
+      await images.nth(index).scrollIntoViewIfNeeded();
+      await expect(images.nth(index)).toBeVisible();
+      await expect.poll(() => images.nth(index).evaluate((image) => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+    }
+
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+    expect(overflow).toBeLessThanOrEqual(0);
+  });
+}
+
 test('career portrait connects the homepage to the selected archive and earlier record', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByRole('heading', { name: 'The current work has a history.' })).toBeVisible();

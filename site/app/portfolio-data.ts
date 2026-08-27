@@ -8,6 +8,16 @@ export type ArchitectureNode = {
   detail: string;
 };
 
+export type ProjectMedia = {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+  label: string;
+  caption: string;
+  layout?: 'wide' | 'standard' | 'portrait';
+};
+
 export type PortfolioProject = {
   slug: string;
   name: string;
@@ -22,6 +32,9 @@ export type PortfolioProject = {
     width: number;
     height: number;
   };
+  galleryTitle: string;
+  gallerySummary: string;
+  gallery: ProjectMedia[];
   stack: string[];
   architecture: ArchitectureNode[];
   maturity: ProjectMaturity;
@@ -48,6 +61,45 @@ export const projects: PortfolioProject[] = [
       width: 1440,
       height: 1120,
     },
+    galleryTitle: 'A working product, end to end',
+    gallerySummary:
+      'The system spans the daily cockpit, guarded application execution, live search diagnostics, human review, and the architecture connecting those surfaces.',
+    gallery: [
+      {
+        src: '/projects/job-search-os/application-assistant.png',
+        alt: 'Job Search OS Apply Sprint interface showing readiness, blocked claims, and the next application workflow',
+        width: 1440,
+        height: 1120,
+        label: 'Application assistant',
+        caption: 'A review-led sprint surface that prepares application work while keeping final submission with the user.',
+        layout: 'wide',
+      },
+      {
+        src: '/projects/job-search-os/search-operations.png',
+        alt: 'Job Search OS Search Operations interface with live run metrics and diagnostic charts',
+        width: 1440,
+        height: 1120,
+        label: 'Search operations',
+        caption: 'Live discovery telemetry makes yield, filtering, blockers, and handoff state visible while a search is running.',
+      },
+      {
+        src: '/projects/job-search-os/agent-review-board.png',
+        alt: 'Job Search OS Agent Review Board showing material warnings, agent activity, and prioritized recommendations',
+        width: 1440,
+        height: 1120,
+        label: 'Agent review board',
+        caption: 'Recommendations, warnings, and material checks meet in one place before they become decisions.',
+      },
+      {
+        src: '/projects/job-search-os/system-topology.png',
+        alt: 'Job Search OS system topology diagram connecting the interface, control plane, agent teams, memory, and approval gates',
+        width: 1600,
+        height: 953,
+        label: 'System topology',
+        caption: 'The product surface sits above a typed control plane, specialist agent teams, durable state, and explicit approval gates.',
+        layout: 'wide',
+      },
+    ],
     stack: ['Next.js', 'TypeScript', 'PostgreSQL + pgvector', 'OpenAI', 'LangGraph', 'MCP'],
     architecture: [
       { id: 'sources', label: 'Job sources', detail: 'Direct ATS, company, and review-only lead channels' },
@@ -99,6 +151,20 @@ export const projects: PortfolioProject[] = [
       width: 1440,
       height: 1000,
     },
+    galleryTitle: 'One system, two viewing modes',
+    gallerySummary:
+      'The map-led desktop workspace carries the full operational picture; the mobile view distills replay status and aircraft telemetry into a focused vertical surface.',
+    gallery: [
+      {
+        src: '/projects/flight-tracker-ai/mobile-replay.png',
+        alt: 'Flight Tracker AI mobile replay interface showing replay controls and aircraft telemetry charts',
+        width: 390,
+        height: 844,
+        label: 'Mobile replay',
+        caption: 'A compact replay view preserves the scenario clock, tracked-aircraft state, and core telemetry on a phone-sized canvas.',
+        layout: 'portrait',
+      },
+    ],
     stack: ['Next.js', 'TypeScript', 'Rust + Axum', 'PostgreSQL + PostGIS', 'NOAA data', 'Vercel'],
     architecture: [
       { id: 'traffic', label: 'Traffic + weather', detail: 'Live or replay data with NOAA weather and hazard sources' },
@@ -148,6 +214,45 @@ export const projects: PortfolioProject[] = [
       width: 724,
       height: 567,
     },
+    galleryTitle: 'A plug-in family with its own visual world',
+    gallerySummary:
+      'The collection pairs purpose-built controls with a distinct art direction for each instrument. These are product interfaces and source art from the plug-ins themselves.',
+    gallery: [
+      {
+        src: '/projects/wave-factory-essentials/valley-spirit-interface.png',
+        alt: 'Valley Spirit audio plug-in interface running inside a plug-in host',
+        width: 764,
+        height: 587,
+        label: 'Valley Spirit',
+        caption: 'A five-control pitch-shifting echo presented as a moonlit, playable instrument rather than a generic utility panel.',
+        layout: 'wide',
+      },
+      {
+        src: '/projects/wave-factory-essentials/threefold-palm-gesture-surface.png',
+        alt: 'Threefold Palm visual surface with a martial-arts figure and animated energy treatment',
+        width: 724,
+        height: 460,
+        label: 'Threefold Palm / gesture state',
+        caption: 'The alternate gesture surface leaves room for controls while the character and energy treatment communicate an active performance state.',
+      },
+      {
+        src: '/projects/wave-factory-essentials/valley-spirit-gesture-surface.png',
+        alt: 'Valley Spirit visual surface with moonlit mountains and an animated energy gesture',
+        width: 764,
+        height: 460,
+        label: 'Valley Spirit / gesture state',
+        caption: 'A second performance state extends the same nocturnal visual language used by the finished plug-in interface.',
+      },
+      {
+        src: '/projects/wave-factory-essentials/spirit-mirror-scene.png',
+        alt: 'Spirit Mirror source art showing a spectral hand reflected in an ornate moonlit mirror',
+        width: 760,
+        height: 460,
+        label: 'Spirit Mirror / visual foundation',
+        caption: 'The source scene for Spirit Mirror establishes the spectral, camera-conducted member of the product family.',
+        layout: 'wide',
+      },
+    ],
     stack: ['C++', 'iPlug2', 'AU', 'VST3', 'CLAP', 'DSP'],
     architecture: [
       { id: 'host', label: 'DAW host', detail: 'Audio Unit, VST3, or CLAP plug-in host' },

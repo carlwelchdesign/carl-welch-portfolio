@@ -229,19 +229,18 @@ export function JoleneChat({ mode: connectionMode, scenario: scenarioValue = 'su
                 Checking reviewed public evidence…
               </p>
             ) : null}
+            {suggestedQuestions.length > 0 ? (
+              <div className="jolene-starters" aria-label="Suggested questions">
+                {messages.length > 1 ? <p>Ask next</p> : null}
+                {suggestedQuestions.map((question) => (
+                  <button type="button" disabled={waiting} key={question} onClick={() => void sendQuestion(question)}>
+                    {question}
+                  </button>
+                ))}
+              </div>
+            ) : null}
             <div ref={messagesEndRef} aria-hidden="true" />
           </div>
-
-          {suggestedQuestions.length > 0 ? (
-            <div className="jolene-starters" aria-label="Suggested questions">
-              {messages.length > 1 ? <p>Ask next</p> : null}
-              {suggestedQuestions.map((question) => (
-                <button type="button" disabled={waiting} key={question} onClick={() => void sendQuestion(question)}>
-                  {question}
-                </button>
-              ))}
-            </div>
-          ) : null}
 
           <form className="jolene-form" onSubmit={submit}>
             <label htmlFor="jolene-question">Ask about Carl’s work or experience</label>
@@ -283,6 +282,7 @@ export function JoleneChat({ mode: connectionMode, scenario: scenarioValue = 'su
           }
         }}
         data-jolene-launcher
+        hidden={open}
         {...(connectionMode === 'fixture' ? { 'data-jolene-fixture-launcher': true } : {})}
       >
         <span className="jolene-launcher-mark" aria-hidden="true">J</span>
