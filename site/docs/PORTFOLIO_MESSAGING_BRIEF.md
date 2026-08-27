@@ -231,8 +231,8 @@ The source labels below are intentionally content-minimized. Private mailbox ide
 | Job Search OS combines role discovery, fit review, evidence-backed materials, tracking, and approval-gated actions. | Public-approved project claims | Strong; protected single-user production | Approved with existing limitations | Home and case study | Public applicant service or autonomous submission |
 | Flight Tracker AI combines traffic, weather, hazards, trajectories, and explainable cues in a map interface. | Public-approved project claims and deployed demo | Strong; deployed demo | Approved with non-operational boundary | Home and case study | Certified aviation use or production traffic scale |
 | Wave Factory Essentials targets AU, VST3, and CLAP with local DSP and separate release gates. | Public-approved project claims | Strong; pre-release | Approved with release boundary | Home and case study | Public commercial release or completed platform validation |
-| Carl built the yU+co studio website using Flash AS2, video, a multi-user server, and XML. | Preserved personal portfolio entry and asset | Documented first-person | Review required | Selected archive after Carl approval | Independent employer credit, sole ownership, or modern-stack evidence |
-| The yU+co site was recognized as a 2006 Webby Awards Honoree. | Preserved portfolio plus independent public recognition record | Corroborated award level | Review required | Pair with the bounded build claim after Carl approval | Webby Winner, Movie and Film winner, or category claim |
+| Carl contributed interactive development to the yU+co studio website using Flash AS2, video, a multi-user server, and XML. | Preserved personal portfolio entry and asset | Documented first-person | Publication approved August 27, 2026 | Selected archive with team attribution | Independent employer credit, sole ownership, or modern-stack evidence |
+| The yU+co site and team were recognized as a 2006 Webby Awards Honoree. | Preserved portfolio plus independent public recognition record | Corroborated award level | Publication approved August 27, 2026 | Pair with the bounded contribution claim | Webby Winner, personal award, or unsupported category claim |
 | A professional contact recognized Carl's portfolio motion work in ABC television advertising and remembered his game work before 2009. | Authenticated private historical message | Independent private corroboration | Review required; paraphrase only | About/archive context after approval | ABC employment, campaign ownership, SIGGRAPH speaking, audience, or outcome |
 | Carl designed project-based Scratch and JavaScript/HTML/Canvas programming instruction in 2012. | Historical correspondence plus preserved personal portfolio | Contemporaneous but original-message recheck required | Not ready for publication | Internal narrative planning only | Formal faculty role, exact attendance, universal completion, or recurring employment |
 | Teaching families received positive feedback about Carl's instruction. | Private historical correspondence | Relayed third-party feedback | Not ready for publication | Internal proof of a mentoring pattern | Naming the child/family or claiming universal outcomes |
@@ -244,17 +244,17 @@ The source labels below are intentionally content-minimized. Private mailbox ide
 Use a **Selected archive** rather than "Older work." The latter makes the work sound obsolete; "Selected archive" signals deliberate context without claiming current relevance.
 
 - Keep all three current case studies above it.
-- Start with one yU+co record after Carl approves the claim and asset.
+- Start with the approved yU+co record, followed by the remaining public-cleared project visuals in a subordinate gallery.
 - Use the 2009 message only as a short source note attached to the creative-technology through-line.
 - Do not publish Ignite photographs unless ownership, consent, and the privacy of every identifiable child are resolved.
-- Do not add every recoverable project. Each archive entry must explain something about Carl's current practice and carry a clear evidence level.
+- The ten approved project visuals may be shown when each entry explains something about Carl's current practice and carries its bounded role and evidence note.
 
 ## Decisions required from Carl before PORT-MSG-002
 
 1. Approve or revise the literal positioning statement.
 2. Confirm whether "senior product engineer" or "senior software engineer" should lead.
 3. Confirm the primary opportunity: employment, consulting/collaboration, or a deliberate combination.
-4. Approve or reject yU+co for the first Selected archive entry.
+4. Completed August 27, 2026: yU+co and the bounded historical project gallery are approved for public display.
 5. Decide whether the teaching record should appear publicly after the original-message recheck.
 6. Decide whether a dedicated About route should be added.
 7. Explicitly approve or reject recommendation publication and indexing.

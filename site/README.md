@@ -38,7 +38,7 @@ Docker is a reproducibility and CI path. Sites/Cloudflare remains the intended p
 
 The internal [`PORTFOLIO_MESSAGING_BRIEF.md`](docs/PORTFOLIO_MESSAGING_BRIEF.md) records the audience hierarchy, evidence-backed positioning, proof order, tone rules, historical-claim matrix, and page-level messaging decisions awaiting Carl's review. It is an editorial planning artifact, not approved public copy.
 
-The internal [`PORTFOLIO_ARCHIVE_INVENTORY.md`](docs/PORTFOLIO_ARCHIVE_INVENTORY.md) and machine-readable [`archive-candidates.v1.json`](docs/archive-candidates.v1.json) manifest rank legacy-work candidates with exact asset fingerprints, evidence strength, rights states, captions, and prohibited inferences. Run `pnpm check:archive` to verify those boundaries. The records do not authorize publication.
+The [`PORTFOLIO_ARCHIVE_INVENTORY.md`](docs/PORTFOLIO_ARCHIVE_INVENTORY.md) and machine-readable [`archive-candidates.v1.json`](docs/archive-candidates.v1.json) manifest record the ten historical project visuals Carl approved for bounded archival display on August 27, 2026, along with exact asset fingerprints, contribution wording, captions, and prohibited inferences. TASER imagery and Ignite classroom photographs remain private under separate confidentiality and subject-privacy gates. Run `pnpm check:archive` to verify those boundaries and every public asset hash.
 
 The internal [`PORTFOLIO_LEGACY_ASSET_RECOVERY.md`](docs/PORTFOLIO_LEGACY_ASSET_RECOVERY.md) and [`legacy-asset-recovery.v1.json`](docs/legacy-asset-recovery.v1.json) record stronger-source searches, unresolved resolution gaps, and a do-not-execute boundary for legacy SWF/FLV material. Run `pnpm check:archive-recovery` to verify the recovery and quarantine decisions.
 
@@ -50,6 +50,7 @@ The internal [`PORTFOLIO_RELEASE_DECISION_PACKET.md`](docs/PORTFOLIO_RELEASE_DEC
 - `app/github-projects.ts` contains the curated public GitHub archive snapshot. Repository descriptions and verified live links remain hand-reviewed; a live check reports repository-list, language, URL, and update-date drift but does not overwrite copy.
 - `app/recommendations-data.ts` contains all 13 received recommendations reconciled against Carl’s authenticated LinkedIn profile on August 26, 2026. Stable source IDs, author links, observed visibility, and the reconciliation timestamp are retained. The route remains excluded from search until Carl separately approves portfolio publication.
 - `public/github/` contains local copies of GitHub preview imagery so the archive does not depend on GitHub's image rate limits at runtime.
+- `public/archive/` contains only the ten approved historical-work images or derivatives; it excludes confidential interfaces, classroom photographs, and the rest of the legacy repository.
 
 ### Reviewed GitHub content sync
 

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { careerChapters, careerThesis, earlierPracticeGroups } from '../career-story-data';
+import { LegacyArchiveGallery } from '../legacy-archive-gallery';
 import { MotionRuntime, Reveal } from '../motion-elements';
 import { CharacterSignals, PageFrame, PageIntro, SelectedArchive } from '../site-components';
 import { buildPageMetadata } from '../site-metadata';
@@ -54,14 +55,16 @@ export default function ArchivePage() {
 
           <SelectedArchive showArchiveLink={false} />
 
+          <LegacyArchiveGallery />
+
           <section className="earlier-practice-panel" data-tone="green" aria-labelledby="earlier-practice-title">
             <header>
               <p className="eyebrow">Earlier professional record</p>
               <h2 id="earlier-practice-title">Studios, agencies, client teams, and technical environments.</h2>
               <p>
                 The public record spans studios, agencies, client teams, software organizations,
-                and technical environments. Project-level visuals are published only when their
-                rights and contribution boundaries are clear.
+                and technical environments. The visual archive above shows the public-cleared
+                project record while confidential systems and private subjects remain protected.
               </p>
             </header>
             <div className="earlier-practice-grid">

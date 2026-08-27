@@ -1,18 +1,23 @@
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
+import { loadTypescriptData } from './load-typescript-data.mjs';
 
 const siteRoot = process.cwd();
 const manifestSource = await readFile(resolve(siteRoot, 'docs/archive-candidates.v1.json'), 'utf8');
 const inventory = await readFile(resolve(siteRoot, 'docs/PORTFOLIO_ARCHIVE_INVENTORY.md'), 'utf8');
 const manifest = JSON.parse(manifestSource);
+const { legacyArchiveProjects } = await loadTypescriptData(resolve(siteRoot, 'app/legacy-archive-data.ts'));
 
 assert.equal(manifest.schemaVersion, '1.0.0');
-assert.equal(manifest.status, 'internal_review_only');
+assert.equal(manifest.status, 'public_selection_approved');
+assert.equal(manifest.approvedAt, '2026-08-27');
 assert.equal(manifest.items.length, 12, 'Archive review queue must contain exactly 12 ranked candidates.');
 
-const allowedPublicationStates = new Set(['candidate_review', 'needs_permission', 'private_only', 'reject']);
+const allowedPublicationStates = new Set(['public_approved', 'candidate_review', 'needs_permission', 'private_only', 'reject']);
 const ids = new Set();
+const publicItems = [];
 
 for (const [index, item] of manifest.items.entries()) {
   assert.equal(item.rank, index + 1, `Archive rank is not contiguous at ${item.id}.`);
@@ -32,6 +37,34 @@ for (const [index, item] of manifest.items.entries()) {
     assert.match(asset.sha256, /^[a-f0-9]{64}$/, `${item.id} has an invalid SHA-256.`);
     assert.ok(asset.width > 0 && asset.height > 0 && asset.bytes > 0, `${item.id} has invalid asset dimensions or size.`);
   }
+
+  if (item.publicationState === 'public_approved') {
+    publicItems.push(item);
+    assert.match(item.publicAsset.path, /^\/archive\/[a-z0-9-]+\.(?:jpg|png)$/);
+    assert.match(item.publicAsset.sha256, /^[a-f0-9]{64}$/);
+    assert.ok(item.publicAsset.width > 0 && item.publicAsset.height > 0);
+    const publicBytes = await readFile(resolve(siteRoot, 'public', item.publicAsset.path.slice(1)));
+    assert.equal(
+      createHash('sha256').update(publicBytes).digest('hex'),
+      item.publicAsset.sha256,
+      `${item.id} public asset does not match its approved fingerprint.`,
+    );
+  } else {
+    assert.equal(item.publicAsset, undefined, `${item.id} must not expose a public asset.`);
+  }
+}
+
+assert.equal(publicItems.length, 10, 'Exactly ten historical project visuals are approved for public display.');
+assert.deepEqual(
+  legacyArchiveProjects.map(({ id }) => id),
+  publicItems.map(({ id }) => id),
+  'Public archive data must exactly match the approved manifest order.',
+);
+for (const project of legacyArchiveProjects) {
+  const manifestItem = publicItems.find(({ id }) => id === project.id);
+  assert.equal(project.image.src, manifestItem.publicAsset.path, `${project.id} image path drifted from the manifest.`);
+  assert.equal(project.image.width, manifestItem.publicAsset.width, `${project.id} image width drifted from the manifest.`);
+  assert.equal(project.image.height, manifestItem.publicAsset.height, `${project.id} image height drifted from the manifest.`);
 }
 
 for (const privateMarker of ['/Users/', 'mail.google.com', 'source-supplied-awaiting-original-email-recheck']) {
@@ -47,6 +80,8 @@ assert.equal(manifest.items.find(({ id }) => id === 'archive-taser-axon-2009')?.
 assert.equal(manifest.items.find(({ id }) => id === 'archive-ignite-class-2012')?.publicationState, 'private_only');
 assert.match(inventory, /2006 Webby Awards Honoree/);
 assert.match(inventory, /must never say Carl personally won a Webby/i);
-assert.match(inventory, /No source asset has been copied into `public\/`/);
+assert.match(inventory, /Ten bounded project records have been copied into `public\/archive\/`/);
+assert.match(inventory, /TASER \/ Evidence\.com imagery remains private/i);
+assert.match(inventory, /Ignite classroom photographs remain private/i);
 
-console.log('Archive boundary checks passed: 12 ranked candidates, asset fingerprints, rights states, and privacy guards are intact.');
+console.log('Archive boundary checks passed: 10 approved visuals, exact public fingerprints, bounded claims, and 2 private-only safeguards are intact.');
