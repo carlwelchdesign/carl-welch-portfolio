@@ -28,6 +28,10 @@ The Jolene topology, trust boundaries, observability policy, failure ownership, 
 
 The Docker build context excludes local environments, dependencies, generated output, Git history, and deployment state. Public build-time values such as `NEXT_PUBLIC_SITE_URL` may be supplied to Compose; secrets must never use a `NEXT_PUBLIC_` variable or Docker build argument. After the container is healthy, `pnpm check:container` verifies the home page, manifest, résumé, and the default-disabled Jolene gate.
 
+## Error monitoring
+
+Sentry browser and Cloudflare Worker SDKs are installed but disabled unless explicitly configured. The browser DSN is the only Sentry value permitted in a `NEXT_PUBLIC_` build argument; Worker DSNs and release/source-map credentials belong only in provider or CI secret stores. Session Replay, tracing, visitor identity, and professional-context capture are off, and the shared pre-transport scrubber is covered by `pnpm check:sentry-privacy`. Provisioning, source maps, alerts, and production activation remain separate provider gates documented in [`docs/SENTRY_OPERATIONS_RUNBOOK.md`](docs/SENTRY_OPERATIONS_RUNBOOK.md).
+
 Docker is a reproducibility and CI path. Sites/Cloudflare remains the intended publication path, and running Compose does not deploy or publish the portfolio.
 
 ## Content boundaries

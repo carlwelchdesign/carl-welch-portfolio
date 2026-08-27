@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import { JoleneShell } from './jolene/jolene-shell';
 import { EvidenceTargetObserver } from './jolene/evidence-target-observer';
 import { AnalyticsRuntime } from './analytics/analytics-runtime';
+import { SentryRuntime } from './observability/sentry-runtime';
 import { analyticsModes, type AnalyticsMode } from './analytics/analytics-contract';
 import {
   buildPageMetadata,
@@ -55,10 +56,17 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   const analyticsMode: AnalyticsMode = analyticsModes.includes(requestedAnalyticsMode as AnalyticsMode)
     ? requestedAnalyticsMode as AnalyticsMode
     : 'disabled';
+  const sentryEnabled = process.env.NEXT_PUBLIC_SENTRY_ENABLED === 'true';
 
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body>
+        <SentryRuntime
+          dsn={process.env.NEXT_PUBLIC_SENTRY_DSN}
+          enabled={sentryEnabled}
+          environment={process.env.NEXT_PUBLIC_SENTRY_ENVIRONMENT ?? 'production'}
+          release={process.env.NEXT_PUBLIC_SENTRY_RELEASE}
+        />
         <AnalyticsRuntime mode={analyticsMode} />
         <EvidenceTargetObserver />
         {children}

@@ -27,14 +27,17 @@
     "check:jolene-browser-live": "node scripts/check-jolene-browser-live.mjs",
     "evaluate:jolene": "node scripts/evaluate-public-jolene.mjs",
     "check:analytics": "node scripts/check-analytics.mjs",
+    "check:sentry-privacy": "node scripts/check-sentry-privacy.mjs",
     "check:release-readiness": "node scripts/check-release-readiness.mjs",
     "check:container": "node scripts/check-container.mjs",
     "check:routes": "node scripts/check-routes.mjs",
     "check:production": "node scripts/check-production-origin.mjs",
     "check:browser": "playwright test",
-    "check": "pnpm lint && pnpm check:metadata && pnpm check:content && pnpm check:editorial && pnpm check:archive && pnpm check:archive-recovery && pnpm check:release-decisions && pnpm check:github-sync && pnpm check:jolene-contract && pnpm check:jolene-job-fit && pnpm check:jolene-bff && pnpm check:analytics && pnpm check:release-readiness && pnpm build"
+    "check": "pnpm lint && pnpm check:metadata && pnpm check:content && pnpm check:editorial && pnpm check:archive && pnpm check:archive-recovery && pnpm check:release-decisions && pnpm check:github-sync && pnpm check:jolene-contract && pnpm check:jolene-job-fit && pnpm check:jolene-bff && pnpm check:analytics && pnpm check:sentry-privacy && pnpm check:release-readiness && pnpm build"
   },
   "dependencies": {
+    "@sentry/browser": "10.71.0",
+    "@sentry/cloudflare": "10.71.0",
     "@vitejs/plugin-react": "6.0.2",
     "@vitejs/plugin-rsc": "0.5.34",
     "motion": "13.1.1",
@@ -47,8 +50,8 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "4.13.0",
-    "@cloudflare/vite-plugin": "1.37.1",
-    "@cloudflare/workers-types": "4.20260515.1",
+    "@cloudflare/vite-plugin": "1.54.0",
+    "@cloudflare/workers-types": "5.20260826.1",
     "@openai/sites-vite-plugin": "^0.1.0 || ^0.2.0",
     "@playwright/test": "1.62.1",
     "@tailwindcss/postcss": "4.2.1",
@@ -59,7 +62,7 @@
     "eslint-config-next": "16.3.3",
     "tailwindcss": "4.2.1",
     "typescript": "5.9.3",
-    "wrangler": "4.92.0"
+    "wrangler": "4.126.0"
   },
   "type": "module"
 }

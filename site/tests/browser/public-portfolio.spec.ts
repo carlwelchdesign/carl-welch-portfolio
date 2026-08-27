@@ -115,3 +115,18 @@ test('server-rendered navigation and content remain available without JavaScript
   await expect(page.getByRole('link', { name: 'View selected work' })).toBeVisible();
   await context.close();
 });
+
+test('Sentry remains fail-closed without explicit production configuration', async ({ page }) => {
+  const telemetryRequests: string[] = [];
+  page.on('request', (request) => {
+    if (/\.ingest\.sentry\.io|\/api\/\d+\/envelope/i.test(request.url())) {
+      telemetryRequests.push(request.url());
+    }
+  });
+
+  await page.goto('/');
+  await expectCorePageContract(page);
+  await page.waitForTimeout(250);
+
+  expect(telemetryRequests).toEqual([]);
+});
