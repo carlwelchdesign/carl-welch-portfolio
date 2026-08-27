@@ -9,7 +9,7 @@ const manifest = JSON.parse(source);
 
 assert.equal(manifest.schemaVersion, '1.0.0');
 assert.equal(manifest.status, 'internal_review_only');
-assert.equal(manifest.recoveries.length, 8);
+assert.equal(manifest.recoveries.length, 9);
 assert.equal(manifest.unrecovered.length, 4);
 
 const ids = new Set();
@@ -31,6 +31,9 @@ for (const item of manifest.recoveries.filter(({ declaredExtension }) => declare
 
 assert.equal(manifest.recoveries.find(({ declaredExtension }) => declaredExtension === 'flv')?.safetyState, 'offline_media_inspection_only');
 assert.equal(manifest.recoveries.find(({ id }) => id === 'recovery-almost-alice-psd')?.safetyState, 'do_not_serve_mislabeled_source');
+const yucoGif = manifest.recoveries.find(({ id }) => id === 'recovery-yuco-gif-frame-audit');
+assert.equal(yucoGif?.media.encodedFrames, 4);
+assert.equal(yucoGif?.safetyState, 'privacy_crop_and_composited_frame_review_required');
 
 for (const privateMarker of ['/Users/', 'mail.google.com']) {
   assert.equal(source.includes(privateMarker), false, `Recovery manifest exposes private source detail: ${privateMarker}`);

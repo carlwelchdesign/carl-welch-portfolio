@@ -33,6 +33,13 @@
       "reason": "Provides more system context than the GIF first frame, but is too short for featured placement."
     },
     {
+      "id": "recovery-yuco-gif-frame-audit", "candidateId": "archive-yuco-2006", "sourceLocator": "legacy:carlsite/images/samples/YUCO-SCREENSHOTS-sm.gif",
+      "declaredExtension": "gif", "detectedFormat": "GIF89a image", "sha256": "7e173ec2297bcbbfb498db2aa5633a0ac3b0f370e121133103bcba54c10317ed", "bytes": 38531,
+      "media": {"width": 620, "height": 462, "encodedFrames": 4, "meaningfulStandaloneFrames": 3}, "inspection": "All four encoded frames were extracted without browser playback. Three show successive navigation states; the fourth does not render as a meaningful standalone frame. Visible states include a legacy business-contact footer.",
+      "decision": "retain_pending_composited_audit", "publicationState": "needs_permission", "safetyState": "privacy_crop_and_composited_frame_review_required",
+      "reason": "Any animated derivative must be composited, reviewed frame by frame, and cropped or redacted to remove the legacy contact footer before publication."
+    },
+    {
       "id": "recovery-darksiders-alternate-thumbnail", "candidateId": "archive-darksiders-ii-2011", "sourceLocator": "legacy:carlsite/images/webdesign/darksiderstest.jpg",
       "declaredExtension": "jpg", "detectedFormat": "JPEG image", "sha256": "0c5d78b81df1dc77c1e8d87da5be286f016852d2ac4b03ba1592f5f1e8f4f405", "bytes": 38532,
       "media": {"width": 240, "height": 162}, "inspection": "Alternate thumbnail at the same dimensions as the ranked source.",
