@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import type { CSSProperties, ReactNode } from 'react';
+import { careerChapters, characterSignals } from './career-story-data';
 import { contact } from './contact-data';
 import type { ArchitectureNode, PortfolioProject, ProjectTone } from './portfolio-data';
 import { ArchitectureFlow, ImageDrift, NodePulse, Reveal } from './motion-elements';
@@ -27,6 +28,7 @@ export function SiteHeader() {
 
       <nav aria-label="Primary navigation">
         <Link href="/work">Work</Link>
+        <Link href="/archive">Archive</Link>
         <Link href="/about">About</Link>
         <Link href="/experience">Experience</Link>
         <Link href="/recommendations">Recommendations</Link>
@@ -36,6 +38,7 @@ export function SiteHeader() {
         <summary>Menu</summary>
         <nav aria-label="Mobile navigation">
           <Link href="/work">Work</Link>
+          <Link href="/archive">Archive</Link>
           <Link href="/about">About</Link>
           <Link href="/capabilities">Capabilities</Link>
           <Link href="/experience">Experience</Link>
@@ -49,9 +52,66 @@ export function SiteHeader() {
   );
 }
 
-export function SelectedArchive() {
+export function CareerPortraitPreview() {
   return (
-    <section className="selected-archive" data-tone="orange" aria-labelledby="selected-archive-title">
+    <section className="career-portrait-preview" data-tone="orange" aria-labelledby="career-portrait-title">
+      <Reveal className="career-portrait-heading">
+        <p className="eyebrow">The long view</p>
+        <h2 id="career-portrait-title">The current work has a history.</h2>
+      </Reveal>
+      <div className="career-portrait-layout">
+        <p>
+          Before product systems and applied AI, there were interactive studio sites,
+          motion, client deadlines, technical environments, and teams learning new tools
+          together. That earlier work still shapes how I engineer products now.
+        </p>
+        <ol className="career-portrait-steps">
+          {careerChapters.map((chapter) => (
+            <li key={chapter.number}>
+              <span>{chapter.number}</span>
+              <div>
+                <small>{chapter.period}</small>
+                <strong>{chapter.title}</strong>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+      <Link className="primary-action dark-action" href="/archive">
+        Explore the career arc <span aria-hidden="true">→</span>
+      </Link>
+    </section>
+  );
+}
+
+export function CharacterSignals() {
+  return (
+    <section className="character-signals" data-tone="red" aria-labelledby="character-signals-title">
+      <header>
+        <p className="eyebrow">How people describe the work</p>
+        <h2 id="character-signals-title">The pattern shows up in other people’s words.</h2>
+      </header>
+      <div className="character-signal-grid">
+        {characterSignals.map((signal) => (
+          <figure key={signal.recommendationId}>
+            <figcaption>{signal.label}</figcaption>
+            <blockquote>
+              <p>“{signal.quote}”</p>
+            </blockquote>
+            <p>{signal.attribution}</p>
+          </figure>
+        ))}
+      </div>
+      <Link className="primary-action" href="/recommendations">
+        Read all recommendations <span aria-hidden="true">→</span>
+      </Link>
+    </section>
+  );
+}
+
+export function SelectedArchive({ showArchiveLink = true }: { showArchiveLink?: boolean }) {
+  return (
+    <section id="yuco" className="selected-archive" data-tone="orange" aria-labelledby="selected-archive-title">
       <div className="selected-archive-heading">
         <div>
           <p className="eyebrow">Selected archive / 2006–2007</p>
@@ -73,6 +133,11 @@ export function SelectedArchive() {
             Interactive development documented in Carl’s preserved portfolio. This record
             describes a team project; it does not claim sole authorship or a personal Webby win.
           </p>
+          {showArchiveLink ? (
+            <Link className="primary-action dark-action selected-archive-link" href="/archive">
+              More of the story <span aria-hidden="true">→</span>
+            </Link>
+          ) : null}
         </div>
       </div>
     </section>

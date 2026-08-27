@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import { capabilities } from './capabilities-data';
 import { MotionRuntime, Orbit, Reveal } from './motion-elements';
-import { experience, projects, recommendationReview } from './portfolio-data';
-import { PageFrame, ProjectChapter } from './site-components';
+import { experience, projects } from './portfolio-data';
+import { CareerPortraitPreview, CharacterSignals, PageFrame, ProjectChapter } from './site-components';
 
 export function PortfolioHome() {
   return (
@@ -11,11 +11,12 @@ export function PortfolioHome() {
         <main id="main-content">
           <section id="top" className="hero" data-tone="red" aria-labelledby="hero-title">
             <div className="hero-copy">
-              <p className="eyebrow">Senior Product Engineer</p>
+              <p className="eyebrow">Senior Product Engineer · Creative Technologist</p>
               <h1 id="hero-title">Carl Welch</h1>
               <p className="hero-summary">
-                I build interfaces and product systems for complicated workflows. My recent work
-                spans React, TypeScript, applied AI, security products, analytics, and creative software.
+                I build complex product interfaces and the systems behind them. My work spans
+                enterprise security, analytics, mobility, applied AI, and creative software—grounded
+                in two decades of interactive and product work.
               </p>
               <div className="hero-actions">
                 <a className="primary-action" href="#work">
@@ -46,6 +47,8 @@ export function PortfolioHome() {
               <span className="green" />
             </div>
           </section>
+
+          <CareerPortraitPreview />
 
           <div id="work">
             {projects.map((project, index) => (
@@ -93,18 +96,7 @@ export function PortfolioHome() {
             </Link>
           </section>
 
-          <section className="recommendations-preview" data-tone="red" aria-labelledby="recommendations-title">
-            <div>
-              <p className="eyebrow">Recommendations</p>
-              <h2 id="recommendations-title">From people I’ve worked with</h2>
-            </div>
-            <div>
-              <p>{recommendationReview.description}</p>
-              <Link className="primary-action" href="/recommendations">
-                Read all 13 <span aria-hidden="true">→</span>
-              </Link>
-            </div>
-          </section>
+          <CharacterSignals />
         </main>
       </PageFrame>
     </MotionRuntime>

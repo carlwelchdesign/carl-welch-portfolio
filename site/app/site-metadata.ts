@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 export const siteName = 'Carl Welch Portfolio';
 export const defaultTitle = 'Carl Welch — Senior Product Engineer';
 export const defaultDescription =
-  'Selected work, architecture, and experience from senior product engineer Carl Welch.';
+  'Senior product engineer Carl Welch: current systems, professional experience, and a selected archive tracing two decades of interactive and product work.';
 
 function resolveSiteUrl() {
   const configuredUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';

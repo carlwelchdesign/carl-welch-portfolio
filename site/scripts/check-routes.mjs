@@ -79,9 +79,10 @@ function requireShareMetadata(html, route) {
 const pageExpectations = [
   ['/', 'Carl Welch'],
   ['/work', `${githubProjects.length} public repositories`],
-  ['/about', 'Senior product engineer with a long creative-technology practice'],
+  ['/archive', 'The work behind the current work'],
+  ['/about', 'The engineer I am now was built over time'],
   ['/capabilities', 'What I do, and the work behind it'],
-  ['/experience', 'Professional history'],
+  ['/experience', 'A practice built across different kinds of work'],
   ['/recommendations', 'Source-verified LinkedIn recommendations'],
   ['/contact', 'carlwelchdesign@gmail.com'],
   ...projects.map((project) => [`/work/${project.slug}`, project.name]),
@@ -145,6 +146,7 @@ const sitemap = await (await fetchRoute('/sitemap.xml')).text();
 for (const project of projects) requireText(sitemap, `/work/${project.slug}`, '/sitemap.xml');
 requireText(sitemap, '/capabilities', '/sitemap.xml');
 requireText(sitemap, '/about', '/sitemap.xml');
+requireText(sitemap, '/archive', '/sitemap.xml');
 requireText(sitemap, '/experience', '/sitemap.xml');
 requireText(sitemap, '/contact', '/sitemap.xml');
 requireText(sitemap, '/recommendations', '/sitemap.xml');

@@ -4,6 +4,7 @@ import { expect, test, type Page } from '@playwright/test';
 const routes = [
   '/',
   '/work',
+  '/archive',
   '/about',
   '/capabilities',
   '/experience',
@@ -53,7 +54,7 @@ for (const route of routes) {
 for (const viewport of mobileViewports) {
   test(`mobile layout is operable at ${viewport.width}px`, async ({ page }) => {
     await page.setViewportSize(viewport);
-    await page.goto('/work');
+    await page.goto('/archive');
     await expectCorePageContract(page);
 
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
@@ -82,6 +83,18 @@ for (const viewport of mobileViewports) {
     await expect(page.getByRole('navigation', { name: 'Mobile navigation' })).toBeVisible();
   });
 }
+
+test('career portrait connects the homepage to the selected archive and earlier record', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.getByRole('heading', { name: 'The current work has a history.' })).toBeVisible();
+  await page.getByRole('link', { name: 'Explore the career arc' }).click();
+  await expect(page).toHaveURL('/archive');
+  await expect(page.getByRole('heading', { level: 1, name: 'The work behind the current work' })).toBeVisible();
+  await expect(page.locator('#yuco')).toContainText('yU+co studio website');
+  await expect(page.getByText('SapientNitro', { exact: true })).toBeVisible();
+  await expect(page.getByText('General Dynamics', { exact: true })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Archive', exact: true }).first()).toBeVisible();
+});
 
 test('reduced motion preserves content and suppresses looping animation', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
