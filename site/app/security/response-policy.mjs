@@ -23,9 +23,37 @@ export const portfolioSecurityHeaders = Object.freeze({
   'X-Frame-Options': 'DENY',
 });
 
-export function applyPortfolioSecurityHeaders(response) {
+function headersForProtocol(protocol) {
+  if (protocol !== 'http:') return portfolioSecurityHeaders;
+
+  const headers = { ...portfolioSecurityHeaders };
+  headers['Content-Security-Policy'] = headers['Content-Security-Policy']
+    .split(';')
+    .map((directive) => directive.trim())
+    .filter((directive) => directive && directive !== 'upgrade-insecure-requests')
+    .join('; ');
+  delete headers['Cross-Origin-Opener-Policy'];
+  delete headers['Strict-Transport-Security'];
+  return headers;
+}
+
+export function portfolioSecurityHeadersForUrl(requestUrl) {
+  if (!requestUrl) return portfolioSecurityHeaders;
+
+  let protocol;
+  try {
+    protocol = new URL(requestUrl).protocol;
+  } catch {
+    return portfolioSecurityHeaders;
+  }
+  return headersForProtocol(protocol);
+}
+
+export function applyPortfolioSecurityHeaders(response, requestUrl) {
   const headers = new Headers(response.headers);
-  for (const [name, value] of Object.entries(portfolioSecurityHeaders)) headers.set(name, value);
+  for (const [name, value] of Object.entries(portfolioSecurityHeadersForUrl(requestUrl))) {
+    headers.set(name, value);
+  }
   return new Response(response.body, {
     status: response.status,
     statusText: response.statusText,
