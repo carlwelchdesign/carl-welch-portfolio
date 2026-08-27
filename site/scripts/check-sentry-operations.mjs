@@ -3,6 +3,7 @@ import { readFile } from 'node:fs/promises';
 
 const runbook = await readFile(new URL('../docs/SENTRY_OPERATIONS_RUNBOOK.md', import.meta.url), 'utf8');
 const requiredSections = [
+  '### Scheduled reconciliation safety net',
   '## Trust and data flow',
   '## Severity and response expectations',
   '## Alert-to-ticket transition rules',
@@ -20,6 +21,7 @@ for (const scenario of [
   'Browser exception',
   'Worker exception',
   'Duplicate delivery',
+  'Missed webhook',
   'Regression',
   'Sensitive synthetic payload',
   'Missing source map',
@@ -34,6 +36,8 @@ for (const guardrail of [
   'cannot merge, deploy, suppress alerts, resolve Sentry, or',
   'Monitoring readiness does not activate public Jolene',
   'SENTRY_ASANA_INTAKE_ENABLED=false',
+  'No `vercel.json` schedule is committed yet',
+  '/api/cron/sentry-reconcile',
   'Portfolio Sentry incident triage',
 ]) {
   assert.ok(runbook.includes(guardrail), `Missing Sentry operations guardrail: ${guardrail}`);

@@ -52,6 +52,26 @@ delivery-fingerprint ledger. Duplicate deliveries do not create duplicate
 tasks. Regressions and resolutions update the same task; a Sentry resolution
 never completes the Asana incident before a verified deployment.
 
+### Scheduled reconciliation safety net
+
+`GET /api/cron/sentry-reconcile` is a disabled-by-default recovery path for
+missed service-hook deliveries. It requires Vercel's
+`Authorization: Bearer <CRON_SECRET>` convention, a read-only Sentry issues API
+token, the Sentry organization and project slugs, and the same Asana delivery
+configuration as the webhook. Each run reads one bounded page of unresolved
+issues for the configured environment, normalizes the same technical metadata,
+and sends it through the existing issue-ID deduplication path.
+
+The route returns aggregate counts only and fails closed when its credentials,
+configuration, provider response, or Asana delivery is invalid. It does not
+retain a Sentry response or place exception messages, visitor content, request
+bodies, credentials, or private Jolene data in Asana.
+
+No `vercel.json` schedule is committed yet. A production cron would create
+recurring provider invocations, so Carl must approve the schedule and cost
+before activation. Start with one off-peak daily production run; preview cron
+jobs do not execute automatically.
+
 Do not put auth tokens, organization tokens, cookies, contact details, prompts, job descriptions, transcripts, evidence bodies, or private Jolene data in public variables, Git, Asana, or logs.
 
 ## Privacy boundary
@@ -65,6 +85,8 @@ Do not put auth tokens, organization tokens, cookies, contact details, prompts, 
 Run `pnpm check:sentry-privacy` whenever the scrubbing policy changes.
 Run `pnpm check:sentry-asana` whenever intake normalization, signature handling,
 or Asana mapping changes.
+Run `pnpm check:sentry-reconciliation` whenever the Sentry issues query,
+cron authorization, missed-delivery mapping, or reconciliation limits change.
 
 ## Trust and data flow
 
@@ -79,6 +101,7 @@ Sentry service hook ──HMAC POST──▶ /api/ops/sentry ──least privile
                                                             paused Codex heartbeat
                                                                           ▼
                                                               branch + test + PR
+Sentry issues API ──bounded read──▶ /api/cron/sentry-reconcile ────────────┘
 ```
 
 The intake has no route to Obsidian, private Jolene, private SQLite, durable
@@ -109,6 +132,7 @@ an owner-approved destination; P1/P2 can wait for the next bounded review.
 | Changed frequency, route, release, or severity | Replace only the machine-managed intake block and preserve human remediation notes. |
 | Regression or reopen | Reopen the same task, move it to In progress, and add a sanitized transition comment. |
 | Sentry resolution | Record the state, but do not complete the task before an approved release is verified. |
+| Missed open or regression hook | A bounded reconciliation run creates or updates the same issue-ID task without duplicating it. |
 | Asana outage or timeout | Return a retryable failure; do not acknowledge a delivery that was not durably recorded. |
 
 Task names never include exception messages. Task notes allow only issue ID and
@@ -151,6 +175,7 @@ Evidence date: 2026-08-27.
 | Browser exception | SDK initialization and fail-closed browser network test | Deliberate production event reaches the browser project and is scrubbed. |
 | Worker exception | Cloudflare SDK wrapper and build/runtime tests | Deliberate Worker event reaches the correct project and release. |
 | Duplicate delivery | Deterministic intake test creates one task and deduplicates replay | Real Sentry retry produces one Asana task. |
+| Missed webhook | Deterministic reconciliation reads a bounded unresolved-issue page and reuses the existing task deduplication path | An approved production cron finds a deliberately missed issue without creating a duplicate task. |
 | Regression | Deterministic intake test reopens/updates the same task | A resolved Sentry issue regresses and reaches the approved destination. |
 | Resolution | Deterministic test records resolution without premature completion | Provider transition arrives and remains incomplete until deployed verification. |
 | Sensitive synthetic payload | Scrubbing and intake tests exclude every seeded secret | Inspect an actual Sentry event, notification, and Asana task. |
@@ -181,8 +206,13 @@ credentials, visitor data, messages, stack-frame local paths, or raw payloads.
    deliberate browser and Worker events.
 7. Create new/regressed and sustained-rate alert rules, then test P0, P1,
    resolution, regression, duplicate, and retry transitions.
-8. Verify sanitized Asana intake. Only then enable and observe one heartbeat run.
-9. Carl reviews the complete evidence packet and explicitly approves production
+8. Verify sanitized Asana intake.
+9. If Carl approves the recurring schedule and cost, store a read-only Sentry
+   issues token and `CRON_SECRET`, enable reconciliation, and observe one bounded
+   production run before committing a schedule.
+10. Only after intake and reconciliation evidence are reviewed, enable and
+   observe one heartbeat run.
+11. Carl reviews the complete evidence packet and explicitly approves production
    activation. Monitoring readiness does not activate public Jolene.
 
 ## Monthly review

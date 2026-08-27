@@ -86,7 +86,7 @@ function stateFromPayload(payload, group) {
   const action = firstString(payload.action, payload.type).toLowerCase();
   const status = firstString(group.status, group.substatus).toLowerCase();
   if (action.includes('resolved') || status === 'resolved') return 'resolved';
-  if (action.includes('regress') || action.includes('reopen') || status === 'unresolved') return 'regressed';
+  if (action.includes('regress') || action.includes('reopen')) return 'regressed';
   return 'open';
 }
 
@@ -181,7 +181,7 @@ export async function verifySentrySignature(secret, body, suppliedSignature) {
   return constantTimeEqual(await signSentryBody(secret, body), supplied);
 }
 
-function requireConfig(env) {
+export function readSentryAsanaConfig(env, { requireHookSecret = false } = {}) {
   const config = {
     enabled: env.SENTRY_ASANA_INTAKE_ENABLED === 'true',
     hookSecret: firstString(env.SENTRY_SERVICE_HOOK_SECRET),
@@ -192,7 +192,7 @@ function requireConfig(env) {
     timeoutMs: Math.min(Math.max(Number(env.SENTRY_ASANA_TIMEOUT_MS) || 8000, 1000), 15000),
   };
   if (!config.enabled) return config;
-  if (!config.hookSecret || !config.asanaToken || !config.projectId || !config.sectionId) {
+  if ((requireHookSecret && !config.hookSecret) || !config.asanaToken || !config.projectId || !config.sectionId) {
     throw new Error('intake_configuration_incomplete');
   }
   return config;
@@ -351,11 +351,19 @@ async function updateIncident(fetcher, config, task, incident, digest) {
   return { taskId, created: false, deduplicated: false };
 }
 
-export async function handleSentryAsanaIntake(request, env, dependencies = {}) {
+export async function deliverSentryIncident(incident, config, dependencies = {}) {
   const fetcher = dependencies.fetch ?? fetch;
+  const digest = await sha256(JSON.stringify(incident));
+  const existing = await findIncidentTask(fetcher, config, incident.issueId);
+  return existing
+    ? updateIncident(fetcher, config, existing, incident, digest)
+    : createIncident(fetcher, config, incident, digest);
+}
+
+export async function handleSentryAsanaIntake(request, env, dependencies = {}) {
   let config;
   try {
-    config = requireConfig(env);
+    config = readSentryAsanaConfig(env, { requireHookSecret: true });
   } catch {
     return json(503, { error: 'intake_unavailable' });
   }
@@ -387,13 +395,9 @@ export async function handleSentryAsanaIntake(request, env, dependencies = {}) {
   }
   const incident = normalizeSentryPayload(payload);
   if (!incident) return json(422, { error: 'unsupported_payload' });
-  const digest = await sha256(JSON.stringify(incident));
 
   try {
-    const existing = await findIncidentTask(fetcher, config, incident.issueId);
-    const result = existing
-      ? await updateIncident(fetcher, config, existing, incident, digest)
-      : await createIncident(fetcher, config, incident, digest);
+    const result = await deliverSentryIncident(incident, config, dependencies);
     return json(result.created ? 201 : 200, {
       accepted: true,
       created: result.created,
