@@ -93,6 +93,11 @@ assert.deepEqual(
 requireUnique(Object.values(githubRepositoryIds), 'GitHub repository IDs');
 requireUnique(recommendations.map((item) => `${item.name}:${item.date}`), 'Recommendation attributions');
 requireUnique(recommendations.map((item) => item.id), 'Recommendation IDs');
+assert.equal(
+  recommendations.find((item) => item.id === 'portfolio:recommendation:david-allen-2011-06-23')?.relationship,
+  'David was Carl’s employer',
+  'David Allen must remain identified as Carl’s employer.',
+);
 requireUnique(capabilities.map((capability) => capability.id), 'Capability IDs');
 assert.equal(careerChapters.length, 4, 'The public career portrait must contain four reviewed chapters.');
 requireUnique(careerChapters.map((chapter) => chapter.number), 'Career chapter numbers');

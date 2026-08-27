@@ -143,6 +143,9 @@ test('recommendations read as professional testimony without publication audit c
   await expect(page.locator('body')).not.toContainText(
     /verified from|source-verified|approved by carl|approved for publication|correction or removal/i,
   );
+  const davidAllen = page.getByRole('listitem', { name: 'David Allen recommendation' });
+  await expect(davidAllen).toContainText('David was Carl’s employer');
+  await expect(davidAllen).not.toContainText('David was Carl’s client');
 });
 
 test('reduced motion preserves content and suppresses looping animation', async ({ page }) => {
