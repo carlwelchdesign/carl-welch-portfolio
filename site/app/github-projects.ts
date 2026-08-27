@@ -35,6 +35,7 @@ export const githubPortfolioExclusions = [
   { name: 'Primaloft', repositoryId: 25988120 },
   { name: 'Superman75thAniv', repositoryId: 25984590 },
   { name: 'TheConjuringSweepstakes', repositoryId: 25985061 },
+  { name: 'cadillac', repositoryId: 37469031 },
 ] as const;
 
 // Stable GitHub repository IDs make renames detectable without treating a
@@ -53,7 +54,6 @@ export const githubRepositoryIds: Record<string, number> = {
   'progression-lab-ai': 1183648275,
   'emf-disturbance-sim': 1212889435,
   'webauthn-core': 1197826799,
-  cadillac: 37469031,
 };
 
 export const githubProjects: GitHubProject[] = [
@@ -188,16 +188,5 @@ export const githubProjects: GitHubProject[] = [
     topics: ['WebAuthn', 'MFA', 'authentication', 'adapters'],
     stars: 0,
     kind: 'library',
-  },
-  {
-    name: 'cadillac',
-    description: 'A legacy HTML repository. Its public metadata does not currently include a project description or README.',
-    language: 'HTML',
-    url: 'https://github.com/carlwelchdesign/cadillac',
-    homepage: null,
-    updatedAt: '2016-01-26T21:42:23Z',
-    topics: ['HTML'],
-    stars: 0,
-    kind: 'legacy',
   },
 ];
