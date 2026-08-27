@@ -69,6 +69,14 @@ With the isolated Jolene Compose service already running on loopback, validate t
 pnpm check:jolene-live
 ```
 
+With a live-mode portfolio preview running, execute the precommitted end-to-end evaluation thresholds and write a privacy-safe local report:
+
+```bash
+JOLENE_EVAL_PORTFOLIO_URL=http://127.0.0.1:4182 pnpm evaluate:jolene
+```
+
+The versioned policy is in `evaluations/public-jolene-portfolio-v1.json`. Reports are written under ignored `outputs/` with owner-only permissions and retain only stable case IDs, aggregate pass/timing metrics, the public corpus version, and known limitations. The harness never creates a contact intent.
+
 The fixture shell includes an ephemeral role-comparison view. It removes common contact, private-path, and credential-like values before comparison; rejects high-confidence disclosure instructions; clears its draft and results when the view unmounts; and renders direct, adjacent, missing, or unknown assessments without a fit score or blanket recommendation. Run `pnpm check:jolene-job-fit` for the deterministic policy and state checks.
 
 The fixture contact-intent flow collects only name, email, optional organization, and a short message. It requires a separate review step and explicit consent before calling the fixture adapter, clears the personal fields after a successful fixture receipt, and has no persistence or outbound capability. Closing the panel also discards the in-memory draft. Production retention, deletion, distributed abuse prevention, monitoring, and live transport remain release gates; the fixture UI must not be represented as a live contact channel.
