@@ -11,7 +11,7 @@ const manifest = JSON.parse(manifestSource);
 const { legacyArchiveProjects } = await loadTypescriptData(resolve(siteRoot, 'app/legacy-archive-data.ts'));
 
 assert.equal(manifest.schemaVersion, '1.0.0');
-assert.equal(manifest.status, 'public_selection_approved');
+assert.equal(manifest.status, 'complete_public_archive_approved');
 assert.equal(manifest.approvedAt, '2026-08-27');
 assert.equal(manifest.items.length, 12, 'Archive review queue must contain exactly 12 ranked candidates.');
 
@@ -40,21 +40,26 @@ for (const [index, item] of manifest.items.entries()) {
 
   if (item.publicationState === 'public_approved') {
     publicItems.push(item);
-    assert.match(item.publicAsset.path, /^\/archive\/[a-z0-9-]+\.(?:jpg|png)$/);
-    assert.match(item.publicAsset.sha256, /^[a-f0-9]{64}$/);
-    assert.ok(item.publicAsset.width > 0 && item.publicAsset.height > 0);
-    const publicBytes = await readFile(resolve(siteRoot, 'public', item.publicAsset.path.slice(1)));
-    assert.equal(
-      createHash('sha256').update(publicBytes).digest('hex'),
-      item.publicAsset.sha256,
-      `${item.id} public asset does not match its approved fingerprint.`,
-    );
+    const publicAssets = item.publicAssets ?? [item.publicAsset];
+    assert.ok(publicAssets.every(Boolean), `${item.id} is missing public asset metadata.`);
+    for (const publicAsset of publicAssets) {
+      assert.match(publicAsset.path, /^\/archive\/[a-z0-9-]+\.(?:jpg|png)$/);
+      assert.match(publicAsset.sha256, /^[a-f0-9]{64}$/);
+      assert.ok(publicAsset.width > 0 && publicAsset.height > 0);
+      const publicBytes = await readFile(resolve(siteRoot, 'public', publicAsset.path.slice(1)));
+      assert.equal(
+        createHash('sha256').update(publicBytes).digest('hex'),
+        publicAsset.sha256,
+        `${item.id} public asset ${publicAsset.path} does not match its approved fingerprint.`,
+      );
+    }
   } else {
     assert.equal(item.publicAsset, undefined, `${item.id} must not expose a public asset.`);
+    assert.equal(item.publicAssets, undefined, `${item.id} must not expose public assets.`);
   }
 }
 
-assert.equal(publicItems.length, 10, 'Exactly ten historical project visuals are approved for public display.');
+assert.equal(publicItems.length, 12, 'Exactly twelve historical project records are approved for public display.');
 assert.deepEqual(
   legacyArchiveProjects.map(({ id }) => id),
   publicItems.map(({ id }) => id),
@@ -62,9 +67,13 @@ assert.deepEqual(
 );
 for (const project of legacyArchiveProjects) {
   const manifestItem = publicItems.find(({ id }) => id === project.id);
-  assert.equal(project.image.src, manifestItem.publicAsset.path, `${project.id} image path drifted from the manifest.`);
-  assert.equal(project.image.width, manifestItem.publicAsset.width, `${project.id} image width drifted from the manifest.`);
-  assert.equal(project.image.height, manifestItem.publicAsset.height, `${project.id} image height drifted from the manifest.`);
+  const projectImages = [project.image, ...(project.additionalImages ?? [])];
+  const manifestAssets = manifestItem.publicAssets ?? [manifestItem.publicAsset];
+  assert.deepEqual(
+    projectImages.map(({ src, width, height }) => ({ path: src, width, height })),
+    manifestAssets.map(({ path, width, height }) => ({ path, width, height })),
+    `${project.id} public image set drifted from the manifest.`,
+  );
 }
 
 for (const privateMarker of ['/Users/', 'mail.google.com', 'source-supplied-awaiting-original-email-recheck']) {
@@ -76,12 +85,10 @@ for (const source of [manifestSource, inventory]) {
   assert.equal(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i.test(source), false, 'Archive records must not contain email addresses.');
 }
 
-assert.equal(manifest.items.find(({ id }) => id === 'archive-taser-axon-2009')?.publicationState, 'private_only');
-assert.equal(manifest.items.find(({ id }) => id === 'archive-ignite-class-2012')?.publicationState, 'private_only');
+assert.equal(manifest.items.every(({ publicationState }) => publicationState === 'public_approved'), true);
 assert.match(inventory, /2006 Webby Awards Honoree/);
 assert.match(inventory, /must never say Carl personally won a Webby/i);
-assert.match(inventory, /Ten bounded project records have been copied into `public\/archive\/`/);
-assert.match(inventory, /TASER \/ Evidence\.com imagery remains private/i);
-assert.match(inventory, /Ignite classroom photographs remain private/i);
+assert.match(inventory, /Twelve bounded project records and nineteen selected images have been copied into `public\/archive\/`/);
+assert.match(inventory, /complete reviewed visual archive/i);
 
-console.log('Archive boundary checks passed: 10 approved visuals, exact public fingerprints, bounded claims, and 2 private-only safeguards are intact.');
+console.log('Archive checks passed: 12 approved records, 19 exact public image fingerprints, and bounded contribution claims are intact.');

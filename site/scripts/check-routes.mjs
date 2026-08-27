@@ -130,8 +130,8 @@ await Promise.all(pageExpectations.map(async ([route, expectedText]) => {
       requireText(html, project.id === 'archive-yuco-2006' ? 'id="yuco"' : `id="${project.id}"`, route);
       requireText(html, project.project, route);
       requireText(html, project.image.src, route);
+      for (const image of project.additionalImages ?? []) requireText(html, image.src, route);
     }
-    requireText(html, 'confidentiality or subject privacy', route);
   }
 
   if (route.startsWith('/work/')) requireText(html, 'id="evidence"', route);
@@ -168,10 +168,11 @@ await Promise.all(githubProjects.map(async (project) => {
   }
 }));
 
-await Promise.all(legacyArchiveProjects.map(async (project) => {
-  const response = await fetchRoute(project.image.src);
+const legacyArchiveImages = legacyArchiveProjects.flatMap((project) => [project.image, ...(project.additionalImages ?? [])]);
+await Promise.all(legacyArchiveImages.map(async (image) => {
+  const response = await fetchRoute(image.src);
   if (!response.headers.get('content-type')?.startsWith('image/')) {
-    throw new Error(`${project.image.src} did not return an image content type.`);
+    throw new Error(`${image.src} did not return an image content type.`);
   }
 }));
 
@@ -181,5 +182,5 @@ if (!resume.headers.get('content-type')?.startsWith('application/pdf')) {
 }
 
 console.log(
-  `Route checks passed: ${pageExpectations.length} pages, ${githubProjects.length} GitHub images, ${legacyArchiveProjects.length} historical images, evidence anchors, metadata, indexing gates, sitemap, and résumé.`,
+  `Route checks passed: ${pageExpectations.length} pages, ${githubProjects.length} GitHub images, ${legacyArchiveProjects.length} historical projects, ${legacyArchiveImages.length} historical images, evidence anchors, metadata, indexing gates, sitemap, and résumé.`,
 );

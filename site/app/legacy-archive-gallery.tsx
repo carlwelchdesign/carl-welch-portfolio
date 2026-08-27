@@ -28,17 +28,22 @@ export function LegacyArchiveGallery() {
           >
             <Reveal className="legacy-gallery-card">
               <figure className="legacy-gallery-figure">
-                <div className="legacy-gallery-image">
-                  <Image
-                    src={project.image.src}
-                    alt={project.image.alt}
-                    width={project.image.width}
-                    height={project.image.height}
-                    sizes={project.display === 'feature'
-                      ? '(max-width: 760px) 100vw, 66vw'
-                      : '(max-width: 760px) 100vw, 50vw'}
-                    unoptimized={project.display === 'thumbnail'}
-                  />
+                <div className={`legacy-gallery-image${project.additionalImages ? ' legacy-gallery-image-collection' : ''}`}>
+                  {[project.image, ...(project.additionalImages ?? [])].map((image) => (
+                    <Image
+                      key={image.src}
+                      src={image.src}
+                      alt={image.alt}
+                      width={image.width}
+                      height={image.height}
+                      sizes={project.additionalImages
+                        ? '(max-width: 760px) 50vw, 16vw'
+                        : project.display === 'feature'
+                          ? '(max-width: 760px) 100vw, 66vw'
+                          : '(max-width: 760px) 100vw, 50vw'}
+                      unoptimized={project.display === 'thumbnail' || Boolean(project.additionalImages)}
+                    />
+                  ))}
                 </div>
                 <figcaption>
                   <span>{String(index + 2).padStart(2, '0')}</span>
@@ -59,11 +64,6 @@ export function LegacyArchiveGallery() {
           </li>
         ))}
       </ol>
-
-      <p className="legacy-gallery-boundary">
-        Additional historical records remain private where confidentiality or subject privacy—not
-        copyright—still requires separate review.
-      </p>
     </section>
   );
 }

@@ -98,10 +98,11 @@ test('career portrait connects the homepage to the selected archive and earlier 
   await expect(page.getByRole('heading', { level: 1, name: 'The work behind the current work' })).toBeVisible();
   await expect(page.locator('#yuco')).toContainText('yU+co studio website');
   await expect(page.getByRole('heading', { name: 'More visual work across the years.' })).toBeVisible();
-  await expect(page.locator('.legacy-gallery-grid > li')).toHaveCount(9);
-  await expect(page.locator('.selected-archive-art img, .legacy-gallery-grid img')).toHaveCount(10);
+  await expect(page.locator('.legacy-gallery-grid > li')).toHaveCount(11);
+  await expect(page.locator('.selected-archive-art img, .legacy-gallery-grid img')).toHaveCount(19);
+  await expect(page.getByRole('heading', { name: 'TASER AXON / Evidence.com prototype' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Beatnik mobile UI concepts' })).toBeVisible();
-  await expect(page.getByText(/confidentiality or subject privacy/i)).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Ignite Creative Learning programming instruction' })).toBeVisible();
   await expect(page.getByText('SapientNitro', { exact: true })).toBeVisible();
   await expect(page.getByText('General Dynamics', { exact: true })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Archive', exact: true }).first()).toBeVisible();
