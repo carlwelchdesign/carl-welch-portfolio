@@ -172,6 +172,25 @@ for (const [route, heading, decision] of [
   });
 }
 
+for (const [route, nextProject, nextHref] of [
+  ['/work/job-search-os', 'Flight Tracker AI', '/work/flight-tracker-ai'],
+  ['/work/flight-tracker-ai', 'Wave Factory Essentials', '/work/wave-factory-essentials'],
+  ['/work/wave-factory-essentials', 'Job Search OS', '/work/job-search-os'],
+] as const) {
+  test(`${route} continues to the next flagship case study`, async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto(route);
+
+    const continuation = page.locator('.project-continuation');
+    await expect(continuation.getByRole('heading', { name: 'Next case study' })).toBeVisible();
+    await expect(continuation.getByRole('link', { name: `Next case study: ${nextProject}` })).toHaveAttribute('href', nextHref);
+    await expect(continuation.getByRole('link', { name: /View all selected work/ })).toHaveAttribute('href', '/work');
+
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+    expect(overflow).toBeLessThanOrEqual(0);
+  });
+}
+
 test('career portrait connects the homepage to the selected archive and earlier record', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByRole('heading', { name: 'The current work has a history.' })).toBeVisible();

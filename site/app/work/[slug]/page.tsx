@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { MotionRuntime, Reveal } from '../../motion-elements';
 import { getProject, projects } from '../../portfolio-data';
@@ -39,6 +40,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   const project = getProject(slug);
 
   if (!project) notFound();
+
+  const projectIndex = projects.findIndex((candidate) => candidate.slug === project.slug);
+  const nextProject = projects[(projectIndex + 1) % projects.length];
 
   return (
     <MotionRuntime>
@@ -122,6 +126,39 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           <section className="project-links" aria-label="Project links">
             <a className="primary-action" href={project.repositoryUrl}>Repository <span aria-hidden="true">↗</span></a>
             {project.liveUrl ? <a className="primary-action" href={project.liveUrl}>Live demo <span aria-hidden="true">↗</span></a> : null}
+          </section>
+
+          <section className="project-continuation" aria-labelledby="project-continuation-title">
+            <div className="project-continuation-heading">
+              <div>
+                <p className="eyebrow">Continue exploring</p>
+                <h2 id="project-continuation-title">Next case study</h2>
+              </div>
+              <Link className="text-action" href="/work">View all selected work <span aria-hidden="true">→</span></Link>
+            </div>
+
+            <Link
+              className="project-continuation-card"
+              href={`/work/${nextProject.slug}`}
+              data-tone={nextProject.tone}
+              aria-label={`Next case study: ${nextProject.name}`}
+            >
+              <div className="project-continuation-copy">
+                <p className="eyebrow">{nextProject.category}</p>
+                <h3>{nextProject.name}</h3>
+                <p>{nextProject.status}</p>
+                <span>Open case study <span aria-hidden="true">→</span></span>
+              </div>
+              <div className="project-continuation-image">
+                <Image
+                  src={nextProject.image.src}
+                  alt=""
+                  width={nextProject.image.width}
+                  height={nextProject.image.height}
+                  sizes="(max-width: 720px) 100vw, 58vw"
+                />
+              </div>
+            </Link>
           </section>
         </main>
       </PageFrame>
