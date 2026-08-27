@@ -33,6 +33,8 @@ const supersededEvidenceIds = new Map([
   ['fixture:project:flight-tracker-ai:typed-system', 'portfolio:claim:flight-tracker-ai:typed-system'],
 ]);
 
+const providerCitationAliases = buildProviderCitationAliases();
+
 export function listPublicEvidenceTargets(): readonly PublicEvidenceTarget[] {
   return targets;
 }
@@ -52,7 +54,51 @@ export function resolvePublicEvidenceCitation(
   if (direct.status !== 'unavailable') return direct;
 
   const target = targetsByHref.get(citation.href);
-  if (!target) return direct;
-  if (target.status === 'review_required') return { status: 'review_required', evidenceId: citation.evidenceId };
-  return { status: 'available', target };
+  if (target) {
+    if (target.status === 'review_required') return { status: 'review_required', evidenceId: citation.evidenceId };
+    return { status: 'available', target };
+  }
+
+  const alias = providerCitationAliases.get(citation.href);
+  return alias ? { status: 'available', target: alias } : direct;
+}
+
+function buildProviderCitationAliases(): ReadonlyMap<string, PublicEvidenceTarget> {
+  const aliases = new Map<string, PublicEvidenceTarget>();
+  const available = targets.filter((item) => item.status === 'available');
+
+  aliases.set('/capabilities', {
+    evidenceId: 'portfolio:source:capabilities',
+    href: '/capabilities#main-content',
+    anchorId: 'main-content',
+    label: 'Capabilities and supporting evidence',
+    status: 'available',
+  });
+
+  for (const item of available) {
+    const project = item.evidenceId.match(/^portfolio:source:project:([a-z0-9-]+)$/)?.[1];
+    if (project) {
+      aliases.set(`/work/${project}`, item);
+      aliases.set(`/work/${project}#evidence`, {
+        evidenceId: item.evidenceId,
+        href: `/work/${project}#evidence`,
+        anchorId: 'evidence',
+        label: `${item.label} evidence`,
+        status: 'available',
+      });
+    }
+
+    const employer = item.evidenceId.match(/^portfolio:source:experience:([a-z0-9-]+)$/)?.[1];
+    if (employer) {
+      aliases.set(`/experience#${employer}`, {
+        evidenceId: item.evidenceId,
+        href: `/experience#${employer}`,
+        anchorId: employer,
+        label: item.label,
+        status: 'available',
+      });
+    }
+  }
+
+  return aliases;
 }
