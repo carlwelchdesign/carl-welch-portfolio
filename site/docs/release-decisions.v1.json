@@ -1,0 +1,124 @@
+{
+  "schemaVersion": "1.0.0",
+  "status": "awaiting_carl",
+  "sourceMainCommit": "a6d33c244912799d6141689c7d69f3b1d280c47c",
+  "approvalRule": "A recommendation is not an approval. Only Carl's explicit response may set a decision to approved.",
+  "decisions": [
+    {
+      "id": "PORT-DEC-001",
+      "label": "First release profile",
+      "status": "pending",
+      "options": ["static_portfolio_first", "public_jolene_release"],
+      "recommended": "static_portfolio_first",
+      "reason": "The static profile can exclude live Jolene, contact intent, and the avatar while those production operations and art gates remain open.",
+      "owningTasks": ["PORT-CONTENT-001", "PORT-RELEASE-001"]
+    },
+    {
+      "id": "PORT-DEC-002",
+      "label": "Lead professional title",
+      "status": "pending",
+      "options": ["senior_product_engineer", "senior_software_engineer"],
+      "recommended": "senior_product_engineer",
+      "reason": "It most directly joins Carl's demonstrated product, interface, systems, and engineering work without reducing him to visual design.",
+      "owningTasks": ["PORT-MSG-001", "PORT-MSG-002"]
+    },
+    {
+      "id": "PORT-DEC-003",
+      "label": "Primary opportunity",
+      "status": "pending",
+      "options": ["employment_first", "consulting_first", "employment_and_selected_collaboration"],
+      "recommended": "employment_and_selected_collaboration",
+      "reason": "It keeps the hiring path unmistakable while allowing high-value collaboration without presenting the site as an agency pitch.",
+      "owningTasks": ["PORT-MSG-001", "PORT-MSG-002"]
+    },
+    {
+      "id": "PORT-DEC-004",
+      "label": "Dedicated About route",
+      "status": "pending",
+      "options": ["add_about_route", "keep_story_within_existing_routes"],
+      "recommended": "add_about_route",
+      "reason": "A dedicated route gives the creative-technologist-to-product-engineer story room without overloading the homepage.",
+      "owningTasks": ["PORT-MSG-001", "PORT-MSG-002"]
+    },
+    {
+      "id": "PORT-DEC-005",
+      "label": "LinkedIn recommendation publication",
+      "status": "pending",
+      "options": ["publish_all_13", "publish_selected_set", "omit_for_first_release"],
+      "recommended": "publish_all_13",
+      "reason": "All 13 received recommendations have exact-text and attribution reconciliation; publication still requires Carl's explicit approval.",
+      "owningTasks": ["PORT-REC-001", "PORT-CONTENT-001"]
+    },
+    {
+      "id": "PORT-DEC-006",
+      "label": "Recommendation indexing",
+      "status": "pending",
+      "options": ["index_after_publication_approval", "keep_noindex"],
+      "recommended": "index_after_publication_approval",
+      "reason": "Indexing is professionally useful only after Carl approves the exact public recommendation set and takedown path.",
+      "owningTasks": ["PORT-REC-001", "PORT-META-001"]
+    },
+    {
+      "id": "PORT-DEC-007",
+      "label": "Historical work treatment",
+      "status": "pending",
+      "options": ["selected_archive_after_current_work", "career_timeline", "omit_for_first_release"],
+      "recommended": "selected_archive_after_current_work",
+      "reason": "A small archive preserves career depth while keeping current product engineering as the first impression.",
+      "owningTasks": ["PORT-ARCHIVE-001", "PORT-ARCHIVE-003", "PORT-MSG-003"]
+    },
+    {
+      "id": "PORT-DEC-008",
+      "label": "First archive candidate",
+      "status": "pending",
+      "options": ["yuco_after_rights_review", "choose_another_approved_candidate", "no_archive_yet"],
+      "recommended": "yuco_after_rights_review",
+      "reason": "yU+co has the strongest combined interaction history, surviving evidence, and team-level recognition, but rights and attribution are not yet cleared.",
+      "owningTasks": ["PORT-ARCHIVE-003", "PORT-MSG-003"]
+    },
+    {
+      "id": "PORT-DEC-009",
+      "label": "Teaching evidence",
+      "status": "pending",
+      "options": ["text_only_after_source_recheck", "omit"],
+      "recommended": "text_only_after_source_recheck",
+      "reason": "The supported 2012 programming-instruction and Scratch claim adds mentoring evidence. Classroom photographs remain private unless consent and image rights are established.",
+      "owningTasks": ["PORT-MSG-003", "PORT-CONTENT-001"]
+    },
+    {
+      "id": "PORT-DEC-010",
+      "label": "Jolene and avatar in first release",
+      "status": "pending",
+      "options": ["defer_both", "include_live_jolene_without_avatar_after_ops", "include_both_after_all_gates"],
+      "recommended": "defer_both",
+      "reason": "The UI and local contract are strong, but public service operations and the approved avatar master do not exist yet.",
+      "owningTasks": ["PORT-PLATFORM-002", "PORT-AVATAR-002", "PORT-LAUNCH-001"]
+    },
+    {
+      "id": "PORT-DEC-011",
+      "label": "Production origin",
+      "status": "pending",
+      "options": ["custom_domain_to_be_supplied", "approved_host_subdomain_to_be_supplied"],
+      "recommended": "custom_domain_to_be_supplied",
+      "reason": "A stable custom origin produces the strongest canonical URLs and share previews, but no domain is assumed or reserved here.",
+      "owningTasks": ["PORT-META-001", "PORT-RELEASE-001"]
+    },
+    {
+      "id": "PORT-DEC-012",
+      "label": "Deployment authorization",
+      "status": "pending_after_release_candidate_review",
+      "options": ["approve_deployment", "hold_deployment"],
+      "recommended": null,
+      "reason": "Deployment authorization must follow, not replace, production-origin metadata, physical-device QA, final copy review, and rollback evidence.",
+      "owningTasks": ["PORT-QA-001", "PORT-META-001", "PORT-RELEASE-001", "PORT-LAUNCH-001"]
+    }
+  ],
+  "nonDecisions": [
+    "Production analytics remains disabled.",
+    "The portfolio never accesses private Jolene APIs, Obsidian, MCP tools, or durable memory.",
+    "Job descriptions remain untrusted ephemeral input.",
+    "Contact intent cannot autonomously email, apply, schedule, negotiate, or contact recruiters.",
+    "TASER evidence imagery and Ignite classroom photographs remain private-only unless their separate gates are cleared.",
+    "The yU+co site and team may be described as a 2006 Webby Awards Honoree; Carl may not be described as a personal Webby winner."
+  ]
+}
