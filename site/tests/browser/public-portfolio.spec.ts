@@ -91,6 +91,22 @@ for (const viewport of mobileViewports) {
   });
 }
 
+test('homepage gives recruiters a synchronized proof summary', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 720 });
+  await page.goto('/');
+
+  const proof = page.getByRole('region', { name: 'Portfolio at a glance' });
+  await expect(proof.locator('dt')).toHaveCount(4);
+  await expect(proof.locator('dd')).toHaveText(['20+', '5', '13', '3']);
+  await expect(proof).toContainText('Years across interactive and product work');
+  await expect(proof).toContainText('Product engineering roles since 2016');
+  await expect(proof).toContainText('Professional recommendations');
+  await expect(proof).toContainText('Flagship projects with full case studies');
+
+  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+  expect(overflow).toBeLessThanOrEqual(0);
+});
+
 for (const [route, expectedGalleryImages] of [
   ['/work/job-search-os', 6],
   ['/work/flight-tracker-ai', 3],

@@ -59,6 +59,17 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .signal-rail .orange { background: var(--orange); }
 .signal-rail .green { background: var(--green); }
 
+.home-proof { padding: clamp(36px, 4vw, 62px) var(--page-padding) clamp(58px, 7vw, 98px); background: var(--ink); color: var(--paper); }
+.home-proof > .eyebrow { color: var(--muted); }
+.home-proof dl { margin: 28px 0 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.home-proof dl > div { min-width: 0; min-height: 250px; padding: clamp(22px, 3vw, 38px); display: flex; flex-direction: column; }
+.home-proof dl > div + div { border-left: 1px solid var(--line); }
+.home-proof dt { margin-top: auto; max-width: 230px; color: var(--muted); font: 10px/1.5 var(--font-geist-mono), monospace; letter-spacing: 0.1em; text-transform: uppercase; }
+.home-proof dd { order: -1; margin: 0; color: var(--red); font-size: clamp(74px, 9vw, 132px); font-weight: 700; line-height: 0.78; letter-spacing: -0.085em; }
+.home-proof dl > div:nth-child(2) dd { color: var(--orange); }
+.home-proof dl > div:nth-child(3) dd { color: var(--green); }
+.home-proof dl > div:nth-child(4) dd { color: var(--paper); }
+
 .career-portrait-preview { padding: clamp(82px, 10vw, 150px) var(--page-padding); background: rgba(255, 104, 0, 0.93); color: var(--ink); }
 .career-portrait-heading { display: grid; grid-template-columns: minmax(150px, 0.28fr) 1fr; gap: 48px; }
 .career-portrait-heading h2 { max-width: 1100px; margin: 0; font-size: clamp(50px, 7.6vw, 116px); line-height: 0.9; letter-spacing: -0.07em; }
@@ -651,6 +662,11 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .hero { min-height: calc(100svh - 68px); }
   .hero-copy { padding-top: 78px; }
   .hero-actions { align-items: flex-start; flex-direction: column; }
+  .home-proof dl { grid-template-columns: 1fr 1fr; }
+  .home-proof dl > div { min-height: 210px; padding: 24px 16px; }
+  .home-proof dl > div:nth-child(3) { border-top: 1px solid var(--line); border-left: 0; }
+  .home-proof dl > div:nth-child(4) { border-top: 1px solid var(--line); }
+  .home-proof dd { font-size: clamp(62px, 24vw, 96px); }
   .section-heading, .project-detail-deck, .evidence-grid { grid-template-columns: 1fr; }
   .project-meta { text-align: left; }
   .project-image-wrap { margin-top: 32px; }

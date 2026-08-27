@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { capabilities } from './capabilities-data';
 import { MotionRuntime, Orbit, Reveal } from './motion-elements';
 import { experience, projects } from './portfolio-data';
+import { recommendations } from './recommendations-data';
 import { CareerPortraitPreview, CharacterSignals, PageFrame, ProjectChapter } from './site-components';
 
 export function PortfolioHome() {
@@ -46,6 +47,28 @@ export function PortfolioHome() {
               <span className="orange" />
               <span className="green" />
             </div>
+          </section>
+
+          <section className="home-proof" data-tone="orange" aria-label="Portfolio at a glance">
+            <p className="eyebrow">At a glance</p>
+            <dl>
+              <div>
+                <dt>Years across interactive and product work</dt>
+                <dd>20+</dd>
+              </div>
+              <div>
+                <dt>Product engineering roles since 2016</dt>
+                <dd>{experience.length}</dd>
+              </div>
+              <div>
+                <dt>Professional recommendations</dt>
+                <dd>{recommendations.length}</dd>
+              </div>
+              <div>
+                <dt>Flagship projects with full case studies</dt>
+                <dd>{projects.length}</dd>
+              </div>
+            </dl>
           </section>
 
           <CareerPortraitPreview />
