@@ -1,0 +1,10 @@
+.env*
+.vercel
+.next
+.vinext
+.wrangler
+dist
+node_modules
+playwright-report
+test-results
+outputs

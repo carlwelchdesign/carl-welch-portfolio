@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "vinext dev",
     "build": "vinext build",
+    "build:vercel": "next build --webpack",
     "preview:lan": "vinext build && HOSTNAME=0.0.0.0 PORT=4173 NODE_ENV=production node dist/standalone/server.js",
     "build:sentry": "SENTRY_RELEASE_UPLOAD_ENABLED=true vinext build",
     "start": "vinext start",
