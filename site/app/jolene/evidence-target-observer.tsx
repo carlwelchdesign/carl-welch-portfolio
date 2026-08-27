@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 function currentEvidenceTarget(): HTMLElement | null {
   const hash = window.location.hash.slice(1);
-  if (!hash.startsWith('evidence--')) return null;
+  if (!hash) return null;
   const target = document.getElementById(decodeURIComponent(hash));
   return target instanceof HTMLElement && target.hasAttribute('data-evidence-target') ? target : null;
 }

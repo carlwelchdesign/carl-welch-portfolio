@@ -26,7 +26,12 @@ export default function CapabilitiesPage() {
   return (
     <MotionRuntime>
       <PageFrame>
-        <main id="main-content">
+        <main
+          id="main-content"
+          data-evidence-target
+          tabIndex={-1}
+          aria-label="Capabilities and supporting evidence"
+        >
           <PageIntro
             eyebrow="Capabilities"
             title="What I do, and the work behind it"

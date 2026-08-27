@@ -174,6 +174,45 @@ try {
     'available',
   );
   assert.equal(
+    publicNavigation.resolvePublicEvidenceCitation(
+      { evidenceId: `career:${'c1'.repeat(16)}`, href: '/capabilities' },
+      { corpusVersion: manifest.corpusVersion, expectedCorpusVersion: manifest.corpusVersion },
+    ).target.href,
+    '/capabilities#main-content',
+  );
+  assert.equal(
+    publicNavigation.resolvePublicEvidenceCitation(
+      { evidenceId: `career:${'c2'.repeat(16)}`, href: '/experience#grindr' },
+      { corpusVersion: manifest.corpusVersion, expectedCorpusVersion: manifest.corpusVersion },
+    ).target.anchorId,
+    'grindr',
+  );
+  assert.equal(
+    publicNavigation.resolvePublicEvidenceCitation(
+      { evidenceId: `career:${'c3'.repeat(16)}`, href: '/work/job-search-os#evidence' },
+      { corpusVersion: manifest.corpusVersion, expectedCorpusVersion: manifest.corpusVersion },
+    ).target.anchorId,
+    'evidence',
+  );
+  assert.equal(
+    publicNavigation.resolvePublicEvidenceCitation(
+      { evidenceId: `career:${'c4'.repeat(16)}`, href: '/contact' },
+      { corpusVersion: manifest.corpusVersion, expectedCorpusVersion: manifest.corpusVersion },
+    ).status,
+    'unavailable',
+  );
+  assert.equal(
+    publicNavigation.resolvePublicEvidenceCitation(
+      { evidenceId: `career:${'c5'.repeat(16)}`, href: '/capabilities' },
+      {
+        corpusVersion: manifest.corpusVersion,
+        expectedCorpusVersion: manifest.corpusVersion,
+        revokedEvidenceIds: [`career:${'c5'.repeat(16)}`],
+      },
+    ).status,
+    'revoked',
+  );
+  assert.equal(
     navigation.resolveEvidenceTarget(reviewTarget.evidenceId, navigationTargets, supersededEvidence).status,
     'review_required',
   );

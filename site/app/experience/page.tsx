@@ -26,6 +26,9 @@ export default function ExperiencePage() {
               <li
                 key={item.company}
                 id={item.id}
+                data-evidence-target
+                tabIndex={-1}
+                aria-label={`${item.company} — ${item.role}`}
               >
                 <div
                   id={publicEvidenceAnchorId(item.sourceId)}
