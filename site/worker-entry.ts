@@ -16,7 +16,7 @@ const hardenedApp = {
     env?: PortfolioWorkerEnv,
     context?: Parameters<typeof app.fetch>[2],
   ): Promise<Response> {
-    return applyPortfolioSecurityHeaders(await app.fetch(request, env, context));
+    return applyPortfolioSecurityHeaders(await app.fetch(request, env, context), request.url);
   },
 };
 

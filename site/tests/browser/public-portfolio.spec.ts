@@ -38,8 +38,10 @@ for (const route of routes) {
 
     const response = await page.goto(route);
     expect(response).not.toBeNull();
-    expect(response?.headers()['content-security-policy']).toContain("default-src 'self'");
-    expect(response?.headers()['strict-transport-security']).toContain('max-age=31536000');
+    const responseHeaders = response?.headers() ?? {};
+    expect(responseHeaders['content-security-policy']).toContain("default-src 'self'");
+    expect(responseHeaders['content-security-policy']).not.toContain('upgrade-insecure-requests');
+    expect(responseHeaders['strict-transport-security']).toBeUndefined();
     expect(response?.headers()['x-frame-options']).toBe('DENY');
     await expectCorePageContract(page);
 
