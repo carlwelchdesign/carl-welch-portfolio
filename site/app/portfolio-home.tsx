@@ -3,7 +3,7 @@ import { capabilities } from './capabilities-data';
 import { MotionRuntime, Orbit, Reveal } from './motion-elements';
 import { experience, projects } from './portfolio-data';
 import { recommendations } from './recommendations-data';
-import { CareerPortraitPreview, CharacterSignals, PageFrame, ProjectChapter } from './site-components';
+import { CareerPortraitPreview, CharacterSignals, PageFrame, ProjectChapter, WorkIndex } from './site-components';
 
 export function PortfolioHome() {
   return (
@@ -74,6 +74,7 @@ export function PortfolioHome() {
           <CareerPortraitPreview />
 
           <div id="work">
+            <WorkIndex items={projects} />
             {projects.map((project, index) => (
               <ProjectChapter key={project.slug} project={project} priority={index === 0} />
             ))}
