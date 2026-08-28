@@ -126,6 +126,55 @@ test('all return-to-index controls meet the mobile touch-target contract', async
   }
 });
 
+test('every public route meets the mobile control-size and overflow contract', async ({ page }) => {
+  for (const viewport of mobileViewports) {
+    await page.setViewportSize(viewport);
+    for (const route of routes) {
+      await page.goto(route);
+      const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+      expect(overflow, `${route} overflows at ${viewport.width}px`).toBeLessThanOrEqual(0);
+
+      const undersizedTargets = await page.locator('a, button, summary, input, textarea, select').evaluateAll(
+        (elements) => elements.flatMap((element) => {
+          const target = element as HTMLElement;
+          const box = target.getBoundingClientRect();
+          const styles = getComputedStyle(target);
+          const visible = box.width > 0 && box.height > 0 && styles.visibility !== 'hidden' && styles.display !== 'none';
+          if (!visible || (box.width >= 44 && box.height >= 44)) return [];
+          return [{
+            label: target.getAttribute('aria-label') || target.textContent?.trim().slice(0, 60) || target.tagName,
+            width: Math.round(box.width),
+            height: Math.round(box.height),
+          }];
+        }),
+      );
+      expect(
+        undersizedTargets,
+        `${route} has undersized controls at ${viewport.width}px: ${JSON.stringify(undersizedTargets)}`,
+      ).toEqual([]);
+    }
+  }
+});
+
+test('fixed mobile targets preserve author attribution and architecture disclosure behavior', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/recommendations');
+  const authorLinks = page.locator('.recommendation-card footer strong a');
+  await expect(authorLinks).toHaveCount(13);
+  await expect(page.getByRole('link', { name: 'David Allen', exact: true })).toHaveAttribute(
+    'href',
+    'https://www.linkedin.com/in/davidallengtd/',
+  );
+
+  await page.goto('/work/job-search-os');
+  const connections = page.locator('.architecture-connections');
+  const disclosure = connections.getByText('Read system connections', { exact: true });
+  await disclosure.focus();
+  await expect(disclosure).toBeFocused();
+  await disclosure.press('Enter');
+  await expect(connections).toHaveAttribute('open', '');
+});
+
 test('homepage gives recruiters a synchronized proof summary', async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 720 });
   await page.goto('/');
