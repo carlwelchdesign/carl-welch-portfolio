@@ -1,5 +1,6 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
+import { githubProjects } from '../../app/github-projects';
 import { projects } from '../../app/portfolio-data';
 import { recommendations } from '../../app/recommendations-data';
 
@@ -1202,6 +1203,40 @@ test('visitor-facing routes avoid internal editorial and evidence-system languag
       await expect(page.locator('body')).not.toContainText(rejectedCopy);
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
       expect(overflow, `${route} overflows at ${viewport.width}px`).toBeLessThanOrEqual(0);
+    }
+  }
+});
+
+test('GitHub archive actions identify each project and external destination', async ({ page }) => {
+  await page.goto('/work#public-repositories');
+
+  for (const project of githubProjects) {
+    const card = page.getByRole('heading', { level: 3, name: project.name }).locator('xpath=ancestor::article');
+    const expectedLinks = [
+      {
+        name: `Open ${project.name} repository preview on GitHub (opens in a new tab)`,
+        href: project.url,
+      },
+      {
+        name: `Open ${project.name} repository on GitHub (opens in a new tab)`,
+        href: project.url,
+      },
+      {
+        name: `View ${project.name} repository on GitHub (opens in a new tab)`,
+        href: project.url,
+      },
+      ...(project.homepage ? [{
+        name: `Open ${project.name} live site (opens in a new tab)`,
+        href: project.homepage,
+      }] : []),
+    ];
+
+    await expect(card.getByRole('link')).toHaveCount(expectedLinks.length);
+    for (const expectedLink of expectedLinks) {
+      const link = card.getByRole('link', { name: expectedLink.name, exact: true });
+      await expect(link).toHaveAttribute('href', expectedLink.href);
+      await expect(link).toHaveAttribute('target', '_blank');
+      await expect(link).toHaveAttribute('rel', /\bnoreferrer\b/);
     }
   }
 });
