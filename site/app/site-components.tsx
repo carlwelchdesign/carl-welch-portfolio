@@ -7,6 +7,7 @@ import { homepageLegacyWork } from './legacy-career-visuals';
 import type { PortfolioProject, ProjectArchitecture, ProjectTone } from './portfolio-data';
 import { ArchitectureFlow, ImageDrift, NodePulse, Reveal } from './motion-elements';
 import { ProjectMediaViewer } from './project-media-viewer';
+import { SiteHeader } from './site-header';
 
 type ToneStyle = CSSProperties & { '--chapter-tone': string };
 
@@ -15,44 +16,6 @@ const toneColors: Record<ProjectTone, string> = {
   orange: '#ff6800',
   green: '#62e879',
 };
-
-export function SiteHeader() {
-  return (
-    <header className="site-header">
-      <Link className="wordmark" href="/" aria-label="Carl Welch home">
-        <span className="wordmark-mark" aria-hidden="true">
-          <i />
-          <i />
-          <i />
-        </span>
-        <span>Carl Welch</span>
-      </Link>
-
-      <nav aria-label="Primary navigation">
-        <Link href="/work">Work</Link>
-        <Link href="/archive">Archive</Link>
-        <Link href="/about">About</Link>
-        <Link href="/experience">Experience</Link>
-        <Link href="/recommendations">Recommendations</Link>
-      </nav>
-
-      <details className="mobile-navigation">
-        <summary>Menu</summary>
-        <nav aria-label="Mobile navigation">
-          <Link href="/work">Work</Link>
-          <Link href="/archive">Archive</Link>
-          <Link href="/about">About</Link>
-          <Link href="/capabilities">Capabilities</Link>
-          <Link href="/experience">Experience</Link>
-          <Link href="/recommendations">Recommendations</Link>
-          <Link href="/contact">Contact</Link>
-        </nav>
-      </details>
-
-      <Link className="build-label" href="/contact">Contact →</Link>
-    </header>
-  );
-}
 
 export function CareerPortraitPreview() {
   return (
