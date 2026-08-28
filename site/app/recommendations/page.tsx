@@ -5,6 +5,42 @@ import { PageFrame, PageIntro } from '../site-components';
 import { buildPageMetadata } from '../site-metadata';
 import { publicEvidenceAnchorId } from '../jolene/public-evidence-navigation-core';
 
+const recommendationHighlightDefinitions = [
+  {
+    label: 'Product craft',
+    recommendationId: 'portfolio:recommendation:sree-sankara-2026-06-02',
+    excerpt: 'a rare combination of a keen eye for visualization and a deep commitment to high-performance user experience',
+  },
+  {
+    label: 'Mentorship',
+    recommendationId: 'portfolio:recommendation:jason-conover-2017-07-17',
+    excerpt: 'Carl’s been a true mentor.',
+  },
+  {
+    label: 'Calm under pressure',
+    recommendationId: 'portfolio:recommendation:todd-rimes-2013-08-13',
+    excerpt: "Carl's experience, persistence, and (most of all) calm always saved the day.",
+  },
+  {
+    label: 'Creative and technical range',
+    recommendationId: 'portfolio:recommendation:jacob-tell-2011-06-17',
+    excerpt: 'Carl Welch is a rare breed of web expert.',
+  },
+] as const;
+
+function displayRecommendationQuote(quote: string): string {
+  return quote.replaceAll('_', '');
+}
+
+const recommendationHighlights = recommendationHighlightDefinitions.map((highlight) => {
+  const recommendation = recommendations.find(({ id }) => id === highlight.recommendationId);
+  if (!recommendation) throw new Error(`Missing recommendation highlight source: ${highlight.recommendationId}`);
+  if (!displayRecommendationQuote(recommendation.quote).includes(highlight.excerpt)) {
+    throw new Error(`Recommendation highlight is not a direct excerpt: ${highlight.recommendationId}`);
+  }
+  return { ...highlight, recommendation };
+});
+
 export const metadata: Metadata = buildPageMetadata({
   title: 'Recommendations',
   description: 'Professional recommendations for Carl Welch.',
@@ -27,6 +63,20 @@ export default function RecommendationsPage() {
               <p className="eyebrow">Across teams and years</p>
               <h2 id="recommendation-collection-title">What people say</h2>
               <p>Recommendations from managers, teammates, direct reports, and clients who worked with me.</p>
+              <nav className="recommendation-highlights" aria-label="Recommendation highlights">
+                <p className="eyebrow">Four qualities, in their words</p>
+                <ul>
+                  {recommendationHighlights.map(({ label, excerpt, recommendation }) => (
+                    <li key={recommendation.id}>
+                      <a href={`#${publicEvidenceAnchorId(recommendation.sourceId)}`}>
+                        <span>{label}</span>
+                        <q>{excerpt}</q>
+                        <small>{recommendation.name} <span aria-hidden="true">↓</span></small>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
             </div>
           </section>
           <ol className="recommendation-list" aria-label="Professional recommendations">
@@ -44,7 +94,7 @@ export default function RecommendationsPage() {
                     {String(index + 1).padStart(2, '0')}
                   </div>
                   <blockquote>
-                    <p>“{recommendation.quote}”</p>
+                    <p>“{displayRecommendationQuote(recommendation.quote)}”</p>
                   </blockquote>
                   <footer>
                     <strong>

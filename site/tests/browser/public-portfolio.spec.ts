@@ -277,6 +277,30 @@ test('recommendations read as professional testimony without publication audit c
   await expect(davidAllen).not.toContainText('David was Carl’s client');
 });
 
+test('recommendation highlights use direct excerpts and link to the full testimony', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 720 });
+  await page.goto('/recommendations');
+
+  const highlights = page.getByRole('navigation', { name: 'Recommendation highlights' });
+  await expect(highlights.getByRole('link')).toHaveCount(4);
+  await expect(highlights).toContainText('Product craft');
+  await expect(highlights).toContainText('Carl’s been a true mentor.');
+  await expect(highlights).toContainText("Carl's experience, persistence, and (most of all) calm always saved the day.");
+  await expect(highlights).toContainText('Carl Welch is a rare breed of web expert.');
+
+  const mentorship = highlights.getByRole('link', { name: /Mentorship/ });
+  await expect(mentorship).toHaveAttribute(
+    'href',
+    '#evidence--portfolio--source--recommendation--jason-conover-2017-07-17',
+  );
+  await mentorship.click();
+  await expect(page).toHaveURL(/#evidence--portfolio--source--recommendation--jason-conover-2017-07-17$/);
+  await expect(page.getByRole('listitem', { name: 'Jason Conover recommendation' })).toBeVisible();
+
+  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+  expect(overflow).toBeLessThanOrEqual(0);
+});
+
 test('contact page invites conversation without internal policy copy', async ({ page }) => {
   await page.goto('/contact');
   await expectCorePageContract(page);
@@ -353,6 +377,13 @@ test('server-rendered navigation and content remain available without JavaScript
   await expect(page.getByRole('link', { name: 'View selected work' })).toBeVisible();
   await expect(page.getByRole('region', { name: 'Let’s talk about what you’re building.' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Start a conversation' })).toHaveAttribute('href', '/contact');
+
+  await page.goto('/recommendations');
+  await expect(page.getByRole('navigation', { name: 'Recommendation highlights' })).toBeVisible();
+  await expect(page.getByRole('link', { name: /Mentorship/ })).toHaveAttribute(
+    'href',
+    '#evidence--portfolio--source--recommendation--jason-conover-2017-07-17',
+  );
 
   await page.goto('/work/job-search-os#project-gallery');
   await expect(page.locator('#project-gallery img')).toHaveCount(6);
