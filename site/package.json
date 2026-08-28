@@ -41,6 +41,7 @@
     "check:jolene-avatar-sprites": "node scripts/build-jolene-avatar-sprites.mjs --check",
     "build:jolene-avatar-review": "node scripts/build-jolene-avatar-review.mjs",
     "check:jolene-avatar-review": "node scripts/build-jolene-avatar-review.mjs --check",
+    "check:jolene-avatar-renderer": "node scripts/check-jolene-avatar-renderer.mjs",
     "evaluate:jolene": "node scripts/evaluate-public-jolene.mjs",
     "check:analytics": "node scripts/check-analytics.mjs",
     "check:sentry-privacy": "node scripts/check-sentry-privacy.mjs",
@@ -62,7 +63,7 @@
     "check:jolene-ui:enabled": "JOLENE_UI_CONTACT_ENABLED=true playwright test --config=playwright.jolene.config.ts",
     "check:jolene-ui:error": "JOLENE_UI_CONTACT_ENABLED=false JOLENE_UI_SCENARIO=unavailable playwright test --config=playwright.jolene.config.ts",
     "check:jolene-ui": "pnpm check:jolene-ui:disabled && pnpm check:jolene-ui:enabled && pnpm check:jolene-ui:error",
-    "check": "pnpm typecheck && pnpm lint && pnpm check:metadata && pnpm check:social-cards && pnpm check:content && pnpm check:no-em-dashes && pnpm check:editorial && pnpm check:archive && pnpm check:legacy-visuals && pnpm check:archive-recovery && pnpm check:release-decisions && pnpm check:github-sync && pnpm check:jolene-contract && pnpm check:jolene-job-fit && pnpm check:jolene-bff && pnpm check:jolene-avatar-brief && pnpm check:jolene-avatar-master && pnpm check:jolene-avatar-state && pnpm check:jolene-avatar-sprites && pnpm check:jolene-avatar-review && pnpm check:analytics && pnpm check:sentry-privacy && pnpm check:sentry-asana && pnpm check:sentry-reconciliation && pnpm check:sentry-release && pnpm check:sentry-operations && pnpm check:research-protocol && pnpm check:recovery && pnpm check:security-headers && pnpm check:release-readiness && pnpm build && pnpm check:no-public-sourcemaps"
+    "check": "pnpm typecheck && pnpm lint && pnpm check:metadata && pnpm check:social-cards && pnpm check:content && pnpm check:no-em-dashes && pnpm check:editorial && pnpm check:archive && pnpm check:legacy-visuals && pnpm check:archive-recovery && pnpm check:release-decisions && pnpm check:github-sync && pnpm check:jolene-contract && pnpm check:jolene-job-fit && pnpm check:jolene-bff && pnpm check:jolene-avatar-brief && pnpm check:jolene-avatar-master && pnpm check:jolene-avatar-state && pnpm check:jolene-avatar-sprites && pnpm check:jolene-avatar-review && pnpm check:jolene-avatar-renderer && pnpm check:analytics && pnpm check:sentry-privacy && pnpm check:sentry-asana && pnpm check:sentry-reconciliation && pnpm check:sentry-release && pnpm check:sentry-operations && pnpm check:research-protocol && pnpm check:recovery && pnpm check:security-headers && pnpm check:release-readiness && pnpm build && pnpm check:no-public-sourcemaps"
   },
   "dependencies": {
     "@sentry/browser": "10.71.0",
