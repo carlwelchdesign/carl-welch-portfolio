@@ -355,6 +355,7 @@ export function ProjectChapter({ project, priority = false }: { project: Portfol
 
   return (
     <section
+      id={`work-${project.slug}`}
       className="project-chapter"
       data-tone={project.tone}
       style={style}
@@ -435,6 +436,31 @@ export function ProjectChapter({ project, priority = false }: { project: Portfol
         <ArchitectureDiagram architecture={project.architecture} tone={project.tone} compact />
       </div>
     </section>
+  );
+}
+
+export function WorkIndex({ items }: { items: PortfolioProject[] }) {
+  return (
+    <nav className="work-index" aria-labelledby="work-index-title">
+      <Reveal className="work-index-heading">
+        <p className="eyebrow">Jump to a case study</p>
+        <h2 id="work-index-title">Project index</h2>
+        <p>Five flagship projects, organized for a quick scan.</p>
+      </Reveal>
+      <ol>
+        {items.map((project) => (
+          <li key={project.slug} style={{ '--chapter-tone': toneColors[project.tone] } as ToneStyle}>
+            <Link href={`#work-${project.slug}`}>
+              <span className="work-index-number">{project.number}</span>
+              <strong>{project.name}</strong>
+              <span className="work-index-category">{project.category}</span>
+              <span className="work-index-status">{project.status}</span>
+              <span className="work-index-arrow" aria-hidden="true">↓</span>
+            </Link>
+          </li>
+        ))}
+      </ol>
+    </nav>
   );
 }
 

@@ -3,7 +3,7 @@ import { ArchiveExplorer } from '../archive-explorer';
 import { githubProjects } from '../github-projects';
 import { MotionRuntime } from '../motion-elements';
 import { projects } from '../portfolio-data';
-import { PageFrame, PageIntro, ProjectChapter, SelectedArchive } from '../site-components';
+import { PageFrame, PageIntro, ProjectChapter, SelectedArchive, WorkIndex } from '../site-components';
 import { buildPageMetadata } from '../site-metadata';
 
 export const metadata: Metadata = buildPageMetadata({
@@ -22,6 +22,7 @@ export default function WorkPage() {
             title="Selected work"
             summary={`${projects.length} detailed case studies and ${githubProjects.length} selected public repositories spanning product systems, applied AI, audio software, and creative technology.`}
           />
+          <WorkIndex items={projects} />
           {projects.map((project, index) => (
             <ProjectChapter key={project.slug} project={project} priority={index === 0} />
           ))}
