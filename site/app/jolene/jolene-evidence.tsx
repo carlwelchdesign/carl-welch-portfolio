@@ -18,6 +18,7 @@ export type JoleneAnswerEvidence = Pick<
 
 type JoleneEvidenceProps = {
   evidence: JoleneAnswerEvidence;
+  onOpen?: () => void;
 };
 
 const maturityLabels: Record<ProjectMaturity, string> = {
@@ -86,13 +87,19 @@ export function JoleneCitationLink({
   );
 }
 
-export function JoleneEvidence({ evidence }: JoleneEvidenceProps) {
+export function JoleneEvidence({ evidence, onOpen }: JoleneEvidenceProps) {
   const sourceCount = evidence.citations.length;
   const hasClaims = evidence.claims.length > 0;
   const citationsById = new Map(evidence.citations.map((citation) => [citation.evidenceId, citation]));
 
   return (
-    <details className="jolene-evidence" {...(!hasClaims ? { open: true } : {})}>
+    <details
+      className="jolene-evidence"
+      onToggle={(event) => {
+        if (event.currentTarget.open) onOpen?.();
+      }}
+      {...(!hasClaims ? { open: true } : {})}
+    >
       <summary>
         <span>{hasClaims ? 'See what supports this answer' : 'No matching example found'}</span>
         <small>{sourceCount} {sourceCount === 1 ? 'source' : 'sources'}</small>

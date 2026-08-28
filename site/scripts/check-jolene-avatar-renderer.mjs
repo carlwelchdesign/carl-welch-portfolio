@@ -2,6 +2,8 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 
 const source = await readFile(new URL('../app/jolene/jolene-avatar.tsx', import.meta.url), 'utf8');
+const chatSource = await readFile(new URL('../app/jolene/jolene-chat.tsx', import.meta.url), 'utf8');
+const evidenceSource = await readFile(new URL('../app/jolene/jolene-evidence.tsx', import.meta.url), 'utf8');
 const styles = await readFile(new URL('../app/globals.css', import.meta.url), 'utf8');
 const contract = JSON.parse(await readFile(new URL('../app/jolene/avatar-state-contract.v1.json', import.meta.url), 'utf8'));
 const catalog = JSON.parse(await readFile(new URL('../app/jolene/avatar-frame-catalog.v1.json', import.meta.url), 'utf8'));
@@ -42,4 +44,21 @@ for (const state of contract.states) {
 
 assert.deepEqual(contract.interruption.alwaysInterruptFor, ['offline']);
 assert.equal(catalog.imageRendering, 'pixelated');
-console.log('Jolene avatar renderer passed: stepped Motion playback, replaceable assets, central signals, crisp pixels, and reduced-motion frames.');
+
+for (const signal of Object.keys(contract.signals)) {
+  assert.ok(chatSource.includes(`'${signal}'`) || ['answer_finished'].includes(signal), `Chat does not drive avatar signal ${signal}.`);
+}
+for (const integrationBoundary of [
+  'Howdy, folks!',
+  'jolene-country-host-intro-seen-v1',
+  'introVisible && !open',
+  '<JoleneAvatar',
+  "sendAvatar('chat_opened')",
+  "sendAvatar('evidence_highlighted')",
+  "'service_unavailable'",
+]) {
+  assert.ok(chatSource.includes(integrationBoundary), `Chat integration is missing ${integrationBoundary}.`);
+}
+assert.ok(evidenceSource.includes('onToggle'), 'Evidence expansion must expose a state signal.');
+assert.ok(evidenceSource.includes('onOpen?.()'), 'Evidence expansion must notify the avatar controller.');
+console.log('Jolene avatar renderer passed: stepped playback, central signals, one-time cameo, chat/evidence/error integration, crisp pixels, and reduced motion.');
