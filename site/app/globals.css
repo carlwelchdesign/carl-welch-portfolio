@@ -692,6 +692,11 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .recommendation-card footer time { margin-top: auto; }
 .recommendation-highlights-return { width: fit-content; padding: 8px 0 5px; border-bottom: 1px solid currentColor; font: 9px/1.2 var(--font-geist-mono), monospace; letter-spacing: 0.09em; text-transform: uppercase; transition: color 160ms ease, border-color 160ms ease; }
 .recommendation-highlights-return:hover, .recommendation-highlights-return:focus-visible { color: #a82820; border-color: #a82820; outline: 0; }
+.recommendation-closing { padding: clamp(82px, 10vw, 150px) var(--page-padding); display: grid; grid-template-columns: minmax(150px, 0.28fr) minmax(0, 1fr); gap: 48px; background: var(--green); color: var(--ink); }
+.recommendation-closing > div { max-width: 1080px; }
+.recommendation-closing h2 { margin: 0; font-size: clamp(52px, 7.5vw, 116px); line-height: 0.88; letter-spacing: -0.07em; }
+.recommendation-closing > div > p { max-width: 720px; margin: 36px 0 0; font-size: clamp(18px, 1.8vw, 25px); line-height: 1.5; letter-spacing: -0.022em; }
+.recommendation-closing-actions { margin-top: 38px; display: flex; flex-wrap: wrap; gap: 14px; }
 
 .archive { padding: clamp(86px, 10vw, 150px) var(--page-padding); background: rgba(9, 12, 9, 0.96); color: var(--paper); }
 .archive-heading { display: grid; grid-template-columns: 1fr 0.7fr; gap: 60px; align-items: end; padding-bottom: 40px; border-bottom: 1px solid var(--line); }
@@ -927,7 +932,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .evidence-link { min-height: 230px; }
   .contact-routes { grid-template-columns: 1fr; }
   .contact-routes > a { min-height: 180px; }
-  .career-portrait-heading, .character-signals > header, .home-closing, .about-chapters > header, .earlier-experience > header { grid-template-columns: 1fr; }
+  .career-portrait-heading, .character-signals > header, .home-closing, .recommendation-closing, .about-chapters > header, .earlier-experience > header { grid-template-columns: 1fr; }
   .career-portrait-layout { grid-template-columns: minmax(220px, 0.65fr) minmax(380px, 1.35fr); gap: 42px; }
   .character-signal-grid { grid-template-columns: 1fr; }
   .career-chapter { grid-template-columns: 58px minmax(0, 1fr); }
@@ -1114,6 +1119,9 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .recommendation-index { display: none; }
   .recommendation-card footer { grid-column: auto; }
   .recommendation-card footer time { margin-top: 14px; }
+  .recommendation-closing { gap: 28px; }
+  .recommendation-closing h2 { font-size: clamp(48px, 15vw, 72px); overflow-wrap: anywhere; }
+  .recommendation-closing-actions { align-items: flex-start; flex-direction: column; }
   .archive-heading, .archive-controls { grid-template-columns: 1fr; }
   .archive-filter-group { grid-column: auto; grid-row: auto; display: grid; grid-template-columns: 1fr 1fr; }
   .archive-filter-group button { min-height: 44px; border-bottom: 1px solid var(--line); }

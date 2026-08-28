@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { MotionRuntime, Reveal } from '../motion-elements';
 import { recommendations } from '../recommendations-data';
 import { PageFrame, PageIntro } from '../site-components';
@@ -117,6 +118,24 @@ export default function RecommendationsPage() {
               </li>
             ))}
           </ol>
+          <section className="recommendation-closing" data-tone="green" aria-labelledby="recommendation-closing-title">
+            <p className="eyebrow">Where to next</p>
+            <div>
+              <h2 id="recommendation-closing-title">See the work they’re talking about.</h2>
+              <p>Move from the recommendations to the projects, roles, and career behind them.</p>
+              <nav className="recommendation-closing-actions" aria-label="Continue from the recommendations">
+                <Link className="primary-action dark-action" href="/work#work-index">
+                  View selected work <span aria-hidden="true">→</span>
+                </Link>
+                <Link className="primary-action dark-action" href="/experience#career-index">
+                  Trace the career <span aria-hidden="true">→</span>
+                </Link>
+                <Link className="primary-action dark-action" href="/contact">
+                  Contact Carl <span aria-hidden="true">→</span>
+                </Link>
+              </nav>
+            </div>
+          </section>
         </main>
       </PageFrame>
     </MotionRuntime>
