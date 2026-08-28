@@ -2,10 +2,43 @@ import type { ProjectMaturity, PublicEvidenceRecord } from './evidence-types';
 
 export type ProjectTone = 'red' | 'orange' | 'green';
 
+export type ArchitectureNodeKind = 'surface' | 'service' | 'data' | 'ai' | 'integration' | 'control' | 'runtime';
+
 export type ArchitectureNode = {
   id: string;
   label: string;
   detail: string;
+  technology: string;
+  kind: ArchitectureNodeKind;
+  x: number;
+  y: number;
+  width?: number;
+};
+
+export type ArchitectureGroup = {
+  id: string;
+  label: string;
+  detail: string;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+};
+
+export type ArchitectureEdge = {
+  from: string;
+  to: string;
+  label?: string;
+  dashed?: boolean;
+  bidirectional?: boolean;
+};
+
+export type ProjectArchitecture = {
+  title: string;
+  summary: string;
+  groups: ArchitectureGroup[];
+  nodes: ArchitectureNode[];
+  edges: ArchitectureEdge[];
 };
 
 export type ProjectMedia = {
@@ -49,7 +82,7 @@ export type PortfolioProject = {
   gallery: ProjectMedia[];
   story: ProjectStory;
   stack: string[];
-  architecture: ArchitectureNode[];
+  architecture: ProjectArchitecture;
   maturity: ProjectMaturity;
   sourceId: `portfolio:source:project:${string}`;
   evidence: PublicEvidenceRecord[];
@@ -153,13 +186,40 @@ export const projects: PortfolioProject[] = [
       ],
     },
     stack: ['Next.js', 'TypeScript', 'PostgreSQL + pgvector', 'OpenAI', 'LangGraph', 'MCP'],
-    architecture: [
-      { id: 'sources', label: 'Job sources', detail: 'Direct ATS, company, and discovery channels' },
-      { id: 'evidence', label: 'Evidence store', detail: 'Career facts, project records, and embeddings' },
-      { id: 'agents', label: 'Agent workflows', detail: 'Structured outputs with deterministic fallbacks' },
-      { id: 'review', label: 'Review workspace', detail: 'Fit, materials, blockers, and approval state' },
-      { id: 'actions', label: 'External actions', detail: 'Manual or approved by the user' },
-    ],
+    architecture: {
+      title: 'Human-reviewed career operations',
+      summary: 'Four product surfaces share one evidence and orchestration layer; every consequential external action stops at an approval boundary.',
+      groups: [
+        { id: 'surfaces', label: 'Product surfaces', detail: 'Ways Carl enters and reviews work', x: 20, y: 35, width: 205, height: 550 },
+        { id: 'core', label: 'Application + orchestration', detail: 'Server-owned workflow boundary', x: 250, y: 35, width: 410, height: 550 },
+        { id: 'state', label: 'Durable state', detail: 'Shared operational record', x: 685, y: 35, width: 295, height: 250 },
+        { id: 'gates', label: 'Controlled exits', detail: 'No autonomous submission', x: 685, y: 310, width: 295, height: 275 },
+      ],
+      nodes: [
+        { id: 'dashboard', label: 'Daily cockpit', detail: 'Search, fit, materials, review', technology: 'Next.js · React', kind: 'surface', x: 42, y: 105, width: 160 },
+        { id: 'chrome', label: 'Browser capture', detail: 'Role and source intake', technology: 'Chrome extension', kind: 'surface', x: 42, y: 225, width: 160 },
+        { id: 'slack', label: 'Jolene command', detail: 'Private operator channel', technology: 'Slack', kind: 'surface', x: 42, y: 345, width: 160 },
+        { id: 'mcp', label: 'Local tool access', detail: 'Tracking and preparation tools', technology: 'MCP · stdio', kind: 'surface', x: 42, y: 465, width: 160 },
+        { id: 'api', label: 'Workflow API', detail: 'Typed routes and policy checks', technology: 'Next.js App Router', kind: 'service', x: 275, y: 105, width: 160 },
+        { id: 'agents', label: 'Specialist agents', detail: 'Structured outputs + fallbacks', technology: 'OpenAI', kind: 'ai', x: 470, y: 105, width: 165 },
+        { id: 'rag', label: 'Evidence RAG', detail: 'Approved career evidence only', technology: 'pgvector', kind: 'ai', x: 275, y: 265, width: 160 },
+        { id: 'graph', label: 'Durable workflows', detail: 'Runs, checkpoints, review state', technology: 'LangGraph', kind: 'service', x: 470, y: 265, width: 165 },
+        { id: 'worker', label: 'Background worker', detail: 'Embeddings and queued work', technology: 'Node.js · Redis', kind: 'runtime', x: 372, y: 440, width: 170 },
+        { id: 'postgres', label: 'System of record', detail: 'Roles, claims, runs, materials', technology: 'PostgreSQL', kind: 'data', x: 710, y: 105, width: 150 },
+        { id: 'vector', label: 'Semantic index', detail: 'Career evidence embeddings', technology: 'pgvector', kind: 'data', x: 805, y: 195, width: 150 },
+        { id: 'approval', label: 'Owner approval', detail: 'Review before consequence', technology: 'Policy gate', kind: 'control', x: 710, y: 385, width: 155 },
+        { id: 'external', label: 'External channels', detail: 'ATS, email, LinkedIn', technology: 'Manual / approved', kind: 'integration', x: 805, y: 485, width: 150 },
+      ],
+      edges: [
+        { from: 'dashboard', to: 'api' }, { from: 'chrome', to: 'api', label: 'capture' },
+        { from: 'slack', to: 'agents' }, { from: 'mcp', to: 'api' },
+        { from: 'api', to: 'agents', label: 'plan' }, { from: 'api', to: 'rag' },
+        { from: 'agents', to: 'graph' }, { from: 'rag', to: 'vector' },
+        { from: 'graph', to: 'postgres' }, { from: 'graph', to: 'worker', dashed: true },
+        { from: 'worker', to: 'postgres' }, { from: 'agents', to: 'approval', label: 'propose' },
+        { from: 'approval', to: 'external', label: 'approved only' },
+      ],
+    },
     maturity: 'production',
     sourceId: 'portfolio:source:project:job-search-os',
     evidence: [
@@ -259,13 +319,37 @@ export const projects: PortfolioProject[] = [
       ],
     },
     stack: ['Next.js', 'TypeScript', 'Rust + Axum', 'PostgreSQL + PostGIS', 'NOAA data', 'Vercel'],
-    architecture: [
-      { id: 'traffic', label: 'Traffic + weather', detail: 'Live or replay data with NOAA weather and hazard sources' },
-      { id: 'frontend', label: 'Map interface', detail: 'Next.js and TypeScript presentation layer' },
-      { id: 'api', label: 'Rust API', detail: 'Axum service for domain logic and data access' },
-      { id: 'spatial', label: 'Spatial store', detail: 'PostgreSQL and PostGIS for geospatial queries' },
-      { id: 'explain', label: 'Attention layer', detail: 'Explainable cues and constrained draft assistance' },
-    ],
+    architecture: {
+      title: 'Regional aviation intelligence',
+      summary: 'Live providers and deterministic fixtures enter one Rust domain service; the browser receives a sanitized, read-only air picture.',
+      groups: [
+        { id: 'providers', label: 'External observations', detail: 'Best-effort public data', x: 20, y: 35, width: 235, height: 550 },
+        { id: 'domain', label: 'Domain service', detail: 'Rust owns aviation policy', x: 280, y: 35, width: 390, height: 550 },
+        { id: 'platform', label: 'Hosted platform', detail: 'Read-only public deployment', x: 695, y: 35, width: 285, height: 550 },
+      ],
+      nodes: [
+        { id: 'adsb', label: 'Aircraft positions', detail: 'Primary + fallback feeds', technology: 'ADSB.lol · Airplanes.live', kind: 'integration', x: 45, y: 100, width: 185 },
+        { id: 'weather', label: 'Aviation weather', detail: 'METAR, TAF, PIREP, SIGMET', technology: 'NOAA AWC', kind: 'integration', x: 45, y: 225, width: 185 },
+        { id: 'radar', label: 'Weather imagery', detail: 'Radar and forecast layers', technology: 'nowCOAST · GFS/HRRR', kind: 'integration', x: 45, y: 350, width: 185 },
+        { id: 'maps', label: 'Base map', detail: 'Vector tiles and geography', technology: 'OpenFreeMap · OSM', kind: 'integration', x: 45, y: 475, width: 185 },
+        { id: 'ingest', label: 'Ingestion + normalize', detail: 'Provider fallback and typed records', technology: 'Rust · Axum', kind: 'service', x: 310, y: 105, width: 170 },
+        { id: 'geometry', label: 'Spatial engine', detail: 'Trails, regions, route geometry', technology: 'Rust · PostGIS', kind: 'service', x: 475, y: 235, width: 165 },
+        { id: 'attention', label: 'Attention policy', detail: 'Explainable rules and factors', technology: 'Deterministic Rust', kind: 'control', x: 310, y: 365, width: 170 },
+        { id: 'drafting', label: 'Constrained wording', detail: 'Synthetic recommendation phrasing only', technology: 'OpenAI + fallback', kind: 'ai', x: 475, y: 475, width: 165 },
+        { id: 'postgis', label: 'Spatial record', detail: 'Aircraft, observations, scenarios', technology: 'Neon · PostgreSQL/PostGIS', kind: 'data', x: 720, y: 105, width: 225 },
+        { id: 'fixtures', label: 'Replay fixtures', detail: 'Repeatable review scenarios', technology: 'Deterministic JSON', kind: 'data', x: 720, y: 235, width: 225 },
+        { id: 'api', label: 'Public read API', detail: 'Sanitized, no-store responses', technology: 'Render · Axum', kind: 'service', x: 720, y: 365, width: 225 },
+        { id: 'map-ui', label: 'Interactive airspace', detail: 'Traffic, weather, replay, comparison', technology: 'Vercel · Next.js · MapLibre', kind: 'surface', x: 720, y: 495, width: 225 },
+      ],
+      edges: [
+        { from: 'adsb', to: 'ingest' }, { from: 'weather', to: 'ingest' },
+        { from: 'radar', to: 'map-ui', dashed: true }, { from: 'maps', to: 'map-ui', dashed: true },
+        { from: 'ingest', to: 'postgis' }, { from: 'ingest', to: 'geometry' },
+        { from: 'postgis', to: 'geometry', bidirectional: true }, { from: 'fixtures', to: 'geometry', label: 'replay' },
+        { from: 'geometry', to: 'attention' }, { from: 'attention', to: 'drafting', dashed: true },
+        { from: 'attention', to: 'api' }, { from: 'drafting', to: 'api' }, { from: 'api', to: 'map-ui' },
+      ],
+    },
     maturity: 'deployed_demo',
     sourceId: 'portfolio:source:project:flight-tracker-ai',
     evidence: [
@@ -379,13 +463,39 @@ export const projects: PortfolioProject[] = [
       ],
     },
     stack: ['C++', 'iPlug2', 'AU', 'VST3', 'CLAP', 'DSP'],
-    architecture: [
-      { id: 'host', label: 'DAW host', detail: 'Audio Unit, VST3, or CLAP plug-in host' },
-      { id: 'params', label: 'Parameters', detail: 'Stable automation and state boundaries' },
-      { id: 'dsp', label: 'Local DSP', detail: 'Deterministic audio processing without network dependencies' },
-      { id: 'interface', label: 'Custom UI', detail: 'Purpose-built controls, metering, and help surfaces' },
-      { id: 'validation', label: 'Release gates', detail: 'Host, listening, automation, signing, and packaging checks' },
-    ],
+    architecture: {
+      title: 'Host-loadable real-time audio system',
+      summary: 'The DAW, plug-in adapter, real-time DSP, interface, and optional camera controller remain deliberately separated by thread and process boundaries.',
+      groups: [
+        { id: 'host', label: 'Audio host', detail: 'Musician-owned runtime', x: 20, y: 35, width: 210, height: 550 },
+        { id: 'plugin', label: 'Plug-in process', detail: 'Hard real-time boundary', x: 255, y: 35, width: 425, height: 550 },
+        { id: 'gesture', label: 'Optional local control', detail: 'Never required for audio', x: 705, y: 35, width: 275, height: 345 },
+        { id: 'release', label: 'Release gates', detail: 'Separate evidence, not one checkbox', x: 705, y: 405, width: 275, height: 180 },
+      ],
+      nodes: [
+        { id: 'daw', label: 'DAW session', detail: 'Audio, automation, saved state', technology: 'Logic · host DAW', kind: 'surface', x: 45, y: 115, width: 160 },
+        { id: 'formats', label: 'Format adapters', detail: 'Host lifecycle and parameter bridge', technology: 'AU · VST3 · CLAP', kind: 'runtime', x: 45, y: 285, width: 160 },
+        { id: 'automation', label: 'Host automation', detail: 'Stable IDs and normalized values', technology: 'iPlug2 parameters', kind: 'control', x: 45, y: 455, width: 160 },
+        { id: 'adapter', label: 'iPlug2 adapter', detail: 'Host events into product code', technology: 'C++ · iPlug2', kind: 'runtime', x: 285, y: 105, width: 170 },
+        { id: 'dsp', label: 'Shared DSP core', detail: 'No allocation, locks, file or network I/O', technology: 'wave_factory_dsp', kind: 'service', x: 475, y: 105, width: 175 },
+        { id: 'signal', label: 'Product signal path', detail: 'Split, shape, delay, diffuse, mix', technology: 'C++ real-time audio', kind: 'service', x: 380, y: 270, width: 175 },
+        { id: 'meters', label: 'Meter bridge', detail: 'Relaxed atomics leave audio thread clean', technology: 'Lock-free state', kind: 'runtime', x: 285, y: 455, width: 170 },
+        { id: 'ui', label: 'Custom interface', detail: 'Controls, help, metering, art direction', technology: 'iPlug2 UI', kind: 'surface', x: 475, y: 455, width: 175 },
+        { id: 'camera', label: 'Camera helper', detail: 'Local capture outside plug-in process', technology: 'macOS helper', kind: 'surface', x: 730, y: 100, width: 220 },
+        { id: 'vision', label: 'Hand pose model', detail: 'Two 21-point hand skeletons', technology: 'Apple Vision', kind: 'ai', x: 730, y: 205, width: 220 },
+        { id: 'midi', label: 'Gesture bridge', detail: 'Six signals over local bridge or MIDI', technology: 'CC 20–25 · local IPC', kind: 'integration', x: 730, y: 310, width: 220 },
+        { id: 'gates', label: 'Validation pipeline', detail: 'Host · listening · signing · packaging', technology: 'auval · CI · notarization', kind: 'control', x: 730, y: 475, width: 220 },
+      ],
+      edges: [
+        { from: 'daw', to: 'formats' }, { from: 'formats', to: 'adapter' },
+        { from: 'automation', to: 'adapter' }, { from: 'adapter', to: 'dsp' },
+        { from: 'dsp', to: 'signal', bidirectional: true }, { from: 'signal', to: 'meters' },
+        { from: 'meters', to: 'ui' }, { from: 'ui', to: 'adapter', bidirectional: true },
+        { from: 'camera', to: 'vision' }, { from: 'vision', to: 'midi' },
+        { from: 'midi', to: 'automation', label: 'optional', dashed: true },
+        { from: 'adapter', to: 'gates', label: 'build artifacts', dashed: true },
+      ],
+    },
     maturity: 'pre_release',
     sourceId: 'portfolio:source:project:wave-factory-essentials',
     evidence: [
@@ -479,13 +589,40 @@ export const projects: PortfolioProject[] = [
       ],
     },
     stack: ['Next.js', 'TypeScript', 'PostgreSQL + Prisma', 'OpenAI', 'MCP', 'Flutter'],
-    architecture: [
-      { id: 'clients', label: 'Web + MCP clients', detail: 'Journal experience and compatible external AI entry points' },
-      { id: 'guide', label: 'Guide service', detail: 'Safety checks, structured analysis, and one active reflection voice' },
-      { id: 'retrieval', label: 'Governed retrieval', detail: 'Reviewed sources, rights rules, provenance, and optional ontology context' },
-      { id: 'store', label: 'PostgreSQL', detail: 'Journal state, source records, traces, feedback, and review metadata' },
-      { id: 'admin', label: 'Admin control plane', detail: 'Prompt, source, safety, quality, feature, and subscription operations' },
-    ],
+    architecture: {
+      title: 'Governed reflection platform',
+      summary: 'Customer surfaces share a policy-first AI package and database, while a separately deployed admin plane controls prompts, sources, safety, and feature state.',
+      groups: [
+        { id: 'experiences', label: 'Experience surfaces', detail: 'User and compatible AI clients', x: 20, y: 35, width: 225, height: 550 },
+        { id: 'ai', label: 'Shared AI runtime', detail: 'Policy before generation', x: 270, y: 35, width: 400, height: 550 },
+        { id: 'state', label: 'Durable knowledge + state', detail: 'Server-only persistence', x: 695, y: 35, width: 285, height: 285 },
+        { id: 'ops', label: 'Operator control plane', detail: 'Separately deployed admin', x: 695, y: 345, width: 285, height: 240 },
+      ],
+      nodes: [
+        { id: 'web', label: 'Journal web', detail: 'Writing, reflection, privacy controls', technology: 'Next.js', kind: 'surface', x: 45, y: 105, width: 175 },
+        { id: 'mcp', label: 'ChatGPT surface', detail: 'Authenticated tools + widget', technology: 'Express · MCP', kind: 'surface', x: 45, y: 250, width: 175 },
+        { id: 'mobile', label: 'Mobile client', detail: 'Scaffolded product surface', technology: 'Flutter · scaffold', kind: 'surface', x: 45, y: 430, width: 175 },
+        { id: 'routes', label: 'Server routes', detail: 'Auth, journal, voice, billing', technology: 'Next.js route handlers', kind: 'service', x: 300, y: 105, width: 165 },
+        { id: 'safety', label: 'Safety classifier', detail: 'Intensity and response boundaries', technology: 'OpenAI · Zod', kind: 'control', x: 480, y: 105, width: 165 },
+        { id: 'guide', label: 'Reflection guide', detail: 'One active voice + structured output', technology: 'Shared AI package', kind: 'ai', x: 300, y: 270, width: 165 },
+        { id: 'retrieval', label: 'Governed retrieval', detail: 'Eligible reviewed sources + citations', technology: 'Policy-first keyword RAG', kind: 'ai', x: 480, y: 270, width: 165 },
+        { id: 'graph', label: 'Ontology context', detail: 'Approved neighborhoods only', technology: 'GraphRAG · feature-flagged', kind: 'ai', x: 300, y: 455, width: 165 },
+        { id: 'memory', label: 'Pattern memory', detail: 'Traces and reusable reflection state', technology: 'Shared AI package', kind: 'service', x: 480, y: 455, width: 165 },
+        { id: 'postgres', label: 'Application record', detail: 'Journal, sources, prompts, traces', technology: 'PostgreSQL · Prisma', kind: 'data', x: 720, y: 105, width: 235 },
+        { id: 'ontology', label: 'Reviewed knowledge', detail: 'Chunks, provenance, ontology state', technology: 'PostgreSQL', kind: 'data', x: 720, y: 225, width: 235 },
+        { id: 'admin', label: 'Admin console', detail: 'Prompts, sources, safety, quality', technology: 'Separate Next.js app', kind: 'control', x: 720, y: 405, width: 235 },
+        { id: 'stripe', label: 'Subscription boundary', detail: 'Plans and billing operations', technology: 'Stripe', kind: 'integration', x: 720, y: 505, width: 235 },
+      ],
+      edges: [
+        { from: 'web', to: 'routes' }, { from: 'mcp', to: 'guide' },
+        { from: 'mobile', to: 'routes', dashed: true, label: 'scaffold' }, { from: 'routes', to: 'safety' },
+        { from: 'safety', to: 'guide' }, { from: 'guide', to: 'retrieval', bidirectional: true },
+        { from: 'retrieval', to: 'ontology' }, { from: 'graph', to: 'ontology', dashed: true, label: 'flagged' },
+        { from: 'guide', to: 'memory' }, { from: 'memory', to: 'postgres' },
+        { from: 'routes', to: 'postgres' }, { from: 'admin', to: 'postgres', bidirectional: true },
+        { from: 'admin', to: 'ontology', bidirectional: true }, { from: 'routes', to: 'stripe' },
+      ],
+    },
     maturity: 'pre_release',
     sourceId: 'portfolio:source:project:supraconscious-avatar-ai',
     evidence: [
@@ -585,13 +722,38 @@ export const projects: PortfolioProject[] = [
       ],
     },
     stack: ['Next.js', 'TypeScript', 'Fastify', 'Flutter', 'PostgreSQL', 'Docker'],
-    architecture: [
-      { id: 'surfaces', label: 'Public + mobile', detail: 'Synthetic applicant, member, and introduction experiences' },
-      { id: 'contracts', label: 'Generated contracts', detail: 'OpenAPI source with TypeScript and Dart clients' },
-      { id: 'api', label: 'Fastify API', detail: 'Versioned service boundary for future application workflows' },
-      { id: 'domain', label: 'Domain + database', detail: 'Server-only policy, migrations, and synthetic fixture controls' },
-      { id: 'operations', label: 'Staff + worker', detail: 'Separate review workspace and background process foundation' },
-    ],
+    architecture: {
+      title: 'Private-service product foundation',
+      summary: 'The current synthetic concept is split into public, staff, mobile, API, worker, contract, and server-only policy boundaries without implying a live matching service.',
+      groups: [
+        { id: 'clients', label: 'Cross-platform surfaces', detail: 'Synthetic experience layer', x: 20, y: 35, width: 225, height: 550 },
+        { id: 'boundary', label: 'Service + contract boundary', detail: 'Versioned and generated', x: 270, y: 35, width: 390, height: 550 },
+        { id: 'infra', label: 'Server-only foundation', detail: 'No real profiles or matching', x: 685, y: 35, width: 295, height: 550 },
+      ],
+      nodes: [
+        { id: 'public', label: 'Public experience', detail: 'Editorial concept and application story', technology: 'Next.js', kind: 'surface', x: 45, y: 105, width: 175 },
+        { id: 'staff', label: 'Staff workspace', detail: 'Separate matchmaker review surface', technology: 'Next.js · separate app', kind: 'surface', x: 45, y: 260, width: 175 },
+        { id: 'mobile', label: 'Member mobile', detail: 'Cross-platform introduction concept', technology: 'Flutter', kind: 'surface', x: 45, y: 430, width: 175 },
+        { id: 'clients', label: 'Generated clients', detail: 'One contract for web and mobile', technology: 'OpenAPI · TypeScript · Dart', kind: 'integration', x: 300, y: 105, width: 170 },
+        { id: 'api', label: 'HTTP service', detail: 'Versioned workflow boundary', technology: 'Fastify', kind: 'service', x: 465, y: 260, width: 170 },
+        { id: 'design', label: 'Nocturne system', detail: 'Shared semantic tokens and adapters', technology: 'Web + Flutter tokens', kind: 'surface', x: 300, y: 430, width: 170 },
+        { id: 'domain', label: 'Domain policy', detail: 'Server-only rules and calculations', technology: 'Framework-light TypeScript', kind: 'control', x: 465, y: 105, width: 170 },
+        { id: 'worker', label: 'Background worker', detail: 'Process and delivery foundation', technology: 'Node.js worker', kind: 'runtime', x: 465, y: 430, width: 170 },
+        { id: 'postgres', label: 'Data foundation', detail: 'Migrations and synthetic fixtures', technology: 'PostgreSQL 18', kind: 'data', x: 715, y: 120, width: 235 },
+        { id: 'redis', label: 'Queue foundation', detail: 'Local background coordination', technology: 'Redis 8', kind: 'data', x: 715, y: 260, width: 235 },
+        { id: 'docker', label: 'Isolated runtime', detail: 'Five-service smoke verification', technology: 'Docker Compose', kind: 'runtime', x: 715, y: 400, width: 235 },
+        { id: 'ci', label: 'Supply-chain gates', detail: 'Secrets, scanning, SBOM, containers', technology: 'GitHub Actions', kind: 'control', x: 715, y: 505, width: 235 },
+      ],
+      edges: [
+        { from: 'public', to: 'clients' }, { from: 'staff', to: 'clients' }, { from: 'mobile', to: 'clients' },
+        { from: 'design', to: 'public', dashed: true }, { from: 'design', to: 'staff', dashed: true }, { from: 'design', to: 'mobile', dashed: true },
+        { from: 'clients', to: 'api' }, { from: 'api', to: 'domain' },
+        { from: 'api', to: 'postgres' }, { from: 'api', to: 'redis' },
+        { from: 'redis', to: 'worker', bidirectional: true }, { from: 'worker', to: 'postgres' },
+        { from: 'docker', to: 'api', dashed: true }, { from: 'docker', to: 'worker', dashed: true },
+        { from: 'docker', to: 'postgres', dashed: true }, { from: 'ci', to: 'docker', label: 'verify' },
+      ],
+    },
     maturity: 'prototype',
     sourceId: 'portfolio:source:project:argent-matchmaking',
     evidence: [

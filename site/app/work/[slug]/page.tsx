@@ -98,7 +98,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           <section id="architecture" className="project-detail-section" aria-labelledby="architecture-title">
             <p className="eyebrow">Technical view</p>
             <h2 id="architecture-title">Architecture</h2>
-            <ArchitectureDiagram nodes={project.architecture} tone={project.tone} />
+            <ArchitectureDiagram architecture={project.architecture} tone={project.tone} />
           </section>
 
           <section

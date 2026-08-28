@@ -3,7 +3,7 @@ import Link from 'next/link';
 import type { CSSProperties, ReactNode } from 'react';
 import { careerChapters, characterSignals } from './career-story-data';
 import { contact } from './contact-data';
-import type { ArchitectureNode, PortfolioProject, ProjectTone } from './portfolio-data';
+import type { PortfolioProject, ProjectArchitecture, ProjectTone } from './portfolio-data';
 import { ArchitectureFlow, ImageDrift, NodePulse, Reveal } from './motion-elements';
 import { ProjectMediaViewer } from './project-media-viewer';
 
@@ -187,62 +187,130 @@ export function PageFrame({ children }: { children: ReactNode }) {
 }
 
 export function ArchitectureDiagram({
-  nodes,
+  architecture,
   tone,
   compact = false,
 }: {
-  nodes: ArchitectureNode[];
+  architecture: ProjectArchitecture;
   tone: ProjectTone;
   compact?: boolean;
 }) {
   const style = { '--chapter-tone': toneColors[tone] } as ToneStyle;
+  const nodeById = new Map(architecture.nodes.map((node) => [node.id, node]));
+  const markerId = `architecture-arrow-${architecture.title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+
+  const connectionPath = (fromId: string, toId: string) => {
+    const from = nodeById.get(fromId);
+    const to = nodeById.get(toId);
+    if (!from || !to) return '';
+
+    const fromWidth = from.width ?? 170;
+    const toWidth = to.width ?? 170;
+    const fromCenter = { x: from.x + fromWidth / 2, y: from.y + 40 };
+    const toCenter = { x: to.x + toWidth / 2, y: to.y + 40 };
+    const horizontal = Math.abs(toCenter.x - fromCenter.x) >= Math.abs(toCenter.y - fromCenter.y);
+
+    if (horizontal) {
+      const direction = toCenter.x >= fromCenter.x ? 1 : -1;
+      const startX = fromCenter.x + direction * fromWidth / 2;
+      const endX = toCenter.x - direction * toWidth / 2;
+      const control = Math.max(34, Math.abs(endX - startX) * 0.45);
+      return `M ${startX} ${fromCenter.y} C ${startX + direction * control} ${fromCenter.y}, ${endX - direction * control} ${toCenter.y}, ${endX} ${toCenter.y}`;
+    }
+
+    const direction = toCenter.y >= fromCenter.y ? 1 : -1;
+    const startY = fromCenter.y + direction * 40;
+    const endY = toCenter.y - direction * 40;
+    const control = Math.max(30, Math.abs(endY - startY) * 0.45);
+    return `M ${fromCenter.x} ${startY} C ${fromCenter.x} ${startY + direction * control}, ${toCenter.x} ${endY - direction * control}, ${toCenter.x} ${endY}`;
+  };
 
   return (
     <figure
       className={`architecture-card${compact ? ' architecture-card-compact' : ''}`}
       style={style}
-      aria-label="System architecture flow"
+      aria-label={`${architecture.title} system architecture topology`}
     >
       <figcaption>
-        <span>System architecture</span>
-        <span>{String(nodes.length).padStart(2, '0')} connected components</span>
+        <span>{architecture.title}</span>
+        <span>{String(architecture.nodes.length).padStart(2, '0')} components · {String(architecture.edges.length).padStart(2, '0')} connections</span>
       </figcaption>
+      <p className="architecture-summary">{architecture.summary}</p>
       <ArchitectureFlow className="architecture-map-motion">
-        <div className="architecture-map">
-          <svg
-            className="architecture-connectors"
-            viewBox="0 0 1000 600"
-            preserveAspectRatio="none"
-            aria-hidden="true"
-            focusable="false"
-          >
-            <path d="M 235 300 C 315 300 285 102 350 102" />
-            <polygon points="350,102 336,94 336,110" />
-            <path d="M 500 172 L 500 228" />
-            <polygon points="500,228 492,214 508,214" />
-            <path d="M 500 372 L 500 428" />
-            <polygon points="500,428 492,414 508,414" />
-            <path d="M 650 498 C 715 498 685 300 765 300" />
-            <polygon points="765,300 751,292 751,308" />
-          </svg>
-          <ol className="architecture-track">
-            {nodes.map((node, index) => (
+        <div className="architecture-viewport" tabIndex={0} aria-label="Scrollable architecture diagram">
+          <div className="architecture-map">
+            {architecture.groups.map((group) => (
+              <div
+                className="architecture-group"
+                data-architecture-group={group.id}
+                key={group.id}
+                style={{ left: group.x, top: group.y, width: group.width, height: group.height }}
+              >
+                <strong>{group.label}</strong>
+                <span>{group.detail}</span>
+              </div>
+            ))}
+            <svg
+              className="architecture-connectors"
+              viewBox="0 0 1000 620"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <defs>
+                <marker id={markerId} viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+                  <path d="M 0 0 L 10 5 L 0 10 z" />
+                </marker>
+              </defs>
+              {architecture.edges.map((edge) => (
+                <g key={`${edge.from}-${edge.to}`}>
+                  <path
+                    className={edge.dashed ? 'architecture-edge-dashed' : undefined}
+                    d={connectionPath(edge.from, edge.to)}
+                    markerEnd={`url(#${markerId})`}
+                    markerStart={edge.bidirectional ? `url(#${markerId})` : undefined}
+                  />
+                </g>
+              ))}
+            </svg>
+            <ol className="architecture-track">
+              {architecture.nodes.map((node, index) => (
               <li
-                className={`architecture-step architecture-step-${index + 1}`}
+                className="architecture-step"
                 data-architecture-node={node.id}
+                data-node-kind={node.kind}
                 key={node.id}
+                style={{ left: node.x, top: node.y, width: node.width ?? 170 }}
               >
                 <div className="architecture-step-meta">
-                  <small>Component {String(index + 1).padStart(2, '0')}</small>
+                  <small>{node.technology}</small>
                   <NodePulse delay={index * 0.22} />
                 </div>
                 <strong>{node.label}</strong>
                 <p>{node.detail}</p>
               </li>
-            ))}
-          </ol>
+              ))}
+            </ol>
+          </div>
         </div>
       </ArchitectureFlow>
+      <div className="architecture-legend" aria-label="Architecture component legend">
+        {['surface', 'service', 'data', 'ai', 'integration', 'control', 'runtime'].map((kind) => (
+          <span key={kind} data-node-kind={kind}><i aria-hidden="true" />{kind}</span>
+        ))}
+      </div>
+      <details className="architecture-connections">
+        <summary>Read system connections</summary>
+        <ul>
+          {architecture.edges.map((edge) => (
+            <li key={`${edge.from}-${edge.to}-description`}>
+              <strong>{nodeById.get(edge.from)?.label}</strong>
+              <span>{edge.bidirectional ? ' ↔ ' : ' → '}</span>
+              <strong>{nodeById.get(edge.to)?.label}</strong>
+              {edge.label ? <small>{edge.label}</small> : null}
+            </li>
+          ))}
+        </ul>
+      </details>
     </figure>
   );
 }
@@ -330,7 +398,7 @@ export function ProjectChapter({ project, priority = false }: { project: Portfol
           </Link>
         </Reveal>
 
-        <ArchitectureDiagram nodes={project.architecture} tone={project.tone} compact />
+        <ArchitectureDiagram architecture={project.architecture} tone={project.tone} compact />
       </div>
     </section>
   );

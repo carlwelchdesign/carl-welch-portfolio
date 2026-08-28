@@ -1,7 +1,7 @@
 'use client';
 
-import { LazyMotion, MotionConfig, domAnimation, m, useReducedMotion } from 'motion/react';
-import { useEffect, useState, type ReactNode } from 'react';
+import { LazyMotion, MotionConfig, domAnimation, m, useInView, useReducedMotion } from 'motion/react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 
 type SectionTone = 'red' | 'orange' | 'green';
 
@@ -97,14 +97,14 @@ export function ImageDrift({ children }: { children: ReactNode }) {
 
 export function ArchitectureFlow({ children, className }: { children: ReactNode; className?: string }) {
   const reduceMotion = useReducedMotion();
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, amount: 0.12 });
 
   return (
     <m.div
+      ref={ref}
       className={className}
-      initial={reduceMotion ? false : { clipPath: 'inset(0 100% 0 0)' }}
-      whileInView={{ clipPath: 'inset(0 0% 0 0)' }}
-      viewport={{ once: true, amount: 0.35 }}
-      transition={reduceMotion ? { duration: 0 } : { duration: 1.05, ease: [0.22, 1, 0.36, 1] }}
+      data-in-view={inView || reduceMotion ? 'true' : 'false'}
     >
       {children}
     </m.div>

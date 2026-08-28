@@ -130,11 +130,28 @@ for (const project of projects) {
   assert(project.story?.problem?.trim(), `${project.name} must explain the product problem.`);
   assert(project.story?.contribution?.trim(), `${project.name} must explain Carl's contribution.`);
   assert.equal(project.story?.decisions?.length, 3, `${project.name} must include exactly three key decisions.`);
-  assert.equal(project.architecture?.length, 5, `${project.name} must include exactly five architecture components.`);
-  requireUnique(project.architecture.map((node) => node.id), `${project.name} architecture component IDs`);
-  for (const node of project.architecture) {
+  assert(project.architecture?.title?.trim(), `${project.name} must name its architecture topology.`);
+  assert(project.architecture?.summary?.trim(), `${project.name} must explain its architecture boundary.`);
+  assert(project.architecture?.groups?.length >= 3, `${project.name} must include at least three system boundaries.`);
+  assert(project.architecture?.nodes?.length >= 10, `${project.name} must include a detailed component topology.`);
+  assert(project.architecture?.edges?.length >= 10, `${project.name} must include meaningful system connections.`);
+  requireUnique(project.architecture.groups.map((group) => group.id), `${project.name} architecture group IDs`);
+  requireUnique(project.architecture.nodes.map((node) => node.id), `${project.name} architecture component IDs`);
+  const architectureNodeIds = new Set(project.architecture.nodes.map((node) => node.id));
+  for (const group of project.architecture.groups) {
+    assert(group.label?.trim(), `${project.name} architecture boundaries must include a label.`);
+    assert(group.detail?.trim(), `${project.name} architecture boundaries must explain their responsibility.`);
+    assert(group.x >= 0 && group.y >= 0 && group.x + group.width <= 1000 && group.y + group.height <= 620, `${project.name} architecture boundaries must fit the topology canvas.`);
+  }
+  for (const node of project.architecture.nodes) {
     assert(node.label?.trim(), `${project.name} architecture components must include a label.`);
     assert(node.detail?.trim(), `${project.name} architecture components must explain their system responsibility.`);
+    assert(node.technology?.trim(), `${project.name} architecture components must identify concrete technology or policy.`);
+    assert(node.x >= 0 && node.y >= 0 && node.x + (node.width ?? 170) <= 1000 && node.y + 80 <= 620, `${project.name} architecture components must fit the topology canvas.`);
+  }
+  for (const edge of project.architecture.edges) {
+    assert(architectureNodeIds.has(edge.from), `${project.name} architecture edge references unknown source ${edge.from}.`);
+    assert(architectureNodeIds.has(edge.to), `${project.name} architecture edge references unknown target ${edge.to}.`);
   }
   for (const decision of project.story.decisions) {
     assert(decision.title?.trim(), `${project.name} case-study decisions must include a title.`);
@@ -168,7 +185,7 @@ for (const project of projects) {
 
 const jobSearchOs = projects.find((project) => project.slug === 'job-search-os');
 assert(jobSearchOs?.gallery.length >= 6, 'Job Search OS must retain its expanded multi-surface product tour.');
-assert(jobSearchOs?.architecture.length >= 5, 'Job Search OS must retain its native five-layer architecture flow.');
+assert(jobSearchOs?.architecture.nodes.length >= 10, 'Job Search OS must retain its detailed source-grounded topology.');
 assert(!jobSearchOs?.gallery.some((item) => item.src.includes('system-topology')), 'Job Search OS must not render the rejected topology artifact.');
 assert(projects.find((project) => project.slug === 'flight-tracker-ai')?.gallery.length >= 3, 'Flight Tracker AI must retain live, replay, and route-comparison views.');
 assert(projects.find((project) => project.slug === 'wave-factory-essentials')?.gallery.length >= 5, 'Wave Factory Essentials must retain its expanded product-family gallery.');

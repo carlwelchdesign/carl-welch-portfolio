@@ -174,15 +174,19 @@ test('project media viewer supports full-size keyboard inspection on mobile', as
   await expect.poll(() => page.evaluate(() => document.body.style.overflow)).toBe('');
 });
 
-test('Job Search OS uses the native architecture flow instead of the rejected topology artifact', async ({ page }) => {
+test('Job Search OS renders a source-grounded product topology instead of the rejected static artifact', async ({ page }) => {
   await page.goto('/work/job-search-os');
   await expect(page.locator('img[src*="system-topology"]')).toHaveCount(0);
   await expect(page.getByText('System topology', { exact: true })).toHaveCount(0);
 
-  const architecture = page.getByRole('figure', { name: 'System architecture flow' });
-  await expect(architecture.locator('.architecture-step')).toHaveCount(5);
-  await expect(architecture).toContainText('Direct ATS, company, and discovery channels');
-  await expect(architecture).toContainText('Manual or approved by the user');
+  const architecture = page.locator('#architecture .architecture-card');
+  await expect(architecture).toContainText('Human-reviewed career operations');
+  await expect(architecture).toContainText('PostgreSQL');
+  await expect(architecture).toContainText('pgvector');
+  await expect(architecture).toContainText('LangGraph');
+  await expect(architecture).toContainText('MCP');
+  await expect(architecture).toContainText('approved only');
+  expect(await architecture.locator('.architecture-step').count()).toBeGreaterThanOrEqual(10);
 });
 
 for (const route of [
@@ -196,17 +200,19 @@ for (const route of [
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto(`${route}#architecture`);
 
-    const architecture = page.getByRole('figure', { name: 'System architecture flow' });
-    await expect(architecture.getByText('System architecture', { exact: true })).toBeVisible();
-    await expect(architecture.locator('.architecture-step')).toHaveCount(5);
-    await expect(architecture.locator('.architecture-step p')).toHaveCount(5);
-    await expect(architecture.locator('.architecture-connectors path')).toHaveCount(4);
-    await expect(architecture.locator('.architecture-connectors polygon')).toHaveCount(4);
-    await expect(architecture.locator('.architecture-step-3')).toHaveCSS('border-top-color', /rgb\(/);
+    const architecture = page.locator('#architecture .architecture-card');
+    await expect(architecture.locator('.architecture-summary')).toBeVisible();
+    expect(await architecture.locator('.architecture-group').count()).toBeGreaterThanOrEqual(3);
+    expect(await architecture.locator('.architecture-step').count()).toBeGreaterThanOrEqual(10);
+    expect(await architecture.locator('.architecture-step p').count()).toBeGreaterThanOrEqual(10);
+    expect(await architecture.locator('.architecture-connectors > g > path').count()).toBeGreaterThanOrEqual(10);
+    await expect(architecture.locator('.architecture-step').first()).toHaveCSS('border-top-color', /rgb\(/);
 
     await page.setViewportSize({ width: 390, height: 844 });
-    await expect(architecture.locator('.architecture-connectors')).toBeHidden();
-    await expect(architecture.locator('.architecture-step')).toHaveCount(5);
+    await expect(architecture.locator('.architecture-connectors')).toBeVisible();
+    expect(await architecture.locator('.architecture-step').count()).toBeGreaterThanOrEqual(10);
+    const diagramOverflow = await architecture.locator('.architecture-viewport').evaluate((element) => element.scrollWidth - element.clientWidth);
+    expect(diagramOverflow).toBeGreaterThan(0);
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
     expect(overflow).toBeLessThanOrEqual(0);
   });
@@ -428,8 +434,8 @@ test('server-rendered navigation and content remain available without JavaScript
   await expect(page.locator('#project-gallery img')).toHaveCount(6);
   await expect(page.getByText('Application assistant', { exact: true })).toBeVisible();
   await expect(page.getByText('System topology', { exact: true })).toHaveCount(0);
-  await expect(page.locator('.architecture-step')).toHaveCount(5);
-  await expect(page.getByText('External actions', { exact: true })).toBeVisible();
+  expect(await page.locator('.architecture-step').count()).toBeGreaterThanOrEqual(10);
+  await expect(page.locator('.architecture-step').getByText('External channels', { exact: true })).toBeVisible();
   await context.close();
 });
 
