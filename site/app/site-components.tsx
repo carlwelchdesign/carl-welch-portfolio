@@ -152,7 +152,11 @@ export function SelectedArchive({
             </Link>
           ) : null}
           {archiveReturnHref ? (
-            <Link className="archive-map-return" href={archiveReturnHref}>
+            <Link
+              className="archive-map-return"
+              href={archiveReturnHref}
+              aria-label="Return to archive map from yU+co studio website"
+            >
               Archive map <span aria-hidden="true">↑</span>
             </Link>
           ) : null}
@@ -348,7 +352,11 @@ export function ProjectChapter({ project, priority = false }: { project: Portfol
         <div className="project-meta">
           <span>{project.category}</span>
           <span>{project.status}</span>
-          <Link className="project-index-return" href="#work-index">
+          <Link
+            className="project-index-return"
+            href="#work-index"
+            aria-label={`Return to project index from ${project.name}`}
+          >
             Project index <span aria-hidden="true">↑</span>
           </Link>
         </div>

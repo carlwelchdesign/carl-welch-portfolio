@@ -68,7 +68,11 @@ export default function ArchivePage() {
               <h2 id="archive-thesis-title">A practice built across interaction, engineering, and product work.</h2>
             </Reveal>
             <p>{careerThesis}</p>
-            <Link className="archive-map-return" href="#archive-map">
+            <Link
+              className="archive-map-return"
+              href="#archive-map"
+              aria-label="Return to archive map from career portrait"
+            >
               Archive map <span aria-hidden="true">↑</span>
             </Link>
           </section>
@@ -95,7 +99,11 @@ export default function ArchivePage() {
               ))}
             </ol>
             <div className="archive-map-return-band">
-              <Link className="archive-map-return" href="#archive-map">
+              <Link
+                className="archive-map-return"
+                href="#archive-map"
+                aria-label="Return to archive map from career chapters"
+              >
                 Archive map <span aria-hidden="true">↑</span>
               </Link>
             </div>
@@ -128,7 +136,11 @@ export default function ArchivePage() {
                 </article>
               ))}
             </div>
-            <Link className="archive-map-return" href="#archive-map">
+            <Link
+              className="archive-map-return"
+              href="#archive-map"
+              aria-label="Return to archive map from earlier professional work"
+            >
               Archive map <span aria-hidden="true">↑</span>
             </Link>
           </section>

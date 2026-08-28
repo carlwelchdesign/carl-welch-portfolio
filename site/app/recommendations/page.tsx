@@ -110,7 +110,11 @@ export default function RecommendationsPage() {
                     {recommendation.headline ? <span>{recommendation.headline}</span> : null}
                     <span>{recommendation.relationship}</span>
                     <time>{recommendation.date}</time>
-                    <a className="recommendation-highlights-return" href="#recommendation-highlights">
+                    <a
+                      className="recommendation-highlights-return"
+                      href="#recommendation-highlights"
+                      aria-label={`Return to recommendation highlights from ${recommendation.name}, ${recommendation.date}`}
+                    >
                       Recommendation highlights <span aria-hidden="true">↑</span>
                     </a>
                   </footer>

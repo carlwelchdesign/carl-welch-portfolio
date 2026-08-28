@@ -84,7 +84,11 @@ export default function ExperiencePage() {
                       <ul className="inline-tags" aria-label={`${item.company} skills`}>
                         {item.stack.map((skill) => <li key={skill}>{skill}</li>)}
                       </ul>
-                      <Link className="career-index-return" href="#career-index">
+                      <Link
+                        className="career-index-return"
+                        href="#career-index"
+                        aria-label={`Return to career index from ${item.role} at ${item.company}`}
+                      >
                         Career index <span aria-hidden="true">↑</span>
                       </Link>
                     </div>
@@ -120,7 +124,11 @@ export default function ExperiencePage() {
                     <ul className="inline-tags" aria-label={`${foundation.title} tools and disciplines`}>
                       {foundation.technologies.map((technology) => <li key={technology}>{technology}</li>)}
                     </ul>
-                    <Link className="career-index-return" href="#career-index">
+                    <Link
+                      className="career-index-return"
+                      href="#career-index"
+                      aria-label={`Return to career index from ${foundation.title}`}
+                    >
                       Career index <span aria-hidden="true">↑</span>
                     </Link>
                   </article>

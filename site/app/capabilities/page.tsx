@@ -120,7 +120,11 @@ export default function CapabilitiesPage() {
                         })}
                       </ArchitectureFlow>
                     </div>
-                    <Link className="capability-index-return" href="#capability-index">
+                    <Link
+                      className="capability-index-return"
+                      href="#capability-index"
+                      aria-label={`Return to capability index from ${capability.name}`}
+                    >
                       Capability index <span aria-hidden="true">↑</span>
                     </Link>
                   </div>

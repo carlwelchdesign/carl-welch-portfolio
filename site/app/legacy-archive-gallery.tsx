@@ -64,7 +64,11 @@ export function LegacyArchiveGallery() {
           </li>
         ))}
       </ol>
-      <Link className="archive-map-return" href="#archive-map">
+      <Link
+        className="archive-map-return"
+        href="#archive-map"
+        aria-label="Return to archive map from selected professional archive"
+      >
         Archive map <span aria-hidden="true">↑</span>
       </Link>
     </section>
