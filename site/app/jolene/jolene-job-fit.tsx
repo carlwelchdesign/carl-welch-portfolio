@@ -46,7 +46,7 @@ function describeError(error: unknown): string {
   }
   if (error instanceof PublicJoleneAdapterError) {
     if (error.code === 'rate_limited') return 'The comparison limit has been reached. Try again shortly.';
-    if (error.code === 'version_mismatch') return 'This preview needs a contract update before it can compare the role safely.';
+    if (error.code === 'version_mismatch') return 'Jolene’s role comparison is temporarily unavailable. Please try again soon.';
   }
   return 'The role could not be compared. Your pasted text remains only in this open panel so you can retry.';
 }
@@ -123,14 +123,14 @@ export function JoleneJobFit({
       <section className="jolene-job-fit jolene-job-fit-results" aria-labelledby="jolene-job-fit-results-title">
         <div className="jolene-job-fit-result-header">
           <div>
-            <p className="jolene-contact-kicker">Requirement evidence</p>
-            <h3 id="jolene-job-fit-results-title" ref={resultHeadingRef} tabIndex={-1}>Comparison, not a verdict</h3>
+            <p className="jolene-contact-kicker">Role comparison</p>
+            <h3 id="jolene-job-fit-results-title" ref={resultHeadingRef} tabIndex={-1}>How the role lines up</h3>
           </div>
           <button type="button" onClick={resetComparison}>Compare another</button>
         </div>
 
         <p className="jolene-job-fit-policy">
-          Each requirement stands on its own. Missing public evidence is not proof that Carl lacks the experience.
+          Each requirement stands on its own. If the portfolio does not answer one clearly, that is a good question to bring to Carl.
         </p>
 
         <dl className="jolene-job-fit-counts" aria-label="Requirement assessment counts">
@@ -162,7 +162,7 @@ export function JoleneJobFit({
 
                 {sources.length > 0 ? (
                   <div className="jolene-job-fit-evidence">
-                    <strong>Supporting evidence</strong>
+                    <strong>Open the sources</strong>
                     {sources.map((citation) => (
                       <JoleneCitationLink
                         citation={citation}
@@ -176,12 +176,12 @@ export function JoleneJobFit({
                     ))}
                   </div>
                 ) : (
-                  <p className="jolene-job-fit-no-source">No reviewed public evidence cited.</p>
+                  <p className="jolene-job-fit-no-source">No matching example found.</p>
                 )}
 
                 {requirement.limitations.length > 0 ? (
                   <div className="jolene-job-fit-limitations">
-                    <strong>Limitations</strong>
+                    <strong>What this doesn’t establish</strong>
                     <ul>{requirement.limitations.map((limitation) => <li key={limitation}>{limitation}</li>)}</ul>
                   </div>
                 ) : null}
@@ -191,7 +191,7 @@ export function JoleneJobFit({
         </ol>
 
         <div className="jolene-job-fit-caveats">
-          <strong>Read before using</strong>
+          <strong>A little context</strong>
           <ul>{response.caveats.map((caveat) => <li key={caveat}>{caveat}</li>)}</ul>
         </div>
 
@@ -204,17 +204,16 @@ export function JoleneJobFit({
           </div>
         ) : null}
 
-        <p className="jolene-corpus-version">Public {mode === 'fixture' ? 'fixture ' : ''}corpus · {response.corpusVersion}</p>
       </section>
     );
   }
 
   return (
     <form className="jolene-job-fit" onSubmit={compare} aria-labelledby="jolene-job-fit-title">
-      <p className="jolene-contact-kicker">Requirement evidence</p>
+      <p className="jolene-contact-kicker">Role comparison</p>
       <h3 id="jolene-job-fit-title">Paste a job description</h3>
       <p className="jolene-job-fit-policy">
-        Jolene will classify individual requirements against reviewed public evidence. She will not invent a qualification or issue a fit score.
+        Jolene compares each requirement with examples from Carl’s work and tells you where the match is direct, adjacent, or unclear.
       </p>
       <label htmlFor="jolene-job-description">Job description</label>
       <textarea
@@ -234,13 +233,13 @@ export function JoleneJobFit({
       />
       <div className="jolene-job-fit-meta">
         <span>{draft.length.toLocaleString()}/{PUBLIC_JOLENE_LIMITS.jobDescriptionCharacters.toLocaleString()}</span>
-        <span>Ephemeral · cleared when this view closes</span>
+        <span>Cleared when this panel closes</span>
       </div>
       <p className="jolene-job-fit-privacy">
-        Before comparison, email addresses, phone numbers, private paths, and credential-like strings are removed. Nothing is saved by this fixture.
+        Email addresses, phone numbers, private file paths, and credential-like strings are removed before comparison. The description is not saved.
       </p>
       {error ? <p className="jolene-contact-error" role="alert">{error}</p> : null}
-      {waiting ? <p className="jolene-waiting" role="status">Checking requirement evidence…</p> : null}
+      {waiting ? <p className="jolene-waiting" role="status">Comparing the role with Carl’s work…</p> : null}
       <button type="submit" disabled={waiting || !draft.trim()}>{waiting ? 'Comparing…' : 'Compare requirements'}</button>
     </form>
   );

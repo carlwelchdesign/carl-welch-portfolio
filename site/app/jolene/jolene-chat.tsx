@@ -37,10 +37,10 @@ function initialMessage(mode: JoleneMode): ChatMessage {
     role: 'assistant',
     text: mode === 'live'
       ? 'Hi. I’m Jolene. Ask me about Carl’s work, experience, or qualifications.'
-      : 'Hi. I’m Jolene. This development preview shows how I can answer questions about Carl from reviewed public evidence.',
+      : 'Hi. I’m Jolene. Try a question about Carl’s work, experience, or qualifications.',
     note: mode === 'live'
-      ? 'Answers use reviewed public evidence. This panel does not retain a transcript.'
-      : 'Fixture mode only. No live agent is connected, and this preview does not retain a transcript.',
+      ? 'I’ll point you to the work behind every answer.'
+      : 'Sample answers are standing in while Jolene’s live connection is off.',
   };
 }
 
@@ -52,12 +52,12 @@ function normalizeScenario(value: string): PublicJoleneFixtureScenario {
 
 function describeError(error: unknown): string {
   if (error instanceof PublicJoleneAdapterError) {
-    if (error.code === 'rate_limited') return 'This preview has reached its request limit. Please try again shortly.';
-    if (error.code === 'version_mismatch') return 'This preview needs a contract update before it can answer safely.';
-    return 'Jolene is unavailable in this preview right now.';
+    if (error.code === 'rate_limited') return 'Jolene has reached her request limit. Please try again shortly.';
+    if (error.code === 'version_mismatch') return 'Jolene is catching up with the latest portfolio update. Please try again soon.';
+    return 'Jolene is unavailable right now.';
   }
-  if (error instanceof PublicJoleneContractError) return 'That request could not be checked safely. Please revise it and try again.';
-  return 'The preview could not complete that request.';
+  if (error instanceof PublicJoleneContractError) return 'Jolene could not read that question. Please revise it and try again.';
+  return 'Jolene could not complete that request.';
 }
 
 function getSuggestedQuestions(messages: ChatMessage[]): string[] {
@@ -71,7 +71,23 @@ function getSuggestedQuestions(messages: ChatMessage[]): string[] {
   return [];
 }
 
-export function JoleneChat({ mode: connectionMode, scenario: scenarioValue = 'success' }: { mode: JoleneMode; scenario?: string }) {
+function getLatestAssistantMessageId(messages: ChatMessage[]): string | null {
+  for (let index = messages.length - 1; index >= 0; index -= 1) {
+    if (messages[index].role === 'assistant') return messages[index].id;
+  }
+
+  return null;
+}
+
+export function JoleneChat({
+  mode: connectionMode,
+  scenario: scenarioValue = 'success',
+  contactIntentEnabled = false,
+}: {
+  mode: JoleneMode;
+  scenario?: string;
+  contactIntentEnabled?: boolean;
+}) {
   const scenario = normalizeScenario(scenarioValue);
   const adapter = useMemo(
     () => connectionMode === 'live' ? createBrowserPublicJoleneAdapter() : createFixturePublicJoleneAdapter(scenario),
@@ -80,6 +96,8 @@ export function JoleneChat({ mode: connectionMode, scenario: scenarioValue = 'su
   const launcherRef = useRef<HTMLButtonElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const latestAssistantRef = useRef<HTMLElement>(null);
+  const focusedAssistantId = useRef<string | null>(null);
   const messageSequence = useRef(0);
   const [open, setOpen] = useState(false);
   const [mode, setMode] = useState<'chat' | 'job' | 'contact'>('chat');
@@ -87,6 +105,7 @@ export function JoleneChat({ mode: connectionMode, scenario: scenarioValue = 'su
   const [waiting, setWaiting] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([initialMessage(connectionMode)]);
   const suggestedQuestions = getSuggestedQuestions(messages);
+  const latestAssistantMessageId = getLatestAssistantMessageId(messages);
 
   useEffect(() => {
     if (!open) return;
@@ -102,6 +121,19 @@ export function JoleneChat({ mode: connectionMode, scenario: scenarioValue = 'su
   useEffect(() => {
     if (open) messagesEndRef.current?.scrollIntoView({ block: 'end' });
   }, [messages, open, waiting]);
+
+  useEffect(() => {
+    if (
+      !open
+      || waiting
+      || messages.length === 1
+      || !latestAssistantMessageId
+      || focusedAssistantId.current === latestAssistantMessageId
+    ) return;
+
+    latestAssistantRef.current?.focus({ preventScroll: true });
+    focusedAssistantId.current = latestAssistantMessageId;
+  }, [latestAssistantMessageId, messages.length, open, waiting]);
 
   function closePanel() {
     setOpen(false);
@@ -159,7 +191,7 @@ export function JoleneChat({ mode: connectionMode, scenario: scenarioValue = 'su
           id: `assistant-error-${sequence}`,
           role: 'assistant',
           text: describeError(error),
-          note: 'No unsupported answer was generated.',
+          note: 'I don’t have a reliable answer for that yet.',
         },
       ]);
     } finally {
@@ -191,7 +223,7 @@ export function JoleneChat({ mode: connectionMode, scenario: scenarioValue = 'su
         >
           <header className="jolene-panel-header">
             <div>
-              <p>{connectionMode === 'live' ? 'Portfolio guide / Reviewed evidence' : 'Portfolio guide / Development fixture'}</p>
+              <p>{connectionMode === 'live' ? 'Carl’s portfolio guide' : 'Jolene preview'}</p>
               <h2 id="jolene-panel-title">
                 {mode === 'contact' ? 'Contact Carl' : mode === 'job' ? 'Compare a role' : 'Ask Jolene'}
               </h2>
@@ -203,19 +235,27 @@ export function JoleneChat({ mode: connectionMode, scenario: scenarioValue = 'su
 
           <p className="jolene-fixture-notice" id="jolene-panel-description">
             {connectionMode === 'live'
-              ? 'Reviewed public evidence only. No private memory, Obsidian access, or transcript retention.'
-              : 'Fixture responses only. No live agent, private memory, Obsidian access, or transcript retention.'}
+              ? 'Ask about Carl’s work, experience, or how his background lines up with a role.'
+              : 'This preview uses sample answers while the live connection is off.'}
           </p>
 
           <nav className="jolene-mode-switch" aria-label="Jolene panel sections">
             <button type="button" aria-pressed={mode === 'chat'} onClick={() => setMode('chat')}>Questions</button>
             <button type="button" aria-pressed={mode === 'job'} onClick={() => setMode('job')}>Compare role</button>
-            <button type="button" aria-pressed={mode === 'contact'} onClick={() => setMode('contact')}>Request contact</button>
+            {contactIntentEnabled ? (
+              <button type="button" aria-pressed={mode === 'contact'} onClick={() => setMode('contact')}>Request contact</button>
+            ) : null}
           </nav>
 
           {mode === 'chat' ? <><div className="jolene-messages" role="log" aria-live="polite" aria-busy={waiting}>
             {messages.map((message) => (
-              <article className="jolene-message" data-role={message.role} key={message.id}>
+              <article
+                className="jolene-message"
+                data-role={message.role}
+                key={message.id}
+                ref={message.id === latestAssistantMessageId && messages.length > 1 ? latestAssistantRef : undefined}
+                tabIndex={message.id === latestAssistantMessageId && messages.length > 1 ? -1 : undefined}
+              >
                 <p className="jolene-message-role">{message.role === 'assistant' ? 'Jolene' : 'You'}</p>
                 <p>{message.text}</p>
                 {message.note ? <p className="jolene-message-note">{message.note}</p> : null}
@@ -226,7 +266,7 @@ export function JoleneChat({ mode: connectionMode, scenario: scenarioValue = 'su
             ))}
             {waiting ? (
               <p className="jolene-waiting" role="status">
-                Checking reviewed public evidence…
+                Looking through Carl’s work…
               </p>
             ) : null}
             {suggestedQuestions.length > 0 ? (
@@ -287,7 +327,7 @@ export function JoleneChat({ mode: connectionMode, scenario: scenarioValue = 'su
       >
         <span className="jolene-launcher-mark" aria-hidden="true">J</span>
         <span>
-          <small>{connectionMode === 'live' ? 'Reviewed evidence' : 'Fixture preview'}</small>
+          <small>{connectionMode === 'live' ? 'Meet your guide' : 'Preview'}</small>
           Ask Jolene
         </span>
       </button>
@@ -296,5 +336,5 @@ export function JoleneChat({ mode: connectionMode, scenario: scenarioValue = 'su
 }
 
 export function JoleneFixtureChat({ scenario }: { scenario: string }) {
-  return <JoleneChat mode="fixture" scenario={scenario} />;
+  return <JoleneChat mode="fixture" scenario={scenario} contactIntentEnabled />;
 }

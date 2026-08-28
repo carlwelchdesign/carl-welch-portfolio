@@ -3,7 +3,7 @@ import { ArchiveExplorer } from '../archive-explorer';
 import { githubProjects } from '../github-projects';
 import { MotionRuntime } from '../motion-elements';
 import { projects } from '../portfolio-data';
-import { PageFrame, PageIntro, ProjectChapter, SelectedArchive } from '../site-components';
+import { PageFrame, PageIntro, ProjectChapter, SelectedArchive, WorkIndex } from '../site-components';
 import { buildPageMetadata } from '../site-metadata';
 
 export const metadata: Metadata = buildPageMetadata({
@@ -16,12 +16,13 @@ export default function WorkPage() {
   return (
     <MotionRuntime>
       <PageFrame>
-        <main id="main-content">
+        <main id="main-content" tabIndex={-1}>
           <PageIntro
             eyebrow="Work / 2026"
             title="Selected work"
-            summary={`Three detailed case studies, followed by ${githubProjects.length} selected public repositories. Status, constraints, and older work remain visible instead of being rewritten as equal flagship projects.`}
+            summary={`${projects.length} detailed case studies and ${githubProjects.length} selected public repositories spanning product systems, applied AI, audio software, and creative technology.`}
           />
+          <WorkIndex items={projects} />
           {projects.map((project, index) => (
             <ProjectChapter key={project.slug} project={project} priority={index === 0} />
           ))}

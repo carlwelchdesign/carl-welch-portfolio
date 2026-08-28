@@ -65,14 +65,14 @@ export function ArchiveExplorer() {
   }, [deferredQuery, filter, language, sort]);
 
   return (
-    <section className="archive" aria-labelledby="archive-title">
+    <section id="public-repositories" className="archive" aria-labelledby="archive-title">
       <header className="archive-heading">
         <div>
           <p className="eyebrow">GitHub archive</p>
           <h2 id="archive-title">Public repositories</h2>
         </div>
         <p>
-          A curated public-repository selection reviewed on <time dateTime={githubSnapshotDate}>{githubSnapshotLabel}</time>. The selected case studies above carry the deeper product and architecture narrative.
+          A selection of current products, useful libraries, experiments, and earlier code. Updated <time dateTime={githubSnapshotDate}>{githubSnapshotLabel}</time>. The case studies above tell the deeper product and architecture stories.
         </p>
       </header>
 
@@ -140,7 +140,13 @@ export function ArchiveExplorer() {
                 transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
               >
                 <article className="archive-card">
-                  <a className="archive-image-link" href={project.url} aria-label={`Open ${project.name} on GitHub`}>
+                  <a
+                    className="archive-image-link"
+                    href={project.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={`Open ${project.name} repository preview on GitHub (opens in a new tab)`}
+                  >
                     <Image
                       src={githubPreview(project)}
                       alt=""
@@ -154,14 +160,39 @@ export function ArchiveExplorer() {
                       <span>{project.language ?? 'Profile'}</span>
                       <span>{new Date(project.updatedAt).getUTCFullYear()}</span>
                     </div>
-                    <h3><a href={project.url}>{project.name}</a></h3>
+                    <h3>
+                      <a
+                        href={project.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        aria-label={`Open ${project.name} repository on GitHub (opens in a new tab)`}
+                      >
+                        {project.name}
+                      </a>
+                    </h3>
                     <p>{project.description}</p>
                     <ul aria-label={`${project.name} topics`}>
                       {project.topics.slice(0, 4).map((topic) => <li key={topic}>{topic}</li>)}
                     </ul>
                     <div className="archive-card-links">
-                      <a href={project.url}>Repository ↗</a>
-                      {project.homepage ? <a href={project.homepage}>Live site ↗</a> : null}
+                      <a
+                        href={project.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        aria-label={`View ${project.name} repository on GitHub (opens in a new tab)`}
+                      >
+                        Repository ↗
+                      </a>
+                      {project.homepage ? (
+                        <a
+                          href={project.homepage}
+                          target="_blank"
+                          rel="noreferrer"
+                          aria-label={`Open ${project.name} live site (opens in a new tab)`}
+                        >
+                          Live site ↗
+                        </a>
+                      ) : null}
                     </div>
                   </div>
                 </article>

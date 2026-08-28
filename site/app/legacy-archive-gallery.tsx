@@ -1,10 +1,17 @@
 import Image from 'next/image';
+import { FragmentFocusLink } from './fragment-focus-link';
 import { legacyArchiveProjects } from './legacy-archive-data';
 import { Reveal } from './motion-elements';
 
 export function LegacyArchiveGallery() {
   return (
-    <section className="legacy-gallery" data-tone="paper" aria-labelledby="legacy-gallery-title">
+    <section
+      id="visual-archive"
+      className="legacy-gallery"
+      data-tone="paper"
+      aria-labelledby="legacy-gallery-title"
+      tabIndex={-1}
+    >
       <header className="legacy-gallery-heading">
         <div>
           <p className="eyebrow">Selected professional archive</p>
@@ -14,8 +21,8 @@ export function LegacyArchiveGallery() {
         </div>
         <p>
           These surviving artifacts show the range behind the current practice: interactive
-          development, visual systems, mobile UI, campaigns, and product storytelling. Every
-          caption names Carl’s supported role without turning team work into sole authorship.
+          development, visual systems, mobile UI, campaigns, and product storytelling. Together,
+          they trace the visual and technical instincts that still shape Carl’s work.
         </p>
       </header>
 
@@ -63,6 +70,13 @@ export function LegacyArchiveGallery() {
           </li>
         ))}
       </ol>
+      <FragmentFocusLink
+        className="archive-map-return"
+        href="#archive-map"
+        accessibleName="Return to Archive map from selected professional archive"
+      >
+        Archive map <span aria-hidden="true">↑</span>
+      </FragmentFocusLink>
     </section>
   );
 }

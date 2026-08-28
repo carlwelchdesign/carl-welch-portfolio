@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function NotFound() {
   return (
     <PageFrame>
-      <main id="main-content" data-tone="orange">
+      <main id="main-content" tabIndex={-1} data-tone="orange">
         <section className="page-intro recovery-intro" aria-labelledby="not-found-title">
           <p className="eyebrow">404 / Page not found</p>
           <h1 id="not-found-title">That route isn’t part of the portfolio.</h1>

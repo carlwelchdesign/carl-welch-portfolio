@@ -14,11 +14,11 @@ export default function ContactPage() {
   return (
     <MotionRuntime>
       <PageFrame>
-        <main id="main-content" data-tone="red">
+        <main id="main-content" tabIndex={-1} data-tone="red">
           <PageIntro
             eyebrow="Contact"
             title="Email Carl"
-            summary="Direct contact details from the current résumé. No form and no message collection on this site."
+            summary="Have a role, product, or difficult problem in mind? Email Carl directly, or connect through LinkedIn and GitHub."
           />
 
           <section className="contact-panel" aria-labelledby="contact-email-title">
@@ -30,17 +30,32 @@ export default function ContactPage() {
             </Reveal>
 
             <div className="contact-routes" aria-label="Other contact routes">
-              <a href={contact.linkedinUrl}>
+              <a
+                href={contact.linkedinUrl}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Open Carl Welch’s LinkedIn profile (opens in a new tab)"
+              >
                 <span>Professional profile</span>
                 <strong>LinkedIn</strong>
                 <span className="contact-route-arrow" aria-hidden="true">↗</span>
               </a>
-              <a href={contact.githubUrl}>
+              <a
+                href={contact.githubUrl}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Open Carl Welch’s GitHub profile (opens in a new tab)"
+              >
                 <span>Public code</span>
                 <strong>GitHub</strong>
                 <span className="contact-route-arrow" aria-hidden="true">↗</span>
               </a>
-              <a href={contact.resumeUrl} download>
+              <a
+                href={contact.resumeUrl}
+                download
+                type="application/pdf"
+                aria-label="Download Carl Welch résumé (PDF)"
+              >
                 <span>Current document</span>
                 <strong>Résumé</strong>
                 <span className="contact-route-arrow" aria-hidden="true">↓</span>

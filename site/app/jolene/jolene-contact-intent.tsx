@@ -88,12 +88,12 @@ export function JoleneContactIntent({
   if (step === 'submitted' && receipt) {
     return (
       <section className="jolene-contact jolene-contact-receipt" aria-labelledby="jolene-contact-receipt-title">
-        <p className="jolene-contact-kicker">Pending Carl’s review</p>
+        <p className="jolene-contact-kicker">Sent to Carl</p>
         <h3 id="jolene-contact-receipt-title">Request received</h3>
         <p>{receipt.message}</p>
-        <p className="jolene-contact-receipt-id">Fixture receipt · {receipt.intentId}</p>
+        <p className="jolene-contact-receipt-id">Reference · {receipt.intentId}</p>
         <p className="jolene-contact-policy">
-          Jolene cannot email, schedule, negotiate, apply, or make commitments for Carl.
+          Carl reviews requests himself. Jolene cannot make commitments on his behalf.
         </p>
         <button type="button" onClick={onReturnToChat}>Return to questions</button>
       </section>
@@ -121,7 +121,7 @@ export function JoleneContactIntent({
           <span>I consent to send these fields to Carl for review.</span>
         </label>
         <p className="jolene-contact-policy">
-          Fixture mode retains nothing. A future live handoff will be reviewable and will not trigger autonomous outreach.
+          Nothing is sent until you confirm. Carl reviews each request himself.
         </p>
         {error ? <p className="jolene-contact-error" role="alert">{error}</p> : null}
         <div className="jolene-contact-actions">
@@ -136,10 +136,10 @@ export function JoleneContactIntent({
 
   return (
     <form className="jolene-contact" onSubmit={review} aria-labelledby="jolene-contact-title">
-      <p className="jolene-contact-kicker">Minimized contact request</p>
+      <p className="jolene-contact-kicker">Contact Carl</p>
       <h3 id="jolene-contact-title">Ask Carl to follow up</h3>
       <p className="jolene-contact-policy">
-        Nothing is sent until you review every field and explicitly consent. Jolene cannot contact anyone on Carl’s behalf.
+        Fill this out, review every field, and confirm when you are ready to send it to Carl.
       </p>
       <label>
         Name

@@ -15,11 +15,11 @@ export default function AboutPage() {
   return (
     <MotionRuntime>
       <PageFrame>
-        <main id="main-content" data-tone="orange">
+        <main id="main-content" tabIndex={-1} data-tone="orange">
           <PageIntro
             eyebrow="About"
             title="The engineer I am now was built over time"
-            summary="I came to product engineering through interactive design, motion, client work, technical systems, teaching, and team leadership. That history is not a side note. It explains how I work."
+            summary="The path runs from military service and art school to art direction, full-stack web systems, immersive defense R&D, Evidence.com, teaching, and modern product engineering. That history is not a side note. It explains how I work."
           />
 
           <section className="about-story" aria-labelledby="about-story-title">
@@ -29,16 +29,18 @@ export default function AboutPage() {
             </Reveal>
             <div className="about-story-copy">
               <p>
-                Early interactive work taught me to pay attention to motion, hierarchy, timing,
-                and the moment a person realizes what an interface is asking them to do. Client
-                delivery taught me to make decisions under real constraints and keep moving when
-                the work became messy.
+                Before front-end developer was a settled job title, I was designing interfaces,
+                writing JavaScript and PHP, working with MySQL and XML, producing motion and video,
+                managing creative teams, and sitting with clients to figure out what the system
+                actually needed to do. I even designed a poster and T-shirt for GWAR. The range was
+                unusual, but the lesson was consistent: understand the audience and own the result.
               </p>
               <p>
-                Product teams added a different responsibility: shared systems, maintainable code,
-                testing, documentation, leadership, and the long life of a decision after launch.
-                My current work brings both sides together in applied AI, aviation, audio software,
-                and products with explicit operating boundaries.
+                General Dynamics added immersive 3D software, positional tracking, engineering data,
+                training systems, and high-stakes stakeholders. David Allen Company and TASER added
+                brand systems, full-stack delivery, media operations, and finished Evidence.com
+                workflows. Modern product teams added React, TypeScript, testing, design systems,
+                and the long life of a decision after launch. The through-line is still visible.
               </p>
             </div>
           </section>

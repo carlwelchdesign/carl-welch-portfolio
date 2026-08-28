@@ -227,7 +227,7 @@ export function renderReviewMarkdown(review) {
 }
 
 function cell(value) {
-  if (value === undefined) return '—';
+  if (value === undefined) return 'Not available';
   return `\`${JSON.stringify(value).replaceAll('|', '\\|')}\``;
 }
 

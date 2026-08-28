@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { MotionRuntime, Reveal } from '../../motion-elements';
 import { getProject, projects } from '../../portfolio-data';
-import { ArchitectureDiagram, PageFrame, ProjectGallery } from '../../site-components';
+import { ArchitectureDiagram, PageFrame, ProjectGallery, ProjectStory } from '../../site-components';
 import { buildPageMetadata } from '../../site-metadata';
 import { publicEvidenceAnchorId } from '../../jolene/public-evidence-navigation-core';
 
@@ -26,10 +27,10 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
     description: project.summary,
     path: `/work/${project.slug}`,
     image: {
-      url: project.image.src,
-      width: project.image.width,
-      height: project.image.height,
-      alt: project.image.alt,
+      url: `/social/${project.slug}.png`,
+      width: 1200,
+      height: 630,
+      alt: `${project.name} case study by Carl Welch`,
     },
   });
 }
@@ -40,10 +41,13 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
   if (!project) notFound();
 
+  const projectIndex = projects.findIndex((candidate) => candidate.slug === project.slug);
+  const nextProject = projects[(projectIndex + 1) % projects.length];
+
   return (
     <MotionRuntime>
       <PageFrame>
-        <main id="main-content" className={`project-detail project-detail-${project.tone}`} data-tone={project.tone}>
+        <main id="main-content" tabIndex={-1} className={`project-detail project-detail-${project.tone}`} data-tone={project.tone}>
           <header
             className="project-detail-hero"
             id={publicEvidenceAnchorId(project.sourceId)}
@@ -52,14 +56,28 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             aria-label={`${project.name} case study`}
           >
             <p className="eyebrow">Selected work / {project.number}</p>
-            <h1>{project.name}</h1>
+            <h1 className={project.name.length >= 24 ? 'long-project-title' : undefined}>{project.name}</h1>
             <div className="project-detail-deck">
               <p>{project.summary}</p>
-              <div className="project-meta">
-                <span>{project.category}</span>
-                <span>{project.status}</span>
-              </div>
             </div>
+            <dl className="project-facts" aria-label={`${project.name} project facts`}>
+              <div>
+                <dt>My role</dt>
+                <dd>{project.role}</dd>
+              </div>
+              <div>
+                <dt>Scope</dt>
+                <dd>{project.scope}</dd>
+              </div>
+              <div>
+                <dt>Stage</dt>
+                <dd>{project.status}</dd>
+              </div>
+              <div>
+                <dt>Core technologies</dt>
+                <dd>{project.stack.slice(0, 4).join(' · ')}</dd>
+              </div>
+            </dl>
           </header>
 
           <Reveal className="project-detail-image">
@@ -73,12 +91,14 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             />
           </Reveal>
 
+          <ProjectStory project={project} />
+
           <ProjectGallery project={project} />
 
-          <section className="project-detail-section" aria-labelledby="architecture-title">
+          <section id="architecture" className="project-detail-section" aria-labelledby="architecture-title">
             <p className="eyebrow">Technical view</p>
             <h2 id="architecture-title">Architecture</h2>
-            <ArchitectureDiagram nodes={project.architecture} tone={project.tone} />
+            <ArchitectureDiagram architecture={project.architecture} tone={project.tone} />
           </section>
 
           <section
@@ -89,7 +109,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             aria-label={`${project.name} evidence and boundaries`}
           >
             <div>
-              <p className="eyebrow">What is implemented</p>
+              <p className="eyebrow">Built so far</p>
               <ul>
                 {project.evidence.map((item) => (
                   <li
@@ -108,9 +128,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               id={publicEvidenceAnchorId(`portfolio:limitation:project:${project.slug}`)}
               data-evidence-target
               tabIndex={-1}
-              aria-label={`${project.name} current boundaries`}
+              aria-label={`${project.name} current status`}
             >
-              <p className="eyebrow">Current boundaries</p>
+              <p className="eyebrow">Where it stands</p>
               <ul>
                 {project.boundaries.map((item) => <li key={item}>{item}</li>)}
               </ul>
@@ -118,8 +138,59 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           </section>
 
           <section className="project-links" aria-label="Project links">
-            <a className="primary-action" href={project.repositoryUrl}>Repository <span aria-hidden="true">↗</span></a>
-            {project.liveUrl ? <a className="primary-action" href={project.liveUrl}>Live demo <span aria-hidden="true">↗</span></a> : null}
+            <a
+              className="primary-action"
+              href={project.repositoryUrl}
+              target="_blank"
+              rel="noreferrer"
+              aria-label={`Open ${project.name} repository on GitHub (opens in a new tab)`}
+            >
+              Repository <span aria-hidden="true">↗</span>
+            </a>
+            {project.liveUrl ? (
+              <a
+                className="primary-action"
+                href={project.liveUrl}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={`Open ${project.name} live demo (opens in a new tab)`}
+              >
+                Live demo <span aria-hidden="true">↗</span>
+              </a>
+            ) : null}
+          </section>
+
+          <section className="project-continuation" aria-labelledby="project-continuation-title">
+            <div className="project-continuation-heading">
+              <div>
+                <p className="eyebrow">Continue exploring</p>
+                <h2 id="project-continuation-title">Next case study</h2>
+              </div>
+              <Link className="text-action" href="/work">View all selected work <span aria-hidden="true">→</span></Link>
+            </div>
+
+            <Link
+              className="project-continuation-card"
+              href={`/work/${nextProject.slug}`}
+              data-tone={nextProject.tone}
+              aria-label={`Next case study: ${nextProject.name}`}
+            >
+              <div className="project-continuation-copy">
+                <p className="eyebrow">{nextProject.category}</p>
+                <h3>{nextProject.name}</h3>
+                <p>{nextProject.status}</p>
+                <span>Open case study <span aria-hidden="true">→</span></span>
+              </div>
+              <div className="project-continuation-image">
+                <Image
+                  src={nextProject.image.src}
+                  alt=""
+                  width={nextProject.image.width}
+                  height={nextProject.image.height}
+                  sizes="(max-width: 720px) 100vw, 58vw"
+                />
+              </div>
+            </Link>
           </section>
         </main>
       </PageFrame>

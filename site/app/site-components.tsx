@@ -3,8 +3,12 @@ import Link from 'next/link';
 import type { CSSProperties, ReactNode } from 'react';
 import { careerChapters, characterSignals } from './career-story-data';
 import { contact } from './contact-data';
-import type { ArchitectureNode, PortfolioProject, ProjectTone } from './portfolio-data';
+import { homepageLegacyWork } from './legacy-career-visuals';
+import { FragmentFocusLink } from './fragment-focus-link';
+import type { PortfolioProject, ProjectArchitecture, ProjectTone } from './portfolio-data';
 import { ArchitectureFlow, ImageDrift, NodePulse, Reveal } from './motion-elements';
+import { ProjectMediaViewer } from './project-media-viewer';
+import { SiteHeader } from './site-header';
 
 type ToneStyle = CSSProperties & { '--chapter-tone': string };
 
@@ -13,44 +17,6 @@ const toneColors: Record<ProjectTone, string> = {
   orange: '#ff6800',
   green: '#62e879',
 };
-
-export function SiteHeader() {
-  return (
-    <header className="site-header">
-      <Link className="wordmark" href="/" aria-label="Carl Welch home">
-        <span className="wordmark-mark" aria-hidden="true">
-          <i />
-          <i />
-          <i />
-        </span>
-        <span>Carl Welch</span>
-      </Link>
-
-      <nav aria-label="Primary navigation">
-        <Link href="/work">Work</Link>
-        <Link href="/archive">Archive</Link>
-        <Link href="/about">About</Link>
-        <Link href="/experience">Experience</Link>
-        <Link href="/recommendations">Recommendations</Link>
-      </nav>
-
-      <details className="mobile-navigation">
-        <summary>Menu</summary>
-        <nav aria-label="Mobile navigation">
-          <Link href="/work">Work</Link>
-          <Link href="/archive">Archive</Link>
-          <Link href="/about">About</Link>
-          <Link href="/capabilities">Capabilities</Link>
-          <Link href="/experience">Experience</Link>
-          <Link href="/recommendations">Recommendations</Link>
-          <Link href="/contact">Contact</Link>
-        </nav>
-      </details>
-
-      <Link className="build-label" href="/contact">Contact →</Link>
-    </header>
-  );
-}
 
 export function CareerPortraitPreview() {
   return (
@@ -61,9 +27,10 @@ export function CareerPortraitPreview() {
       </Reveal>
       <div className="career-portrait-layout">
         <p>
-          Before product systems and applied AI, there were interactive studio sites,
-          motion, client deadlines, technical environments, and teams learning new tools
-          together. That earlier work still shapes how I engineer products now.
+          Before React and applied AI, I was managing designers and programmers, building
+          PHP and MySQL applications, prototyping immersive training systems, shaping
+          Evidence.com workflows, and, yes, making graphics for GWAR. That earlier work still
+          shapes how I engineer products now.
         </p>
         <ol className="career-portrait-steps">
           {careerChapters.map((chapter) => (
@@ -73,6 +40,38 @@ export function CareerPortraitPreview() {
                 <small>{chapter.period}</small>
                 <strong>{chapter.title}</strong>
               </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+      <div className="career-portrait-proof">
+        <header>
+          <p className="eyebrow">From the archive</p>
+          <p>
+            <span>Four selected examples</span>
+            <span>Swipe to browse <span aria-hidden="true">→</span></span>
+          </p>
+        </header>
+        <ol>
+          {homepageLegacyWork.map((item) => (
+            <li key={item.id}>
+              <a href={`/archive#${item.id}`} aria-label={`View ${item.project} in the archive`}>
+                <figure>
+                  <Image
+                    src={item.image.src}
+                    alt={item.image.alt}
+                    width={item.image.width}
+                    height={item.image.height}
+                    sizes="(max-width: 720px) 78vw, 25vw"
+                    unoptimized
+                  />
+                </figure>
+                <div>
+                  <small>{item.context}</small>
+                  <strong>{item.project}</strong>
+                  <span aria-hidden="true">↗</span>
+                </div>
+              </a>
             </li>
           ))}
         </ol>
@@ -109,9 +108,21 @@ export function CharacterSignals() {
   );
 }
 
-export function SelectedArchive({ showArchiveLink = true }: { showArchiveLink?: boolean }) {
+export function SelectedArchive({
+  showArchiveLink = true,
+  archiveReturnHref,
+}: {
+  showArchiveLink?: boolean;
+  archiveReturnHref?: `#${string}`;
+}) {
   return (
-    <section id="yuco" className="selected-archive" data-tone="orange" aria-labelledby="selected-archive-title">
+    <section
+      id="yuco"
+      className="selected-archive"
+      data-tone="orange"
+      aria-labelledby="selected-archive-title"
+      tabIndex={-1}
+    >
       <div className="selected-archive-heading">
         <div>
           <p className="eyebrow">Selected archive / 2006–2007</p>
@@ -133,7 +144,7 @@ export function SelectedArchive({ showArchiveLink = true }: { showArchiveLink?: 
             height={400}
             sizes="(max-width: 1000px) 100vw, 58vw"
           />
-          <figcaption>Archived interface / privacy-safe crop</figcaption>
+          <figcaption>Archived interface</figcaption>
         </figure>
         <div>
           <p className="eyebrow">Carl’s contribution</p>
@@ -146,6 +157,15 @@ export function SelectedArchive({ showArchiveLink = true }: { showArchiveLink?: 
             <Link className="primary-action dark-action selected-archive-link" href="/archive">
               More of the story <span aria-hidden="true">→</span>
             </Link>
+          ) : null}
+          {archiveReturnHref ? (
+            <FragmentFocusLink
+              className="archive-map-return"
+              href={archiveReturnHref}
+              accessibleName="Return to Archive map from yU+co studio website"
+            >
+              Archive map <span aria-hidden="true">↑</span>
+            </FragmentFocusLink>
           ) : null}
         </div>
       </div>
@@ -162,9 +182,28 @@ export function SiteFooter() {
       </div>
       <div className="footer-links">
         <a href={`mailto:${contact.email}`}>{contact.email}</a>
-        <a href={contact.linkedinUrl}>LinkedIn ↗</a>
-        <a href={contact.githubUrl}>GitHub ↗</a>
-        <a href={contact.resumeUrl} download>
+        <a
+          href={contact.linkedinUrl}
+          target="_blank"
+          rel="noreferrer"
+          aria-label="Carl Welch on LinkedIn (opens in a new tab)"
+        >
+          LinkedIn ↗
+        </a>
+        <a
+          href={contact.githubUrl}
+          target="_blank"
+          rel="noreferrer"
+          aria-label="Carl Welch on GitHub (opens in a new tab)"
+        >
+          GitHub ↗
+        </a>
+        <a
+          href={contact.resumeUrl}
+          download
+          type="application/pdf"
+          aria-label="Download Carl Welch résumé (PDF)"
+        >
           Résumé ↓
         </a>
       </div>
@@ -186,83 +225,201 @@ export function PageFrame({ children }: { children: ReactNode }) {
 }
 
 export function ArchitectureDiagram({
-  nodes,
+  architecture,
   tone,
   compact = false,
 }: {
-  nodes: ArchitectureNode[];
+  architecture: ProjectArchitecture;
   tone: ProjectTone;
   compact?: boolean;
 }) {
   const style = { '--chapter-tone': toneColors[tone] } as ToneStyle;
+  const nodeById = new Map(architecture.nodes.map((node) => [node.id, node]));
+  const markerId = `architecture-arrow-${architecture.title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+
+  const connectionPath = (fromId: string, toId: string) => {
+    const from = nodeById.get(fromId);
+    const to = nodeById.get(toId);
+    if (!from || !to) return '';
+
+    const fromWidth = from.width ?? 170;
+    const toWidth = to.width ?? 170;
+    const fromCenter = { x: from.x + fromWidth / 2, y: from.y + 40 };
+    const toCenter = { x: to.x + toWidth / 2, y: to.y + 40 };
+    const horizontal = Math.abs(toCenter.x - fromCenter.x) >= Math.abs(toCenter.y - fromCenter.y);
+
+    if (horizontal) {
+      const direction = toCenter.x >= fromCenter.x ? 1 : -1;
+      const startX = fromCenter.x + direction * fromWidth / 2;
+      const endX = toCenter.x - direction * toWidth / 2;
+      const control = Math.max(34, Math.abs(endX - startX) * 0.45);
+      return `M ${startX} ${fromCenter.y} C ${startX + direction * control} ${fromCenter.y}, ${endX - direction * control} ${toCenter.y}, ${endX} ${toCenter.y}`;
+    }
+
+    const direction = toCenter.y >= fromCenter.y ? 1 : -1;
+    const startY = fromCenter.y + direction * 40;
+    const endY = toCenter.y - direction * 40;
+    const control = Math.max(30, Math.abs(endY - startY) * 0.45);
+    return `M ${fromCenter.x} ${startY} C ${fromCenter.x} ${startY + direction * control}, ${toCenter.x} ${endY - direction * control}, ${toCenter.x} ${endY}`;
+  };
 
   return (
-    <figure className={`architecture-card${compact ? ' architecture-card-compact' : ''}`} style={style}>
+    <figure
+      className={`architecture-card${compact ? ' architecture-card-compact' : ''}`}
+      style={style}
+      aria-label={`${architecture.title} system architecture topology`}
+    >
       <figcaption>
-        <span>System architecture</span>
-        <span>Repository-grounded</span>
+        <span>{architecture.title}</span>
+        <span>{String(architecture.nodes.length).padStart(2, '0')} components · {String(architecture.edges.length).padStart(2, '0')} connections</span>
       </figcaption>
-      <ArchitectureFlow>
-        <div className="architecture-track" aria-hidden="true">
-          {nodes.map((node, index) => (
-            <div className="architecture-step" key={node.id}>
-              <NodePulse delay={index * 0.22} />
-              <strong>{node.label}</strong>
-              <small>{String(index + 1).padStart(2, '0')}</small>
-            </div>
-          ))}
+      <p className="architecture-summary">{architecture.summary}</p>
+      <ArchitectureFlow className="architecture-map-motion">
+        <div className="architecture-viewport" tabIndex={0} aria-label="Scrollable architecture diagram">
+          <div className="architecture-map">
+            {architecture.groups.map((group) => (
+              <div
+                className="architecture-group"
+                data-architecture-group={group.id}
+                key={group.id}
+                style={{ left: group.x, top: group.y, width: group.width, height: group.height }}
+              >
+                <strong>{group.label}</strong>
+                <span>{group.detail}</span>
+              </div>
+            ))}
+            <svg
+              className="architecture-connectors"
+              viewBox="0 0 1000 620"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <defs>
+                <marker id={markerId} viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+                  <path d="M 0 0 L 10 5 L 0 10 z" />
+                </marker>
+              </defs>
+              {architecture.edges.map((edge) => (
+                <g key={`${edge.from}-${edge.to}`}>
+                  <path
+                    className={edge.dashed ? 'architecture-edge-dashed' : undefined}
+                    d={connectionPath(edge.from, edge.to)}
+                    markerEnd={`url(#${markerId})`}
+                    markerStart={edge.bidirectional ? `url(#${markerId})` : undefined}
+                  />
+                </g>
+              ))}
+            </svg>
+            <ol className="architecture-track">
+              {architecture.nodes.map((node, index) => (
+              <li
+                className="architecture-step"
+                data-architecture-node={node.id}
+                data-node-kind={node.kind}
+                key={node.id}
+                style={{ left: node.x, top: node.y, width: node.width ?? 170 }}
+              >
+                <div className="architecture-step-meta">
+                  <small>{node.technology}</small>
+                  <NodePulse delay={index * 0.22} />
+                </div>
+                <strong>{node.label}</strong>
+                <p>{node.detail}</p>
+              </li>
+              ))}
+            </ol>
+          </div>
         </div>
       </ArchitectureFlow>
-      <ol className="architecture-legend">
-        {nodes.map((node) => (
-          <li key={node.id}>
-            <strong>{node.label}</strong>
-            <span>{node.detail}</span>
-          </li>
+      <div className="architecture-legend" aria-label="Architecture component legend">
+        {['surface', 'service', 'data', 'ai', 'integration', 'control', 'runtime'].map((kind) => (
+          <span key={kind} data-node-kind={kind}><i aria-hidden="true" />{kind}</span>
         ))}
-      </ol>
+      </div>
+      <details className="architecture-connections">
+        <summary>Read system connections</summary>
+        <ul>
+          {architecture.edges.map((edge) => (
+            <li key={`${edge.from}-${edge.to}-description`}>
+              <strong>{nodeById.get(edge.from)?.label}</strong>
+              <span>{edge.bidirectional ? ' ↔ ' : ' → '}</span>
+              <strong>{nodeById.get(edge.to)?.label}</strong>
+              {edge.label ? <small>{edge.label}</small> : null}
+            </li>
+          ))}
+        </ul>
+      </details>
     </figure>
   );
 }
 
 export function ProjectChapter({ project, priority = false }: { project: PortfolioProject; priority?: boolean }) {
   const style = { '--chapter-tone': toneColors[project.tone] } as ToneStyle;
+  const previewMedia = project.gallery;
 
   return (
     <section
+      id={`work-${project.slug}`}
       className="project-chapter"
       data-tone={project.tone}
       style={style}
       aria-labelledby={`${project.slug}-title`}
+      tabIndex={-1}
     >
       <Reveal className="section-heading">
         <div>
           <p className="eyebrow">Selected work / {project.number}</p>
-          <h2 id={`${project.slug}-title`}>{project.name}</h2>
+          <h2
+            id={`${project.slug}-title`}
+            className={project.name.length >= 24 ? 'long-project-title' : undefined}
+          >
+            {project.name}
+          </h2>
         </div>
         <div className="project-meta">
           <span>{project.category}</span>
           <span>{project.status}</span>
+          <FragmentFocusLink
+            className="project-index-return"
+            href="#work-index"
+            accessibleName={`Return to Project index from ${project.name}`}
+          >
+            Project index <span aria-hidden="true">↑</span>
+          </FragmentFocusLink>
         </div>
       </Reveal>
 
       <div className="project-image-wrap">
         <ImageDrift>
-          <Image
-            className="project-image"
-            src={project.image.src}
-            alt={project.image.alt}
-            width={project.image.width}
-            height={project.image.height}
-            priority={priority}
-            sizes="(max-width: 1000px) 100vw, 88vw"
-          />
+          <Link
+            className="project-image-link"
+            href={`/work/${project.slug}`}
+            aria-label={`View ${project.name} case study`}
+          >
+            <Image
+              className="project-image"
+              src={project.image.src}
+              alt={project.image.alt}
+              width={project.image.width}
+              height={project.image.height}
+              priority={priority}
+              sizes="(max-width: 1000px) 100vw, 88vw"
+            />
+            <span className="project-image-link-label" aria-hidden="true">View case study →</span>
+          </Link>
         </ImageDrift>
       </div>
 
-      <div className="project-media-preview" aria-label={`${project.name} additional project images`}>
-        {project.gallery.slice(0, 3).map((item) => (
-          <Link key={item.src} href={`/work/${project.slug}#project-gallery`}>
+      <div
+        className={`project-media-preview project-media-preview-${previewMedia.length}`}
+        aria-label={`${project.name} additional project images`}
+      >
+        {previewMedia.map((item) => (
+          <Link
+            key={item.src}
+            href={`/work/${project.slug}#project-gallery`}
+            data-layout={item.layout ?? 'standard'}
+          >
             <Image
               src={item.src}
               alt=""
@@ -284,13 +441,39 @@ export function ProjectChapter({ project, priority = false }: { project: Portfol
             ))}
           </ul>
           <Link className="primary-action dark-action" href={`/work/${project.slug}`}>
-            View project <span aria-hidden="true">→</span>
+            <span>View {project.name}</span>
+            <span aria-hidden="true">→</span>
           </Link>
         </Reveal>
 
-        <ArchitectureDiagram nodes={project.architecture} tone={project.tone} compact />
+        <ArchitectureDiagram architecture={project.architecture} tone={project.tone} compact />
       </div>
     </section>
+  );
+}
+
+export function WorkIndex({ items }: { items: PortfolioProject[] }) {
+  return (
+    <nav id="work-index" className="work-index" aria-labelledby="work-index-title" tabIndex={-1}>
+      <Reveal className="work-index-heading">
+        <p className="eyebrow">Jump to a case study</p>
+        <h2 id="work-index-title">Project index</h2>
+        <p>Five flagship projects, organized for a quick scan.</p>
+      </Reveal>
+      <ol>
+        {items.map((project) => (
+          <li key={project.slug} style={{ '--chapter-tone': toneColors[project.tone] } as ToneStyle}>
+            <FragmentFocusLink href={`#work-${project.slug}`}>
+              <span className="work-index-number">{project.number}</span>
+              <strong>{project.name}</strong>
+              <span className="work-index-category">{project.category}</span>
+              <span className="work-index-status">{project.status}</span>
+              <span className="work-index-arrow" aria-hidden="true">↓</span>
+            </FragmentFocusLink>
+          </li>
+        ))}
+      </ol>
+    </nav>
   );
 }
 
@@ -303,32 +486,41 @@ export function ProjectGallery({ project }: { project: PortfolioProject }) {
         <p>{project.gallerySummary}</p>
       </Reveal>
 
-      <div className="project-gallery-grid">
-        {project.gallery.map((item, index) => (
-          <Reveal
-            key={item.src}
-            className={`project-gallery-item project-gallery-item-${item.layout ?? 'standard'} ${index === 0 ? 'project-gallery-item-first' : ''}`}
-          >
-            <figure>
-              <div className="project-gallery-image">
-                <Image
-                  src={item.src}
-                  alt={item.alt}
-                  width={item.width}
-                  height={item.height}
-                  sizes={item.layout === 'portrait' ? '(max-width: 720px) 84vw, 38vw' : '(max-width: 900px) 100vw, 88vw'}
-                />
-              </div>
-              <figcaption>
-                <span>{String(index + 2).padStart(2, '0')}</span>
-                <div>
-                  <strong>{item.label}</strong>
-                  <p>{item.caption}</p>
-                </div>
-              </figcaption>
-            </figure>
-          </Reveal>
-        ))}
+      <ProjectMediaViewer projectName={project.name} media={project.gallery} />
+    </section>
+  );
+}
+
+export function ProjectStory({ project }: { project: PortfolioProject }) {
+  return (
+    <section id="case-study" className="project-story" aria-labelledby="project-story-title">
+      <Reveal className="project-story-heading">
+        <p className="eyebrow">Case study</p>
+        <h2 id="project-story-title">{project.story.heading}</h2>
+      </Reveal>
+
+      <div className="project-story-lead">
+        <article>
+          <p className="eyebrow">The problem</p>
+          <p>{project.story.problem}</p>
+        </article>
+        <article>
+          <p className="eyebrow">What I built</p>
+          <p>{project.story.contribution}</p>
+        </article>
+      </div>
+
+      <div className="project-story-decisions">
+        <p className="eyebrow">Key decisions</p>
+        <ol>
+          {project.story.decisions.map((decision, index) => (
+            <li key={decision.title}>
+              <span>{String(index + 1).padStart(2, '0')}</span>
+              <strong>{decision.title}</strong>
+              <p>{decision.detail}</p>
+            </li>
+          ))}
+        </ol>
       </div>
     </section>
   );

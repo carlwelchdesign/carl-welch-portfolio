@@ -61,7 +61,7 @@ const [
   { capabilities },
   { contact },
   { publicEvidenceTargetRecords },
-  { careerChapters, earlierPracticeGroups, characterSignals },
+  { careerChapters, earlierPracticeGroups, characterSignals, careerFoundations },
 ] = await Promise.all([
   loadTypescriptData(resolve(root, 'app/github-projects.ts')),
   loadTypescriptData(resolve(root, 'app/portfolio-data.ts')),
@@ -98,12 +98,26 @@ assert.equal(
   'David was Carl’s employer',
   'David Allen must remain identified as Carl’s employer.',
 );
+assert.equal(
+  recommendations.find((item) => item.id === 'portfolio:recommendation:laura-baran-2008-02-02')?.quote,
+  'Carl worked on the cutting edge design for a 3D virtual & augmented reality program that broke new ground for commercial and military applications. He was instrumental in the programming of the application software. He is a very focused individual and during his time at General Dynamics I think he surpassed all management expectations with the product he created.',
+  'Laura Baran’s recommendation must retain Carl’s approved virtual and augmented reality correction.',
+);
 requireUnique(capabilities.map((capability) => capability.id), 'Capability IDs');
 assert.equal(careerChapters.length, 4, 'The public career portrait must contain four reviewed chapters.');
 requireUnique(careerChapters.map((chapter) => chapter.number), 'Career chapter numbers');
 assert.equal(earlierPracticeGroups.length, 2, 'Earlier practice must retain the two bounded public groups.');
 requireUnique(earlierPracticeGroups.flatMap((group) => group.organizations), 'Earlier practice organizations');
+assert.equal(careerFoundations.length, 6, 'The long-view career narrative must retain six distinct foundations.');
+assert(careerFoundations.some((foundation) => foundation.title === 'The Army, art school, and GWAR'), 'The career narrative must retain Carl’s early GWAR work.');
+assert(careerFoundations.some((foundation) => foundation.technologies.includes('PHP') && foundation.technologies.includes('MySQL')), 'The career narrative must retain Carl’s historical PHP and MySQL foundation.');
+requireUnique(careerFoundations.map((foundation) => `${foundation.period}:${foundation.title}`), 'Career foundation records');
 requireUnique(characterSignals.map((signal) => signal.recommendationId), 'Character signal recommendation IDs');
+
+const historicalResumeSource = await readFile(resolve(root, 'docs/CAREER_SOURCE_2012_RESUME.md'), 'utf8');
+assert(historicalResumeSource.includes('portfolio:source:career:resume-2012'), 'The 2012 resume source must retain its stable source ID.');
+assert(!historicalResumeSource.includes('805-403-4819'), 'The historical phone number must not enter the repository source record.');
+assert(!historicalResumeSource.includes('carlwelchdesign@gmail.com'), 'The historical email address must not enter the repository source record.');
 
 const projectSlugs = new Set(projects.map((project) => project.slug));
 const repositoryNames = new Set(githubProjects.map((project) => project.name));
@@ -124,6 +138,46 @@ for (const project of projects) {
   if (!Array.isArray(project.gallery) || project.gallery.length === 0) {
     throw new Error(`${project.name} must include an image-rich project gallery.`);
   }
+  assert(project.role?.trim(), `${project.name} must identify Carl's role.`);
+  assert(project.scope?.trim(), `${project.name} must identify Carl's project scope.`);
+  assert(project.story?.heading?.trim(), `${project.name} must include a case-study heading.`);
+  assert(project.story?.problem?.trim(), `${project.name} must explain the product problem.`);
+  assert(project.story?.contribution?.trim(), `${project.name} must explain Carl's contribution.`);
+  assert.equal(project.story?.decisions?.length, 3, `${project.name} must include exactly three key decisions.`);
+  assert(project.architecture?.title?.trim(), `${project.name} must name its architecture topology.`);
+  assert(project.architecture?.summary?.trim(), `${project.name} must explain its architecture boundary.`);
+  assert(project.architecture?.groups?.length >= 3, `${project.name} must include at least three system boundaries.`);
+  assert(project.architecture?.nodes?.length >= 10, `${project.name} must include a detailed component topology.`);
+  assert(project.architecture?.edges?.length >= 10, `${project.name} must include meaningful system connections.`);
+  requireUnique(project.architecture.groups.map((group) => group.id), `${project.name} architecture group IDs`);
+  requireUnique(project.architecture.nodes.map((node) => node.id), `${project.name} architecture component IDs`);
+  const architectureNodeIds = new Set(project.architecture.nodes.map((node) => node.id));
+  for (const group of project.architecture.groups) {
+    assert(group.label?.trim(), `${project.name} architecture boundaries must include a label.`);
+    assert(group.detail?.trim(), `${project.name} architecture boundaries must explain their responsibility.`);
+    assert(group.x >= 0 && group.y >= 0 && group.x + group.width <= 1000 && group.y + group.height <= 620, `${project.name} architecture boundaries must fit the topology canvas.`);
+  }
+  for (const node of project.architecture.nodes) {
+    assert(node.label?.trim(), `${project.name} architecture components must include a label.`);
+    assert(node.detail?.trim(), `${project.name} architecture components must explain their system responsibility.`);
+    assert(node.technology?.trim(), `${project.name} architecture components must identify concrete technology or policy.`);
+    assert(node.x >= 0 && node.y >= 0 && node.x + (node.width ?? 170) <= 1000 && node.y + 80 <= 620, `${project.name} architecture components must fit the topology canvas.`);
+  }
+  for (const edge of project.architecture.edges) {
+    assert(architectureNodeIds.has(edge.from), `${project.name} architecture edge references unknown source ${edge.from}.`);
+    assert(architectureNodeIds.has(edge.to), `${project.name} architecture edge references unknown target ${edge.to}.`);
+  }
+  for (const decision of project.story.decisions) {
+    assert(decision.title?.trim(), `${project.name} case-study decisions must include a title.`);
+    assert(decision.detail?.trim(), `${project.name} case-study decisions must include a concrete explanation.`);
+  }
+  const storyCopy = [
+    project.story.heading,
+    project.story.problem,
+    project.story.contribution,
+    ...project.story.decisions.flatMap((decision) => [decision.title, decision.detail]),
+  ].join(' ');
+  assert(!/verified from|approved for publication|preserved source material|public corpus|repository-grounded/i.test(storyCopy), `${project.name} case-study narrative contains internal editorial language.`);
   requireUnique([project.image.src, ...project.gallery.map((item) => item.src)], `${project.name} media paths`);
   for (const item of project.gallery) {
     assert(item.alt?.trim(), `${project.name} gallery media must include useful alternative text.`);
@@ -143,8 +197,23 @@ for (const project of projects) {
   }
 }
 
-assert(projects.find((project) => project.slug === 'job-search-os')?.gallery.length >= 4, 'Job Search OS must retain its multi-surface product tour.');
-assert(projects.find((project) => project.slug === 'wave-factory-essentials')?.gallery.length >= 4, 'Wave Factory Essentials must retain its multi-image product-family gallery.');
+const jobSearchOs = projects.find((project) => project.slug === 'job-search-os');
+assert(jobSearchOs?.gallery.length >= 6, 'Job Search OS must retain its expanded multi-surface product tour.');
+assert(jobSearchOs?.architecture.nodes.length >= 10, 'Job Search OS must retain its detailed source-grounded topology.');
+assert(!jobSearchOs?.gallery.some((item) => item.src.includes('system-topology')), 'Job Search OS must not render the rejected topology artifact.');
+assert(projects.find((project) => project.slug === 'flight-tracker-ai')?.gallery.length >= 3, 'Flight Tracker AI must retain live, replay, and route-comparison views.');
+assert(projects.find((project) => project.slug === 'wave-factory-essentials')?.gallery.length >= 5, 'Wave Factory Essentials must retain its expanded product-family gallery.');
+const supraconscious = projects.find((project) => project.slug === 'supraconscious-avatar-ai');
+assert(supraconscious?.image.src === '/projects/supraconscious-avatar-ai/current-landing.png', 'Supraconscious Avatar AI must use the current public landing experience as its lead image.');
+assert(
+  JSON.stringify(supraconscious?.gallery.map((item) => item.src)) === JSON.stringify([
+    '/projects/supraconscious-avatar-ai/reflection-method.png',
+    '/projects/supraconscious-avatar-ai/plans-and-access.png',
+    '/projects/supraconscious-avatar-ai/mobile-landing.png',
+  ]),
+  'Supraconscious Avatar AI must retain the current public product gallery.',
+);
+assert(projects.find((project) => project.slug === 'argent-matchmaking')?.gallery.length >= 3, 'Argent Matchmaking must retain its product-system, direction, and environment views.');
 
 for (const capability of capabilities) {
   if (capability.evidence.length < 2) throw new Error(`${capability.name} does not contain enough supporting evidence.`);

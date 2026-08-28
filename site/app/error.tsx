@@ -14,11 +14,11 @@ export default function AppError({ error, reset }: { error: Error & { digest?: s
   }, [error]);
 
   return (
-    <main className="page-shell" id="main-content">
+    <main className="page-shell" id="main-content" tabIndex={-1}>
       <section className="page-intro recovery-intro" aria-labelledby="error-title">
         <p className="eyebrow">Temporary interruption</p>
         <h1 id="error-title">This page hit an unexpected problem.</h1>
-        <p>You can retry the page or return to a known route. No form response or visitor message is stored here.</p>
+        <p>Try the page again, or use one of these links to keep exploring.</p>
         <div className="recovery-actions">
           <button className="primary-action" type="button" onClick={reset}>
             Try again <span aria-hidden="true">↻</span>

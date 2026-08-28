@@ -7,10 +7,11 @@ import type { ProjectTone } from '../portfolio-data';
 import { PageFrame, PageIntro } from '../site-components';
 import { buildPageMetadata } from '../site-metadata';
 import { publicEvidenceAnchorId } from '../jolene/public-evidence-navigation-core';
+import { FragmentFocusLink } from '../fragment-focus-link';
 
 export const metadata: Metadata = buildPageMetadata({
-  title: 'Capabilities and Evidence',
-  description: 'A source-grounded map connecting Carl Welch’s capabilities to specific projects, repositories, experience, and recommendations.',
+  title: 'Capabilities',
+  description: 'Explore Carl Welch’s capabilities through specific projects, professional experience, and recommendations.',
   path: '/capabilities',
 });
 
@@ -21,6 +22,34 @@ const toneColors: Record<ProjectTone, string> = {
   orange: '#ff6800',
   green: '#62e879',
 };
+
+function CapabilityIndex() {
+  return (
+    <nav id="capability-index" className="capability-index" aria-labelledby="capability-index-title" tabIndex={-1}>
+      <header>
+        <p className="eyebrow">Jump through the strengths</p>
+        <h2 id="capability-index-title">Capability index</h2>
+        <p>Five capabilities, with practices and supporting work.</p>
+      </header>
+      <ol>
+        {capabilities.map((capability) => {
+          const style = { '--chapter-tone': toneColors[capability.tone] } as ToneStyle;
+          return (
+            <li key={capability.id} style={style}>
+              <FragmentFocusLink href={`#${capability.id}`}>
+                <span>{capability.number}</span>
+                <strong>{capability.name}</strong>
+                <p>{capability.summary}</p>
+                <small>{capability.evidence.length} examples</small>
+                <span aria-hidden="true">↓</span>
+              </FragmentFocusLink>
+            </li>
+          );
+        })}
+      </ol>
+    </nav>
+  );
+}
 
 export default function CapabilitiesPage() {
   return (
@@ -34,15 +63,22 @@ export default function CapabilitiesPage() {
         >
           <PageIntro
             eyebrow="Capabilities"
-            title="What I do, and the work behind it"
-            summary="Each area below links to a project, repository, role, or recommendation. You can follow every claim back to its source."
+            title="What I bring to the work"
+            summary="Explore each strength through the projects, roles, and recommendations that shaped it."
           />
+          <CapabilityIndex />
 
           <ol className="capability-list">
             {capabilities.map((capability) => {
               const style = { '--chapter-tone': toneColors[capability.tone] } as ToneStyle;
               return (
-                <li key={capability.id} id={capability.id} data-tone={capability.tone} style={style}>
+                <li
+                  key={capability.id}
+                  id={capability.id}
+                  data-tone={capability.tone}
+                  style={style}
+                  tabIndex={-1}
+                >
                   <div className="capability-card">
                     <header>
                       <span className="capability-number">{capability.number}</span>
@@ -58,7 +94,7 @@ export default function CapabilitiesPage() {
                     </ul>
 
                     <div className="capability-evidence">
-                      <p className="eyebrow">Supporting evidence</p>
+                      <p className="eyebrow">See it in the work</p>
                       <ArchitectureFlow className="capability-evidence-links">
                         {capability.evidence.map((evidence) => {
                           const content = (
@@ -91,6 +127,13 @@ export default function CapabilitiesPage() {
                         })}
                       </ArchitectureFlow>
                     </div>
+                    <FragmentFocusLink
+                      className="capability-index-return"
+                      href="#capability-index"
+                      accessibleName={`Return to Capability index from ${capability.name}`}
+                    >
+                      Capability index <span aria-hidden="true">↑</span>
+                    </FragmentFocusLink>
                   </div>
                 </li>
               );
@@ -98,11 +141,36 @@ export default function CapabilitiesPage() {
           </ol>
 
           <section className="capability-method" data-tone="red">
-            <p className="eyebrow">Evidence model</p>
-            <h2>What the site can support today</h2>
+            <p className="eyebrow">Go deeper</p>
+            <h2>See the work behind each strength</h2>
             <p>
-              Case studies carry the deepest technical context. Repository records show public implementation evidence. Experience records establish professional context. Recommendations remain attributed third-party statements and are never rewritten as Carl’s own claims.
+              Open a case study for the full technical story, visit a repository to inspect the code, or read what managers, teammates, and clients have said about working with Carl.
             </p>
+            <nav className="capability-next-steps" aria-label="Explore proof behind the capabilities">
+              <ul>
+                <li>
+                  <Link href="/work#work-index">
+                    <span>Detailed product stories</span>
+                    <strong>Case studies</strong>
+                    <span aria-hidden="true">→</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/work#public-repositories">
+                    <span>Selected public code</span>
+                    <strong>Repositories</strong>
+                    <span aria-hidden="true">→</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/recommendations#recommendation-highlights">
+                    <span>Managers, peers, and clients</span>
+                    <strong>Recommendations</strong>
+                    <span aria-hidden="true">→</span>
+                  </Link>
+                </li>
+              </ul>
+            </nav>
           </section>
         </main>
       </PageFrame>
