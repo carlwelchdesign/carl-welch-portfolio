@@ -98,7 +98,10 @@ test('country-host cameo appears once, leaves cleanly, and returns only with cha
   await expect(avatar).toHaveAttribute('data-avatar-state', /greet|idle/);
 
   const question = panel.getByLabel('Ask about Carl’s work or experience');
-  await question.fill('Which project best shows Carl’s product engineering work?');
+  await question.pressSequentially('Which project best shows Carl’s product engineering work?', { delay: 20 });
+  await expect(avatar).toHaveAttribute('data-avatar-state', 'excited');
+  await expect(avatar.locator('img')).toHaveAttribute('src', /typing-excited-v1\.png/);
+  await page.waitForTimeout(700);
   await expect(avatar).toHaveAttribute('data-avatar-state', 'listen');
   await panel.getByRole('button', { name: 'Ask Jolene', exact: true }).click();
 
@@ -166,6 +169,13 @@ test('reduced motion skips the unsolicited cameo and uses static state frames', 
   const settledFrame = await avatar.getAttribute('data-avatar-frame');
   expect(initialFrame).toBe('greet-2');
   expect(settledFrame).toBe('idle-0');
+
+  const question = page.getByRole('dialog', { name: 'Ask Jolene' }).getByLabel('Ask about Carl’s work or experience');
+  await question.fill('Tell me about Carl');
+  await expect(avatar).toHaveAttribute('data-avatar-state', 'excited');
+  await expect(avatar).toHaveAttribute('data-avatar-frame', 'excited-0');
+  await page.waitForTimeout(300);
+  await expect(avatar).toHaveAttribute('data-avatar-frame', 'excited-0');
 });
 
 test('missing pose assets fail over to the approved static master', async ({ page }) => {
@@ -175,7 +185,7 @@ test('missing pose assets fail over to the approved static master', async ({ pag
   await page.getByRole('button', { name: /Ask Jolene/ }).click();
   const avatar = page.getByRole('dialog', { name: 'Ask Jolene' }).locator('.jolene-avatar');
   await expect(avatar).toHaveAttribute('data-avatar-fallback', 'master');
-  await expect(avatar.locator('img')).toHaveAttribute('src', '/jolene/jolene-country-host-master.png');
+  await expect(avatar.locator('img')).toHaveAttribute('src', /\/jolene\/sprites\/rig-base-v2\.png/);
   await expect(avatar).toBeVisible();
 });
 

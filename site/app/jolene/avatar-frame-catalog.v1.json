@@ -81,6 +81,42 @@
       "scale": 1.004,
       "transformOrigin": "160px 448px"
     },
+    "excited-0": {
+      "assetPath": "/jolene/sprites/typing-excited-v1.png?v=89b896f51e17",
+      "state": "excited",
+      "translateX": 0,
+      "translateY": -3,
+      "rotateDeg": 0,
+      "scale": 1.08,
+      "transformOrigin": "160px 448px"
+    },
+    "excited-1": {
+      "assetPath": "/jolene/sprites/typing-excited-v1.png?v=89b896f51e17",
+      "state": "excited",
+      "translateX": -4,
+      "translateY": -5,
+      "rotateDeg": -2.2,
+      "scale": 1.09,
+      "transformOrigin": "160px 448px"
+    },
+    "excited-2": {
+      "assetPath": "/jolene/sprites/typing-excited-v1.png?v=89b896f51e17",
+      "state": "excited",
+      "translateX": 3,
+      "translateY": -4,
+      "rotateDeg": 2,
+      "scale": 1.09,
+      "transformOrigin": "160px 448px"
+    },
+    "excited-3": {
+      "assetPath": "/jolene/sprites/typing-excited-v1.png?v=89b896f51e17",
+      "state": "excited",
+      "translateX": -2,
+      "translateY": -6,
+      "rotateDeg": -1.5,
+      "scale": 1.1,
+      "transformOrigin": "160px 448px"
+    },
     "listen-0": {
       "assetPath": "/jolene/sprites/rig-base-v2.png?v=83aecc00ed86",
       "state": "listen",

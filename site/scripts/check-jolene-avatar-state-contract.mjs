@@ -8,10 +8,11 @@ const rigBase = spriteManifest.frames[0];
 const rigBaseBytes = await readFile(new URL(`../public${rigBase.path}`, import.meta.url));
 const source = await readFile(new URL('../app/jolene/avatar-state-contract.ts', import.meta.url), 'utf8');
 
-const expectedStates = ['idle', 'blink', 'greet', 'listen', 'think', 'speak', 'evidence', 'boundary', 'offline', 'rest'];
+const expectedStates = ['idle', 'blink', 'greet', 'excited', 'listen', 'think', 'speak', 'evidence', 'boundary', 'offline', 'rest'];
 const expectedSignals = [
   'intro_started',
   'chat_opened',
+  'visitor_typing',
   'visitor_input',
   'request_started',
   'answer_started',
@@ -55,8 +56,8 @@ assert.equal(contract.rendering.frameWidth, rigBase.width);
 assert.equal(contract.rendering.frameHeight, rigBase.height);
 assert.deepEqual(contract.rendering.anchor, spriteManifest.layout.anchor);
 assert.equal(createHash('sha256').update(rigBaseBytes).digest('hex'), contract.rendering.masterSha256);
-assert.equal(spriteManifest.invariants.singleIdentitySource, true);
-assert.equal(spriteManifest.invariants.generatedPoseRedrawsUsedAtRuntime, false);
+assert.equal(spriteManifest.invariants.baseStatesShareIdentitySource, true);
+assert.deepEqual(spriteManifest.invariants.distinctPoseStates, ['excited']);
 
 for (const forbidden of ['openai', 'anthropic', 'gemini', 'ollama', 'language model', 'llm']) {
   assert.equal(JSON.stringify(contract).toLowerCase().includes(forbidden), false, `Avatar contract leaks provider term: ${forbidden}`);
@@ -66,4 +67,4 @@ for (const exportedName of ['AvatarState', 'AvatarSignal', 'stateForAvatarSignal
   assert.ok(source.includes(exportedName), `Avatar state module is missing ${exportedName}.`);
 }
 
-console.log('Jolene avatar state contract passed: 10 states, 11 signals, validated transitions, approved master, and reduced-motion fallback.');
+console.log('Jolene avatar state contract passed: 11 states, 12 signals, validated typing transition, approved master, and reduced-motion fallback.');

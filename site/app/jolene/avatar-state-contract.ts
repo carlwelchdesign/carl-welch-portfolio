@@ -4,6 +4,7 @@ export const avatarStates = [
   'idle',
   'blink',
   'greet',
+  'excited',
   'listen',
   'think',
   'speak',

@@ -34,7 +34,7 @@ for (const requirement of ['image-rendering: pixelated', 'pointer-events: none',
   assert.ok(styles.includes(requirement), `Jolene avatar CSS is missing ${requirement}.`);
 }
 
-const primarySequence = ['greet', 'listen', 'think', 'speak', 'evidence', 'idle'];
+const primarySequence = ['greet', 'excited', 'listen', 'think', 'speak', 'evidence', 'idle'];
 for (let index = 0; index < primarySequence.length - 1; index += 1) {
   const from = primarySequence[index];
   const to = primarySequence[index + 1];
@@ -49,7 +49,8 @@ for (const state of contract.states) {
 
 assert.deepEqual(contract.interruption.alwaysInterruptFor, ['offline']);
 assert.equal(catalog.imageRendering, 'pixelated');
-assert.equal(new Set(Object.values(catalog.frames).map(({ assetPath }) => assetPath)).size, 1, 'All runtime states must preserve one character identity source.');
+assert.equal(new Set(Object.values(catalog.frames).map(({ assetPath }) => assetPath)).size, 2, 'Runtime must use one base identity plus one excited typing pose.');
+assert.ok(Object.values(catalog.frames).filter(({ state }) => state === 'excited').every(({ assetPath }) => assetPath.includes('typing-excited-v1.png')), 'Excited frames must use the approved typing pose.');
 assert.ok(contract.rendering.masterPath.includes('/jolene/sprites/rig-base-v2.png'), 'Fallback must use the corrected rig base.');
 
 for (const signal of Object.keys(contract.signals)) {
@@ -65,6 +66,9 @@ for (const integrationBoundary of [
   "'service_unavailable'",
   'jolene-starter-stage',
   'jolene-conversation-avatar',
+  "sendAvatar('visitor_typing')",
+  'typingAnimationTimer',
+  '650',
 ]) {
   assert.ok(chatSource.includes(integrationBoundary), `Chat integration is missing ${integrationBoundary}.`);
 }

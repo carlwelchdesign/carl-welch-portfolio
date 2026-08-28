@@ -102,6 +102,7 @@ export function JoleneChat({
   const focusedAssistantId = useRef<string | null>(null);
   const messageSequence = useRef(0);
   const answerAnimationTimer = useRef<number | null>(null);
+  const typingAnimationTimer = useRef<number | null>(null);
   const reducedMotion = useReducedMotion() === true;
   const { state: avatarState, send: sendAvatar, settle: settleAvatar } = useJoleneAvatarController();
   const [open, setOpen] = useState(false);
@@ -115,6 +116,7 @@ export function JoleneChat({
 
   const closePanel = useCallback(() => {
     if (answerAnimationTimer.current !== null) window.clearTimeout(answerAnimationTimer.current);
+    if (typingAnimationTimer.current !== null) window.clearTimeout(typingAnimationTimer.current);
     sendAvatar('inactive');
     setOpen(false);
     setMode('chat');
@@ -139,6 +141,7 @@ export function JoleneChat({
 
   useEffect(() => () => {
     if (answerAnimationTimer.current !== null) window.clearTimeout(answerAnimationTimer.current);
+    if (typingAnimationTimer.current !== null) window.clearTimeout(typingAnimationTimer.current);
   }, []);
 
   useEffect(() => {
@@ -178,6 +181,7 @@ export function JoleneChat({
     if (!normalizedQuestion || waiting) return;
 
     if (answerAnimationTimer.current !== null) window.clearTimeout(answerAnimationTimer.current);
+    if (typingAnimationTimer.current !== null) window.clearTimeout(typingAnimationTimer.current);
     sendAvatar('visitor_input');
     sendAvatar('request_started');
 
@@ -245,6 +249,20 @@ export function JoleneChat({
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     void sendQuestion(draft);
+  }
+
+  function updateDraft(value: string) {
+    setDraft(value);
+    if (typingAnimationTimer.current !== null) window.clearTimeout(typingAnimationTimer.current);
+    if (!value.trim()) {
+      sendAvatar('activity_resumed');
+      return;
+    }
+    sendAvatar('visitor_typing');
+    typingAnimationTimer.current = window.setTimeout(() => {
+      sendAvatar('visitor_input');
+      typingAnimationTimer.current = null;
+    }, 650);
   }
 
   function askFromComparison(question: string) {
@@ -354,10 +372,7 @@ export function JoleneChat({
               id="jolene-question"
               name="question"
               value={draft}
-              onChange={(event) => {
-                setDraft(event.target.value);
-                sendAvatar(event.target.value.trim() ? 'visitor_input' : 'activity_resumed');
-              }}
+              onChange={(event) => updateDraft(event.target.value)}
               maxLength={800}
               rows={3}
               placeholder="What would you like to know?"

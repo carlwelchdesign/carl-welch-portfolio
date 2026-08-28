@@ -14,6 +14,7 @@ const labels = Object.freeze({
   idle: ['IDLE', 'ready, warm, breathing'],
   blink: ['BLINK', 'quick natural reset'],
   greet: ['GREET', 'warm pop-in + “Howdy, folks!”'],
+  excited: ['EXCITED', 'typing jiggle + downward peek'],
   listen: ['LISTEN', 'settles into attention'],
   think: ['THINK', 'subtle considering lean'],
   speak: ['SPEAK', 'confident conversational cadence'],
@@ -80,7 +81,7 @@ try {
           <div>
             <div class="eyebrow">PORT-AVATAR-003 / MOTION REVIEW</div>
             <h1>Jolene state ensemble</h1>
-            <p class="subhead">One locked character identity, ten behaviors driven by motion, no generated pose redraws.</p>
+            <p class="subhead">One locked base identity, ten restrained behaviors, and one expressive typing pose.</p>
           </div>
           <div class="stamp">LOCAL REVIEW ONLY<br />NO DEPLOYMENT</div>
         </header>
@@ -94,7 +95,7 @@ try {
           <section class="flow">
             <div class="panel">
               <div class="panel-title">PRIMARY CONVERSATION PATH</div>
-              <div class="sequence"><span class="pill">GREET</span><span class="arrow">→</span><span class="pill">LISTEN</span><span class="arrow">→</span><span class="pill">THINK</span><span class="arrow">→</span><span class="pill">SPEAK</span><span class="arrow">→</span><span class="pill">EVIDENCE</span><span class="arrow">→</span><span class="pill">IDLE</span></div>
+              <div class="sequence"><span class="pill">GREET</span><span class="arrow">→</span><span class="pill">EXCITED</span><span class="arrow">→</span><span class="pill">LISTEN</span><span class="arrow">→</span><span class="pill">THINK</span><span class="arrow">→</span><span class="pill">SPEAK</span><span class="arrow">→</span><span class="pill">EVIDENCE</span><span class="arrow">→</span><span class="pill">IDLE</span></div>
             </div>
             <div class="panel">
               <div class="panel-title">LOCKED BEHAVIOR RULES</div>
@@ -118,7 +119,7 @@ const reviewManifest = {
   boardSha256: sha256(screenshotBytes),
   stateCount: cards.length,
   stateOrder: cards.map(({ state }) => state),
-  primarySequence: ['greet', 'listen', 'think', 'speak', 'evidence', 'idle'],
+  primarySequence: ['greet', 'excited', 'listen', 'think', 'speak', 'evidence', 'idle'],
   offlinePresentation: 'poised, lightly humorous pause; never sad, angry, or apologetic',
   reducedMotion: stateContract.reducedMotion,
   publicUseAuthorized: false,
@@ -131,7 +132,7 @@ if (checkOnly) {
   assert.deepEqual(committedReviewManifest, reviewManifest);
   assert.deepEqual(cards.map(({ state }) => state), stateContract.states);
   assert.equal(cards.find(({ state }) => state === 'offline').note, 'poised pause with humor');
-  console.log('Jolene avatar review passed: 10-state board, primary transition path, poised offline response, and accessibility rules.');
+  console.log('Jolene avatar review passed: 11-state board, typing response, primary transition path, poised offline response, and accessibility rules.');
 } else {
   await mkdir(new URL('../docs/review/', import.meta.url), { recursive: true });
   await writeFile(outputUrl, screenshotBytes);

@@ -7,6 +7,7 @@
     "idle",
     "blink",
     "greet",
+    "excited",
     "listen",
     "think",
     "speak",
@@ -36,6 +37,13 @@
       "loop": false,
       "returnState": "idle",
       "reducedMotionFrame": "greet-2"
+    },
+    "excited": {
+      "frames": ["excited-0", "excited-1", "excited-2", "excited-3", "excited-2", "excited-1"],
+      "durationsMs": [100, 110, 110, 110, 110, 110],
+      "loop": true,
+      "returnState": null,
+      "reducedMotionFrame": "excited-0"
     },
     "listen": {
       "frames": ["listen-0"],
@@ -88,20 +96,22 @@
     }
   },
   "transitions": {
-    "idle": ["blink", "greet", "listen", "think", "speak", "evidence", "boundary", "offline", "rest"],
-    "blink": ["idle", "offline"],
-    "greet": ["idle", "listen", "offline"],
-    "listen": ["idle", "think", "offline"],
-    "think": ["idle", "speak", "boundary", "offline"],
-    "speak": ["idle", "evidence", "boundary", "offline"],
-    "evidence": ["idle", "speak", "offline"],
-    "boundary": ["idle", "listen", "offline"],
-    "offline": ["idle"],
-    "rest": ["idle", "greet", "offline"]
+    "idle": ["blink", "greet", "excited", "listen", "think", "speak", "evidence", "boundary", "offline", "rest"],
+    "blink": ["idle", "excited", "offline"],
+    "greet": ["idle", "excited", "listen", "offline"],
+    "excited": ["idle", "listen", "think", "offline"],
+    "listen": ["idle", "excited", "think", "offline"],
+    "think": ["idle", "excited", "speak", "boundary", "offline"],
+    "speak": ["idle", "excited", "evidence", "boundary", "offline"],
+    "evidence": ["idle", "excited", "speak", "offline"],
+    "boundary": ["idle", "excited", "listen", "offline"],
+    "offline": ["idle", "excited"],
+    "rest": ["idle", "greet", "excited", "offline"]
   },
   "signals": {
     "intro_started": "greet",
     "chat_opened": "greet",
+    "visitor_typing": "excited",
     "visitor_input": "listen",
     "request_started": "think",
     "answer_started": "speak",

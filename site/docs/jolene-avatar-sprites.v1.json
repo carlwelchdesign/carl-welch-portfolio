@@ -8,7 +8,14 @@
     "height": 1347,
     "generatedWith": "built-in image generation edit mode"
   },
-  "overrides": [],
+  "overrides": [
+    {
+      "state": "excited",
+      "path": "/jolene/review/country-host-typing-excited-v1-source.png",
+      "sha256": "3f3b683ace207b3497c0f650900627f85d0c4e302ca314a3a794a9a339ccc8e2",
+      "intent": "hands clasped at chest, slight forward lean, soft downward gaze toward visitor input"
+    }
+  ],
   "layout": {
     "frameWidth": 320,
     "frameHeight": 460,
@@ -83,6 +90,27 @@
         "height": 440
       },
       "removedInteriorMattePixels": 7204
+    },
+    {
+      "state": "excited",
+      "path": "/jolene/sprites/typing-excited-v1.png",
+      "sha256": "89b896f51e176095d5d39e8254a5d0b2a73718f1320fabc11886088bdb593c9f",
+      "width": 320,
+      "height": 460,
+      "opaquePixels": 88332,
+      "sourceBounds": {
+        "x": 182,
+        "y": 71,
+        "width": 726,
+        "height": 1181
+      },
+      "drawBounds": {
+        "x": 25,
+        "y": 8,
+        "width": 270,
+        "height": 440
+      },
+      "removedInteriorMattePixels": 2088
     },
     {
       "state": "listen",
@@ -233,8 +261,10 @@
     }
   ],
   "invariants": {
-    "singleIdentitySource": true,
-    "generatedPoseRedrawsUsedAtRuntime": false,
+    "baseStatesShareIdentitySource": true,
+    "distinctPoseStates": [
+      "excited"
+    ],
     "providerIndependent": true,
     "approvedForPublicUse": false
   }

@@ -2,12 +2,13 @@
   "schemaVersion": "1.0.0",
   "status": "candidate_pending_carl_approval",
   "boardPath": "/docs/review/jolene-avatar-state-board.png",
-  "boardSha256": "c4929f4033b57b5b6b98940714f08420f33b0ca3f2c006ae5f341f62725d7cc8",
-  "stateCount": 10,
+  "boardSha256": "de877aa70366bb20f80ccae1dec227d09684d05e3294ae49d02881c1b6e26d76",
+  "stateCount": 11,
   "stateOrder": [
     "idle",
     "blink",
     "greet",
+    "excited",
     "listen",
     "think",
     "speak",
@@ -18,6 +19,7 @@
   ],
   "primarySequence": [
     "greet",
+    "excited",
     "listen",
     "think",
     "speak",
