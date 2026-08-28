@@ -383,8 +383,12 @@ test('experience presents the historical client range with explicit agency and t
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/experience#career-foundations');
   const field = page.locator('.legacy-client-field');
+  const viewport = page.getByRole('region', { name: 'Historical client and project index' });
   await expect(field.getByRole('heading', { name: 'The work moved from defense and finance to entertainment, commerce, and culture.' })).toBeVisible();
   await expect(field).toContainText('Some were direct roles. Many came through agencies, studios, and project teams.');
+  await expect(field.getByText('35 selected marks')).toBeVisible();
+  await expect(field.getByText('Swipe to browse')).toBeVisible();
+  await expect(viewport).toHaveAttribute('aria-describedby', 'legacy-client-mark-guide');
   await expect(field.locator('.legacy-client-mark-grid img')).toHaveCount(35);
   await expect(field.locator('.legacy-client-mark-grid > li')).toHaveCount(36);
 
@@ -394,6 +398,27 @@ test('experience presents the historical client range with explicit agency and t
     await expect.poll(() => image.evaluate((element) => (element as HTMLImageElement).naturalWidth)).toBe(170);
   }
 
+  await page.evaluate(() => document.fonts.ready);
+  expect(await field.evaluate((element) => element.getBoundingClientRect().height)).toBeLessThan(1050);
+  const mobileScroll = await viewport.evaluate((element) => ({
+    clientWidth: element.clientWidth,
+    scrollWidth: element.scrollWidth,
+  }));
+  expect(mobileScroll.scrollWidth).toBeGreaterThan(mobileScroll.clientWidth);
+  await viewport.evaluate((element) => { element.scrollLeft = 0; });
+  await viewport.focus();
+  await page.keyboard.press('ArrowRight');
+  await expect.poll(() => viewport.evaluate((element) => element.scrollLeft)).toBeGreaterThan(0);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto('/experience#career-foundations');
+  await page.evaluate(() => document.fonts.ready);
+  const desktopField = page.locator('.legacy-client-field');
+  expect(await desktopField.evaluate((element) => element.getBoundingClientRect().height)).toBeLessThan(1250);
+  expect(await desktopField.locator('.legacy-client-mark-grid').evaluate((element) => (
+    getComputedStyle(element).gridTemplateColumns.split(' ').length
+  ))).toBe(8);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 });
 
