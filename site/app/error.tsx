@@ -14,7 +14,7 @@ export default function AppError({ error, reset }: { error: Error & { digest?: s
   }, [error]);
 
   return (
-    <main className="page-shell" id="main-content">
+    <main className="page-shell" id="main-content" tabIndex={-1}>
       <section className="page-intro recovery-intro" aria-labelledby="error-title">
         <p className="eyebrow">Temporary interruption</p>
         <h1 id="error-title">This page hit an unexpected problem.</h1>

@@ -14,7 +14,7 @@ export default function ContactPage() {
   return (
     <MotionRuntime>
       <PageFrame>
-        <main id="main-content" data-tone="red">
+        <main id="main-content" tabIndex={-1} data-tone="red">
           <PageIntro
             eyebrow="Contact"
             title="Email Carl"

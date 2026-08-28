@@ -87,7 +87,7 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
         <title>Portfolio interruption | Carl Welch</title>
       </head>
       <body style={pageStyle}>
-        <main id="main-content" style={mainStyle}>
+        <main id="main-content" tabIndex={-1} style={mainStyle}>
           <p style={{ margin: 0, fontSize: 12, letterSpacing: '0.12em', textTransform: 'uppercase' }}>
             Carl Welch / Portfolio
           </p>

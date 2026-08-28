@@ -52,7 +52,7 @@ export default function RecommendationsPage() {
   return (
     <MotionRuntime>
       <PageFrame>
-        <main id="main-content" data-tone="red">
+        <main id="main-content" tabIndex={-1} data-tone="red">
           <PageIntro
             eyebrow="Recommendations"
             title="The people I worked with"

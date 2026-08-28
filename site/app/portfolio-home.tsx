@@ -9,7 +9,7 @@ export function PortfolioHome() {
   return (
     <MotionRuntime>
       <PageFrame>
-        <main id="main-content">
+        <main id="main-content" tabIndex={-1}>
           <section id="top" className="hero" data-tone="red" aria-labelledby="hero-title">
             <div className="hero-copy">
               <p className="eyebrow">Senior Product Engineer · Creative Technologist</p>

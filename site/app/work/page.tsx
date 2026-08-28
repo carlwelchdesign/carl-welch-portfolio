@@ -16,7 +16,7 @@ export default function WorkPage() {
   return (
     <MotionRuntime>
       <PageFrame>
-        <main id="main-content">
+        <main id="main-content" tabIndex={-1}>
           <PageIntro
             eyebrow="Work / 2026"
             title="Selected work"

@@ -50,7 +50,7 @@ export default function ExperiencePage() {
   return (
     <MotionRuntime>
       <PageFrame>
-        <main id="main-content" data-tone="green">
+        <main id="main-content" tabIndex={-1} data-tone="green">
           <PageIntro
             eyebrow="Experience"
             title="A practice built across different kinds of work"

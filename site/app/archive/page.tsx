@@ -54,7 +54,7 @@ export default function ArchivePage() {
   return (
     <MotionRuntime>
       <PageFrame>
-        <main id="main-content">
+        <main id="main-content" tabIndex={-1}>
           <PageIntro
             eyebrow="Selected archive"
             title="The work behind the current work"

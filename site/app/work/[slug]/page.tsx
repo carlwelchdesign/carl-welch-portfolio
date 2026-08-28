@@ -47,7 +47,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   return (
     <MotionRuntime>
       <PageFrame>
-        <main id="main-content" className={`project-detail project-detail-${project.tone}`} data-tone={project.tone}>
+        <main id="main-content" tabIndex={-1} className={`project-detail project-detail-${project.tone}`} data-tone={project.tone}>
           <header
             className="project-detail-hero"
             id={publicEvidenceAnchorId(project.sourceId)}

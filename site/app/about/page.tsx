@@ -15,7 +15,7 @@ export default function AboutPage() {
   return (
     <MotionRuntime>
       <PageFrame>
-        <main id="main-content" data-tone="orange">
+        <main id="main-content" tabIndex={-1} data-tone="orange">
           <PageIntro
             eyebrow="About"
             title="The engineer I am now was built over time"
