@@ -172,6 +172,50 @@ test('return-to-index controls expose unique contextual names and preserve their
   }
 });
 
+test('return-to-index controls transfer focus to their fragment destinations', async ({ page }) => {
+  const routes = [
+    ['/work', '.project-index-return', '#work-index'],
+    ['/archive', '.archive-map-return', '#archive-map'],
+    ['/capabilities', '.capability-index-return', '#capability-index'],
+    ['/experience', '.career-index-return', '#career-index'],
+    ['/recommendations', '.recommendation-highlights-return', '#recommendation-highlights'],
+  ] as const;
+
+  for (const [route, selector, destination] of routes) {
+    await page.goto(route);
+    const returnLink = page.locator(selector).first();
+    await returnLink.scrollIntoViewIfNeeded();
+    await returnLink.click();
+
+    await expect(page).toHaveURL(new RegExp(`${destination}$`));
+    await expect(page.locator(destination)).toBeFocused();
+  }
+});
+
+test('return-to-index links retain native fragment navigation without JavaScript', async ({ browser }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  const page = await context.newPage();
+  const routes = [
+    ['/work', '.project-index-return', '#work-index'],
+    ['/archive', '.archive-map-return', '#archive-map'],
+    ['/capabilities', '.capability-index-return', '#capability-index'],
+    ['/experience', '.career-index-return', '#career-index'],
+    ['/recommendations', '.recommendation-highlights-return', '#recommendation-highlights'],
+  ] as const;
+
+  for (const [route, selector, destination] of routes) {
+    await page.goto(route);
+    const returnLink = page.locator(selector).first();
+    await returnLink.scrollIntoViewIfNeeded();
+    await returnLink.click();
+
+    await expect(page).toHaveURL(new RegExp(`${destination}$`));
+    await expect(page.locator(destination)).toBeVisible();
+  }
+
+  await context.close();
+});
+
 test('every public route meets the mobile control-size and overflow contract', async ({ page }) => {
   for (const viewport of mobileViewports) {
     await page.setViewportSize(viewport);
