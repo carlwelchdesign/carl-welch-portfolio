@@ -262,6 +262,30 @@ test('collapsed mobile menu communicates the current section at every phone widt
   }
 });
 
+test('mobile menu supports keyboard, outside-pointer, and destination dismissal', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/work');
+  const menu = page.locator('details.mobile-navigation');
+  const summary = menu.locator('summary');
+  await expect(menu).toHaveAttribute('data-dismissal-ready', 'true');
+
+  await summary.click();
+  await expect(menu).toHaveAttribute('open', '');
+  await page.keyboard.press('Escape');
+  await expect(menu).not.toHaveAttribute('open', '');
+  await expect(summary).toBeFocused();
+
+  await summary.click();
+  await page.locator('main#main-content').click();
+  await expect(menu).not.toHaveAttribute('open', '');
+
+  await summary.click();
+  await menu.getByRole('link', { name: 'Archive', exact: true }).click();
+  await expect(page).toHaveURL(/\/archive$/);
+  await expect(menu).not.toHaveAttribute('open', '');
+  await expect(summary).toHaveAttribute('aria-label', 'Menu, current section: Archive');
+});
+
 test('homepage gives recruiters a synchronized proof summary', async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 720 });
   await page.goto('/');
