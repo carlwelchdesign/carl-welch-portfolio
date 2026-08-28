@@ -15,6 +15,7 @@ export type EarlierPracticeGroup = {
 };
 
 export type CareerFoundation = {
+  id: string;
   period: string;
   title: string;
   context: string;
@@ -93,6 +94,7 @@ export const earlierPracticeGroups: EarlierPracticeGroup[] = [
 
 export const careerFoundations: CareerFoundation[] = [
   {
+    id: 'army-art-school-gwar',
     period: '1989 to 1995',
     title: 'The Army, art school, and GWAR',
     context: 'Service, education, and the first professional work',
@@ -102,6 +104,7 @@ export const careerFoundations: CareerFoundation[] = [
     technologies: ['Print', 'Identity', 'Illustration'],
   },
   {
+    id: 'early-full-stack-web',
     period: '1994 to 2001',
     title: 'Learning the web by building all of it',
     context: 'Art direction, multimedia, teams, and early web systems',
@@ -111,6 +114,7 @@ export const careerFoundations: CareerFoundation[] = [
     technologies: ['HTML', 'JavaScript', 'Shockwave', 'Flash', 'Video'],
   },
   {
+    id: 'immersive-systems',
     period: '2001 to 2004',
     title: 'Immersive systems before AR was a product category',
     context: 'General Dynamics Land Systems',
@@ -120,6 +124,7 @@ export const careerFoundations: CareerFoundation[] = [
     technologies: ['Director 3D', 'Positional tracking', 'Pro/ENGINEER', 'UX/UI'],
   },
   {
+    id: 'gtd-evidence-com',
     period: '2005 to 2010',
     title: 'Brand systems, GTD, and Evidence.com',
     context: 'David Allen Company and TASER International',
@@ -129,6 +134,7 @@ export const careerFoundations: CareerFoundation[] = [
     technologies: ['PHP', 'MySQL', 'ActionScript 3', 'JavaScript', 'Video'],
   },
   {
+    id: 'agency-creative-technology',
     period: '2008 to 2012',
     title: 'Agency range without losing the engineering',
     context: 'Independent art direction and development',
@@ -138,6 +144,7 @@ export const careerFoundations: CareerFoundation[] = [
     technologies: ['PHP', 'MySQL', 'JavaScript', 'jQuery', 'XML', 'CSS'],
   },
   {
+    id: 'teaching-code',
     period: '2012',
     title: 'Teaching code made the work legible',
     context: 'Ignite Creative Learning',
