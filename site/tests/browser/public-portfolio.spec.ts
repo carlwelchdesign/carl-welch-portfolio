@@ -476,8 +476,9 @@ test('homepage closes with a direct recruiter next step', async ({ page }) => {
   const closing = page.getByRole('region', { name: 'Let’s talk about what you’re building.' });
   await expect(closing).toContainText('If you’re hiring for senior product engineering');
   await expect(closing.getByRole('link', { name: 'Start a conversation' })).toHaveAttribute('href', '/contact');
-  await expect(closing.getByRole('link', { name: 'Résumé' })).toHaveAttribute('href', '/carl-welch-resume.pdf');
-  await expect(closing.getByRole('link', { name: 'Résumé' })).toHaveAttribute('download', '');
+  const resume = closing.getByRole('link', { name: 'Download Carl Welch résumé (PDF)' });
+  await expect(resume).toHaveAttribute('href', '/carl-welch-resume.pdf');
+  await expect(resume).toHaveAttribute('download', '');
 
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
   expect(overflow).toBeLessThanOrEqual(0);
@@ -943,6 +944,22 @@ test('professional profile links identify destinations and new-tab behavior', as
   await expect(resumeLinks).toHaveCount(2);
   expect(await emailLinks.evaluateAll((links) => links.every((link) => !link.hasAttribute('target')))).toBe(true);
   expect(await resumeLinks.evaluateAll((links) => links.every((link) => !link.hasAttribute('target')))).toBe(true);
+});
+
+test('résumé downloads identify Carl and the PDF file type on every public route', async ({ page }) => {
+  for (const route of routes) {
+    await page.goto(route);
+    const resumeLinks = page.getByRole('link', { name: 'Download Carl Welch résumé (PDF)', exact: true });
+    const expectedCount = route === '/' ? 3 : route === '/contact' ? 2 : 1;
+
+    await expect(resumeLinks).toHaveCount(expectedCount);
+    expect(await resumeLinks.evaluateAll((links) => links.every((link) => (
+      link.getAttribute('href') === '/carl-welch-resume.pdf' &&
+      link.hasAttribute('download') &&
+      link.getAttribute('type') === 'application/pdf' &&
+      !link.hasAttribute('target')
+    )))).toBe(true);
+  }
 });
 
 test('capability index maps every strength to supporting work', async ({ page }) => {
