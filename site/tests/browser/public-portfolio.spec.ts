@@ -175,6 +175,57 @@ test('fixed mobile targets preserve author attribution and architecture disclosu
   await expect(connections).toHaveAttribute('open', '');
 });
 
+test('primary navigation identifies the current portfolio section', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.getByRole('link', { name: 'Carl Welch home' })).toHaveAttribute('aria-current', 'page');
+  await expect(page.getByRole('navigation', { name: 'Primary navigation' }).locator('[aria-current="page"]')).toHaveCount(0);
+
+  const sectionRoutes = [
+    ['/work', 'Work'],
+    ['/archive', 'Archive'],
+    ['/about', 'About'],
+    ['/experience', 'Experience'],
+    ['/recommendations', 'Recommendations'],
+    ['/work/job-search-os', 'Work'],
+    ['/work/flight-tracker-ai', 'Work'],
+    ['/work/wave-factory-essentials', 'Work'],
+    ['/work/supraconscious-avatar-ai', 'Work'],
+    ['/work/argent-matchmaking', 'Work'],
+  ] as const;
+
+  for (const [route, label] of sectionRoutes) {
+    await page.goto(route);
+    const navigation = page.getByRole('navigation', { name: 'Primary navigation' });
+    await expect(navigation.getByRole('link', { name: label, exact: true })).toHaveAttribute('aria-current', 'page');
+    await expect(navigation.locator('[aria-current="page"]')).toHaveCount(1);
+  }
+
+  await page.goto('/contact');
+  await expect(page.locator('a.build-label')).toHaveAttribute('aria-current', 'page');
+});
+
+test('mobile navigation identifies every current primary destination', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  const mobileRoutes = [
+    ['/work/job-search-os', 'Work'],
+    ['/archive', 'Archive'],
+    ['/about', 'About'],
+    ['/capabilities', 'Capabilities'],
+    ['/experience', 'Experience'],
+    ['/recommendations', 'Recommendations'],
+    ['/contact', 'Contact'],
+  ] as const;
+
+  for (const [route, label] of mobileRoutes) {
+    await page.goto(route);
+    const menu = page.locator('details.mobile-navigation');
+    await menu.locator('summary').click();
+    const navigation = page.getByRole('navigation', { name: 'Mobile navigation' });
+    await expect(navigation.getByRole('link', { name: label, exact: true })).toHaveAttribute('aria-current', 'page');
+    await expect(navigation.locator('[aria-current="page"]')).toHaveCount(1);
+  }
+});
+
 test('homepage gives recruiters a synchronized proof summary', async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 720 });
   await page.goto('/');
