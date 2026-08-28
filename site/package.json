@@ -40,6 +40,7 @@
     "check:sentry-asana": "node scripts/check-sentry-asana-intake.mjs",
     "check:sentry-reconciliation": "node scripts/check-sentry-reconciliation.mjs",
     "check:sentry-release": "node scripts/check-sentry-release-config.mjs",
+    "check:sentry-alert-policy": "node scripts/check-sentry-alert-policy.mjs",
     "check:sentry-operations": "node scripts/check-sentry-operations.mjs",
     "check:research-protocol": "node scripts/check-research-protocol.mjs",
     "check:recovery": "node scripts/check-recovery-boundaries.mjs",
@@ -55,7 +56,7 @@
     "check:jolene-ui:enabled": "JOLENE_UI_CONTACT_ENABLED=true playwright test --config=playwright.jolene.config.ts",
     "check:jolene-ui:error": "JOLENE_UI_CONTACT_ENABLED=false JOLENE_UI_SCENARIO=unavailable playwright test --config=playwright.jolene.config.ts",
     "check:jolene-ui": "pnpm check:jolene-ui:disabled && pnpm check:jolene-ui:enabled && pnpm check:jolene-ui:error",
-    "check": "pnpm typecheck && pnpm lint && pnpm check:metadata && pnpm check:social-cards && pnpm check:content && pnpm check:no-em-dashes && pnpm check:editorial && pnpm check:archive && pnpm check:legacy-visuals && pnpm check:archive-recovery && pnpm check:release-decisions && pnpm check:github-sync && pnpm check:jolene-contract && pnpm check:jolene-job-fit && pnpm check:jolene-bff && pnpm check:jolene-avatar-brief && pnpm check:analytics && pnpm check:sentry-privacy && pnpm check:sentry-asana && pnpm check:sentry-reconciliation && pnpm check:sentry-release && pnpm check:sentry-operations && pnpm check:research-protocol && pnpm check:recovery && pnpm check:security-headers && pnpm check:release-readiness && pnpm build && pnpm check:no-public-sourcemaps"
+    "check": "pnpm typecheck && pnpm lint && pnpm check:metadata && pnpm check:social-cards && pnpm check:content && pnpm check:no-em-dashes && pnpm check:editorial && pnpm check:archive && pnpm check:legacy-visuals && pnpm check:archive-recovery && pnpm check:release-decisions && pnpm check:github-sync && pnpm check:jolene-contract && pnpm check:jolene-job-fit && pnpm check:jolene-bff && pnpm check:jolene-avatar-brief && pnpm check:analytics && pnpm check:sentry-privacy && pnpm check:sentry-asana && pnpm check:sentry-reconciliation && pnpm check:sentry-release && pnpm check:sentry-alert-policy && pnpm check:sentry-operations && pnpm check:research-protocol && pnpm check:recovery && pnpm check:security-headers && pnpm check:release-readiness && pnpm build && pnpm check:no-public-sourcemaps"
   },
   "dependencies": {
     "@sentry/browser": "10.71.0",

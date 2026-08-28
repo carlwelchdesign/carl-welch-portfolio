@@ -1,0 +1,118 @@
+{
+  "schemaVersion": "1.0.0",
+  "status": "provider_configured_resolution_transition_requires_provider_supported_trigger",
+  "activation": {
+    "enabled": true,
+    "ownerApprovalState": "approved",
+    "environments": ["production"],
+    "approvedDestinations": ["sentry_member:Carl Welch"],
+    "providerRuleIds": ["3910542", "3914366", "3914414"],
+    "providerEnvironmentScope": "production"
+  },
+  "deduplication": {
+    "keyFields": ["project", "environment", "service", "issueId"],
+    "resolvedBehavior": "update_existing_incident",
+    "regressionBehavior": "reopen_existing_incident",
+    "repeatedBehavior": "update_frequency_without_new_notification"
+  },
+  "severities": [
+    {
+      "id": "P0",
+      "conditions": [
+        "private_data_exposure",
+        "credential_compromise",
+        "destructive_behavior",
+        "broad_production_outage"
+      ],
+      "notificationUrgency": "immediate",
+      "afterHours": true,
+      "cooldownSeconds": 300,
+      "ownerAction": "disable_or_rollback_affected_capability"
+    },
+    {
+      "id": "P1",
+      "conditions": [
+        "new_production_error",
+        "regressed_production_error",
+        "degraded_public_jolene_endpoint",
+        "sustained_production_error_rate"
+      ],
+      "notificationUrgency": "prompt",
+      "afterHours": false,
+      "cooldownSeconds": 1800,
+      "ownerAction": "reproduce_and_prepare_scoped_remediation"
+    },
+    {
+      "id": "P2",
+      "conditions": ["low_frequency_technical_error"],
+      "notificationUrgency": "queued",
+      "afterHours": false,
+      "cooldownSeconds": 86400,
+      "ownerAction": "group_for_bounded_review"
+    }
+  ],
+  "notification": {
+    "allowedFields": [
+      "severity",
+      "state",
+      "service",
+      "environment",
+      "release",
+      "route",
+      "frequency",
+      "affectedUserEstimate",
+      "firstSeenAt",
+      "lastSeenAt",
+      "issueUrl"
+    ],
+    "prohibitedFields": [
+      "rawEvent",
+      "visitorContent",
+      "requestBody",
+      "responseBody",
+      "queryString",
+      "urlFragment",
+      "localPath",
+      "secret",
+      "privateJoleneContext"
+    ]
+  },
+  "thresholds": {
+    "approvalState": "new_and_regressed_approved_metric_thresholds_pending_baseline",
+    "newAndRegressedIssues": true,
+    "sustainedErrorRate": null,
+    "availabilityDegradation": null
+  },
+  "providerRules": [
+    {
+      "id": "3910542",
+      "severity": "P0",
+      "triggers": ["new_high_priority_issue", "existing_issue_becomes_high_priority"],
+      "cooldownSeconds": 300,
+      "destination": "sentry_member:Carl Welch"
+    },
+    {
+      "id": "3914366",
+      "severity": "P1",
+      "triggers": ["new_issue", "resolved_issue", "escalated_issue", "regressed_issue"],
+      "cooldownSeconds": 1800,
+      "destination": "sentry_member:Carl Welch"
+    },
+    {
+      "id": "3914414",
+      "severity": "lifecycle",
+      "triggers": ["resolved_issue", "regressed_issue"],
+      "notifyEveryTrigger": true,
+      "destination": "sentry_member:Carl Welch"
+    }
+  ],
+  "validation": {
+    "builtInTestNotification": "passed",
+    "syntheticIssueId": "7698438400",
+    "syntheticIssueShortId": "CARL-WELCH-PORTFOLIO-BROWSER-2",
+    "p0Transition": "passed",
+    "p1Transition": "passed",
+    "resolutionTransition": "blocked_manual_resolution_does_not_trigger_provider_alert",
+    "regressionTransition": "passed"
+  }
+}
