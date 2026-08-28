@@ -6,6 +6,22 @@ The browser and Cloudflare Worker SDKs are installed and fail closed when their 
 
 Production activation remains separate from code delivery. It requires a Carl-owned Sentry organization/project and approved hosting secrets.
 
+## Provisioned provider boundary
+
+Provider state reviewed on August 27, 2026:
+
+- Organization: `carlwelchdesign`, owned through Carl's existing Sentry account.
+- Browser project: `carl-welch-portfolio-browser`, React platform, assigned to `#carlwelchdesign`.
+- Plan: Developer, with no billing details or payment method on file and 5,000 errors included in the current usage period.
+- Cost protection: project spike protection is enabled. The account showed no additional spend and no ingested errors when provisioned.
+- Alerting: the project has one error monitor with one high-priority email alert. Provider activation and a deliberate test event remain separate gates.
+- Privacy: server-side scrubbing and default scrubbers are enabled, storage of IP addresses is disabled, JavaScript source fetching is disabled, and TLS verification is enabled.
+- Ingestion boundary: the browser project accepts events only from `https://carl-welch-portfolio.vercel.app`.
+- Retention: the Developer-plan interface did not expose a project-level retention selector. Treat retention as provider-managed and require an owner review of the then-current Sentry policy before production activation; do not assume or document an unsupported duration.
+- Service separation: this project is for the public portfolio browser only. Do not reuse it for the isolated public Jolene delegate, any future Worker/server runtime, or private Jolene. Provision a distinct project only after that runtime topology is approved.
+
+The project DSN exists in Sentry but has not been copied into Git, Asana, chat, logs, Vercel, or CI. No release/source-map token has been created. Creating or transmitting either credential is a separate approval-gated step.
+
 ## Required configuration
 
 Browser build environment:

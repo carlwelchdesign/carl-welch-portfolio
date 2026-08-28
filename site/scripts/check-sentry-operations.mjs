@@ -3,6 +3,7 @@ import { readFile } from 'node:fs/promises';
 
 const runbook = await readFile(new URL('../docs/SENTRY_OPERATIONS_RUNBOOK.md', import.meta.url), 'utf8');
 const requiredSections = [
+  '## Provisioned provider boundary',
   '### Scheduled reconciliation safety net',
   '## Trust and data flow',
   '## Severity and response expectations',
@@ -33,6 +34,9 @@ for (const scenario of [
 }
 
 for (const guardrail of [
+  'carl-welch-portfolio-browser',
+  'accepts events only from `https://carl-welch-portfolio.vercel.app`',
+  'No release/source-map token has been created',
   'cannot merge, deploy, suppress alerts, resolve Sentry, or',
   'Monitoring readiness does not activate public Jolene',
   'SENTRY_ASANA_INTAKE_ENABLED=false',
