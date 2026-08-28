@@ -23,6 +23,11 @@ function isCurrentRoute(pathname: string, href: string) {
   return pathname === href;
 }
 
+function currentSection(pathname: string) {
+  if (pathname === '/') return 'Home';
+  return mobileLinks.find(({ href }) => isCurrentRoute(pathname, href))?.label ?? 'Menu';
+}
+
 function CurrentLink({ href, label }: { href: string; label: string }) {
   const pathname = usePathname();
 
@@ -35,6 +40,7 @@ function CurrentLink({ href, label }: { href: string; label: string }) {
 
 export function SiteHeader() {
   const pathname = usePathname();
+  const section = currentSection(pathname);
 
   return (
     <header className="site-header">
@@ -57,7 +63,9 @@ export function SiteHeader() {
       </nav>
 
       <details className="mobile-navigation">
-        <summary>Menu</summary>
+        <summary aria-label={`Menu, current section: ${section}`}>
+          <span className="mobile-navigation-location">{section}</span>
+        </summary>
         <nav aria-label="Mobile navigation">
           {mobileLinks.map((link) => <CurrentLink key={link.href} {...link} />)}
         </nav>

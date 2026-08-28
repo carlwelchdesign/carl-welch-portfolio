@@ -958,6 +958,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .mobile-navigation summary::-webkit-details-marker { display: none; }
   .mobile-navigation summary::after { content: '+'; margin-left: 10px; }
   .mobile-navigation[open] summary::after { content: '−'; }
+  .mobile-navigation-location { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .mobile-navigation nav { position: absolute; top: calc(100% + 12px); right: 0; width: min(280px, calc(100vw - 40px)); display: grid; gap: 0; border: 1px solid var(--line); background: var(--ink); box-shadow: 0 22px 50px rgba(0, 0, 0, 0.28); }
   .mobile-navigation nav a { min-height: 50px; display: flex; align-items: center; padding: 0 18px; border-bottom: 1px solid var(--line); color: var(--paper); }
   .mobile-navigation nav a:last-child { border-bottom: 0; }
