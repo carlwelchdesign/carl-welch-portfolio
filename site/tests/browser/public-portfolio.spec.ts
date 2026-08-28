@@ -13,6 +13,7 @@ const routes = [
   '/work/job-search-os',
   '/work/flight-tracker-ai',
   '/work/wave-factory-essentials',
+  '/work/supraconscious-avatar-ai',
 ] as const;
 
 const mobileViewports = [
@@ -97,7 +98,7 @@ test('homepage gives recruiters a synchronized proof summary', async ({ page }) 
 
   const proof = page.getByRole('region', { name: 'Portfolio at a glance' });
   await expect(proof.locator('dt')).toHaveCount(4);
-  await expect(proof.locator('dd')).toHaveText(['20+', '5', '13', '3']);
+  await expect(proof.locator('dd')).toHaveText(['20+', '5', '13', '4']);
   await expect(proof).toContainText('Years across interactive and product work');
   await expect(proof).toContainText('Product engineering roles since 2016');
   await expect(proof).toContainText('Professional recommendations');
@@ -125,6 +126,7 @@ for (const [route, expectedGalleryImages] of [
   ['/work/job-search-os', 6],
   ['/work/flight-tracker-ai', 3],
   ['/work/wave-factory-essentials', 5],
+  ['/work/supraconscious-avatar-ai', 3],
 ] as const) {
   test(`${route} keeps its repository media gallery intact on mobile`, async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
@@ -185,6 +187,7 @@ for (const [route, heading, decision] of [
   ['/work/job-search-os', 'Turning a fragmented search into one operating system.', 'Evidence over invention'],
   ['/work/flight-tracker-ai', 'Making a dense air picture understandable and reviewable.', 'Live when available, repeatable when needed'],
   ['/work/wave-factory-essentials', 'Treating every plug-in as a product, not a demo.', 'Build for the host from the start'],
+  ['/work/supraconscious-avatar-ai', 'Building a reflection product that can be governed.', 'Govern retrieval before expanding it'],
 ] as const) {
   test(`${route} explains the problem, contribution, and product decisions`, async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
@@ -206,6 +209,7 @@ for (const [route, role, scope] of [
   ['/work/job-search-os', 'Independent product engineer', 'Product strategy, interface design, and full-stack implementation'],
   ['/work/flight-tracker-ai', 'Independent product engineer', 'Product design, frontend engineering, and Rust service integration'],
   ['/work/wave-factory-essentials', 'Creator and plug-in engineer', 'DSP, plug-in architecture, interface design, and product direction'],
+  ['/work/supraconscious-avatar-ai', 'Independent product engineer', 'Product strategy, AI system design, and full-stack implementation'],
 ] as const) {
   test(`${route} presents recruiter-readable project facts above the fold`, async ({ page }) => {
     await page.setViewportSize({ width: 320, height: 720 });
@@ -226,7 +230,8 @@ for (const [route, role, scope] of [
 for (const [route, nextProject, nextHref] of [
   ['/work/job-search-os', 'Flight Tracker AI', '/work/flight-tracker-ai'],
   ['/work/flight-tracker-ai', 'Wave Factory Essentials', '/work/wave-factory-essentials'],
-  ['/work/wave-factory-essentials', 'Job Search OS', '/work/job-search-os'],
+  ['/work/wave-factory-essentials', 'Supraconscious Avatar AI', '/work/supraconscious-avatar-ai'],
+  ['/work/supraconscious-avatar-ai', 'Job Search OS', '/work/job-search-os'],
 ] as const) {
   test(`${route} continues to the next flagship case study`, async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
@@ -330,6 +335,7 @@ test('work overview shows every flagship gallery preview without broken media', 
     { name: 'Job Search OS', previews: 6 },
     { name: 'Flight Tracker AI', previews: 3 },
     { name: 'Wave Factory Essentials', previews: 5 },
+    { name: 'Supraconscious Avatar AI', previews: 3 },
   ];
 
   for (const project of projects) {

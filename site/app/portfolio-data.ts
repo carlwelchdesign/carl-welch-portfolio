@@ -411,6 +411,109 @@ export const projects: PortfolioProject[] = [
     ],
     repositoryUrl: 'https://github.com/carlwelchdesign/wave-factory-essentials',
   },
+  {
+    slug: 'supraconscious-avatar-ai',
+    name: 'Supraconscious Avatar AI',
+    category: 'AI product / Reflection systems',
+    status: 'Deployed web application / mobile scaffold',
+    tone: 'red',
+    number: '04',
+    summary:
+      'A multi-surface reflection product that turns journal entries into guided questions while giving the operator a separate place to govern prompts, sources, safety, and review.',
+    role: 'Independent product engineer',
+    scope: 'Product strategy, AI system design, and full-stack implementation',
+    image: {
+      src: '/projects/supraconscious-avatar-ai/landing-page.png',
+      alt: 'Supraconscious Avatar AI landing page introducing the Mirror reflection experience',
+      width: 760,
+      height: 720,
+    },
+    galleryTitle: 'The product and its control boundaries',
+    gallerySummary:
+      'The public entry point, guided journal, privacy controls, and plan surface show a product designed around one coherent reflection experience rather than a loose collection of AI features.',
+    gallery: [
+      {
+        src: '/projects/supraconscious-avatar-ai/journal-workspace.png',
+        alt: 'Supraconscious Avatar AI journal workspace with guided reflection scenarios and a daily writing frame',
+        width: 760,
+        height: 720,
+        label: 'Journal workspace',
+        caption: 'Guided scenarios and a focused writing surface give each reflection a clear place to begin.',
+      },
+      {
+        src: '/projects/supraconscious-avatar-ai/privacy-settings.png',
+        alt: 'Supraconscious Avatar AI settings for language, passkeys, safety, memory, and account preferences',
+        width: 760,
+        height: 720,
+        label: 'Privacy and preferences',
+        caption: 'Passkeys, safety, memory, and account controls are treated as part of the product experience, not buried operational details.',
+      },
+      {
+        src: '/projects/supraconscious-avatar-ai/pricing-page.png',
+        alt: 'Supraconscious Avatar AI pricing page comparing product plans and billing availability',
+        width: 760,
+        height: 720,
+        label: 'Plan comparison',
+        caption: 'A CMS-backed plan surface connects the customer-facing offer to the product’s operational control plane.',
+      },
+    ],
+    story: {
+      heading: 'Building a reflection product that can be governed.',
+      problem:
+        'A journaling product can generate polished language and still fail its user if safety, source selection, memory, and prompt changes are hidden inside an opaque model call. Sensitive reflection needs a clear experience for the person writing and a disciplined operating surface behind it.',
+      contribution:
+        'I designed and built a multi-app system with a Next.js journal product, a separate admin and content-governance console, an MCP-compatible service, shared AI packages, and PostgreSQL persistence. The active flow uses one consistent guide while source eligibility, safety, prompts, and review remain visible to the operator.',
+      decisions: [
+        {
+          title: 'One guide, one product voice',
+          detail: 'The active reflection flow uses one consistent guide instead of exposing internal role orchestration as a cast of competing personas.',
+        },
+        {
+          title: 'Govern retrieval before expanding it',
+          detail: 'Source review, rights, quote rules, safety intensity, and traceability are enforced before future vector search or broader graph retrieval is introduced.',
+        },
+        {
+          title: 'Separate the experience from the control plane',
+          detail: 'The journal stays focused on reflection while a distinct admin application owns prompts, sources, feature flags, quality review, and operational state.',
+        },
+      ],
+    },
+    stack: ['Next.js', 'TypeScript', 'PostgreSQL + Prisma', 'OpenAI', 'MCP', 'Flutter'],
+    architecture: [
+      { id: 'clients', label: 'Web + MCP clients', detail: 'Journal experience and compatible external AI entry points' },
+      { id: 'guide', label: 'Guide service', detail: 'Safety checks, structured analysis, and one active reflection voice' },
+      { id: 'retrieval', label: 'Governed retrieval', detail: 'Reviewed sources, rights rules, provenance, and optional ontology context' },
+      { id: 'store', label: 'PostgreSQL', detail: 'Journal state, source records, traces, feedback, and review metadata' },
+      { id: 'admin', label: 'Admin control plane', detail: 'Prompt, source, safety, quality, feature, and subscription operations' },
+    ],
+    maturity: 'pre_release',
+    sourceId: 'portfolio:source:project:supraconscious-avatar-ai',
+    evidence: [
+      {
+        id: 'portfolio:claim:supraconscious-avatar-ai:multi-app-system',
+        sourceIds: ['portfolio:source:project:supraconscious-avatar-ai'],
+        text: 'Combines a user-facing journal, a separate admin and content-governance application, an MCP-compatible service, shared AI packages, and PostgreSQL persistence.',
+        strength: 'strong', maturity: 'pre_release', limitations: ['The Flutter mobile client remains scaffolded.'], reviewState: 'approved', publicApproved: true,
+      },
+      {
+        id: 'portfolio:claim:supraconscious-avatar-ai:policy-first-retrieval',
+        sourceIds: ['portfolio:source:project:supraconscious-avatar-ai'],
+        text: 'Gates retrieval by source review, rights metadata, quote permissions, safety intensity, feature state, and citation traceability.',
+        strength: 'strong', maturity: 'pre_release', limitations: ['Current retrieval is policy-first and keyword based; vector search is future work.'], reviewState: 'approved', publicApproved: true,
+      },
+      {
+        id: 'portfolio:claim:supraconscious-avatar-ai:separate-control-plane',
+        sourceIds: ['portfolio:source:project:supraconscious-avatar-ai'],
+        text: 'Keeps prompt, source, safety, feature, quality, and subscription operations in a separate admin control plane.',
+        strength: 'strong', maturity: 'pre_release', limitations: ['Graph-assisted runtime context remains feature-flagged and disabled by default.'], reviewState: 'approved', publicApproved: true,
+      },
+    ],
+    boundaries: [
+      'The web product is deployed, while the Flutter mobile client remains a scaffold rather than a released mobile application.',
+      'Retrieval is currently policy-first and keyword based; vector search is planned, and graph-assisted runtime context is disabled by default.',
+    ],
+    repositoryUrl: 'https://github.com/carlwelchdesign/supraconscious-avatar-ai',
+  },
 ];
 
 export type ExperienceRole = {

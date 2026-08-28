@@ -84,6 +84,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .project-chapter { padding: clamp(76px, 10vw, 150px) var(--page-padding); background: rgba(242, 242, 235, 0.91); color: var(--ink); border-bottom: 1px solid rgba(9, 12, 9, 0.24); }
 .section-heading { display: grid; grid-template-columns: 1fr auto; gap: 36px; align-items: end; padding-bottom: 36px; border-bottom: 1px solid rgba(9, 12, 9, 0.25); }
 .section-heading h2 { max-width: 1040px; margin: 18px 0 0; font-size: clamp(58px, 8vw, 132px); line-height: 0.86; letter-spacing: -0.075em; }
+.section-heading h2.long-project-title { font-size: clamp(48px, 6.5vw, 104px); letter-spacing: -0.06em; }
 .project-meta { max-width: 330px; display: grid; gap: 10px; text-align: right; }
 .project-image-wrap { margin: 52px 0 0; overflow: hidden; border: 1px solid rgba(9, 12, 9, 0.35); background: var(--ink); }
 .project-image-motion { overflow: hidden; transform-origin: center; }
@@ -270,6 +271,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .project-detail-green { --chapter-tone: var(--green); }
 .project-detail-hero { padding: clamp(86px, 10vw, 150px) var(--page-padding) 56px; }
 .project-detail-hero h1 { max-width: 1120px; margin: 26px 0 48px; font-size: clamp(72px, 12vw, 178px); line-height: 0.82; letter-spacing: -0.085em; }
+.project-detail-hero h1.long-project-title { font-size: clamp(58px, 9vw, 138px); line-height: 0.86; letter-spacing: -0.07em; }
 .project-detail-deck { padding-top: 34px; border-top: 1px solid rgba(9, 12, 9, 0.28); }
 .project-detail-deck > p { max-width: 780px; margin: 0; font-size: clamp(20px, 2.3vw, 32px); line-height: 1.4; letter-spacing: -0.03em; }
 .project-facts { margin: clamp(52px, 6vw, 88px) 0 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid rgba(9, 12, 9, 0.28); border-bottom: 1px solid rgba(9, 12, 9, 0.28); }
@@ -695,6 +697,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .home-closing-copy > p { margin-top: 30px; }
   .home-closing-actions { align-items: flex-start; flex-direction: column; }
   .section-heading, .project-detail-deck, .evidence-grid { grid-template-columns: 1fr; }
+  .section-heading h2.long-project-title, .project-detail-hero h1.long-project-title { font-size: clamp(42px, 13vw, 58px); overflow-wrap: anywhere; }
   .project-meta { text-align: left; }
   .project-image-wrap { margin-top: 32px; }
   .project-media-preview { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }

@@ -239,7 +239,12 @@ export function ProjectChapter({ project, priority = false }: { project: Portfol
       <Reveal className="section-heading">
         <div>
           <p className="eyebrow">Selected work / {project.number}</p>
-          <h2 id={`${project.slug}-title`}>{project.name}</h2>
+          <h2
+            id={`${project.slug}-title`}
+            className={project.name.length >= 24 ? 'long-project-title' : undefined}
+          >
+            {project.name}
+          </h2>
         </div>
         <div className="project-meta">
           <span>{project.category}</span>

@@ -20,7 +20,7 @@ export default function WorkPage() {
           <PageIntro
             eyebrow="Work / 2026"
             title="Selected work"
-            summary={`Three detailed case studies and ${githubProjects.length} selected public repositories spanning product systems, applied AI, audio software, and creative technology.`}
+            summary={`${projects.length} detailed case studies and ${githubProjects.length} selected public repositories spanning product systems, applied AI, audio software, and creative technology.`}
           />
           {projects.map((project, index) => (
             <ProjectChapter key={project.slug} project={project} priority={index === 0} />

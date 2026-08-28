@@ -56,7 +56,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             aria-label={`${project.name} case study`}
           >
             <p className="eyebrow">Selected work / {project.number}</p>
-            <h1>{project.name}</h1>
+            <h1 className={project.name.length >= 24 ? 'long-project-title' : undefined}>{project.name}</h1>
             <div className="project-detail-deck">
               <p>{project.summary}</p>
             </div>

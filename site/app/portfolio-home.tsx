@@ -38,7 +38,7 @@ export function PortfolioHome() {
               <Orbit variant="two" />
               <div className="hero-index">
                 <span>01</span>
-                <span>03</span>
+                <span>{String(projects.length).padStart(2, '0')}</span>
               </div>
             </div>
 

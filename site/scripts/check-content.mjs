@@ -166,6 +166,7 @@ assert(jobSearchOs?.architecture.length >= 5, 'Job Search OS must retain its nat
 assert(!jobSearchOs?.gallery.some((item) => item.src.includes('system-topology')), 'Job Search OS must not render the rejected topology artifact.');
 assert(projects.find((project) => project.slug === 'flight-tracker-ai')?.gallery.length >= 3, 'Flight Tracker AI must retain live, replay, and route-comparison views.');
 assert(projects.find((project) => project.slug === 'wave-factory-essentials')?.gallery.length >= 5, 'Wave Factory Essentials must retain its expanded product-family gallery.');
+assert(projects.find((project) => project.slug === 'supraconscious-avatar-ai')?.gallery.length >= 3, 'Supraconscious Avatar AI must retain its product, privacy, and plan views.');
 
 for (const capability of capabilities) {
   if (capability.evidence.length < 2) throw new Error(`${capability.name} does not contain enough supporting evidence.`);
