@@ -185,6 +185,33 @@ test('Job Search OS uses the native architecture flow instead of the rejected to
   await expect(architecture).toContainText('Manual or approved by the user');
 });
 
+for (const route of [
+  '/work/job-search-os',
+  '/work/flight-tracker-ai',
+  '/work/wave-factory-essentials',
+  '/work/supraconscious-avatar-ai',
+  '/work/argent-matchmaking',
+] as const) {
+  test(`${route} renders a responsive project-specific system map`, async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto(`${route}#architecture`);
+
+    const architecture = page.getByRole('figure', { name: 'System architecture flow' });
+    await expect(architecture.getByText('System architecture', { exact: true })).toBeVisible();
+    await expect(architecture.locator('.architecture-step')).toHaveCount(5);
+    await expect(architecture.locator('.architecture-step p')).toHaveCount(5);
+    await expect(architecture.locator('.architecture-connectors path')).toHaveCount(4);
+    await expect(architecture.locator('.architecture-connectors polygon')).toHaveCount(4);
+    await expect(architecture.locator('.architecture-step-3')).toHaveCSS('border-top-color', /rgb\(/);
+
+    await page.setViewportSize({ width: 390, height: 844 });
+    await expect(architecture.locator('.architecture-connectors')).toBeHidden();
+    await expect(architecture.locator('.architecture-step')).toHaveCount(5);
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+    expect(overflow).toBeLessThanOrEqual(0);
+  });
+}
+
 for (const [route, heading, decision] of [
   ['/work/job-search-os', 'Turning a fragmented search into one operating system.', 'Evidence over invention'],
   ['/work/flight-tracker-ai', 'Making a dense air picture understandable and reviewable.', 'Live when available, repeatable when needed'],

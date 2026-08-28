@@ -96,13 +96,15 @@ export function ImageDrift({ children }: { children: ReactNode }) {
 }
 
 export function ArchitectureFlow({ children, className }: { children: ReactNode; className?: string }) {
+  const reduceMotion = useReducedMotion();
+
   return (
     <m.div
       className={className}
-      initial={false}
-      whileInView={{ opacity: 1, clipPath: 'inset(0 0% 0 0)' }}
+      initial={reduceMotion ? false : { clipPath: 'inset(0 100% 0 0)' }}
+      whileInView={{ clipPath: 'inset(0 0% 0 0)' }}
       viewport={{ once: true, amount: 0.35 }}
-      transition={{ duration: 1.05, ease: [0.22, 1, 0.36, 1] }}
+      transition={reduceMotion ? { duration: 0 } : { duration: 1.05, ease: [0.22, 1, 0.36, 1] }}
     >
       {children}
     </m.div>

@@ -130,6 +130,12 @@ for (const project of projects) {
   assert(project.story?.problem?.trim(), `${project.name} must explain the product problem.`);
   assert(project.story?.contribution?.trim(), `${project.name} must explain Carl's contribution.`);
   assert.equal(project.story?.decisions?.length, 3, `${project.name} must include exactly three key decisions.`);
+  assert.equal(project.architecture?.length, 5, `${project.name} must include exactly five architecture components.`);
+  requireUnique(project.architecture.map((node) => node.id), `${project.name} architecture component IDs`);
+  for (const node of project.architecture) {
+    assert(node.label?.trim(), `${project.name} architecture components must include a label.`);
+    assert(node.detail?.trim(), `${project.name} architecture components must explain their system responsibility.`);
+  }
   for (const decision of project.story.decisions) {
     assert(decision.title?.trim(), `${project.name} case-study decisions must include a title.`);
     assert(decision.detail?.trim(), `${project.name} case-study decisions must include a concrete explanation.`);

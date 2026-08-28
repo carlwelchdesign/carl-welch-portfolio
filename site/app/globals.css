@@ -113,21 +113,31 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .stack-list li { padding: 13px 0; border-bottom: 1px solid rgba(9, 12, 9, 0.22); }
 .dark-action:hover { background: var(--ink); color: var(--paper); }
 
-.architecture-card { margin: 0; padding: clamp(22px, 3vw, 38px); border: 1px solid rgba(242, 242, 235, 0.3); background: var(--ink); color: var(--paper); }
+.architecture-card { margin: 0; padding: clamp(22px, 3vw, 38px); overflow: hidden; border: 1px solid rgba(242, 242, 235, 0.3); background: var(--ink); color: var(--paper); }
 .architecture-card figcaption { display: flex; justify-content: space-between; gap: 24px; padding-bottom: 20px; border-bottom: 1px solid rgba(242, 242, 235, 0.24); color: rgba(242, 242, 235, 0.72); }
-.architecture-track { position: relative; min-height: 330px; margin: 0; padding: 52px 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: clamp(14px, 2vw, 26px); align-items: stretch; list-style: none; }
-.architecture-track::before { content: ''; position: absolute; top: 50%; right: 3%; left: 3%; height: 2px; background: color-mix(in srgb, var(--chapter-tone) 76%, rgba(242, 242, 235, 0.25)); }
-.architecture-step { position: relative; z-index: 2; min-width: 0; min-height: 218px; padding: 18px; display: flex; flex-direction: column; border: 1px solid rgba(242, 242, 235, 0.3); background: #101510; box-shadow: 0 18px 42px rgba(0, 0, 0, 0.22); }
-.architecture-step:not(:last-child)::after { content: '→'; position: absolute; top: 50%; right: -24px; z-index: 3; width: 22px; height: 22px; display: grid; place-items: center; border: 1px solid var(--chapter-tone); border-radius: 50%; background: var(--ink); color: var(--chapter-tone); font: 12px var(--font-geist-mono), monospace; transform: translateY(-50%); }
+.architecture-map-motion { min-width: 0; }
+.architecture-map { position: relative; min-height: 600px; margin-top: 22px; overflow: hidden; border: 1px solid rgba(242, 242, 235, 0.16); background: #0c110d; }
+.architecture-map::before { content: ''; position: absolute; inset: 0; opacity: 0.24; background-image: linear-gradient(rgba(242, 242, 235, 0.12) 1px, transparent 1px), linear-gradient(90deg, rgba(242, 242, 235, 0.12) 1px, transparent 1px); background-size: 48px 48px; pointer-events: none; }
+.architecture-connectors { position: absolute; z-index: 1; inset: 0; width: 100%; height: 100%; overflow: visible; color: var(--chapter-tone); pointer-events: none; }
+.architecture-connectors path { fill: none; stroke: currentColor; stroke-width: 2; vector-effect: non-scaling-stroke; }
+.architecture-connectors polygon { fill: currentColor; }
+.architecture-track { position: relative; z-index: 2; min-height: 600px; margin: 0; padding: 34px 28px; display: grid; grid-template-columns: minmax(0, 0.84fr) minmax(240px, 1.16fr) minmax(0, 0.84fr); grid-template-rows: repeat(3, minmax(128px, 1fr)); gap: 24px clamp(42px, 6vw, 92px); align-items: stretch; list-style: none; }
+.architecture-step { position: relative; min-width: 0; min-height: 128px; padding: 18px; display: flex; flex-direction: column; border: 1px solid rgba(242, 242, 235, 0.32); background: rgba(12, 17, 13, 0.96); box-shadow: 0 18px 42px rgba(0, 0, 0, 0.24); }
+.architecture-step-1 { grid-column: 1; grid-row: 2; }
+.architecture-step-2 { grid-column: 2; grid-row: 1; }
+.architecture-step-3 { grid-column: 2; grid-row: 2; border-color: var(--chapter-tone); background: color-mix(in srgb, var(--chapter-tone) 10%, #0c110d); }
+.architecture-step-4 { grid-column: 2; grid-row: 3; }
+.architecture-step-5 { grid-column: 3; grid-row: 2; }
 .architecture-step-meta { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 12px; color: var(--chapter-tone); }
 .architecture-step-meta small { font: 9px var(--font-geist-mono), monospace; letter-spacing: 0.12em; text-transform: uppercase; }
-.architecture-step strong { margin-top: auto; font-size: clamp(17px, 1.6vw, 24px); line-height: 1; letter-spacing: -0.035em; }
-.architecture-step p { margin: 14px 0 0; color: rgba(242, 242, 235, 0.68); font-size: 13px; line-height: 1.42; }
+.architecture-step strong { margin-top: auto; font-size: clamp(17px, 1.6vw, 24px); line-height: 1; letter-spacing: -0.035em; overflow-wrap: anywhere; }
+.architecture-step p { margin: 11px 0 0; color: rgba(242, 242, 235, 0.68); font-size: 12px; line-height: 1.42; }
 .node-pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--chapter-tone); box-shadow: 0 0 0 5px color-mix(in srgb, var(--chapter-tone) 16%, transparent); pointer-events: none; }
-.architecture-card-compact .architecture-track { min-height: 230px; padding: 38px 0; gap: 12px; }
-.architecture-card-compact .architecture-step { min-height: 126px; padding: 13px; }
-.architecture-card-compact .architecture-step:not(:last-child)::after { right: -18px; }
-.architecture-card-compact .architecture-step strong { font-size: 12px; }
+.architecture-card-compact .architecture-map, .architecture-card-compact .architecture-track { min-height: 460px; }
+.architecture-card-compact .architecture-track { padding: 24px 20px; grid-template-rows: repeat(3, minmax(102px, 1fr)); gap: 16px clamp(28px, 4vw, 54px); }
+.architecture-card-compact .architecture-step { min-height: 102px; padding: 13px; }
+.architecture-card-compact .architecture-step strong { font-size: clamp(13px, 1.2vw, 17px); }
+.architecture-card-compact .architecture-step p { margin-top: 8px; display: -webkit-box; overflow: hidden; font-size: 10px; line-height: 1.35; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
 
 .experience-preview { padding: clamp(76px, 10vw, 150px) var(--page-padding); background: rgba(98, 232, 121, 0.9); color: var(--ink); }
 .experience-preview-heading { display: grid; grid-template-columns: minmax(160px, 0.32fr) 1fr; gap: 46px; }
@@ -733,13 +743,16 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .project-media-stage figcaption p { font-size: 13px; }
   .architecture-card { padding: 20px; }
   .architecture-card figcaption span:last-child { display: none; }
-  .architecture-track, .architecture-card-compact .architecture-track { min-height: auto; grid-template-columns: 1fr; gap: 14px; padding: 24px 0; }
-  .architecture-track::before { top: 7%; bottom: 7%; left: 27px; width: 2px; height: auto; }
-  .architecture-step, .architecture-card-compact .architecture-step { min-height: 118px; padding: 16px 16px 16px 54px; }
-  .architecture-step:not(:last-child)::after, .architecture-card-compact .architecture-step:not(:last-child)::after { content: '↓'; top: auto; right: auto; bottom: -19px; left: 16px; transform: none; }
+  .architecture-map, .architecture-card-compact .architecture-map { min-height: auto; margin-top: 18px; }
+  .architecture-connectors { display: none; }
+  .architecture-track, .architecture-card-compact .architecture-track { min-height: auto; grid-template-columns: minmax(0, 1fr); grid-template-rows: none; gap: 18px; padding: 24px 14px; }
+  .architecture-track::before { content: ''; position: absolute; top: 32px; bottom: 32px; left: 34px; width: 2px; background: var(--chapter-tone); opacity: 0.72; }
+  .architecture-step, .architecture-card-compact .architecture-step { grid-column: 1; grid-row: auto; min-height: 126px; padding: 18px 18px 18px 60px; }
+  .architecture-step:not(:last-child)::after { content: '↓'; position: absolute; z-index: 3; bottom: -20px; left: 14px; width: 22px; height: 22px; display: grid; place-items: center; border: 1px solid var(--chapter-tone); border-radius: 50%; background: var(--ink); color: var(--chapter-tone); font: 12px var(--font-geist-mono), monospace; }
   .architecture-step-meta { position: absolute; top: 19px; left: 15px; }
   .architecture-step-meta small { display: none; }
   .architecture-step strong { margin-top: auto; }
+  .architecture-card-compact .architecture-step p { display: block; overflow: visible; font-size: 11px; -webkit-line-clamp: initial; }
   .experience-preview-list li { padding: 18px 0; grid-template-columns: 1fr; gap: 6px; }
   .experience-preview-list strong { grid-row: 1; }
   .page-intro { min-height: 58svh; }

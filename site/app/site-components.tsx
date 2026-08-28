@@ -204,22 +204,44 @@ export function ArchitectureDiagram({
       aria-label="System architecture flow"
     >
       <figcaption>
-        <span>System flow</span>
-        <span>{String(nodes.length).padStart(2, '0')} connected layers</span>
+        <span>System architecture</span>
+        <span>{String(nodes.length).padStart(2, '0')} connected components</span>
       </figcaption>
-      <ArchitectureFlow>
-        <ol className="architecture-track">
-          {nodes.map((node, index) => (
-            <li className="architecture-step" key={node.id}>
-              <div className="architecture-step-meta">
-                <small>Layer {String(index + 1).padStart(2, '0')}</small>
-                <NodePulse delay={index * 0.22} />
-              </div>
-              <strong>{node.label}</strong>
-              {compact ? null : <p>{node.detail}</p>}
-            </li>
-          ))}
-        </ol>
+      <ArchitectureFlow className="architecture-map-motion">
+        <div className="architecture-map">
+          <svg
+            className="architecture-connectors"
+            viewBox="0 0 1000 600"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path d="M 235 300 C 315 300 285 102 350 102" />
+            <polygon points="350,102 336,94 336,110" />
+            <path d="M 500 172 L 500 228" />
+            <polygon points="500,228 492,214 508,214" />
+            <path d="M 500 372 L 500 428" />
+            <polygon points="500,428 492,414 508,414" />
+            <path d="M 650 498 C 715 498 685 300 765 300" />
+            <polygon points="765,300 751,292 751,308" />
+          </svg>
+          <ol className="architecture-track">
+            {nodes.map((node, index) => (
+              <li
+                className={`architecture-step architecture-step-${index + 1}`}
+                data-architecture-node={node.id}
+                key={node.id}
+              >
+                <div className="architecture-step-meta">
+                  <small>Component {String(index + 1).padStart(2, '0')}</small>
+                  <NodePulse delay={index * 0.22} />
+                </div>
+                <strong>{node.label}</strong>
+                <p>{node.detail}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
       </ArchitectureFlow>
     </figure>
   );
