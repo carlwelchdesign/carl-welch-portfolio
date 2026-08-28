@@ -270,6 +270,27 @@ test('page indexes retain native forward fragment navigation without JavaScript'
   await context.close();
 });
 
+test('homepage selected-work action transfers focus and preserves native fallback', async ({ browser, page }) => {
+  await page.goto('/');
+  const selectedWorkAction = page.getByRole('link', { name: 'View selected work', exact: true });
+  await selectedWorkAction.focus();
+  await selectedWorkAction.press('Enter');
+
+  await expect(page).toHaveURL(/\/#work$/);
+  await expect(page.locator('#work')).toBeFocused();
+
+  const noScriptContext = await browser.newContext({ javaScriptEnabled: false });
+  const noScriptPage = await noScriptContext.newPage();
+  await noScriptPage.goto('/');
+  const nativeAction = noScriptPage.getByRole('link', { name: 'View selected work', exact: true });
+  await nativeAction.focus();
+  await nativeAction.press('Enter');
+
+  await expect(noScriptPage).toHaveURL(/\/#work$/);
+  await expect(noScriptPage.locator('#work')).toBeVisible();
+  await noScriptContext.close();
+});
+
 test('every public route meets the mobile control-size and overflow contract', async ({ page }) => {
   for (const viewport of mobileViewports) {
     await page.setViewportSize(viewport);
