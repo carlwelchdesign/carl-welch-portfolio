@@ -144,7 +144,13 @@ export function CharacterSignals() {
   );
 }
 
-export function SelectedArchive({ showArchiveLink = true }: { showArchiveLink?: boolean }) {
+export function SelectedArchive({
+  showArchiveLink = true,
+  archiveReturnHref,
+}: {
+  showArchiveLink?: boolean;
+  archiveReturnHref?: string;
+}) {
   return (
     <section id="yuco" className="selected-archive" data-tone="orange" aria-labelledby="selected-archive-title">
       <div className="selected-archive-heading">
@@ -180,6 +186,11 @@ export function SelectedArchive({ showArchiveLink = true }: { showArchiveLink?: 
           {showArchiveLink ? (
             <Link className="primary-action dark-action selected-archive-link" href="/archive">
               More of the story <span aria-hidden="true">→</span>
+            </Link>
+          ) : null}
+          {archiveReturnHref ? (
+            <Link className="archive-map-return" href={archiveReturnHref}>
+              Archive map <span aria-hidden="true">↑</span>
             </Link>
           ) : null}
         </div>

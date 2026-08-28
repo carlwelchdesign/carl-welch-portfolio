@@ -347,9 +347,31 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .home-closing-resume { min-height: 48px; display: inline-flex; align-items: center; gap: 18px; font: 700 11px var(--font-geist-mono), monospace; letter-spacing: 0.11em; text-transform: uppercase; }
 .home-closing-resume:hover { text-decoration: underline; text-underline-offset: 5px; }
 
+.archive-map { scroll-margin-top: 72px; padding: clamp(52px, 7vw, 96px) var(--page-padding); background: var(--ink); color: var(--paper); }
+.archive-map > header { display: grid; grid-template-columns: minmax(150px, 0.32fr) minmax(0, 1fr) minmax(240px, 0.42fr); gap: 24px 48px; align-items: end; padding-bottom: 34px; border-bottom: 1px solid var(--line); }
+.archive-map > header .eyebrow { align-self: start; padding-top: 8px; }
+.archive-map > header h2 { margin: 0; font-size: clamp(44px, 6vw, 82px); line-height: 0.9; letter-spacing: -0.06em; }
+.archive-map > header > p:last-child { margin: 0; color: var(--muted); font-size: 16px; line-height: 1.45; }
+.archive-map > ol { margin: 0; padding: 0; list-style: none; }
+.archive-map > ol > li { border-bottom: 1px solid var(--line); }
+.archive-map a { min-height: 92px; padding: 16px 0; display: grid; grid-template-columns: 58px minmax(260px, 1fr) minmax(260px, 0.62fr) 120px 28px; gap: 24px; align-items: center; color: inherit; transition: padding 220ms cubic-bezier(0.22, 1, 0.36, 1), background 160ms ease, color 160ms ease; }
+.archive-map a:hover, .archive-map a:focus-visible { padding-right: 16px; padding-left: 16px; background: var(--orange); color: var(--ink); outline: 0; }
+.archive-map a > span:first-child, .archive-map small { font: 9px/1.4 var(--font-geist-mono), monospace; letter-spacing: 0.09em; text-transform: uppercase; }
+.archive-map a > span:first-child { color: var(--orange); transition: color 160ms ease; }
+.archive-map a:hover > span:first-child, .archive-map a:focus-visible > span:first-child { color: var(--ink); }
+.archive-map strong { font-size: clamp(22px, 2.4vw, 36px); line-height: 0.98; letter-spacing: -0.04em; }
+.archive-map a > p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.45; }
+.archive-map small { color: var(--muted); }
+.archive-map a:hover > p, .archive-map a:hover small, .archive-map a:focus-visible > p, .archive-map a:focus-visible small { color: rgba(9, 12, 9, 0.72); }
+.archive-map a > span:last-child { justify-self: end; font: 18px/1 var(--font-geist-mono), monospace; }
+.archive-map-return { display: flex; width: fit-content; min-width: 44px; min-height: 44px; margin: 36px 0 0 auto; padding: 0; align-items: center; border-bottom: 1px solid currentColor; font: 9px/1.2 var(--font-geist-mono), monospace; letter-spacing: 0.09em; text-transform: uppercase; transition: opacity 160ms ease; }
+.archive-map-return:hover { opacity: 0.62; }
+.archive-map-return:focus-visible { outline: 2px solid currentColor; outline-offset: 5px; }
+.archive-map-return-band { padding: 0 var(--page-padding) 64px; display: flow-root; background: rgba(242, 242, 235, 0.94); color: var(--ink); }
+.archive-thesis, .career-chapter-section, #yuco, #visual-archive, #working-archive, #professional-range { scroll-margin-top: 72px; }
 .archive-thesis { padding: clamp(82px, 10vw, 150px) var(--page-padding); background: rgba(255, 67, 56, 0.94); color: var(--ink); }
 .archive-thesis h2 { max-width: 1160px; margin: 24px 0 54px; font-size: clamp(54px, 8vw, 124px); line-height: 0.87; letter-spacing: -0.075em; }
-.archive-thesis > p:last-child { max-width: 840px; margin: 0 0 0 auto; font-size: clamp(20px, 2.2vw, 31px); line-height: 1.48; letter-spacing: -0.027em; }
+.archive-thesis > p:not(.eyebrow) { max-width: 840px; margin: 0 0 0 auto; font-size: clamp(20px, 2.2vw, 31px); line-height: 1.48; letter-spacing: -0.027em; }
 .career-chapter-list { margin: 0; padding: 0 var(--page-padding); list-style: none; background: rgba(242, 242, 235, 0.94); color: var(--ink); }
 .career-chapter-list > li { border-top: 1px solid rgba(9, 12, 9, 0.3); }
 .career-chapter { min-height: 420px; padding: clamp(48px, 6vw, 84px) 0; display: grid; grid-template-columns: 82px minmax(320px, 1fr) minmax(260px, 0.55fr); gap: clamp(28px, 5vw, 72px); }
@@ -890,6 +912,10 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .capability-index > header .eyebrow { grid-column: 1 / -1; }
   .capability-index a { grid-template-columns: 48px minmax(220px, 0.8fr) minmax(280px, 1fr) 28px; }
   .capability-index small { display: none; }
+  .archive-map > header { grid-template-columns: 1fr 1fr; }
+  .archive-map > header .eyebrow { grid-column: 1 / -1; }
+  .archive-map a { grid-template-columns: 48px minmax(220px, 1fr) minmax(220px, 0.7fr) 28px; }
+  .archive-map small { display: none; }
   .evidence-link { min-height: 230px; }
   .contact-routes { grid-template-columns: 1fr; }
   .contact-routes > a { min-height: 180px; }
@@ -1018,6 +1044,17 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .capability-index a > p { grid-column: 2; font-size: 13px; }
   .capability-index small { grid-column: 2; display: block; }
   .capability-index a > span:last-child { grid-column: 3; grid-row: 1 / span 3; padding-top: 4px; }
+  .archive-map { padding-top: 54px; padding-bottom: 66px; }
+  .archive-map > header { grid-template-columns: 1fr; gap: 18px; padding-bottom: 28px; }
+  .archive-map > header .eyebrow { grid-column: auto; }
+  .archive-map > header > p:last-child { max-width: 300px; }
+  .archive-map a { min-height: 122px; padding: 18px 0; grid-template-columns: 42px minmax(0, 1fr) 22px; gap: 8px 14px; align-items: start; }
+  .archive-map a:hover, .archive-map a:focus-visible { padding-right: 12px; padding-left: 12px; }
+  .archive-map a > span:first-child { grid-row: 1 / span 3; padding-top: 4px; }
+  .archive-map strong { min-width: 0; font-size: clamp(23px, 7vw, 32px); overflow-wrap: anywhere; }
+  .archive-map a > p { grid-column: 2; font-size: 13px; }
+  .archive-map small { grid-column: 2; display: block; }
+  .archive-map a > span:last-child { grid-column: 3; grid-row: 1 / span 3; padding-top: 4px; }
   .capability-card > header { grid-template-columns: 1fr; }
   .capability-number { display: none; }
   .capability-practices, .capability-evidence { padding-left: 0; }

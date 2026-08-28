@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { legacyClientMarks, legacyWorkImages } from './legacy-career-visuals';
 import { LegacyWorkingGallery } from './legacy-working-gallery';
 import { Reveal } from './motion-elements';
@@ -71,7 +72,7 @@ export function LegacyClientField() {
 
 export function LegacyWorkingArchive() {
   return (
-    <section className="legacy-working-archive" data-tone="dark" aria-labelledby="legacy-working-archive-title">
+    <section id="working-archive" className="legacy-working-archive" data-tone="dark" aria-labelledby="legacy-working-archive-title">
       <header>
         <div>
           <p className="eyebrow">A wider look</p>
@@ -88,6 +89,9 @@ export function LegacyWorkingArchive() {
       </header>
 
       <LegacyWorkingGallery items={legacyWorkImages} />
+      <Link className="archive-map-return" href="#archive-map">
+        Archive map <span aria-hidden="true">↑</span>
+      </Link>
     </section>
   );
 }

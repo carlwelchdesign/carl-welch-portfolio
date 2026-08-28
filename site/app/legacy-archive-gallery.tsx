@@ -1,10 +1,11 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { legacyArchiveProjects } from './legacy-archive-data';
 import { Reveal } from './motion-elements';
 
 export function LegacyArchiveGallery() {
   return (
-    <section className="legacy-gallery" data-tone="paper" aria-labelledby="legacy-gallery-title">
+    <section id="visual-archive" className="legacy-gallery" data-tone="paper" aria-labelledby="legacy-gallery-title">
       <header className="legacy-gallery-heading">
         <div>
           <p className="eyebrow">Selected professional archive</p>
@@ -63,6 +64,9 @@ export function LegacyArchiveGallery() {
           </li>
         ))}
       </ol>
+      <Link className="archive-map-return" href="#archive-map">
+        Archive map <span aria-hidden="true">↑</span>
+      </Link>
     </section>
   );
 }
