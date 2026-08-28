@@ -7,6 +7,7 @@ import type { ProjectTone } from '../portfolio-data';
 import { PageFrame, PageIntro } from '../site-components';
 import { buildPageMetadata } from '../site-metadata';
 import { publicEvidenceAnchorId } from '../jolene/public-evidence-navigation-core';
+import { IndexReturnLink } from '../index-return-link';
 
 export const metadata: Metadata = buildPageMetadata({
   title: 'Capabilities',
@@ -24,7 +25,7 @@ const toneColors: Record<ProjectTone, string> = {
 
 function CapabilityIndex() {
   return (
-    <nav id="capability-index" className="capability-index" aria-labelledby="capability-index-title">
+    <nav id="capability-index" className="capability-index" aria-labelledby="capability-index-title" tabIndex={-1}>
       <header>
         <p className="eyebrow">Jump through the strengths</p>
         <h2 id="capability-index-title">Capability index</h2>
@@ -120,13 +121,13 @@ export default function CapabilitiesPage() {
                         })}
                       </ArchitectureFlow>
                     </div>
-                    <Link
+                    <IndexReturnLink
                       className="capability-index-return"
                       href="#capability-index"
-                      aria-label={`Return to Capability index from ${capability.name}`}
+                      accessibleName={`Return to Capability index from ${capability.name}`}
                     >
                       Capability index <span aria-hidden="true">↑</span>
-                    </Link>
+                    </IndexReturnLink>
                   </div>
                 </li>
               );

@@ -4,6 +4,7 @@ import type { CSSProperties, ReactNode } from 'react';
 import { careerChapters, characterSignals } from './career-story-data';
 import { contact } from './contact-data';
 import { homepageLegacyWork } from './legacy-career-visuals';
+import { IndexReturnLink } from './index-return-link';
 import type { PortfolioProject, ProjectArchitecture, ProjectTone } from './portfolio-data';
 import { ArchitectureFlow, ImageDrift, NodePulse, Reveal } from './motion-elements';
 import { ProjectMediaViewer } from './project-media-viewer';
@@ -112,7 +113,7 @@ export function SelectedArchive({
   archiveReturnHref,
 }: {
   showArchiveLink?: boolean;
-  archiveReturnHref?: string;
+  archiveReturnHref?: `#${string}`;
 }) {
   return (
     <section id="yuco" className="selected-archive" data-tone="orange" aria-labelledby="selected-archive-title">
@@ -152,13 +153,13 @@ export function SelectedArchive({
             </Link>
           ) : null}
           {archiveReturnHref ? (
-            <Link
+            <IndexReturnLink
               className="archive-map-return"
               href={archiveReturnHref}
-              aria-label="Return to Archive map from yU+co studio website"
+              accessibleName="Return to Archive map from yU+co studio website"
             >
               Archive map <span aria-hidden="true">↑</span>
-            </Link>
+            </IndexReturnLink>
           ) : null}
         </div>
       </div>
@@ -352,13 +353,13 @@ export function ProjectChapter({ project, priority = false }: { project: Portfol
         <div className="project-meta">
           <span>{project.category}</span>
           <span>{project.status}</span>
-          <Link
+          <IndexReturnLink
             className="project-index-return"
             href="#work-index"
-            aria-label={`Return to Project index from ${project.name}`}
+            accessibleName={`Return to Project index from ${project.name}`}
           >
             Project index <span aria-hidden="true">↑</span>
-          </Link>
+          </IndexReturnLink>
         </div>
       </Reveal>
 
@@ -427,7 +428,7 @@ export function ProjectChapter({ project, priority = false }: { project: Portfol
 
 export function WorkIndex({ items }: { items: PortfolioProject[] }) {
   return (
-    <nav id="work-index" className="work-index" aria-labelledby="work-index-title">
+    <nav id="work-index" className="work-index" aria-labelledby="work-index-title" tabIndex={-1}>
       <Reveal className="work-index-heading">
         <p className="eyebrow">Jump to a case study</p>
         <h2 id="work-index-title">Project index</h2>

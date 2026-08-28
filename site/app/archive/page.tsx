@@ -8,6 +8,7 @@ import { LegacyArchiveGallery } from '../legacy-archive-gallery';
 import { MotionRuntime, Reveal } from '../motion-elements';
 import { CharacterSignals, PageFrame, PageIntro, SelectedArchive } from '../site-components';
 import { buildPageMetadata } from '../site-metadata';
+import { IndexReturnLink } from '../index-return-link';
 
 export const metadata: Metadata = buildPageMetadata({
   title: 'Selected Archive',
@@ -27,7 +28,7 @@ const archiveMapItems = [
 
 function ArchiveMap() {
   return (
-    <nav id="archive-map" className="archive-map" aria-labelledby="archive-map-title">
+    <nav id="archive-map" className="archive-map" aria-labelledby="archive-map-title" tabIndex={-1}>
       <header>
         <p className="eyebrow">Read the archive</p>
         <h2 id="archive-map-title">Archive map</h2>
@@ -68,13 +69,13 @@ export default function ArchivePage() {
               <h2 id="archive-thesis-title">A practice built across interaction, engineering, and product work.</h2>
             </Reveal>
             <p>{careerThesis}</p>
-            <Link
+            <IndexReturnLink
               className="archive-map-return"
               href="#archive-map"
-              aria-label="Return to Archive map from career portrait"
+              accessibleName="Return to Archive map from career portrait"
             >
               Archive map <span aria-hidden="true">↑</span>
-            </Link>
+            </IndexReturnLink>
           </section>
 
           <section id="career-chapters" className="career-chapter-section" aria-label="Career chapters">
@@ -99,13 +100,13 @@ export default function ArchivePage() {
               ))}
             </ol>
             <div className="archive-map-return-band">
-              <Link
+              <IndexReturnLink
                 className="archive-map-return"
                 href="#archive-map"
-                aria-label="Return to Archive map from career chapters"
+                accessibleName="Return to Archive map from career chapters"
               >
                 Archive map <span aria-hidden="true">↑</span>
-              </Link>
+              </IndexReturnLink>
             </div>
           </section>
 
@@ -136,13 +137,13 @@ export default function ArchivePage() {
                 </article>
               ))}
             </div>
-            <Link
+            <IndexReturnLink
               className="archive-map-return"
               href="#archive-map"
-              aria-label="Return to Archive map from earlier professional work"
+              accessibleName="Return to Archive map from earlier professional work"
             >
               Archive map <span aria-hidden="true">↑</span>
-            </Link>
+            </IndexReturnLink>
           </section>
 
           <CharacterSignals />

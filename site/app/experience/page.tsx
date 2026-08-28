@@ -7,6 +7,7 @@ import { experience } from '../portfolio-data';
 import { PageFrame, PageIntro } from '../site-components';
 import { buildPageMetadata } from '../site-metadata';
 import { publicEvidenceAnchorId } from '../jolene/public-evidence-navigation-core';
+import { IndexReturnLink } from '../index-return-link';
 
 export const metadata: Metadata = buildPageMetadata({
   title: 'Experience',
@@ -16,7 +17,7 @@ export const metadata: Metadata = buildPageMetadata({
 
 function CareerIndex() {
   return (
-    <nav id="career-index" className="career-index" aria-labelledby="career-index-title">
+    <nav id="career-index" className="career-index" aria-labelledby="career-index-title" tabIndex={-1}>
       <header>
         <p className="eyebrow">Jump through the career</p>
         <h2 id="career-index-title">Career index</h2>
@@ -84,13 +85,13 @@ export default function ExperiencePage() {
                       <ul className="inline-tags" aria-label={`${item.company} skills`}>
                         {item.stack.map((skill) => <li key={skill}>{skill}</li>)}
                       </ul>
-                      <Link
+                      <IndexReturnLink
                         className="career-index-return"
                         href="#career-index"
-                        aria-label={`Return to Career index from ${item.role} at ${item.company}`}
+                        accessibleName={`Return to Career index from ${item.role} at ${item.company}`}
                       >
                         Career index <span aria-hidden="true">↑</span>
-                      </Link>
+                      </IndexReturnLink>
                     </div>
                   </Reveal>
                 </div>
@@ -124,13 +125,13 @@ export default function ExperiencePage() {
                     <ul className="inline-tags" aria-label={`${foundation.title} tools and disciplines`}>
                       {foundation.technologies.map((technology) => <li key={technology}>{technology}</li>)}
                     </ul>
-                    <Link
+                    <IndexReturnLink
                       className="career-index-return"
                       href="#career-index"
-                      aria-label={`Return to Career index from ${foundation.title}`}
+                      accessibleName={`Return to Career index from ${foundation.title}`}
                     >
                       Career index <span aria-hidden="true">↑</span>
-                    </Link>
+                    </IndexReturnLink>
                   </article>
                 </li>
               ))}

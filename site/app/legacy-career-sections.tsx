@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import Link from 'next/link';
+import { IndexReturnLink } from './index-return-link';
 import { legacyClientMarks, legacyWorkImages } from './legacy-career-visuals';
 import { LegacyWorkingGallery } from './legacy-working-gallery';
 import { Reveal } from './motion-elements';
@@ -89,13 +89,13 @@ export function LegacyWorkingArchive() {
       </header>
 
       <LegacyWorkingGallery items={legacyWorkImages} />
-      <Link
+      <IndexReturnLink
         className="archive-map-return"
         href="#archive-map"
-        aria-label="Return to Archive map from working archive"
+        accessibleName="Return to Archive map from working archive"
       >
         Archive map <span aria-hidden="true">↑</span>
-      </Link>
+      </IndexReturnLink>
     </section>
   );
 }

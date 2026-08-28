@@ -5,6 +5,7 @@ import { recommendations } from '../recommendations-data';
 import { PageFrame, PageIntro } from '../site-components';
 import { buildPageMetadata } from '../site-metadata';
 import { publicEvidenceAnchorId } from '../jolene/public-evidence-navigation-core';
+import { IndexReturnLink } from '../index-return-link';
 
 const recommendationHighlightDefinitions = [
   {
@@ -68,6 +69,7 @@ export default function RecommendationsPage() {
                 id="recommendation-highlights"
                 className="recommendation-highlights"
                 aria-label="Recommendation highlights"
+                tabIndex={-1}
               >
                 <p className="eyebrow">Four qualities, in their words</p>
                 <ul>
@@ -110,13 +112,13 @@ export default function RecommendationsPage() {
                     {recommendation.headline ? <span>{recommendation.headline}</span> : null}
                     <span>{recommendation.relationship}</span>
                     <time>{recommendation.date}</time>
-                    <a
+                    <IndexReturnLink
                       className="recommendation-highlights-return"
                       href="#recommendation-highlights"
-                      aria-label={`Return to Recommendation highlights from ${recommendation.name}, ${recommendation.date}`}
+                      accessibleName={`Return to Recommendation highlights from ${recommendation.name}, ${recommendation.date}`}
                     >
                       Recommendation highlights <span aria-hidden="true">↑</span>
-                    </a>
+                    </IndexReturnLink>
                   </footer>
                 </Reveal>
               </li>
