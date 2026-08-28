@@ -128,7 +128,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               id={publicEvidenceAnchorId(`portfolio:limitation:project:${project.slug}`)}
               data-evidence-target
               tabIndex={-1}
-              aria-label={`${project.name} current boundaries`}
+              aria-label={`${project.name} current status`}
             >
               <p className="eyebrow">Where it stands</p>
               <ul>

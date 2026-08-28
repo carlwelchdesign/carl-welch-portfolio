@@ -66,7 +66,7 @@ export function JoleneCitationLink({
     return (
       <a className="jolene-citation" href={resolution.target.href}>
         {details}
-        {resolution.status === 'superseded' ? <small>Updated evidence target</small> : null}
+        {resolution.status === 'superseded' ? <small>Open the current source</small> : null}
       </a>
     );
   }

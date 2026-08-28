@@ -144,7 +144,7 @@ export const capabilities: Capability[] = [
       }),
       approvedEvidence({
         id: 'portfolio:capability:security-and-platform-boundaries:webauthn-core', maturity: 'prototype',
-        limitations: ['Repository implementation is not represented as a deployed service.'],
+        limitations: ['The repository is implemented but does not currently run as a deployed service.'],
         label: 'WebAuthn Core',
         detail: 'Reusable server-side orchestration with pluggable challenge, credential, and MFA-state adapters.',
         href: 'https://github.com/carlwelchdesign/webauthn-core',
@@ -154,7 +154,7 @@ export const capabilities: Capability[] = [
       approvedEvidence({
         id: 'portfolio:capability:security-and-platform-boundaries:job-search-os', maturity: 'production',
         label: 'Job Search OS',
-        detail: 'Protected single-user operation with manual or explicitly approval-gated external actions.',
+        detail: 'Protected single-user operation where external actions remain manual or require the user’s approval.',
         href: '/work/job-search-os',
         source: 'Case study',
         reference: { kind: 'project', id: 'job-search-os' },

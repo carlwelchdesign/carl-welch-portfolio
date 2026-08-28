@@ -46,7 +46,7 @@ function describeError(error: unknown): string {
   }
   if (error instanceof PublicJoleneAdapterError) {
     if (error.code === 'rate_limited') return 'The comparison limit has been reached. Try again shortly.';
-    if (error.code === 'version_mismatch') return 'This preview needs a contract update before it can compare the role safely.';
+    if (error.code === 'version_mismatch') return 'Jolene’s role comparison is temporarily unavailable. Please try again soon.';
   }
   return 'The role could not be compared. Your pasted text remains only in this open panel so you can retry.';
 }

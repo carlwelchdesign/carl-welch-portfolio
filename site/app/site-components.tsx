@@ -134,7 +134,7 @@ export function SelectedArchive({ showArchiveLink = true }: { showArchiveLink?: 
             height={400}
             sizes="(max-width: 1000px) 100vw, 58vw"
           />
-          <figcaption>Archived interface / privacy-safe crop</figcaption>
+          <figcaption>Archived interface</figcaption>
         </figure>
         <div>
           <p className="eyebrow">Carl’s contribution</p>

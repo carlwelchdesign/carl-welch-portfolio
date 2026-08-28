@@ -184,7 +184,7 @@ export const legacyArchiveProjects: LegacyArchiveProject[] = [
   {
     id: 'archive-primaloft-downblends',
     project: 'PrimaLoft Down Blend experience',
-    period: 'Date unverified',
+    period: 'Undated',
     role: 'Web contributor',
     contribution:
       'A parallax product-storytelling experience using HTML, JavaScript, jQuery, Canvas, and CSS.',

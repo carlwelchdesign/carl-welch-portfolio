@@ -65,6 +65,17 @@ for (const rejectedLine of [
   'View evidence map',
   'Claim limitations',
   'Requirement evidence',
+  'privacy-safe crop',
+  'Date unverified',
+  'source-verified recommendation',
+  'review-only lead channels',
+  'Approved career facts',
+  'explicitly approval-gated',
+  'not represented as publicly released products',
+  'tracked separately from successful builds',
+  'needs a contract update',
+  'Updated evidence target',
+  'current boundaries',
 ]) {
   assert.equal(publicSource.includes(rejectedLine), false, `Rejected portfolio copy returned: ${rejectedLine}`);
 }

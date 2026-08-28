@@ -177,8 +177,8 @@ test('Job Search OS uses the native architecture flow instead of the rejected to
 
   const architecture = page.getByRole('figure', { name: 'System architecture flow' });
   await expect(architecture.locator('.architecture-step')).toHaveCount(5);
-  await expect(architecture).toContainText('Direct ATS, company, and review-only lead channels');
-  await expect(architecture).toContainText('Manual or explicitly approval-gated');
+  await expect(architecture).toContainText('Direct ATS, company, and discovery channels');
+  await expect(architecture).toContainText('Manual or approved by the user');
 });
 
 for (const [route, heading, decision] of [
@@ -288,10 +288,15 @@ test('contact page invites conversation without internal policy copy', async ({ 
 });
 
 test('visitor-facing routes avoid internal editorial and evidence-system language', async ({ page }) => {
-  const rejectedCopy = /supported role|reviewed image record|reviewed public evidence only|public corpus|evidence model|view evidence map|claim limitations|requirement evidence|current résumé|message collection/i;
-  for (const route of ['/', '/about', '/archive', '/capabilities', '/work', '/contact', '/recommendations']) {
-    await page.goto(route);
-    await expect(page.locator('body')).not.toContainText(rejectedCopy);
+  const rejectedCopy = /supported role|reviewed image record|reviewed public evidence only|public corpus|evidence model|view evidence map|claim limitations|requirement evidence|current résumé|message collection|privacy-safe crop|date unverified|source-verified recommendation|review-only lead channels|approved career facts|explicitly approval-gated|current boundaries/i;
+  for (const viewport of [{ width: 1440, height: 1000 }, { width: 390, height: 844 }]) {
+    await page.setViewportSize(viewport);
+    for (const route of routes) {
+      await page.goto(route);
+      await expect(page.locator('body')).not.toContainText(rejectedCopy);
+      const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+      expect(overflow, `${route} overflows at ${viewport.width}px`).toBeLessThanOrEqual(0);
+    }
   }
 });
 
