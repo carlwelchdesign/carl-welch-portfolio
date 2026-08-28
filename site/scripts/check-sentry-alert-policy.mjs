@@ -8,16 +8,16 @@ const policy = JSON.parse(await readFile(
 ));
 
 assert.equal(policy.schemaVersion, '1.0.0');
-assert.equal(policy.status, 'provider_configured_pending_transition_validation');
+assert.equal(
+  policy.status,
+  'provider_configured_resolution_transition_requires_provider_supported_trigger',
+);
 assert.equal(policy.activation.enabled, true);
 assert.equal(policy.activation.ownerApprovalState, 'approved');
 assert.deepEqual(policy.activation.environments, ['production']);
 assert.deepEqual(policy.activation.approvedDestinations, ['sentry_member:Carl Welch']);
-assert.deepEqual(policy.activation.providerRuleIds, ['3910542', '3914366']);
-assert.equal(
-  policy.activation.providerEnvironmentScope,
-  'all_environments_until_production_is_observed',
-);
+assert.deepEqual(policy.activation.providerRuleIds, ['3910542', '3914366', '3914414']);
+assert.equal(policy.activation.providerEnvironmentScope, 'production');
 
 assert.deepEqual(
   policy.deduplication.keyFields,
@@ -103,15 +103,20 @@ assert(providerRules.get('P0').triggers.includes('new_high_priority_issue'));
 assert(providerRules.get('P1').triggers.includes('new_issue'));
 assert(providerRules.get('P1').triggers.includes('resolved_issue'));
 assert(providerRules.get('P1').triggers.includes('regressed_issue'));
+assert.equal(providerRules.get('lifecycle').notifyEveryTrigger, true);
+assert.equal(providerRules.get('lifecycle').destination, 'sentry_member:Carl Welch');
+assert(providerRules.get('lifecycle').triggers.includes('resolved_issue'));
+assert(providerRules.get('lifecycle').triggers.includes('regressed_issue'));
 
 assert.equal(policy.validation.builtInTestNotification, 'passed');
-for (const transition of [
-  'p0Transition',
-  'p1Transition',
-  'resolutionTransition',
-  'regressionTransition',
-]) {
-  assert.equal(policy.validation[transition], 'pending');
-}
+assert.match(policy.validation.syntheticIssueId, /^\d+$/);
+assert.match(policy.validation.syntheticIssueShortId, /^CARL-WELCH-PORTFOLIO-BROWSER-\d+$/);
+assert.equal(policy.validation.p0Transition, 'passed');
+assert.equal(policy.validation.p1Transition, 'passed');
+assert.equal(
+  policy.validation.resolutionTransition,
+  'blocked_manual_resolution_does_not_trigger_provider_alert',
+);
+assert.equal(policy.validation.regressionTransition, 'passed');
 
 console.log('Sentry alert policy checks passed: severity, deduplication, cooldown, minimization, and activation gates are explicit.');

@@ -1,13 +1,13 @@
 {
   "schemaVersion": "1.0.0",
-  "status": "provider_configured_pending_transition_validation",
+  "status": "provider_configured_resolution_transition_requires_provider_supported_trigger",
   "activation": {
     "enabled": true,
     "ownerApprovalState": "approved",
     "environments": ["production"],
     "approvedDestinations": ["sentry_member:Carl Welch"],
-    "providerRuleIds": ["3910542", "3914366"],
-    "providerEnvironmentScope": "all_environments_until_production_is_observed"
+    "providerRuleIds": ["3910542", "3914366", "3914414"],
+    "providerEnvironmentScope": "production"
   },
   "deduplication": {
     "keyFields": ["project", "environment", "service", "issueId"],
@@ -97,13 +97,22 @@
       "triggers": ["new_issue", "resolved_issue", "escalated_issue", "regressed_issue"],
       "cooldownSeconds": 1800,
       "destination": "sentry_member:Carl Welch"
+    },
+    {
+      "id": "3914414",
+      "severity": "lifecycle",
+      "triggers": ["resolved_issue", "regressed_issue"],
+      "notifyEveryTrigger": true,
+      "destination": "sentry_member:Carl Welch"
     }
   ],
   "validation": {
     "builtInTestNotification": "passed",
-    "p0Transition": "pending",
-    "p1Transition": "pending",
-    "resolutionTransition": "pending",
-    "regressionTransition": "pending"
+    "syntheticIssueId": "7698438400",
+    "syntheticIssueShortId": "CARL-WELCH-PORTFOLIO-BROWSER-2",
+    "p0Transition": "passed",
+    "p1Transition": "passed",
+    "resolutionTransition": "blocked_manual_resolution_does_not_trigger_provider_alert",
+    "regressionTransition": "passed"
   }
 }

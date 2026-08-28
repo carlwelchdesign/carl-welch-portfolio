@@ -8,13 +8,13 @@ Production activation remains separate from code delivery. It requires a Carl-ow
 
 ## Provisioned provider boundary
 
-Provider state reviewed on August 27, 2026:
+Provider state reviewed on August 28, 2026:
 
 - Organization: `carlwelchdesign`, owned through Carl's existing Sentry account.
 - Browser project: `carl-welch-portfolio-browser`, React platform, assigned to `#carlwelchdesign`.
 - Plan: Developer, with no billing details or payment method on file and 5,000 errors included in the current usage period.
 - Cost protection: project spike protection is enabled. The account showed no additional spend and no ingested errors when provisioned.
-- Alerting: the project has one error monitor with one high-priority email alert. Provider activation and a deliberate test event remain separate gates.
+- Alerting: three production-only issue rules notify Carl directly: high-priority issues with a five-minute cooldown, new/regressed/escalated issues with a 30-minute cooldown, and lifecycle changes on every supported trigger.
 - Privacy: server-side scrubbing and default scrubbers are enabled, storage of IP addresses is disabled, JavaScript source fetching is disabled, and TLS verification is enabled.
 - Ingestion boundary: the browser project accepts events only from `https://carl-welch-portfolio.vercel.app`.
 - Retention: the Developer-plan interface did not expose a project-level retention selector. Treat retention as provider-managed and require an owner review of the then-current Sentry policy before production activation; do not assume or document an unsupported duration.
@@ -132,13 +132,15 @@ does not retain raw webhook bodies or full Sentry events.
 The reviewable provider configuration contract is
 `operations/sentry-alert-policy.v1.json`. Carl approved direct Sentry-member
 notifications and the five-minute P0 and 30-minute P1 cooldowns. Provider rules
-3910542 and 3914366 are configured, and Sentry's built-in notification test
-passed. Sentry has not observed an environment yet, so both rules retain the
-provider's all-environments scope until production exists as a selectable
-environment. Sustained-rate and availability thresholds remain unset until a
-real traffic baseline exists. `pnpm check:sentry-alert-policy` keeps provider
-IDs, destinations, cooldowns, data minimization, and pending transition checks
-explicit.
+3910542, 3914366, and 3914414 are configured for `production` only, and
+Sentry's built-in notification test passed. A minimized synthetic production
+issue proved the P0, P1, and regression notification paths. Manual owner
+resolution correctly changed the issue state but did not trigger Sentry's
+`An issue is resolved` alert; that transition remains blocked until a
+provider-supported automatic resolution path can be exercised. Sustained-rate
+and availability thresholds remain unset until a real traffic baseline exists.
+`pnpm check:sentry-alert-policy` keeps provider IDs, destinations, cooldowns,
+data minimization, and the unresolved transition explicit.
 
 | Severity | Condition | Owner action | Automation boundary |
 | --- | --- | --- | --- |
@@ -152,12 +154,12 @@ rule after a real traffic baseline exists. No guessed user count or fabricated
 impact estimate belongs in notifications. After-hours P0 notification requires
 an owner-approved destination; P1/P2 can wait for the next bounded review.
 
-The proposed cooldowns are five minutes for P0, 30 minutes for P1, and 24 hours
-for P2. A repeated event updates frequency on the existing issue instead of
-creating another notification. Resolution updates the existing incident;
-regression reopens it. These values remain reviewable policy, not live provider
-state, until the activation block carries Carl's approval and exact provider
-rule IDs.
+The live cooldowns are five minutes for P0 and 30 minutes for P1. P2 remains a
+24-hour review policy rather than a provider rule. A repeated event updates
+frequency on the existing issue instead of creating another notification.
+Resolution updates the existing incident; regression reopens it. Carl approved
+the destination and exact rule configuration. This provider state does not
+activate Sentry in a portfolio deployment or authorize a deployment.
 
 ## Alert-to-ticket transition rules
 
@@ -204,7 +206,7 @@ switch; disabling the signed intake is the ticket-creation kill switch.
 
 ## Evidence matrix
 
-Evidence date: 2026-08-27.
+Evidence date: 2026-08-28.
 
 | Scenario | Automated evidence available | Provider evidence still required |
 | --- | --- | --- |
@@ -212,8 +214,8 @@ Evidence date: 2026-08-27.
 | Worker exception | Cloudflare SDK wrapper and build/runtime tests | Deliberate Worker event reaches the correct project and release. |
 | Duplicate delivery | Deterministic intake test creates one task and deduplicates replay | Real Sentry retry produces one Asana task. |
 | Missed webhook | Deterministic reconciliation reads a bounded unresolved-issue page and reuses the existing task deduplication path | An approved production cron finds a deliberately missed issue without creating a duplicate task. |
-| Regression | Deterministic intake test reopens/updates the same task | A resolved Sentry issue regresses and reaches the approved destination. |
-| Resolution | Deterministic test records resolution without premature completion | Provider transition arrives and remains incomplete until deployed verification. |
+| Regression | Deterministic intake test reopens/updates the same task | Passed with synthetic issue `CARL-WELCH-PORTFOLIO-BROWSER-2`; the production-only lifecycle rule recorded the trigger. |
+| Resolution | Deterministic test records resolution without premature completion | Manual owner resolution changed provider state but did not trigger Sentry's resolution alert. Exercise a provider-supported automatic resolution path before closing the ticket. |
 | Sensitive synthetic payload | Scrubbing and intake tests exclude every seeded secret | Inspect an actual Sentry event, notification, and Asana task. |
 | Missing source map | Ordinary public build rejects maps and upload config fails closed | Authenticated build uploads maps and a minified error de-minifies. |
 | Bad signature, replay, oversize body | HMAC, idempotency, media-type, method, body-size, and timeout tests | Real service-hook signature and retry semantics match the configured project. |
@@ -271,10 +273,9 @@ secret stores; never paste values into Asana, GitHub, Slack, or logs.
 6. Pause `Portfolio Sentry incident triage` to stop agent remediation. This does
    not disable Sentry alert collection or alter existing incidents.
 
-## Still required before activation
+## Still required before deployment activation
 
-- Provision the Carl-owned Sentry project, quota, retention, and owner notification destination.
 - Store DSNs and a least-privilege source-map token in the approved provider/CI secret stores.
 - Add private source-map upload and verify de-minification without serving `.map` files publicly.
-- Configure new/regressed issue alerts and activate the signed alert-to-Asana path.
+- Validate an automatic provider resolution notification and activate the signed alert-to-Asana path.
 - Run deliberate browser and Worker exceptions and inspect the resulting events for prohibited data.
