@@ -1,6 +1,6 @@
 # Jolene avatar production art direction
 
-Status: approved by Carl on August 28, 2026. The four artist studies are authorized for review; no study, production sprite, or public avatar is approved yet.
+Status: brief approved by Carl on August 28, 2026. Carl selected the Country Host image as the visual master direction; production cleanup, sprite-sheet approval, and public use remain separate gates.
 
 ## Creative target
 
@@ -134,6 +134,23 @@ More asymmetric shoulder line and a compact lifted hand. Most playful study, but
 
 Each study uses the same palette ceiling and grid. An artist may move masses and anchors but may not add antialiasing, extra colors, partial alpha, or a larger source canvas.
 
+## Selected visual direction
+
+On August 28, 2026, Carl selected the **Country Host** study as the direction to preserve. The exact review reference is [`/jolene/review/country-host-selected-direction.png`](/jolene/review/country-host-selected-direction.png), fingerprinted as `sha256:839ade6ea55a69cf4812a238b05204446576eb7241274a06130276b95d0c17b8`.
+
+The locked visual qualities are:
+
+- poised three-quarter stance with one forearm crossing the waist;
+- large blonde hair silhouette with broad curls and a red flower;
+- warm, confident expression with readable eyes and restrained smile;
+- large hoop earrings;
+- red patterned tied blouse with a small dark-blue waist accent;
+- visible square-pixel character without chibi, puppet, or caricature proportions.
+
+This exact review PNG is intentionally retained as the taste reference even though it is 1162 × 1353, has no alpha channel, and contains a baked checkerboard. Those are production defects to correct without redesigning the selected character. Failed generative transparency edits are not approved substitutes because they changed the source and introduced edge artifacts.
+
+Before this ticket can close, the production master must preserve the selected appearance while locking the final native grid, palette, clean silhouette, transparent background, anchor positions, and expression language. Do not simplify away the visual qualities Carl selected merely to satisfy an earlier draft grid.
+
 ## Review board
 
 Every study must be presented on:
@@ -159,6 +176,6 @@ Score silhouette, recognizable cues, warmth, professionalism, readability, anima
 
 ## Approval and rights boundary
 
-Carl approved this brief and its peek-reveal choreography on August 28, 2026. He must still select one study and approve its silhouette, likeness cues, palette, grid, anchors, and expression language before sprite-sheet production. The current assumption is personal, noncommercial portfolio exploration. Public deployment of a recognizable living person's likeness remains a separate rights and launch decision; documenting that boundary does not change the visual brief or substitute a different character.
+Carl approved this brief and its peek-reveal choreography on August 28, 2026, and selected the Country Host visual direction the same day. Final grid, palette, clean master, anchors, and expression language still require approval before sprite-sheet production. The current assumption is personal, noncommercial portfolio exploration. Public deployment of a recognizable living person's likeness remains a separate rights and launch decision; documenting that boundary does not change the visual brief or substitute a different character.
 
 Rejected generated concepts are reference evidence only. They must not be copied into the repository, traced, rigged, or treated as production art.

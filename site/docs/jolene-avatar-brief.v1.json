@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "status": "brief_approved_studies_authorized",
+  "status": "visual_direction_selected_master_cleanup_required",
   "nativeFrame": { "width": 48, "height": 56 },
   "occupiedBounds": { "maxWidth": 44, "maxHeight": 54, "edgePadding": 2 },
   "displayScales": [3, 4],
@@ -59,11 +59,23 @@
     "integerDisplayPixels": true,
     "reducedMotionBehavior": "launcher_only"
   },
+  "selection": {
+    "selectedDirection": "country_host",
+    "selectedAt": "2026-08-28",
+    "referencePath": "/jolene/review/country-host-selected-direction.png",
+    "referenceSha256": "839ade6ea55a69cf4812a238b05204446576eb7241274a06130276b95d0c17b8",
+    "referenceWidth": 1162,
+    "referenceHeight": 1353,
+    "referenceHasAlpha": false,
+    "bakedCheckerboard": true,
+    "visualDirectionApproved": true,
+    "cleanProductionMasterApproved": false
+  },
   "approval": {
     "briefApproved": true,
     "briefApprovedAt": "2026-08-28",
     "reviewStudiesAuthorized": true,
-    "masterSelected": false,
+    "masterSelected": true,
     "productionAuthorized": false,
     "publicUseAuthorized": false
   }
