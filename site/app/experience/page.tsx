@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { careerFoundations, earlierPracticeGroups } from '../career-story-data';
+import { LegacyClientField } from '../legacy-career-sections';
 import { MotionRuntime, Reveal } from '../motion-elements';
 import { experience } from '../portfolio-data';
 import { PageFrame, PageIntro } from '../site-components';
@@ -87,6 +88,7 @@ export default function ExperiencePage() {
                 </li>
               ))}
             </ol>
+            <LegacyClientField />
             <div className="earlier-experience-groups">
               {earlierPracticeGroups.map((group) => (
                 <article key={group.title}>

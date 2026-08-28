@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { careerChapters, careerThesis, earlierPracticeGroups } from '../career-story-data';
+import { LegacyWorkingArchive } from '../legacy-career-sections';
 import { LegacyArchiveGallery } from '../legacy-archive-gallery';
 import { MotionRuntime, Reveal } from '../motion-elements';
 import { CharacterSignals, PageFrame, PageIntro, SelectedArchive } from '../site-components';
@@ -56,6 +57,8 @@ export default function ArchivePage() {
           <SelectedArchive showArchiveLink={false} />
 
           <LegacyArchiveGallery />
+
+          <LegacyWorkingArchive />
 
           <section className="earlier-practice-panel" data-tone="green" aria-labelledby="earlier-practice-title">
             <header>
