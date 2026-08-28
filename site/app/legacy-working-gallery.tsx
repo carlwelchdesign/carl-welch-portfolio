@@ -11,9 +11,14 @@ type LegacyWorkingGalleryProps = {
 
 export function LegacyWorkingGallery({ items }: LegacyWorkingGalleryProps) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const gridRef = useRef<HTMLOListElement>(null);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const openerRef = useRef<HTMLButtonElement | null>(null);
   const activeItem = activeIndex === null ? null : items[activeIndex];
+
+  useEffect(() => {
+    gridRef.current?.setAttribute('data-inspector-ready', 'true');
+  }, []);
 
   useEffect(() => {
     const dialog = dialogRef.current;
@@ -54,7 +59,7 @@ export function LegacyWorkingGallery({ items }: LegacyWorkingGalleryProps) {
 
   return (
     <>
-      <ol className="legacy-working-grid">
+      <ol ref={gridRef} className="legacy-working-grid" data-inspector-ready="false">
         {items.map((item, index) => (
           <li
             key={item.id}

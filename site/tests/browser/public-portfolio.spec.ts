@@ -416,6 +416,49 @@ test('archive adds a responsive working contact sheet without stretching the sma
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 });
 
+test('archive inspector supports focused keyboard and mobile review without upscaling small sources', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/archive#legacy-gm-defense');
+
+  const controls = page.getByRole('button', { name: /^Inspect / });
+  await expect(controls).toHaveCount(16);
+  await expect(page.locator('.legacy-working-grid')).toHaveAttribute('data-inspector-ready', 'true');
+  const firstControl = controls.first();
+  await firstControl.click();
+
+  const dialog = page.locator('.legacy-inspector');
+  await expect(dialog).toBeVisible();
+  await expect(dialog.getByRole('heading', { name: 'GM Defense immersive training' })).toBeVisible();
+  await expect(dialog.getByText('General Dynamics / GM Defense')).toBeVisible();
+
+  const imageDimensions = await dialog.locator('figure img').evaluate((element) => {
+    const image = element as HTMLImageElement;
+    return { naturalWidth: image.naturalWidth, renderedWidth: image.getBoundingClientRect().width };
+  });
+  expect(imageDimensions.naturalWidth).toBe(240);
+  expect(imageDimensions.renderedWidth).toBeLessThanOrEqual(240);
+
+  const animationDuration = await dialog.evaluate((element) => getComputedStyle(element).animationDuration);
+  const animationMilliseconds = animationDuration.endsWith('ms')
+    ? Number.parseFloat(animationDuration)
+    : Number.parseFloat(animationDuration) * 1000;
+  expect(animationMilliseconds).toBeLessThanOrEqual(0.02);
+
+  await dialog.getByRole('button', { name: /^Next/ }).click();
+  await expect(dialog.getByRole('heading', { name: 'GTD IQ application' })).toBeVisible();
+  await page.keyboard.press('ArrowLeft');
+  await expect(dialog.getByRole('heading', { name: 'GM Defense immersive training' })).toBeVisible();
+
+  expect(await dialog.evaluate((element) => element.scrollWidth <= element.clientWidth)).toBe(true);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+
+  await page.keyboard.press('Escape');
+  await expect(dialog).not.toBeVisible();
+  await expect(firstControl).toBeFocused();
+  await expect(page.locator('#legacy-gm-defense')).toHaveCount(1);
+});
+
 test('visitor-facing routes avoid internal editorial and evidence-system language', async ({ page }) => {
   const rejectedCopy = /supported role|reviewed image record|reviewed public evidence only|public corpus|evidence model|view evidence map|claim limitations|requirement evidence|current résumé|message collection|privacy-safe crop|date unverified|source-verified recommendation|review-only lead channels|approved career facts|explicitly approval-gated|current boundaries/i;
   for (const viewport of [{ width: 1440, height: 1000 }, { width: 390, height: 844 }]) {
