@@ -7,7 +7,7 @@ import { experience } from '../portfolio-data';
 import { PageFrame, PageIntro } from '../site-components';
 import { buildPageMetadata } from '../site-metadata';
 import { publicEvidenceAnchorId } from '../jolene/public-evidence-navigation-core';
-import { IndexReturnLink } from '../index-return-link';
+import { FragmentFocusLink } from '../fragment-focus-link';
 
 export const metadata: Metadata = buildPageMetadata({
   title: 'Experience',
@@ -25,21 +25,21 @@ function CareerIndex() {
       </header>
       <ol>
         <li>
-          <Link href="#recent-product-roles">
+          <FragmentFocusLink href="#recent-product-roles">
             <span>Now</span>
             <strong>Recent product engineering</strong>
             <small>2016 to 2026</small>
             <span aria-hidden="true">↓</span>
-          </Link>
+          </FragmentFocusLink>
         </li>
         {careerFoundations.map((foundation, index) => (
           <li key={foundation.id}>
-            <Link href={`#career-${foundation.id}`}>
+            <FragmentFocusLink href={`#career-${foundation.id}`}>
               <span>{String(index + 1).padStart(2, '0')}</span>
               <strong>{foundation.title}</strong>
               <small>{foundation.period}</small>
               <span aria-hidden="true">↓</span>
-            </Link>
+            </FragmentFocusLink>
           </li>
         ))}
       </ol>
@@ -58,7 +58,7 @@ export default function ExperiencePage() {
             summary="Product engineering, interface systems, technical leadership, client delivery, and an earlier foundation in interactive and creative technology."
           />
           <CareerIndex />
-          <ol id="recent-product-roles" className="experience-list">
+          <ol id="recent-product-roles" className="experience-list" tabIndex={-1}>
             {experience.map((item, index) => (
               <li
                 key={item.company}
@@ -85,13 +85,13 @@ export default function ExperiencePage() {
                       <ul className="inline-tags" aria-label={`${item.company} skills`}>
                         {item.stack.map((skill) => <li key={skill}>{skill}</li>)}
                       </ul>
-                      <IndexReturnLink
+                      <FragmentFocusLink
                         className="career-index-return"
                         href="#career-index"
                         accessibleName={`Return to Career index from ${item.role} at ${item.company}`}
                       >
                         Career index <span aria-hidden="true">↑</span>
-                      </IndexReturnLink>
+                      </FragmentFocusLink>
                     </div>
                   </Reveal>
                 </div>
@@ -110,7 +110,7 @@ export default function ExperiencePage() {
             </header>
             <ol className="career-foundation-list" aria-label="Earlier career foundations">
               {careerFoundations.map((foundation, index) => (
-                <li id={`career-${foundation.id}`} key={foundation.id}>
+                <li id={`career-${foundation.id}`} key={foundation.id} tabIndex={-1}>
                   <article>
                     <div className="career-foundation-meta">
                       <span>{String(index + 1).padStart(2, '0')}</span>
@@ -125,13 +125,13 @@ export default function ExperiencePage() {
                     <ul className="inline-tags" aria-label={`${foundation.title} tools and disciplines`}>
                       {foundation.technologies.map((technology) => <li key={technology}>{technology}</li>)}
                     </ul>
-                    <IndexReturnLink
+                    <FragmentFocusLink
                       className="career-index-return"
                       href="#career-index"
                       accessibleName={`Return to Career index from ${foundation.title}`}
                     >
                       Career index <span aria-hidden="true">↑</span>
-                    </IndexReturnLink>
+                    </FragmentFocusLink>
                   </article>
                 </li>
               ))}

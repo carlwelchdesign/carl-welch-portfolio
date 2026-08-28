@@ -7,7 +7,7 @@ import type { ProjectTone } from '../portfolio-data';
 import { PageFrame, PageIntro } from '../site-components';
 import { buildPageMetadata } from '../site-metadata';
 import { publicEvidenceAnchorId } from '../jolene/public-evidence-navigation-core';
-import { IndexReturnLink } from '../index-return-link';
+import { FragmentFocusLink } from '../fragment-focus-link';
 
 export const metadata: Metadata = buildPageMetadata({
   title: 'Capabilities',
@@ -36,13 +36,13 @@ function CapabilityIndex() {
           const style = { '--chapter-tone': toneColors[capability.tone] } as ToneStyle;
           return (
             <li key={capability.id} style={style}>
-              <Link href={`#${capability.id}`}>
+              <FragmentFocusLink href={`#${capability.id}`}>
                 <span>{capability.number}</span>
                 <strong>{capability.name}</strong>
                 <p>{capability.summary}</p>
                 <small>{capability.evidence.length} examples</small>
                 <span aria-hidden="true">↓</span>
-              </Link>
+              </FragmentFocusLink>
             </li>
           );
         })}
@@ -72,7 +72,13 @@ export default function CapabilitiesPage() {
             {capabilities.map((capability) => {
               const style = { '--chapter-tone': toneColors[capability.tone] } as ToneStyle;
               return (
-                <li key={capability.id} id={capability.id} data-tone={capability.tone} style={style}>
+                <li
+                  key={capability.id}
+                  id={capability.id}
+                  data-tone={capability.tone}
+                  style={style}
+                  tabIndex={-1}
+                >
                   <div className="capability-card">
                     <header>
                       <span className="capability-number">{capability.number}</span>
@@ -121,13 +127,13 @@ export default function CapabilitiesPage() {
                         })}
                       </ArchitectureFlow>
                     </div>
-                    <IndexReturnLink
+                    <FragmentFocusLink
                       className="capability-index-return"
                       href="#capability-index"
                       accessibleName={`Return to Capability index from ${capability.name}`}
                     >
                       Capability index <span aria-hidden="true">↑</span>
-                    </IndexReturnLink>
+                    </FragmentFocusLink>
                   </div>
                 </li>
               );

@@ -5,7 +5,7 @@ import { recommendations } from '../recommendations-data';
 import { PageFrame, PageIntro } from '../site-components';
 import { buildPageMetadata } from '../site-metadata';
 import { publicEvidenceAnchorId } from '../jolene/public-evidence-navigation-core';
-import { IndexReturnLink } from '../index-return-link';
+import { FragmentFocusLink } from '../fragment-focus-link';
 
 const recommendationHighlightDefinitions = [
   {
@@ -75,11 +75,11 @@ export default function RecommendationsPage() {
                 <ul>
                   {recommendationHighlights.map(({ label, excerpt, recommendation }) => (
                     <li key={recommendation.id}>
-                      <a href={`#${publicEvidenceAnchorId(recommendation.sourceId)}`}>
+                      <FragmentFocusLink href={`#${publicEvidenceAnchorId(recommendation.sourceId)}`}>
                         <span>{label}</span>
                         <q>{excerpt}</q>
                         <small>{recommendation.name} <span aria-hidden="true">↓</span></small>
-                      </a>
+                      </FragmentFocusLink>
                     </li>
                   ))}
                 </ul>
@@ -112,13 +112,13 @@ export default function RecommendationsPage() {
                     {recommendation.headline ? <span>{recommendation.headline}</span> : null}
                     <span>{recommendation.relationship}</span>
                     <time>{recommendation.date}</time>
-                    <IndexReturnLink
+                    <FragmentFocusLink
                       className="recommendation-highlights-return"
                       href="#recommendation-highlights"
                       accessibleName={`Return to Recommendation highlights from ${recommendation.name}, ${recommendation.date}`}
                     >
                       Recommendation highlights <span aria-hidden="true">↑</span>
-                    </IndexReturnLink>
+                    </FragmentFocusLink>
                   </footer>
                 </Reveal>
               </li>

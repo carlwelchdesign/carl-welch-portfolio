@@ -8,7 +8,7 @@ import { LegacyArchiveGallery } from '../legacy-archive-gallery';
 import { MotionRuntime, Reveal } from '../motion-elements';
 import { CharacterSignals, PageFrame, PageIntro, SelectedArchive } from '../site-components';
 import { buildPageMetadata } from '../site-metadata';
-import { IndexReturnLink } from '../index-return-link';
+import { FragmentFocusLink } from '../fragment-focus-link';
 
 export const metadata: Metadata = buildPageMetadata({
   title: 'Selected Archive',
@@ -37,13 +37,13 @@ function ArchiveMap() {
       <ol>
         {archiveMapItems.map((item) => (
           <li key={item.href}>
-            <Link href={item.href}>
+            <FragmentFocusLink href={item.href}>
               <span>{item.number}</span>
               <strong>{item.title}</strong>
               <p>{item.detail}</p>
               <small>{item.count}</small>
               <span aria-hidden="true">↓</span>
-            </Link>
+            </FragmentFocusLink>
           </li>
         ))}
       </ol>
@@ -63,22 +63,28 @@ export default function ArchivePage() {
           />
           <ArchiveMap />
 
-          <section id="archive-portrait" className="archive-thesis" data-tone="red" aria-labelledby="archive-thesis-title">
+          <section
+            id="archive-portrait"
+            className="archive-thesis"
+            data-tone="red"
+            aria-labelledby="archive-thesis-title"
+            tabIndex={-1}
+          >
             <p className="eyebrow">Career portrait</p>
             <Reveal>
               <h2 id="archive-thesis-title">A practice built across interaction, engineering, and product work.</h2>
             </Reveal>
             <p>{careerThesis}</p>
-            <IndexReturnLink
+            <FragmentFocusLink
               className="archive-map-return"
               href="#archive-map"
               accessibleName="Return to Archive map from career portrait"
             >
               Archive map <span aria-hidden="true">↑</span>
-            </IndexReturnLink>
+            </FragmentFocusLink>
           </section>
 
-          <section id="career-chapters" className="career-chapter-section" aria-label="Career chapters">
+          <section id="career-chapters" className="career-chapter-section" aria-label="Career chapters" tabIndex={-1}>
             <ol className="career-chapter-list">
               {careerChapters.map((chapter) => (
                 <li key={chapter.number} id={`chapter-${chapter.number}`}>
@@ -100,13 +106,13 @@ export default function ArchivePage() {
               ))}
             </ol>
             <div className="archive-map-return-band">
-              <IndexReturnLink
+              <FragmentFocusLink
                 className="archive-map-return"
                 href="#archive-map"
                 accessibleName="Return to Archive map from career chapters"
               >
                 Archive map <span aria-hidden="true">↑</span>
-              </IndexReturnLink>
+              </FragmentFocusLink>
             </div>
           </section>
 
@@ -116,7 +122,13 @@ export default function ArchivePage() {
 
           <LegacyWorkingArchive />
 
-          <section id="professional-range" className="earlier-practice-panel" data-tone="green" aria-labelledby="earlier-practice-title">
+          <section
+            id="professional-range"
+            className="earlier-practice-panel"
+            data-tone="green"
+            aria-labelledby="earlier-practice-title"
+            tabIndex={-1}
+          >
             <header>
               <p className="eyebrow">Earlier professional work</p>
               <h2 id="earlier-practice-title">Studios, agencies, client teams, and technical environments.</h2>
@@ -137,13 +149,13 @@ export default function ArchivePage() {
                 </article>
               ))}
             </div>
-            <IndexReturnLink
+            <FragmentFocusLink
               className="archive-map-return"
               href="#archive-map"
               accessibleName="Return to Archive map from earlier professional work"
             >
               Archive map <span aria-hidden="true">↑</span>
-            </IndexReturnLink>
+            </FragmentFocusLink>
           </section>
 
           <CharacterSignals />

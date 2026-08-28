@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { IndexReturnLink } from './index-return-link';
+import { FragmentFocusLink } from './fragment-focus-link';
 import { legacyClientMarks, legacyWorkImages } from './legacy-career-visuals';
 import { LegacyWorkingGallery } from './legacy-working-gallery';
 import { Reveal } from './motion-elements';
@@ -72,7 +72,13 @@ export function LegacyClientField() {
 
 export function LegacyWorkingArchive() {
   return (
-    <section id="working-archive" className="legacy-working-archive" data-tone="dark" aria-labelledby="legacy-working-archive-title">
+    <section
+      id="working-archive"
+      className="legacy-working-archive"
+      data-tone="dark"
+      aria-labelledby="legacy-working-archive-title"
+      tabIndex={-1}
+    >
       <header>
         <div>
           <p className="eyebrow">A wider look</p>
@@ -89,13 +95,13 @@ export function LegacyWorkingArchive() {
       </header>
 
       <LegacyWorkingGallery items={legacyWorkImages} />
-      <IndexReturnLink
+      <FragmentFocusLink
         className="archive-map-return"
         href="#archive-map"
         accessibleName="Return to Archive map from working archive"
       >
         Archive map <span aria-hidden="true">↑</span>
-      </IndexReturnLink>
+      </FragmentFocusLink>
     </section>
   );
 }

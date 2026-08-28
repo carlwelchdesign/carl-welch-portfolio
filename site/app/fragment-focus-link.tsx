@@ -3,19 +3,19 @@
 import Link from 'next/link';
 import type { MouseEvent, ReactNode } from 'react';
 
-type IndexReturnLinkProps = {
-  accessibleName: string;
+type FragmentFocusLinkProps = {
+  accessibleName?: string;
   children: ReactNode;
-  className: string;
+  className?: string;
   href: `#${string}`;
 };
 
-export function IndexReturnLink({
+export function FragmentFocusLink({
   accessibleName,
   children,
   className,
   href,
-}: IndexReturnLinkProps) {
+}: FragmentFocusLinkProps) {
   function focusDestination(event: MouseEvent<HTMLAnchorElement>) {
     if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
 

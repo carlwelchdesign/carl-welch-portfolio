@@ -4,7 +4,7 @@ import type { CSSProperties, ReactNode } from 'react';
 import { careerChapters, characterSignals } from './career-story-data';
 import { contact } from './contact-data';
 import { homepageLegacyWork } from './legacy-career-visuals';
-import { IndexReturnLink } from './index-return-link';
+import { FragmentFocusLink } from './fragment-focus-link';
 import type { PortfolioProject, ProjectArchitecture, ProjectTone } from './portfolio-data';
 import { ArchitectureFlow, ImageDrift, NodePulse, Reveal } from './motion-elements';
 import { ProjectMediaViewer } from './project-media-viewer';
@@ -116,7 +116,13 @@ export function SelectedArchive({
   archiveReturnHref?: `#${string}`;
 }) {
   return (
-    <section id="yuco" className="selected-archive" data-tone="orange" aria-labelledby="selected-archive-title">
+    <section
+      id="yuco"
+      className="selected-archive"
+      data-tone="orange"
+      aria-labelledby="selected-archive-title"
+      tabIndex={-1}
+    >
       <div className="selected-archive-heading">
         <div>
           <p className="eyebrow">Selected archive / 2006–2007</p>
@@ -153,13 +159,13 @@ export function SelectedArchive({
             </Link>
           ) : null}
           {archiveReturnHref ? (
-            <IndexReturnLink
+            <FragmentFocusLink
               className="archive-map-return"
               href={archiveReturnHref}
               accessibleName="Return to Archive map from yU+co studio website"
             >
               Archive map <span aria-hidden="true">↑</span>
-            </IndexReturnLink>
+            </FragmentFocusLink>
           ) : null}
         </div>
       </div>
@@ -339,6 +345,7 @@ export function ProjectChapter({ project, priority = false }: { project: Portfol
       data-tone={project.tone}
       style={style}
       aria-labelledby={`${project.slug}-title`}
+      tabIndex={-1}
     >
       <Reveal className="section-heading">
         <div>
@@ -353,13 +360,13 @@ export function ProjectChapter({ project, priority = false }: { project: Portfol
         <div className="project-meta">
           <span>{project.category}</span>
           <span>{project.status}</span>
-          <IndexReturnLink
+          <FragmentFocusLink
             className="project-index-return"
             href="#work-index"
             accessibleName={`Return to Project index from ${project.name}`}
           >
             Project index <span aria-hidden="true">↑</span>
-          </IndexReturnLink>
+          </FragmentFocusLink>
         </div>
       </Reveal>
 
@@ -437,13 +444,13 @@ export function WorkIndex({ items }: { items: PortfolioProject[] }) {
       <ol>
         {items.map((project) => (
           <li key={project.slug} style={{ '--chapter-tone': toneColors[project.tone] } as ToneStyle}>
-            <Link href={`#work-${project.slug}`}>
+            <FragmentFocusLink href={`#work-${project.slug}`}>
               <span className="work-index-number">{project.number}</span>
               <strong>{project.name}</strong>
               <span className="work-index-category">{project.category}</span>
               <span className="work-index-status">{project.status}</span>
               <span className="work-index-arrow" aria-hidden="true">↓</span>
-            </Link>
+            </FragmentFocusLink>
           </li>
         ))}
       </ol>
