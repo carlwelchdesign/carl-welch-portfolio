@@ -63,7 +63,11 @@ export default function RecommendationsPage() {
               <p className="eyebrow">Across teams and years</p>
               <h2 id="recommendation-collection-title">What people say</h2>
               <p>Recommendations from managers, teammates, direct reports, and clients who worked with me.</p>
-              <nav className="recommendation-highlights" aria-label="Recommendation highlights">
+              <nav
+                id="recommendation-highlights"
+                className="recommendation-highlights"
+                aria-label="Recommendation highlights"
+              >
                 <p className="eyebrow">Four qualities, in their words</p>
                 <ul>
                   {recommendationHighlights.map(({ label, excerpt, recommendation }) => (
@@ -105,6 +109,9 @@ export default function RecommendationsPage() {
                     {recommendation.headline ? <span>{recommendation.headline}</span> : null}
                     <span>{recommendation.relationship}</span>
                     <time>{recommendation.date}</time>
+                    <a className="recommendation-highlights-return" href="#recommendation-highlights">
+                      Recommendation highlights <span aria-hidden="true">↑</span>
+                    </a>
                   </footer>
                 </Reveal>
               </li>
