@@ -192,7 +192,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .architecture-legend [data-node-kind='control'] { --node-color: #ff7373; }
 .architecture-legend [data-node-kind='runtime'] { --node-color: #77e6ac; }
 .architecture-connections { margin-top: 18px; border-top: 1px solid rgba(242, 242, 235, 0.18); color: rgba(242, 242, 235, 0.68); font-size: 8px; }
-.architecture-connections summary { padding: 14px 0 0; cursor: pointer; color: var(--paper); }
+.architecture-connections summary { min-height: 44px; padding: 0; display: flex; align-items: center; cursor: pointer; color: var(--paper); }
 .architecture-connections ul { margin: 16px 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 24px; list-style: none; text-transform: none; letter-spacing: 0.02em; }
 .architecture-connections li { display: flex; align-items: baseline; gap: 5px; border-bottom: 1px solid rgba(242, 242, 235, 0.1); padding-bottom: 7px; }
 .architecture-connections small { margin-left: auto; color: var(--chapter-tone); }
@@ -679,7 +679,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .recommendation-highlights q::before, .recommendation-highlights q::after { content: none; }
 .recommendation-highlights small { margin-top: auto; color: var(--muted); }
 .recommendation-highlights a:hover small { color: currentColor; }
-.recommendation-card footer strong a { text-decoration: underline; text-decoration-thickness: 0.08em; text-underline-offset: 0.18em; }
+.recommendation-card footer strong a { min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; text-decoration: underline; text-decoration-thickness: 0.08em; text-underline-offset: 0.18em; }
 .recommendation-list { margin: 0; padding: 0 var(--page-padding) clamp(90px, 12vw, 180px); list-style: none; background: rgba(242, 242, 235, 0.93); color: var(--ink); }
 .recommendation-list > li { border-top: 1px solid rgba(9, 12, 9, 0.28); }
 .recommendation-card { min-height: 420px; padding: clamp(48px, 7vw, 96px) 0; display: grid; grid-template-columns: 70px minmax(0, 1fr) minmax(250px, 0.38fr); gap: clamp(28px, 5vw, 74px); }
