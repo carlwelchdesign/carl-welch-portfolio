@@ -4,7 +4,7 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { chromium } from '@playwright/test';
 
 const sourceUrl = new URL('../public/jolene/review/country-host-state-sheet-source.png', import.meta.url);
-const offlineOverrideUrl = new URL('../public/jolene/review/country-host-offline-chibi-source.png', import.meta.url);
+const offlineOverrideUrl = new URL('../public/jolene/review/country-host-offline-shrug-source.png', import.meta.url);
 const outputDirectoryUrl = new URL('../public/jolene/sprites/', import.meta.url);
 const manifestUrl = new URL('../docs/jolene-avatar-sprites.v1.json', import.meta.url);
 const frameCatalogUrl = new URL('../app/jolene/avatar-frame-catalog.v1.json', import.meta.url);
@@ -340,9 +340,9 @@ const manifest = {
   },
   overrides: [{
     state: 'offline',
-    path: '/jolene/review/country-host-offline-chibi-source.png',
+    path: '/jolene/review/country-host-offline-shrug-source.png',
     sha256: sha256(offlineOverrideBytes),
-    intent: 'comic chibi failure reaction; never sad or apologetic',
+    intent: 'poised, lightly humorous shrug; never sad, angry, or apologetic',
   }],
   layout: {
     frameWidth,

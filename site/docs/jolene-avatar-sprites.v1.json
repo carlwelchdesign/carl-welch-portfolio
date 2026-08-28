@@ -11,9 +11,9 @@
   "overrides": [
     {
       "state": "offline",
-      "path": "/jolene/review/country-host-offline-chibi-source.png",
-      "sha256": "82b8746844fe2ec62f642d0b3a08f7958be4122eb0bda720fef3b9f602aa55db",
-      "intent": "comic chibi failure reaction; never sad or apologetic"
+      "path": "/jolene/review/country-host-offline-shrug-source.png",
+      "sha256": "28962cb39d32dcefaf5732775e45533d6de1a81a9dddf0b47c4a8033adc32851",
+      "intent": "poised, lightly humorous shrug; never sad, angry, or apologetic"
     }
   ],
   "layout": {
@@ -190,21 +190,21 @@
     {
       "state": "offline",
       "path": "/jolene/sprites/offline.png",
-      "sha256": "da4e534872e96d192375f6f7f32163726603afe5e62bd045836787db953876a1",
+      "sha256": "727ceea840e938ffc66b3c545d708b0c0fd8e6c07692e38ad44d5e295ad07a9f",
       "width": 320,
       "height": 460,
-      "opaquePixels": 68464,
+      "opaquePixels": 56019,
       "sourceBounds": {
-        "x": 26,
-        "y": 152,
-        "width": 1006,
-        "height": 1158
+        "x": 3,
+        "y": 185,
+        "width": 1041,
+        "height": 1140
       },
       "drawBounds": {
         "x": 8,
-        "y": 98,
+        "y": 115,
         "width": 304,
-        "height": 350
+        "height": 333
       }
     },
     {
