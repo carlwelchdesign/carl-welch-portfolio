@@ -216,6 +216,60 @@ test('return-to-index links retain native fragment navigation without JavaScript
   await context.close();
 });
 
+test('page indexes transfer focus to every selected content destination', async ({ page }) => {
+  const indexes = [
+    ['/work', '#work-index a'],
+    ['/archive', '#archive-map a'],
+    ['/capabilities', '#capability-index a'],
+    ['/experience', '#career-index a'],
+    ['/recommendations', '#recommendation-highlights a'],
+  ] as const;
+
+  for (const [route, selector] of indexes) {
+    await page.goto(route);
+    const hrefs = await page.locator(selector).evaluateAll((links) => links.map((link) => link.getAttribute('href')));
+    expect(hrefs.length, `${route} must expose indexed destinations`).toBeGreaterThan(0);
+
+    for (const href of hrefs) {
+      expect(href, `${route} index link is missing a fragment destination`).toMatch(/^#[a-z0-9-]+$/);
+      if (!href) throw new Error(`${route} index link is missing a fragment destination`);
+      const indexLink = page.locator(`${selector}[href="${href}"]`);
+      await indexLink.focus();
+      await indexLink.press('Enter');
+
+      await expect(page).toHaveURL(new RegExp(`${href}$`));
+      await expect(page.locator(href)).toBeFocused();
+    }
+  }
+});
+
+test('page indexes retain native forward fragment navigation without JavaScript', async ({ browser }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  const page = await context.newPage();
+  const indexes = [
+    ['/work', '#work-index a'],
+    ['/archive', '#archive-map a'],
+    ['/capabilities', '#capability-index a'],
+    ['/experience', '#career-index a'],
+    ['/recommendations', '#recommendation-highlights a'],
+  ] as const;
+
+  for (const [route, selector] of indexes) {
+    await page.goto(route);
+    const indexLink = page.locator(selector).first();
+    const href = await indexLink.getAttribute('href');
+    expect(href, `${route} index link is missing a fragment destination`).toMatch(/^#[a-z0-9-]+$/);
+    if (!href) throw new Error(`${route} index link is missing a fragment destination`);
+    await indexLink.focus();
+    await indexLink.press('Enter');
+
+    await expect(page).toHaveURL(new RegExp(`${href}$`));
+    await expect(page.locator(href)).toBeVisible();
+  }
+
+  await context.close();
+});
+
 test('every public route meets the mobile control-size and overflow contract', async ({ page }) => {
   for (const viewport of mobileViewports) {
     await page.setViewportSize(viewport);
