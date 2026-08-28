@@ -463,6 +463,43 @@ test('recommendation highlights use direct excerpts and link to the full testimo
   expect(overflow).toBeLessThanOrEqual(0);
 });
 
+test('recommendations close with clear recruiter next steps', async ({ page }) => {
+  await page.goto('/recommendations');
+  const closing = page.getByRole('region', { name: 'See the work they’re talking about.' });
+  const actions = closing.getByRole('navigation', { name: 'Continue from the recommendations' });
+  const destinations = [
+    ['View selected work', '/work#work-index'],
+    ['Trace the career', '/experience#career-index'],
+    ['Contact Carl', '/contact'],
+  ] as const;
+
+  await expect(closing).toBeVisible();
+  await expect(actions.getByRole('link')).toHaveCount(destinations.length);
+  for (const [name, href] of destinations) {
+    const link = actions.getByRole('link', { name });
+    await expect(link).toHaveAttribute('href', href);
+    await link.focus();
+    await expect(link).toBeFocused();
+  }
+
+  await actions.getByRole('link', { name: 'View selected work' }).click();
+  await expect(page).toHaveURL(/\/work#work-index$/);
+  await expect(page.locator('#work-index')).toBeInViewport();
+
+  for (const width of [320, 390, 430]) {
+    await page.setViewportSize({ width, height: 844 });
+    await page.goto('/recommendations');
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+    const undersizedLinks = await actions.getByRole('link').evaluateAll((links) => (
+      links.filter((link) => {
+        const bounds = link.getBoundingClientRect();
+        return bounds.width < 44 || bounds.height < 44;
+      }).length
+    ));
+    expect(undersizedLinks).toBe(0);
+  }
+});
+
 test('contact page invites conversation without internal policy copy', async ({ page }) => {
   await page.goto('/contact');
   await expectCorePageContract(page);
@@ -1012,6 +1049,12 @@ test('server-rendered navigation and content remain available without JavaScript
   await expect(page.getByRole('link', { name: /Mentorship/ })).toHaveAttribute(
     'href',
     '#evidence--portfolio--source--recommendation--jason-conover-2017-07-17',
+  );
+  const recommendationNextSteps = page.getByRole('navigation', { name: 'Continue from the recommendations' });
+  await expect(recommendationNextSteps.getByRole('link')).toHaveCount(3);
+  await expect(recommendationNextSteps.getByRole('link', { name: 'Trace the career' })).toHaveAttribute(
+    'href',
+    '/experience#career-index',
   );
   await expect(page.locator('.recommendation-highlights-return')).toHaveCount(13);
   await expect(page.getByRole('listitem', { name: 'David Allen recommendation' }).getByRole('link', {
