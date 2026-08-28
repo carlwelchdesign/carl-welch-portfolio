@@ -645,9 +645,12 @@ test('work index lets recruiters jump to each flagship project', async ({ page }
   await expect(index).toBeVisible();
   const links = index.getByRole('link');
   await expect(links).toHaveCount(projects.length);
+  await expect(page.locator('.project-index-return')).toHaveCount(projects.length);
   for (const [name, href] of projects) {
     await expect(index.getByRole('link', { name: new RegExp(name) })).toHaveAttribute('href', href);
-    await expect(page.locator(href)).toHaveCount(1);
+    const chapter = page.locator(href);
+    await expect(chapter).toHaveCount(1);
+    await expect(chapter.getByRole('link', { name: /Project index/ })).toHaveAttribute('href', '#work-index');
   }
 
   const flightTrackerLink = index.getByRole('link', { name: /Flight Tracker AI/ });
@@ -656,6 +659,12 @@ test('work index lets recruiters jump to each flagship project', async ({ page }
   await flightTrackerLink.click();
   await expect(page).toHaveURL(/\/work#work-flight-tracker-ai$/);
   await expect(page.locator('#work-flight-tracker-ai')).toBeInViewport();
+  const returnLink = page.locator('#work-flight-tracker-ai').getByRole('link', { name: /Project index/ });
+  await returnLink.focus();
+  await expect(returnLink).toBeFocused();
+  await returnLink.click();
+  await expect(page).toHaveURL(/\/work#work-index$/);
+  await expect(index).toBeInViewport();
 
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/work');
@@ -735,6 +744,11 @@ test('server-rendered navigation and content remain available without JavaScript
   await expect(projectIndex.getByRole('link', { name: /Argent Matchmaking/ })).toHaveAttribute(
     'href',
     '#work-argent-matchmaking',
+  );
+  await expect(page.locator('.project-index-return')).toHaveCount(5);
+  await expect(page.locator('#work-argent-matchmaking').getByRole('link', { name: /Project index/ })).toHaveAttribute(
+    'href',
+    '#work-index',
   );
 
   await page.goto('/recommendations');
