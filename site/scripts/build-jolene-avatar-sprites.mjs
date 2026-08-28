@@ -4,6 +4,7 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { chromium } from '@playwright/test';
 
 const sourceUrl = new URL('../public/jolene/review/country-host-state-sheet-source.png', import.meta.url);
+const greetOverrideUrl = new URL('../public/jolene/review/country-host-greet-face-corrected-source.png', import.meta.url);
 const offlineOverrideUrl = new URL('../public/jolene/review/country-host-offline-shrug-source.png', import.meta.url);
 const outputDirectoryUrl = new URL('../public/jolene/sprites/', import.meta.url);
 const manifestUrl = new URL('../docs/jolene-avatar-sprites.v1.json', import.meta.url);
@@ -270,21 +271,54 @@ async function normalizeStandaloneFrame(sourceBytes, state) {
       sourceContext.drawImage(image, 0, 0);
       const imageData = sourceContext.getImageData(0, 0, image.width, image.height);
 
+      const pixelCount = image.width * image.height;
+      const backgroundVisited = new Uint8Array(pixelCount);
+      const backgroundQueue = new Int32Array(pixelCount);
+      let backgroundHead = 0;
+      let backgroundTail = 0;
+      const isNeutralBackground = (pixelIndex) => {
+        const offset = pixelIndex * 4;
+        const minimum = Math.min(imageData.data[offset], imageData.data[offset + 1], imageData.data[offset + 2]);
+        const maximum = Math.max(imageData.data[offset], imageData.data[offset + 1], imageData.data[offset + 2]);
+        return minimum >= policy.minimumChannel && maximum - minimum <= policy.maximumChannelSpread;
+      };
+      const enqueueBackground = (pixelIndex) => {
+        if (backgroundVisited[pixelIndex] || !isNeutralBackground(pixelIndex)) return;
+        backgroundVisited[pixelIndex] = 1;
+        backgroundQueue[backgroundTail++] = pixelIndex;
+      };
+      for (let x = 0; x < image.width; x += 1) {
+        enqueueBackground(x);
+        enqueueBackground((image.height - 1) * image.width + x);
+      }
+      for (let y = 0; y < image.height; y += 1) {
+        enqueueBackground(y * image.width);
+        enqueueBackground(y * image.width + image.width - 1);
+      }
+      while (backgroundHead < backgroundTail) {
+        const pixelIndex = backgroundQueue[backgroundHead++];
+        const x = pixelIndex % image.width;
+        const y = Math.floor(pixelIndex / image.width);
+        if (x > 0) enqueueBackground(pixelIndex - 1);
+        if (x < image.width - 1) enqueueBackground(pixelIndex + 1);
+        if (y > 0) enqueueBackground(pixelIndex - image.width);
+        if (y < image.height - 1) enqueueBackground(pixelIndex + image.width);
+      }
+      for (let pixelIndex = 0; pixelIndex < pixelCount; pixelIndex += 1) {
+        if (!backgroundVisited[pixelIndex]) continue;
+        const offset = pixelIndex * 4;
+        imageData.data[offset] = 0;
+        imageData.data[offset + 1] = 0;
+        imageData.data[offset + 2] = 0;
+        imageData.data[offset + 3] = 0;
+      }
+
       let minimumX = image.width;
       let minimumY = image.height;
       let maximumX = -1;
       let maximumY = -1;
       for (let pixelIndex = 0; pixelIndex < image.width * image.height; pixelIndex += 1) {
         const offset = pixelIndex * 4;
-        const red = imageData.data[offset];
-        const green = imageData.data[offset + 1];
-        const blue = imageData.data[offset + 2];
-        const minimum = Math.min(red, green, blue);
-        const maximum = Math.max(red, green, blue);
-        if (minimum >= policy.minimumChannel && maximum - minimum <= policy.maximumChannelSpread) {
-          imageData.data[offset + 3] = 0;
-          continue;
-        }
         if (imageData.data[offset + 3] === 0) continue;
         const x = pixelIndex % image.width;
         const y = Math.floor(pixelIndex / image.width);
@@ -390,9 +424,11 @@ async function normalizeStandaloneFrame(sourceBytes, state) {
 }
 
 const sourceBytes = await readFile(sourceUrl);
+const greetOverrideBytes = await readFile(greetOverrideUrl);
 const offlineOverrideBytes = await readFile(offlineOverrideUrl);
 const stateContract = JSON.parse(await readFile(stateContractUrl, 'utf8'));
 const result = await buildFrames(sourceBytes);
+result.frames[stateNames.indexOf('greet')] = await normalizeStandaloneFrame(greetOverrideBytes, 'greet');
 result.frames[stateNames.indexOf('offline')] = await normalizeStandaloneFrame(offlineOverrideBytes, 'offline');
 const outputs = [];
 
@@ -429,12 +465,20 @@ const manifest = {
     height: result.sourceHeight,
     generatedWith: 'built-in image generation edit mode',
   },
-  overrides: [{
-    state: 'offline',
-    path: '/jolene/review/country-host-offline-shrug-source.png',
-    sha256: sha256(offlineOverrideBytes),
-    intent: 'poised, lightly humorous shrug; never sad, angry, or apologetic',
-  }],
+  overrides: [
+    {
+      state: 'greet',
+      path: '/jolene/review/country-host-greet-face-corrected-source.png',
+      sha256: sha256(greetOverrideBytes),
+      intent: 'correct eye whites and replace the isolated tooth with an even friendly smile',
+    },
+    {
+      state: 'offline',
+      path: '/jolene/review/country-host-offline-shrug-source.png',
+      sha256: sha256(offlineOverrideBytes),
+      intent: 'poised, lightly humorous shrug; never sad, angry, or apologetic',
+    },
+  ],
   layout: {
     frameWidth,
     frameHeight,

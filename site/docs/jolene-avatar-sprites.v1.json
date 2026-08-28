@@ -10,6 +10,12 @@
   },
   "overrides": [
     {
+      "state": "greet",
+      "path": "/jolene/review/country-host-greet-face-corrected-source.png",
+      "sha256": "8f4b705aeb200f44dab4f330c339fdf775db9af4907fe5a0029dc44f11e8159c",
+      "intent": "correct eye whites and replace the isolated tooth with an even friendly smile"
+    },
+    {
       "state": "offline",
       "path": "/jolene/review/country-host-offline-shrug-source.png",
       "sha256": "28962cb39d32dcefaf5732775e45533d6de1a81a9dddf0b47c4a8033adc32851",
@@ -71,21 +77,21 @@
     {
       "state": "greet",
       "path": "/jolene/sprites/greet.png",
-      "sha256": "8973e017106e89c316cb93d2856a234bb6b144f7cefe32fe6924ac968c18892d",
+      "sha256": "b28f7e3da3cf97be09555a0a1604ea60274061cd5cf581c681da86843625be8c",
       "width": 320,
       "height": 460,
-      "opaquePixels": 77067,
+      "opaquePixels": 92358,
       "sourceBounds": {
-        "x": 0,
-        "y": 112,
-        "width": 252,
-        "height": 404
+        "x": 109,
+        "y": 146,
+        "width": 832,
+        "height": 1322
       },
       "drawBounds": {
-        "x": 34,
-        "y": 44,
-        "width": 252,
-        "height": 404
+        "x": 22,
+        "y": 8,
+        "width": 277,
+        "height": 440
       }
     },
     {
@@ -191,10 +197,10 @@
     {
       "state": "offline",
       "path": "/jolene/sprites/offline.png",
-      "sha256": "d602132796be6a08e5c1ee72277b855b677a8dff273df959a13fa03a17759100",
+      "sha256": "d6f2cf61681627542afed2dc6a6a97d89d11bb8e5335b3dbff594df1bc4dd806",
       "width": 320,
       "height": 460,
-      "opaquePixels": 53825,
+      "opaquePixels": 53952,
       "sourceBounds": {
         "x": 3,
         "y": 185,

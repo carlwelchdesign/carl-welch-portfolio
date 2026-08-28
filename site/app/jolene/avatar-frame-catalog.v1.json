@@ -55,7 +55,7 @@
       "transformOrigin": "160px 448px"
     },
     "greet-0": {
-      "assetPath": "/jolene/sprites/greet.png?v=8973e017106e",
+      "assetPath": "/jolene/sprites/greet.png?v=b28f7e3da3cf",
       "state": "greet",
       "translateX": 0,
       "translateY": 0,
@@ -64,7 +64,7 @@
       "transformOrigin": "160px 448px"
     },
     "greet-1": {
-      "assetPath": "/jolene/sprites/greet.png?v=8973e017106e",
+      "assetPath": "/jolene/sprites/greet.png?v=b28f7e3da3cf",
       "state": "greet",
       "translateX": 1,
       "translateY": -2,
@@ -73,7 +73,7 @@
       "transformOrigin": "160px 448px"
     },
     "greet-2": {
-      "assetPath": "/jolene/sprites/greet.png?v=8973e017106e",
+      "assetPath": "/jolene/sprites/greet.png?v=b28f7e3da3cf",
       "state": "greet",
       "translateX": -1,
       "translateY": -4,
@@ -172,7 +172,7 @@
       "transformOrigin": "160px 448px"
     },
     "offline-0": {
-      "assetPath": "/jolene/sprites/offline.png?v=d602132796be",
+      "assetPath": "/jolene/sprites/offline.png?v=d6f2cf616816",
       "state": "offline",
       "translateX": 0,
       "translateY": 0,
