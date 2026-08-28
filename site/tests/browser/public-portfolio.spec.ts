@@ -25,10 +25,28 @@ const mobileViewports = [
 
 async function expectCorePageContract(page: Page) {
   await expect(page.locator('main#main-content')).toBeVisible();
+  await expect(page.locator('main#main-content')).toHaveAttribute('tabindex', '-1');
   await expect(page.locator('h1')).toHaveCount(1);
   await expect(page.locator('a.skip-link')).toHaveAttribute('href', '#main-content');
   await expect(page.locator('[data-jolene-fixture-launcher]')).toHaveCount(0);
 }
+
+test('skip navigation transfers focus into main content on every public route', async ({ page }) => {
+  for (const route of routes) {
+    await page.goto(route);
+    const skipLink = page.locator('a.skip-link');
+    const main = page.locator('main#main-content');
+
+    await skipLink.focus();
+    await expect(skipLink).toBeFocused();
+    await skipLink.press('Enter');
+    await expect(page).toHaveURL(/#main-content$/);
+    await expect(main).toBeFocused();
+    await page.keyboard.press('Tab');
+    const focusContinuesInsideMain = await main.evaluate((element) => element.contains(document.activeElement));
+    expect(focusContinuesInsideMain, `${route} sends the next Tab outside main content`).toBe(true);
+  }
+});
 
 for (const route of routes) {
   test(`${route} renders without serious accessibility violations`, async ({ page }) => {
