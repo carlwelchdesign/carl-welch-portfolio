@@ -8,6 +8,8 @@ A playful, poised, waist-up Dolly Parton-inspired Jolene who feels drawn for an 
 
 The first read is a warm, quick-witted host waiting at the bottom-right of Carl's portfolio. The second read is early-career Dolly: enormous blonde hair, bright eyes, hoop earrings, a red tied patterned blouse, and confident posture. She should feel delighted to help without becoming a mascot that competes with Carl's work.
 
+The character is a reveal, not a persistent page ornament. On an eligible first load she briefly rises from below the bottom-right edge, says **“Howdy, folks!”**, and drops completely out of sight. After that cameo, the compact Jolene launcher remains visible but the character does not return unless the visitor deliberately opens the chat.
+
 ## Locked production proposal
 
 - Native frame: **48 × 56 pixels**, waist-up, transparent background.
@@ -62,6 +64,53 @@ If the silhouette does not pass in one color, added facial pixels will not fix i
 - `offline`: static calm pose with a small UI status mark outside the character silhouette.
 
 The character represents confidence and hospitality. Avoid winks as a default, exaggerated eyebrow bouncing, constant hair motion, toothy flapping, or pin-up posing.
+
+## Entrance and visibility choreography
+
+The cameo introduces Jolene once without turning her into a distraction or placing a character over Carl's work.
+
+### State grammar
+
+1. `hidden`: the entire character and speech bubble sit below the viewport. The launcher remains visible and usable.
+2. `intro_rising`: after the page is visually stable, the waist-up character rises from below the bottom-right edge using a transform-only movement.
+3. `intro_greeting`: she settles once and a compact bubble reads exactly **“Howdy, folks!”**
+4. `intro_exiting`: the bubble and character move back below the viewport until no part of either is visible.
+5. `launcher_only`: the launcher remains; the character stays hidden.
+6. `chat_open`: the character is visible as part of the open Jolene experience, not as a separate floating ornament.
+7. `chat_closing`: closing the panel hides the character completely and returns to `launcher_only` without replaying the greeting.
+
+### Timing and frequency
+
+- Start the cameo about **700 ms** after the page is stable. Do not delay page interaction while waiting for it.
+- Rise for **360 ms**, settle once for **140 ms**, hold the greeting for **1,300 ms**, then exit for **300 ms**.
+- Play at most once per browser session, on the first eligible portfolio page. Do not replay it on route changes, browser back/forward navigation, chat close, or chat reopen.
+- If the visitor opens Jolene before or during the cameo, cancel the remaining intro sequence and transition directly to `chat_open`.
+- If the tab becomes hidden, stop the cameo and settle in `launcher_only` when the visitor returns. Never resume halfway through the entrance.
+- The launcher is usable throughout. The cameo must never steal focus, intercept pointer events, cover the launcher, or block page controls.
+
+### Motion character
+
+Use one poised rise and one restrained settle. The motion should feel like an arcade host stepping into view, not a spring toy. No repeated bouncing, idle bobbing, hair physics, wobble, overshoot loops, or attention-seeking replay.
+
+The cameo uses CSS transforms and discrete sprite frames only. It must not cause layout shift, move page content, or require WebGL. Keep all positions on integer display pixels so the native sprite remains crisp.
+
+### Mobile and safe-area behavior
+
+- Anchor the fixed reveal layer to the same bottom-right system as the launcher and include `env(safe-area-inset-right)` and `env(safe-area-inset-bottom)`.
+- At 390 × 844, keep the greeting bubble and visible sprite inside the viewport without covering the primary navigation or the launcher.
+- The hidden position must place the complete sprite and bubble below the viewport on every supported display scale—not merely crop the lower torso.
+- Recalculate the hidden endpoint after orientation or viewport-height changes; never leave hair or the bubble peeking above the edge.
+
+### Accessibility and reduced motion
+
+- The cameo is decorative: `aria-hidden="true"`, non-focusable, and `pointer-events: none`.
+- Do not auto-announce “Howdy, folks!” through a live region. The persistently available launcher carries the accessible name **“Ask Jolene about Carl's work.”**
+- With `prefers-reduced-motion: reduce`, skip `intro_rising`, `intro_greeting`, and `intro_exiting`. Show the static launcher only; reveal the character after the visitor opens chat.
+- Keyboard and screen-reader behavior must be identical whether or not the cameo ran.
+
+### Implementation boundary
+
+This brief defines the motion contract but does not authorize implementation or artwork. The later integration ticket owns session persistence, lifecycle cancellation, chat state wiring, browser tests, and performance validation. The avatar renderer remains independent of Jolene's answer service and does not imply awareness, presence, or agency.
 
 ## Four artist studies
 

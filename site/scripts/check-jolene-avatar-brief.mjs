@@ -12,6 +12,10 @@ for (const phrase of [
   'imageSmoothingEnabled = false',
   'Carl must select one study',
   'must not be copied into the repository',
+  '“Howdy, folks!”',
+  'Play at most once per browser session',
+  'The character is a reveal, not a persistent page ornament',
+  'prefers-reduced-motion: reduce',
 ]) {
   assert.ok(brief.includes(phrase), `Avatar brief is missing: ${phrase}`);
 }
@@ -24,8 +28,27 @@ assert.equal(contract.requiredStudies.length, 4);
 assert.equal(contract.requiredStates.length, 9);
 assert.equal(contract.rendering.integerScaleOnly, true);
 assert.equal(contract.rendering.canvasImageSmoothing, false);
+assert.equal(contract.visibility.defaultCharacterState, 'hidden');
+assert.equal(contract.visibility.launcherAlwaysAvailable, true);
+assert.equal(contract.visibility.showCharacterWhileChatOpen, true);
+assert.equal(contract.visibility.hideCharacterWhenChatClosed, true);
+assert.equal(contract.visibility.intro.sessionFrequency, 'once');
+assert.equal(contract.visibility.intro.greeting, 'Howdy, folks!');
+assert.equal(contract.visibility.intro.hiddenAfterExit, true);
+assert.equal(contract.visibility.intro.cancelToChatOpen, true);
+assert.equal(contract.visibility.intro.replayOnRouteChange, false);
+assert.equal(contract.visibility.intro.replayAfterChatClose, false);
+assert.equal(contract.visibility.states.length, 7);
+assert.equal(contract.interaction.introAriaHidden, true);
+assert.equal(contract.interaction.introFocusable, false);
+assert.equal(contract.interaction.introPointerEvents, 'none');
+assert.equal(contract.interaction.autoAnnounceGreeting, false);
+assert.equal(contract.motion.transformOnly, true);
+assert.equal(contract.motion.layoutShiftAllowed, false);
+assert.equal(contract.motion.continuousIdleMotionAllowed, false);
+assert.equal(contract.motion.reducedMotionBehavior, 'launcher_only');
 assert.equal(contract.approval.masterSelected, false);
 assert.equal(contract.approval.productionAuthorized, false);
 assert.equal(contract.approval.publicUseAuthorized, false);
 
-console.log('Jolene avatar brief checks passed: native grid, palette, rendering, studies, and approval gates.');
+console.log('Jolene avatar brief checks passed: native grid, palette, reveal choreography, accessibility, studies, and approval gates.');

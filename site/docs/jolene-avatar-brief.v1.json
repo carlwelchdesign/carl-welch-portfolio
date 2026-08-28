@@ -16,6 +16,49 @@
     "staticFallback": "idle",
     "reducedMotionDefault": "idle"
   },
+  "visibility": {
+    "defaultCharacterState": "hidden",
+    "launcherAlwaysAvailable": true,
+    "showCharacterWhileChatOpen": true,
+    "hideCharacterWhenChatClosed": true,
+    "intro": {
+      "sessionFrequency": "once",
+      "greeting": "Howdy, folks!",
+      "startDelayMs": 700,
+      "riseDurationMs": 360,
+      "settleDurationMs": 140,
+      "holdDurationMs": 1300,
+      "exitDurationMs": 300,
+      "hiddenAfterExit": true,
+      "cancelToChatOpen": true,
+      "resumeAfterTabHidden": false,
+      "replayOnRouteChange": false,
+      "replayAfterChatClose": false
+    },
+    "states": [
+      "hidden",
+      "intro_rising",
+      "intro_greeting",
+      "intro_exiting",
+      "launcher_only",
+      "chat_open",
+      "chat_closing"
+    ]
+  },
+  "interaction": {
+    "introAriaHidden": true,
+    "introFocusable": false,
+    "introPointerEvents": "none",
+    "autoAnnounceGreeting": false,
+    "launcherAccessibleName": "Ask Jolene about Carl's work."
+  },
+  "motion": {
+    "transformOnly": true,
+    "layoutShiftAllowed": false,
+    "continuousIdleMotionAllowed": false,
+    "integerDisplayPixels": true,
+    "reducedMotionBehavior": "launcher_only"
+  },
   "approval": {
     "masterSelected": false,
     "productionAuthorized": false,
