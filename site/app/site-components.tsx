@@ -227,7 +227,7 @@ export function ArchitectureDiagram({
 
 export function ProjectChapter({ project, priority = false }: { project: PortfolioProject; priority?: boolean }) {
   const style = { '--chapter-tone': toneColors[project.tone] } as ToneStyle;
-  const previewMedia = project.gallery.slice(0, 4);
+  const previewMedia = project.gallery;
 
   return (
     <section

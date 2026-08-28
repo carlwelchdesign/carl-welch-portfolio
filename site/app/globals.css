@@ -96,6 +96,10 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .project-media-preview-1 { grid-template-columns: 1fr; }
 .project-media-preview-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .project-media-preview-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.project-media-preview-5 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.project-media-preview-5 > a { grid-column: span 2; }
+.project-media-preview-5 > a:nth-child(n + 4) { grid-column: span 3; }
+.project-media-preview-6 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .project-media-preview > a { position: relative; min-height: clamp(150px, 19vw, 310px); overflow: hidden; background: var(--ink); color: var(--paper); }
 .project-media-preview img { width: 100%; height: 100%; object-fit: cover; opacity: 0.82; transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1), opacity 240ms ease; }
 .project-media-preview > a[data-layout='portrait'] img { object-fit: contain; }
