@@ -420,6 +420,39 @@ test('contact page invites conversation without internal policy copy', async ({ 
   );
 });
 
+test('experience career index exposes the full professional arc', async ({ page }) => {
+  await page.goto('/experience');
+  const index = page.getByRole('navigation', { name: 'Career index' });
+  const destinations = [
+    ['Recent product engineering', '#recent-product-roles'],
+    ['The Army, art school, and GWAR', '#career-army-art-school-gwar'],
+    ['Learning the web by building all of it', '#career-early-full-stack-web'],
+    ['Immersive systems before AR was a product category', '#career-immersive-systems'],
+    ['Brand systems, GTD, and Evidence.com', '#career-gtd-evidence-com'],
+    ['Agency range without losing the engineering', '#career-agency-creative-technology'],
+    ['Teaching code made the work legible', '#career-teaching-code'],
+  ] as const;
+
+  await expect(index).toBeVisible();
+  await expect(index.getByRole('link')).toHaveCount(destinations.length);
+  for (const [label, href] of destinations) {
+    await expect(index.getByRole('link', { name: new RegExp(label) })).toHaveAttribute('href', href);
+    await expect(page.locator(href)).toHaveCount(1);
+  }
+
+  const evidenceLink = index.getByRole('link', { name: /Brand systems, GTD, and Evidence.com/ });
+  await evidenceLink.focus();
+  await expect(evidenceLink).toBeFocused();
+  await evidenceLink.click();
+  await expect(page).toHaveURL(/\/experience#career-gtd-evidence-com$/);
+  await expect(page.locator('#career-gtd-evidence-com')).toBeInViewport();
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/experience');
+  await expect(page.getByRole('navigation', { name: 'Career index' })).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+});
+
 test('experience presents the full early-career foundation without flattening it into a client list', async ({ page }) => {
   await page.goto('/experience#career-foundations');
   const foundations = page.locator('.career-foundation-list > li');
@@ -759,6 +792,12 @@ test('server-rendered navigation and content remain available without JavaScript
   );
 
   await page.goto('/experience');
+  const careerIndex = page.getByRole('navigation', { name: 'Career index' });
+  await expect(careerIndex.getByRole('link')).toHaveCount(7);
+  await expect(careerIndex.getByRole('link', { name: /The Army, art school, and GWAR/ })).toHaveAttribute(
+    'href',
+    '#career-army-art-school-gwar',
+  );
   const archiveLink = page.getByRole('link', { name: 'View archived work related to Coca-Cola' });
   await expect(archiveLink).toHaveAttribute('href', '/archive#legacy-coca-cola');
   await archiveLink.click();
