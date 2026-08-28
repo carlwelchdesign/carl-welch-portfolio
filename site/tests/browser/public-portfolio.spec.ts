@@ -1,5 +1,6 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
+import { projects } from '../../app/portfolio-data';
 
 const routes = [
   '/',
@@ -1055,6 +1056,22 @@ test('work overview shows every flagship gallery preview without broken media', 
     await expect.poll(() => previews.evaluateAll((images) => (
       images.every((image) => (image as HTMLImageElement).naturalWidth > 0)
     ))).toBe(true);
+  }
+});
+
+test('flagship project actions name their destination and fit every phone width', async ({ page }) => {
+  for (const viewport of mobileViewports) {
+    await page.setViewportSize(viewport);
+    await page.goto('/work');
+
+    for (const project of projects) {
+      const chapter = page.locator(`#work-${project.slug}`);
+      const action = chapter.getByRole('link', { name: `View ${project.name}`, exact: true });
+      await expect(action).toHaveAttribute('href', `/work/${project.slug}`);
+      const bounds = await action.boundingBox();
+      expect(bounds, `${project.name} action is not rendered at ${viewport.width}px`).not.toBeNull();
+      expect(bounds?.width, `${project.name} action overflows at ${viewport.width}px`).toBeLessThanOrEqual(viewport.width - 40);
+    }
   }
 });
 
