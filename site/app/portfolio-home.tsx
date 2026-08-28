@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { capabilities } from './capabilities-data';
+import { FragmentFocusLink } from './fragment-focus-link';
 import { MotionRuntime, Orbit, Reveal } from './motion-elements';
 import { experience, projects } from './portfolio-data';
 import { recommendations } from './recommendations-data';
@@ -20,9 +21,9 @@ export function PortfolioHome() {
                 in two decades of interactive and product work.
               </p>
               <div className="hero-actions">
-                <a className="primary-action" href="#work">
+                <FragmentFocusLink className="primary-action" href="#work">
                   View selected work <span aria-hidden="true">↓</span>
-                </a>
+                </FragmentFocusLink>
                 <Link className="text-action" href="/contact">
                   Discuss a role or project
                 </Link>
@@ -73,7 +74,7 @@ export function PortfolioHome() {
 
           <CareerPortraitPreview />
 
-          <div id="work">
+          <div id="work" tabIndex={-1}>
             <WorkIndex items={projects} />
             {projects.map((project, index) => (
               <ProjectChapter key={project.slug} project={project} priority={index === 0} />
