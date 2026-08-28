@@ -103,6 +103,8 @@ Run `pnpm check:sentry-asana` whenever intake normalization, signature handling,
 or Asana mapping changes.
 Run `pnpm check:sentry-reconciliation` whenever the Sentry issues query,
 cron authorization, missed-delivery mapping, or reconciliation limits change.
+Run `pnpm check:sentry-alert-policy` whenever severity, cooldown,
+deduplication, notification fields, destinations, or provider rules change.
 
 ## Trust and data flow
 
@@ -127,6 +129,13 @@ does not retain raw webhook bodies or full Sentry events.
 
 ## Severity and response expectations
 
+The reviewable provider configuration contract is
+`operations/sentry-alert-policy.v1.json`. It keeps production activation off,
+leaves notification destinations and provider rule IDs empty, and leaves
+sustained-rate and availability thresholds unset until Carl approves them.
+`pnpm check:sentry-alert-policy` prevents a proposed policy from silently
+becoming active or allowing sensitive notification fields.
+
 | Severity | Condition | Owner action | Automation boundary |
 | --- | --- | --- | --- |
 | P0 | Confirmed private-data exposure, active credential compromise, destructive behavior, or broad production outage | Notify Carl immediately; disable affected intake or feature; preserve minimal evidence; begin rollback | Create/update a sanitized ticket and stop. Never investigate private data or rotate credentials autonomously. |
@@ -138,6 +147,13 @@ Worker service tags, alert on new/regressed issues, and add a sustained-rate
 rule after a real traffic baseline exists. No guessed user count or fabricated
 impact estimate belongs in notifications. After-hours P0 notification requires
 an owner-approved destination; P1/P2 can wait for the next bounded review.
+
+The proposed cooldowns are five minutes for P0, 30 minutes for P1, and 24 hours
+for P2. A repeated event updates frequency on the existing issue instead of
+creating another notification. Resolution updates the existing incident;
+regression reopens it. These values remain reviewable policy, not live provider
+state, until the activation block carries Carl's approval and exact provider
+rule IDs.
 
 ## Alert-to-ticket transition rules
 

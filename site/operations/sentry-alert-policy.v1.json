@@ -1,0 +1,85 @@
+{
+  "schemaVersion": "1.0.0",
+  "status": "proposed",
+  "activation": {
+    "enabled": false,
+    "ownerApprovalState": "pending",
+    "environments": ["production"],
+    "approvedDestinations": [],
+    "providerRuleIds": []
+  },
+  "deduplication": {
+    "keyFields": ["project", "environment", "service", "issueId"],
+    "resolvedBehavior": "update_existing_incident",
+    "regressionBehavior": "reopen_existing_incident",
+    "repeatedBehavior": "update_frequency_without_new_notification"
+  },
+  "severities": [
+    {
+      "id": "P0",
+      "conditions": [
+        "private_data_exposure",
+        "credential_compromise",
+        "destructive_behavior",
+        "broad_production_outage"
+      ],
+      "notificationUrgency": "immediate",
+      "afterHours": true,
+      "cooldownSeconds": 300,
+      "ownerAction": "disable_or_rollback_affected_capability"
+    },
+    {
+      "id": "P1",
+      "conditions": [
+        "new_production_error",
+        "regressed_production_error",
+        "degraded_public_jolene_endpoint",
+        "sustained_production_error_rate"
+      ],
+      "notificationUrgency": "prompt",
+      "afterHours": false,
+      "cooldownSeconds": 1800,
+      "ownerAction": "reproduce_and_prepare_scoped_remediation"
+    },
+    {
+      "id": "P2",
+      "conditions": ["low_frequency_technical_error"],
+      "notificationUrgency": "queued",
+      "afterHours": false,
+      "cooldownSeconds": 86400,
+      "ownerAction": "group_for_bounded_review"
+    }
+  ],
+  "notification": {
+    "allowedFields": [
+      "severity",
+      "state",
+      "service",
+      "environment",
+      "release",
+      "route",
+      "frequency",
+      "affectedUserEstimate",
+      "firstSeenAt",
+      "lastSeenAt",
+      "issueUrl"
+    ],
+    "prohibitedFields": [
+      "rawEvent",
+      "visitorContent",
+      "requestBody",
+      "responseBody",
+      "queryString",
+      "urlFragment",
+      "localPath",
+      "secret",
+      "privateJoleneContext"
+    ]
+  },
+  "thresholds": {
+    "approvalState": "pending_owner_review",
+    "newAndRegressedIssues": true,
+    "sustainedErrorRate": null,
+    "availabilityDegradation": null
+  }
+}
