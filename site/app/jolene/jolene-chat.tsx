@@ -71,7 +71,15 @@ function getSuggestedQuestions(messages: ChatMessage[]): string[] {
   return [];
 }
 
-export function JoleneChat({ mode: connectionMode, scenario: scenarioValue = 'success' }: { mode: JoleneMode; scenario?: string }) {
+export function JoleneChat({
+  mode: connectionMode,
+  scenario: scenarioValue = 'success',
+  contactIntentEnabled = false,
+}: {
+  mode: JoleneMode;
+  scenario?: string;
+  contactIntentEnabled?: boolean;
+}) {
   const scenario = normalizeScenario(scenarioValue);
   const adapter = useMemo(
     () => connectionMode === 'live' ? createBrowserPublicJoleneAdapter() : createFixturePublicJoleneAdapter(scenario),
@@ -210,7 +218,9 @@ export function JoleneChat({ mode: connectionMode, scenario: scenarioValue = 'su
           <nav className="jolene-mode-switch" aria-label="Jolene panel sections">
             <button type="button" aria-pressed={mode === 'chat'} onClick={() => setMode('chat')}>Questions</button>
             <button type="button" aria-pressed={mode === 'job'} onClick={() => setMode('job')}>Compare role</button>
-            <button type="button" aria-pressed={mode === 'contact'} onClick={() => setMode('contact')}>Request contact</button>
+            {contactIntentEnabled ? (
+              <button type="button" aria-pressed={mode === 'contact'} onClick={() => setMode('contact')}>Request contact</button>
+            ) : null}
           </nav>
 
           {mode === 'chat' ? <><div className="jolene-messages" role="log" aria-live="polite" aria-busy={waiting}>
@@ -296,5 +306,5 @@ export function JoleneChat({ mode: connectionMode, scenario: scenarioValue = 'su
 }
 
 export function JoleneFixtureChat({ scenario }: { scenario: string }) {
-  return <JoleneChat mode="fixture" scenario={scenario} />;
+  return <JoleneChat mode="fixture" scenario={scenario} contactIntentEnabled />;
 }
