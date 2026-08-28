@@ -370,6 +370,48 @@ test('homepage career portrait shows exact archival proof with mobile browsing',
   await expect(page.locator('#legacy-dkny')).toBeInViewport({ timeout: 5000 });
 });
 
+test('archive map makes the full historical record navigable', async ({ page }) => {
+  await page.goto('/archive');
+  const map = page.getByRole('navigation', { name: 'Archive map' });
+  const destinations = [
+    ['Career portrait', '#archive-portrait', 'One career thesis'],
+    ['Career chapters', '#career-chapters', '4 chapters'],
+    ['Featured yU+co record', '#yuco', '2006 to 2007'],
+    ['Selected visual archive', '#visual-archive', '11 projects'],
+    ['Working archive', '#working-archive', '16 images'],
+    ['Professional range', '#professional-range', 'Earlier work'],
+  ] as const;
+
+  await expect(map).toBeVisible();
+  await expect(map.getByRole('link')).toHaveCount(destinations.length);
+  await expect(page.locator('.archive-map-return')).toHaveCount(destinations.length);
+  for (const [name, href, count] of destinations) {
+    const link = map.getByRole('link', { name });
+    await expect(link).toHaveAttribute('href', href);
+    await expect(link).toContainText(count);
+    const section = page.locator(href);
+    await expect(section).toHaveCount(1);
+    await expect(section.getByRole('link', { name: /Archive map/ })).toHaveAttribute('href', '#archive-map');
+  }
+
+  const workingArchive = map.getByRole('link', { name: /Working archive/ });
+  await workingArchive.focus();
+  await expect(workingArchive).toBeFocused();
+  await workingArchive.click();
+  await expect(page).toHaveURL(/\/archive#working-archive$/);
+  await expect(page.locator('#working-archive')).toBeInViewport();
+  const returnLink = page.locator('#working-archive').getByRole('link', { name: /Archive map/ });
+  await returnLink.focus();
+  await expect(returnLink).toBeFocused();
+  await returnLink.click();
+  await expect(page).toHaveURL(/\/archive#archive-map$/);
+  await expect(map).toBeInViewport();
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/archive');
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+});
+
 test('recommendations read as professional testimony without publication audit copy', async ({ page }) => {
   await page.goto('/recommendations');
   await expectCorePageContract(page);
@@ -847,6 +889,19 @@ test('server-rendered navigation and content remain available without JavaScript
   await expect(page.locator('#work-argent-matchmaking').getByRole('link', { name: /Project index/ })).toHaveAttribute(
     'href',
     '#work-index',
+  );
+
+  await page.goto('/archive');
+  const archiveMap = page.getByRole('navigation', { name: 'Archive map' });
+  await expect(archiveMap.getByRole('link')).toHaveCount(6);
+  await expect(archiveMap.getByRole('link', { name: /Working archive/ })).toHaveAttribute(
+    'href',
+    '#working-archive',
+  );
+  await expect(page.locator('.archive-map-return')).toHaveCount(6);
+  await expect(page.locator('#professional-range').getByRole('link', { name: /Archive map/ })).toHaveAttribute(
+    'href',
+    '#archive-map',
   );
 
   await page.goto('/recommendations');
