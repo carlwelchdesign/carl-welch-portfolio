@@ -135,11 +135,42 @@ test('pixel avatar stays clear of controls at an iPhone viewport', async ({ page
 
   await expect(avatar).toHaveCSS('pointer-events', 'none');
   await expect(avatar.locator('img')).toHaveCSS('image-rendering', 'pixelated');
+  await expect(avatar).toHaveAttribute('data-avatar-facing', 'left');
   const panelBounds = await panel.boundingBox();
+  const avatarBounds = await avatar.boundingBox();
   const closeBounds = await close.boundingBox();
   expect(panelBounds).not.toBeNull();
+  expect(avatarBounds).not.toBeNull();
   expect(closeBounds).not.toBeNull();
   expect(panelBounds!.x).toBeGreaterThanOrEqual(0);
   expect(panelBounds!.x + panelBounds!.width).toBeLessThanOrEqual(390);
   expect(closeBounds!.x + closeBounds!.width).toBeLessThanOrEqual(390);
+  expect(avatarBounds!.x + avatarBounds!.width).toBeLessThanOrEqual(closeBounds!.x);
+});
+
+test('reduced motion skips the unsolicited cameo and uses static state frames', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.addInitScript(() => window.sessionStorage.removeItem('jolene-country-host-intro-seen-v1'));
+  await page.goto('/');
+  await page.waitForTimeout(1_000);
+  await expect(page.locator('.jolene-cameo')).toHaveCount(0);
+
+  await page.getByRole('button', { name: /Ask Jolene/ }).click();
+  const avatar = page.getByRole('dialog', { name: 'Ask Jolene' }).locator('.jolene-avatar');
+  const initialFrame = await avatar.getAttribute('data-avatar-frame');
+  await page.waitForTimeout(750);
+  const settledFrame = await avatar.getAttribute('data-avatar-frame');
+  expect(initialFrame).toBe('greet-2');
+  expect(settledFrame).toBe('idle-0');
+});
+
+test('missing pose assets fail over to the approved static master', async ({ page }) => {
+  await page.route(/\/jolene\/sprites\/.*\.png(?:\?.*)?$/, (route) => route.abort());
+  await page.addInitScript(() => window.sessionStorage.setItem('jolene-country-host-intro-seen-v1', 'true'));
+  await page.goto('/');
+  await page.getByRole('button', { name: /Ask Jolene/ }).click();
+  const avatar = page.getByRole('dialog', { name: 'Ask Jolene' }).locator('.jolene-avatar');
+  await expect(avatar).toHaveAttribute('data-avatar-fallback', 'master');
+  await expect(avatar.locator('img')).toHaveAttribute('src', '/jolene/jolene-country-host-master.png');
+  await expect(avatar).toBeVisible();
 });

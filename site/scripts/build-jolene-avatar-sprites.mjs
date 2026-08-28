@@ -16,6 +16,7 @@ const frameWidth = 320;
 const frameHeight = 460;
 const anchor = Object.freeze({ x: 160, y: 448 });
 const removalPolicy = Object.freeze({ minimumChannel: 225, maximumChannelSpread: 16, connectivity: 4 });
+const outlinePolicy = Object.freeze({ minimumChannel: 104, maximumChannelSpread: 38 });
 
 const frameTransforms = Object.freeze({
   'idle-0': { state: 'idle', translateX: 0, translateY: 0, rotateDeg: 0, scale: 1 },
@@ -49,7 +50,7 @@ async function buildFrames(sourceBytes) {
 
   try {
     const page = await browser.newPage();
-    return await page.evaluate(async ({ source, states, targetWidth, targetHeight, targetAnchor, policy }) => {
+    return await page.evaluate(async ({ source, states, targetWidth, targetHeight, targetAnchor, policy, outline }) => {
       const image = new Image();
       image.src = source;
       await image.decode();
@@ -177,7 +178,53 @@ async function buildFrames(sourceBytes) {
           drawHeight,
         );
 
-        const framePixels = frameContext.getImageData(0, 0, targetWidth, targetHeight).data;
+        const framedImage = frameContext.getImageData(0, 0, targetWidth, targetHeight);
+        const framedPixels = framedImage.data;
+        // Generated source sheets carry a neutral gray/white matte around the
+        // character. Remove only matte-colored pixels connected to transparency.
+        // Repeating the pass clears a multi-pixel fringe without touching white
+        // shirt, eye, or teeth details enclosed by opaque character pixels.
+        let removedMattePixel = true;
+        while (removedMattePixel) {
+          removedMattePixel = false;
+          const pixelsToRemove = [];
+          for (let y = 1; y < targetHeight - 1; y += 1) {
+            for (let x = 1; x < targetWidth - 1; x += 1) {
+              const pixelIndex = y * targetWidth + x;
+              const offset = pixelIndex * 4;
+              if (framedPixels[offset + 3] === 0) continue;
+              const minimum = Math.min(framedPixels[offset], framedPixels[offset + 1], framedPixels[offset + 2]);
+              const maximum = Math.max(framedPixels[offset], framedPixels[offset + 1], framedPixels[offset + 2]);
+              if (minimum < outline.minimumChannel || maximum - minimum > outline.maximumChannelSpread) continue;
+              const neighbors = [pixelIndex - 1, pixelIndex + 1, pixelIndex - targetWidth, pixelIndex + targetWidth];
+              if (neighbors.some((neighbor) => framedPixels[neighbor * 4 + 3] === 0)) pixelsToRemove.push(offset);
+            }
+          }
+          for (const offset of pixelsToRemove) {
+            framedPixels[offset + 3] = 0;
+            removedMattePixel = true;
+          }
+        }
+
+        const outerPerimeter = [];
+        for (let y = 1; y < targetHeight - 1; y += 1) {
+          for (let x = 1; x < targetWidth - 1; x += 1) {
+            const pixelIndex = y * targetWidth + x;
+            const offset = pixelIndex * 4;
+            if (framedPixels[offset + 3] === 0) continue;
+            const neighbors = [pixelIndex - 1, pixelIndex + 1, pixelIndex - targetWidth, pixelIndex + targetWidth];
+            if (neighbors.some((neighbor) => framedPixels[neighbor * 4 + 3] === 0)) outerPerimeter.push(offset);
+          }
+        }
+        for (const offset of outerPerimeter) {
+          framedPixels[offset] = 0;
+          framedPixels[offset + 1] = 0;
+          framedPixels[offset + 2] = 0;
+          framedPixels[offset + 3] = 0;
+        }
+        frameContext.putImageData(framedImage, 0, 0);
+
+        const framePixels = framedPixels;
         let opaquePixels = 0;
         for (let pixelIndex = 3; pixelIndex < framePixels.length; pixelIndex += 4) {
           if (framePixels[pixelIndex] > 0) opaquePixels += 1;
@@ -200,6 +247,7 @@ async function buildFrames(sourceBytes) {
       targetHeight: frameHeight,
       targetAnchor: anchor,
       policy: removalPolicy,
+      outline: outlinePolicy,
     });
   } finally {
     await browser.close();
@@ -210,7 +258,7 @@ async function normalizeStandaloneFrame(sourceBytes, state) {
   const browser = await chromium.launch({ headless: true });
   try {
     const page = await browser.newPage();
-    return await page.evaluate(async ({ source, stateName, targetWidth, targetHeight, targetAnchor, policy }) => {
+    return await page.evaluate(async ({ source, stateName, targetWidth, targetHeight, targetAnchor, policy, outline }) => {
       const image = new Image();
       image.src = source;
       await image.decode();
@@ -273,7 +321,49 @@ async function normalizeStandaloneFrame(sourceBytes, state) {
         drawHeight,
       );
 
-      const framePixels = frameContext.getImageData(0, 0, targetWidth, targetHeight).data;
+      const framedImage = frameContext.getImageData(0, 0, targetWidth, targetHeight);
+      const framedPixels = framedImage.data;
+      let removedMattePixel = true;
+      while (removedMattePixel) {
+        removedMattePixel = false;
+        const pixelsToRemove = [];
+        for (let y = 1; y < targetHeight - 1; y += 1) {
+          for (let x = 1; x < targetWidth - 1; x += 1) {
+            const pixelIndex = y * targetWidth + x;
+            const offset = pixelIndex * 4;
+            if (framedPixels[offset + 3] === 0) continue;
+            const minimum = Math.min(framedPixels[offset], framedPixels[offset + 1], framedPixels[offset + 2]);
+            const maximum = Math.max(framedPixels[offset], framedPixels[offset + 1], framedPixels[offset + 2]);
+            if (minimum < outline.minimumChannel || maximum - minimum > outline.maximumChannelSpread) continue;
+            const neighbors = [pixelIndex - 1, pixelIndex + 1, pixelIndex - targetWidth, pixelIndex + targetWidth];
+            if (neighbors.some((neighbor) => framedPixels[neighbor * 4 + 3] === 0)) pixelsToRemove.push(offset);
+          }
+        }
+        for (const offset of pixelsToRemove) {
+          framedPixels[offset + 3] = 0;
+          removedMattePixel = true;
+        }
+      }
+
+      const outerPerimeter = [];
+      for (let y = 1; y < targetHeight - 1; y += 1) {
+        for (let x = 1; x < targetWidth - 1; x += 1) {
+          const pixelIndex = y * targetWidth + x;
+          const offset = pixelIndex * 4;
+          if (framedPixels[offset + 3] === 0) continue;
+          const neighbors = [pixelIndex - 1, pixelIndex + 1, pixelIndex - targetWidth, pixelIndex + targetWidth];
+          if (neighbors.some((neighbor) => framedPixels[neighbor * 4 + 3] === 0)) outerPerimeter.push(offset);
+        }
+      }
+      for (const offset of outerPerimeter) {
+        framedPixels[offset] = 0;
+        framedPixels[offset + 1] = 0;
+        framedPixels[offset + 2] = 0;
+        framedPixels[offset + 3] = 0;
+      }
+      frameContext.putImageData(framedImage, 0, 0);
+
+      const framePixels = framedPixels;
       let opaquePixels = 0;
       for (let pixelIndex = 3; pixelIndex < framePixels.length; pixelIndex += 4) {
         if (framePixels[pixelIndex] > 0) opaquePixels += 1;
@@ -292,6 +382,7 @@ async function normalizeStandaloneFrame(sourceBytes, state) {
       targetHeight: frameHeight,
       targetAnchor: anchor,
       policy: removalPolicy,
+      outline: outlinePolicy,
     });
   } finally {
     await browser.close();
@@ -350,6 +441,7 @@ const manifest = {
     anchor,
     imageSmoothing: false,
     transparentBackground: true,
+    matteCleanup: 'connected neutral fringe and outer perimeter removed',
   },
   frames: outputs,
   invariants: {
@@ -370,8 +462,10 @@ const frameCatalog = {
   frames: Object.fromEntries(referencedFrameNames.map((frameName) => {
     const transform = frameTransforms[frameName];
     assert.ok(transform, `Missing transform for ${frameName}.`);
+    const output = outputs.find(({ state }) => state === transform.state);
+    assert.ok(output, `Missing generated output for ${transform.state}.`);
     return [frameName, {
-      assetPath: `/jolene/sprites/${transform.state}.png`,
+      assetPath: `/jolene/sprites/${transform.state}.png?v=${output.sha256.slice(0, 12)}`,
       ...transform,
       transformOrigin: `${anchor.x}px ${anchor.y}px`,
     }];

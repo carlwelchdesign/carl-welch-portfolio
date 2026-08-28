@@ -67,7 +67,7 @@ assert.equal(contract.selection.visualDirectionApproved, true);
 assert.equal(contract.selection.cleanProductionMasterApproved, true);
 assert.equal(contract.selection.cleanProductionMasterApprovedAt, '2026-08-28');
 assert.equal(contract.productionMaster.path, '/jolene/jolene-country-host-master.png');
-assert.equal(contract.productionMaster.sha256, 'ec53fef8888e3faa15b19b2726882844cccc683493892b402dbe04ca394d6ac8');
+assert.equal(contract.productionMaster.sha256, '4e437fd64b3997bd834bb2310ed0175e75d9958c27871d4ae3857a18fc82cc6f');
 assert.deepEqual(contract.productionMaster.frame, { width: 1162, height: 1353 });
 assert.deepEqual(contract.productionMaster.bottomCenterAnchor, { x: 563, y: 1261 });
 assert.equal(contract.productionMaster.palettePolicy, 'preserve_source_rgb');

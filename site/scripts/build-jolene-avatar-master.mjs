@@ -94,6 +94,50 @@ async function deriveMaster(sourceBytes, existingOutputBytes) {
         }
       }
 
+      let removedFringePixels = 0;
+      let removedFringePixel = true;
+      while (removedFringePixel) {
+        removedFringePixel = false;
+        const pixelsToRemove = [];
+        for (let y = 1; y < height - 1; y += 1) {
+          for (let x = 1; x < width - 1; x += 1) {
+            const pixelIndex = y * width + x;
+            const offset = pixelIndex * 4;
+            if (data[offset + 3] === 0) continue;
+            const minimum = Math.min(data[offset], data[offset + 1], data[offset + 2]);
+            const maximum = Math.max(data[offset], data[offset + 1], data[offset + 2]);
+            if (minimum < 104 || maximum - minimum > 38) continue;
+            const neighbors = [pixelIndex - 1, pixelIndex + 1, pixelIndex - width, pixelIndex + width];
+            if (neighbors.some((neighbor) => data[neighbor * 4 + 3] === 0)) pixelsToRemove.push(offset);
+          }
+        }
+        for (const offset of pixelsToRemove) {
+          data[offset] = 0;
+          data[offset + 1] = 0;
+          data[offset + 2] = 0;
+          data[offset + 3] = 0;
+          removedFringePixels += 1;
+          removedFringePixel = true;
+        }
+      }
+
+      const outerPerimeter = [];
+      for (let y = 1; y < height - 1; y += 1) {
+        for (let x = 1; x < width - 1; x += 1) {
+          const pixelIndex = y * width + x;
+          const offset = pixelIndex * 4;
+          if (data[offset + 3] === 0) continue;
+          const neighbors = [pixelIndex - 1, pixelIndex + 1, pixelIndex - width, pixelIndex + width];
+          if (neighbors.some((neighbor) => data[neighbor * 4 + 3] === 0)) outerPerimeter.push(offset);
+        }
+      }
+      for (const offset of outerPerimeter) {
+        data[offset] = 0;
+        data[offset + 1] = 0;
+        data[offset + 2] = 0;
+        data[offset + 3] = 0;
+      }
+
       let opaquePixels = 0;
       let transparentPixels = 0;
       let minimumX = width;
@@ -147,6 +191,8 @@ async function deriveMaster(sourceBytes, existingOutputBytes) {
         opaquePixels,
         transparentPixels,
         removedComponents,
+        removedFringePixels,
+        removedPerimeterPixels: outerPerimeter.length,
         opaqueBounds: {
           x: minimumX,
           y: minimumY,
@@ -193,6 +239,11 @@ const manifest = {
   },
   removalPolicy,
   removedComponents: result.removedComponents,
+  matteCleanup: {
+    strategy: 'connected neutral fringe and outer perimeter removed',
+    removedFringePixels: result.removedFringePixels,
+    removedPerimeterPixels: result.removedPerimeterPixels,
+  },
   invariants: {
     sourceRgbPreservedForOpaquePixels: true,
     sourceDimensionsPreserved: true,

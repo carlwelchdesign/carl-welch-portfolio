@@ -24,16 +24,17 @@
       "y": 448
     },
     "imageSmoothing": false,
-    "transparentBackground": true
+    "transparentBackground": true,
+    "matteCleanup": "connected neutral fringe and outer perimeter removed"
   },
   "frames": [
     {
       "state": "idle",
       "path": "/jolene/sprites/idle.png",
-      "sha256": "ae17010c939d6db89bdbaa90628a2971b84acd1b8ca945b43675e3159355c647",
+      "sha256": "64a6197d6c3924d2191f118de255844bd3f39d108459050ae21fef590e28e6d9",
       "width": 320,
       "height": 460,
-      "opaquePixels": 79548,
+      "opaquePixels": 76724,
       "sourceBounds": {
         "x": 20,
         "y": 113,
@@ -50,10 +51,10 @@
     {
       "state": "blink",
       "path": "/jolene/sprites/blink.png",
-      "sha256": "9b6e408a2ab96d38b069080a05529b9bc141c6e50b4813a3c45a0d680dd112d1",
+      "sha256": "36e5bbe543d0c3a1260987e01426a545a9f9b523008070d0098df111768d7475",
       "width": 320,
       "height": 460,
-      "opaquePixels": 79674,
+      "opaquePixels": 76897,
       "sourceBounds": {
         "x": 0,
         "y": 112,
@@ -70,10 +71,10 @@
     {
       "state": "greet",
       "path": "/jolene/sprites/greet.png",
-      "sha256": "48afd33358fc24a9b8c1cd3cf01a3b484ea17b101aefdd907326459815f25e42",
+      "sha256": "8973e017106e89c316cb93d2856a234bb6b144f7cefe32fe6924ac968c18892d",
       "width": 320,
       "height": 460,
-      "opaquePixels": 79886,
+      "opaquePixels": 77067,
       "sourceBounds": {
         "x": 0,
         "y": 112,
@@ -90,10 +91,10 @@
     {
       "state": "listen",
       "path": "/jolene/sprites/listen.png",
-      "sha256": "52c0e3ebeff485ab704f2b6f08fd8a67d17f9432046deebe620ccfc56b71b920",
+      "sha256": "83033712e2663f29b112cfd6e036273d53b1a31f02c840cb5f71f83c8d0e9224",
       "width": 320,
       "height": 460,
-      "opaquePixels": 78719,
+      "opaquePixels": 76004,
       "sourceBounds": {
         "x": 15,
         "y": 113,
@@ -110,10 +111,10 @@
     {
       "state": "think",
       "path": "/jolene/sprites/think.png",
-      "sha256": "6b8236e7aa3b8a5677886283994dc8154fb1b84e0e613b913fd73c54d0da4056",
+      "sha256": "51cc6471d7032cd48204887a845eb665547accd931e7e4c678c2a429d15d1791",
       "width": 320,
       "height": 460,
-      "opaquePixels": 80659,
+      "opaquePixels": 77634,
       "sourceBounds": {
         "x": 0,
         "y": 111,
@@ -130,10 +131,10 @@
     {
       "state": "speak",
       "path": "/jolene/sprites/speak.png",
-      "sha256": "9bdd1339228d4b6edaba5a36986a7f470c7898d8f090bba19856c61ed402232c",
+      "sha256": "241b3f0a335f8312cdc1d78b0805ab4c647dc7ca1632d39d13bb6eb99309c699",
       "width": 320,
       "height": 460,
-      "opaquePixels": 82081,
+      "opaquePixels": 79182,
       "sourceBounds": {
         "x": 18,
         "y": 46,
@@ -150,10 +151,10 @@
     {
       "state": "evidence",
       "path": "/jolene/sprites/evidence.png",
-      "sha256": "09641b3744effb5a52551cd5d1330517845875208dc01f3fc9519b1fe8f9a77d",
+      "sha256": "c6d15a756133e2b4c41213bef383aafab787a1d1dac02cc4a1866c8b470ad367",
       "width": 320,
       "height": 460,
-      "opaquePixels": 74476,
+      "opaquePixels": 72138,
       "sourceBounds": {
         "x": 28,
         "y": 51,
@@ -170,10 +171,10 @@
     {
       "state": "boundary",
       "path": "/jolene/sprites/boundary.png",
-      "sha256": "e5d97039d13cac3d73fa769add603559ecee69156e1f4e8f975d03e2375fa55c",
+      "sha256": "70598759517865bc38809836115063e18127806723d019ab14f327c35b82bfb0",
       "width": 320,
       "height": 460,
-      "opaquePixels": 75459,
+      "opaquePixels": 72827,
       "sourceBounds": {
         "x": 20,
         "y": 51,
@@ -190,10 +191,10 @@
     {
       "state": "offline",
       "path": "/jolene/sprites/offline.png",
-      "sha256": "727ceea840e938ffc66b3c545d708b0c0fd8e6c07692e38ad44d5e295ad07a9f",
+      "sha256": "d602132796be6a08e5c1ee72277b855b677a8dff273df959a13fa03a17759100",
       "width": 320,
       "height": 460,
-      "opaquePixels": 56019,
+      "opaquePixels": 53825,
       "sourceBounds": {
         "x": 3,
         "y": 185,
@@ -210,10 +211,10 @@
     {
       "state": "rest",
       "path": "/jolene/sprites/rest.png",
-      "sha256": "42d4ad473741ddf6ca74668ff795bcb37b3b8978cf81fc55448c0786ed084b3a",
+      "sha256": "999a36306564f10265b5f710a472416dfa540a032d4b5fa02582740043afe0a9",
       "width": 320,
       "height": 460,
-      "opaquePixels": 76662,
+      "opaquePixels": 73898,
       "sourceBounds": {
         "x": 0,
         "y": 51,

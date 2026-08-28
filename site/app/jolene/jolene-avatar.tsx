@@ -113,6 +113,8 @@ function AvatarPlayback({
 }) {
   const definition = stateDefinitions[state];
   const [frameIndex, setFrameIndex] = useState(0);
+  const [fallbackToMaster, setFallbackToMaster] = useState(false);
+  const [assetUnavailable, setAssetUnavailable] = useState(false);
 
   const frameName = reducedMotion
     ? reducedMotionFrameForAvatarState(state)
@@ -120,7 +122,14 @@ function AvatarPlayback({
   const frame = frameCatalog[frameName];
 
   useEffect(() => {
-    if (reducedMotion) return;
+    if (reducedMotion) {
+      if (!definition.returnState) return;
+      const settleTimer = window.setTimeout(
+        () => onStateComplete?.(definition.returnState!),
+        stateContractJson.interruption.maximumSettleMs,
+      );
+      return () => window.clearTimeout(settleTimer);
+    }
     const timer = window.setTimeout(() => {
       const nextFrameIndex = frameIndex + 1;
       if (nextFrameIndex < definition.frames.length) {
@@ -151,13 +160,16 @@ function AvatarPlayback({
       className={`jolene-avatar ${className}`.trim()}
       data-avatar-state={state}
       data-avatar-frame={frameName}
+      data-avatar-fallback={fallbackToMaster ? 'master' : 'frame'}
+      data-avatar-facing="left"
       aria-hidden={decorative ? 'true' : undefined}
       role={decorative ? undefined : 'img'}
       aria-label={decorative ? undefined : label}
       style={style}
+      hidden={assetUnavailable}
     >
       <m.img
-        src={frame.assetPath}
+        src={fallbackToMaster ? stateContractJson.rendering.masterPath : frame.assetPath}
         alt=""
         draggable={false}
         decoding="async"
@@ -169,6 +181,10 @@ function AvatarPlayback({
           scale: frame.scale,
         }}
         transition={{ duration: 0 }}
+        onError={() => {
+          if (fallbackToMaster) setAssetUnavailable(true);
+          else setFallbackToMaster(true);
+        }}
       />
     </span>
   );

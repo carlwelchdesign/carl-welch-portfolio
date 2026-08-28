@@ -18,6 +18,10 @@ for (const requirement of [
   'data-avatar-frame',
   'transition={{ duration: 0 }}',
   'preloadJoleneAvatarAssets',
+  'data-avatar-fallback',
+  'fallbackToMaster',
+  'maximumSettleMs',
+  'data-avatar-facing="left"',
 ]) {
   assert.ok(source.includes(requirement), `Jolene avatar renderer is missing ${requirement}.`);
 }
@@ -26,7 +30,7 @@ for (const forbidden of ['canvas', 'webgl', 'openai', 'anthropic', 'gemini', 're
   assert.equal(source.toLowerCase().includes(forbidden), false, `Jolene renderer includes forbidden coupling: ${forbidden}`);
 }
 
-for (const requirement of ['image-rendering: pixelated', 'pointer-events: none', 'contain: layout paint style']) {
+for (const requirement of ['image-rendering: pixelated', 'pointer-events: none', 'contain: layout paint style', 'transform: scaleX(-1)']) {
   assert.ok(styles.includes(requirement), `Jolene avatar CSS is missing ${requirement}.`);
 }
 
