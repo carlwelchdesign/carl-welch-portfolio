@@ -22,24 +22,36 @@ export function LegacyClientField() {
         </p>
       </header>
 
-      <ul className="legacy-client-mark-grid" aria-label="Organizations and properties represented in Carl's professional archive">
-        {legacyClientMarks.map((mark) => (
-          <li key={mark.name}>
-            <Image
-              src={mark.src}
-              alt=""
-              width={170}
-              height={170}
-              sizes="(max-width: 620px) 30vw, (max-width: 1000px) 18vw, 12vw"
-              unoptimized
-            />
-            <span>{mark.name}</span>
+      <p className="legacy-client-mark-guide" id="legacy-client-mark-guide">
+        <span>{legacyClientMarks.length} selected marks</span>
+        <span>Swipe to browse <span aria-hidden="true">→</span></span>
+      </p>
+      <div
+        className="legacy-client-mark-viewport"
+        role="region"
+        aria-label="Historical client and project index"
+        aria-describedby="legacy-client-mark-guide"
+        tabIndex={0}
+      >
+        <ul className="legacy-client-mark-grid" aria-label="Organizations and properties represented in Carl's professional archive">
+          {legacyClientMarks.map((mark) => (
+            <li key={mark.name}>
+              <Image
+                src={mark.src}
+                alt=""
+                width={170}
+                height={170}
+                sizes="(max-width: 720px) 112px, (max-width: 1000px) 20vw, 12.5vw"
+                unoptimized
+              />
+              <span>{mark.name}</span>
+            </li>
+          ))}
+          <li className="legacy-client-mark-note">
+            <p>Work across direct roles, agencies, studios, and client teams.</p>
           </li>
-        ))}
-        <li className="legacy-client-mark-note">
-          <p>Work across direct roles, agencies, studios, and client teams.</p>
-        </li>
-      </ul>
+        </ul>
+      </div>
     </section>
   );
 }

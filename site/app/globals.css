@@ -525,11 +525,15 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .legacy-client-field > header { display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, 0.52fr); gap: clamp(36px, 6vw, 86px); align-items: end; padding-bottom: 46px; border-bottom: 1px solid rgba(9, 12, 9, 0.34); }
 .legacy-client-field > header h2 { max-width: 1020px; margin: 18px 0 0; font-size: clamp(46px, 6.4vw, 96px); line-height: 0.89; letter-spacing: -0.067em; }
 .legacy-client-field > header > p { max-width: 620px; margin: 0; font-size: clamp(17px, 1.65vw, 23px); line-height: 1.52; letter-spacing: -0.018em; }
-.legacy-client-mark-grid { margin: 36px 0 0; padding: 0; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 1px; border: 1px solid rgba(9, 12, 9, 0.3); background: rgba(9, 12, 9, 0.3); list-style: none; }
-.legacy-client-mark-grid li { min-width: 0; aspect-ratio: 1; padding: 12px; display: grid; grid-template-rows: minmax(0, 1fr) auto; gap: 6px; background: var(--paper); }
+.legacy-client-mark-guide { margin: 28px 0 12px; display: flex; justify-content: space-between; gap: 20px; font: 9px/1.4 var(--font-geist-mono), monospace; letter-spacing: 0.09em; text-transform: uppercase; }
+.legacy-client-mark-guide > span:last-child { display: none; }
+.legacy-client-mark-viewport { border: 1px solid rgba(9, 12, 9, 0.3); background: rgba(9, 12, 9, 0.3); }
+.legacy-client-mark-viewport:focus-visible { outline: 3px solid var(--orange); outline-offset: 4px; }
+.legacy-client-mark-grid { margin: 0; padding: 0; display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 1px; background: rgba(9, 12, 9, 0.3); list-style: none; }
+.legacy-client-mark-grid li { min-width: 0; aspect-ratio: 4 / 3; padding: 10px; display: grid; grid-template-rows: minmax(0, 1fr) auto; gap: 5px; background: var(--paper); }
 .legacy-client-mark-grid img { width: 100%; height: 100%; display: block; object-fit: contain; filter: grayscale(1) contrast(1.08); mix-blend-mode: multiply; opacity: 0.72; }
 .legacy-client-mark-grid span { overflow-wrap: anywhere; text-align: center; font: 8px/1.25 var(--font-geist-mono), monospace; letter-spacing: 0.07em; text-transform: uppercase; }
-.legacy-client-mark-grid .legacy-client-mark-note { padding: clamp(16px, 2vw, 26px); display: flex; align-items: flex-end; background: var(--ink); color: var(--paper); }
+.legacy-client-mark-grid .legacy-client-mark-note { grid-column: span 5; aspect-ratio: auto; padding: clamp(18px, 2vw, 28px); display: flex; align-items: flex-end; background: var(--ink); color: var(--paper); }
 .legacy-client-mark-note p { margin: 0; font-size: clamp(15px, 1.4vw, 21px); line-height: 1.25; letter-spacing: -0.025em; }
 .earlier-experience-groups { margin: 70px 0 42px; display: grid; grid-template-columns: 1fr 1fr; gap: 1px; border: 1px solid rgba(9, 12, 9, 0.3); background: rgba(9, 12, 9, 0.3); }
 .earlier-experience-groups article { padding: clamp(26px, 4vw, 50px); background: var(--paper); }
@@ -776,7 +780,8 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .legacy-working-archive > header, .legacy-client-field > header { grid-template-columns: 1fr; align-items: start; }
   .legacy-working-grid > li { grid-column: span 6; }
   .legacy-working-grid > .legacy-working-item-wide { grid-column: span 12; }
-  .legacy-client-mark-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .legacy-client-mark-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .legacy-client-mark-grid .legacy-client-mark-note { grid-column: span 5; min-height: 110px; }
   .experience-preview-heading { grid-template-columns: 1fr; }
   .capabilities-preview-heading { grid-template-columns: 1fr; }
   .about-story-heading { grid-template-columns: 1fr; }
@@ -909,8 +914,15 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .legacy-inspector-copy h2 { font-size: clamp(42px, 14vw, 64px); overflow-wrap: anywhere; }
   .legacy-inspector-nav { position: sticky; bottom: 0; min-height: 64px; padding: 10px 12px max(10px, env(safe-area-inset-bottom)); grid-template-columns: 1fr 1fr; background: var(--ink); }
   .legacy-inspector-nav p { display: none; }
-  .legacy-client-mark-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .legacy-client-mark-grid li { padding: 8px; }
+  .legacy-client-mark-guide { margin-top: 22px; }
+  .legacy-client-mark-guide > span:last-child { display: inline; }
+  .legacy-client-mark-viewport { overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; scrollbar-width: thin; scrollbar-color: var(--ink) rgba(9, 12, 9, 0.16); -webkit-overflow-scrolling: touch; }
+  .legacy-client-mark-viewport::-webkit-scrollbar { height: 8px; }
+  .legacy-client-mark-viewport::-webkit-scrollbar-track { background: rgba(9, 12, 9, 0.16); }
+  .legacy-client-mark-viewport::-webkit-scrollbar-thumb { background: var(--ink); }
+  .legacy-client-mark-grid { width: max-content; grid-template-columns: none; grid-template-rows: repeat(3, 96px); grid-auto-columns: 112px; grid-auto-flow: column; }
+  .legacy-client-mark-grid li { aspect-ratio: auto; padding: 8px; scroll-snap-align: start; }
+  .legacy-client-mark-grid .legacy-client-mark-note { min-height: 0; grid-column: span 2; grid-row: span 3; padding: 20px; }
   .recommendation-card { grid-template-columns: 1fr; }
   .recommendation-index { display: none; }
   .recommendation-card footer { grid-column: auto; }
