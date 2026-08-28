@@ -567,7 +567,10 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .experience-number { padding-top: 8px; }
 .experience-card h2 { margin: 16px 0 8px; font-size: clamp(48px, 6vw, 88px); line-height: 0.9; letter-spacing: -0.065em; }
 .experience-card h3 { margin: 0; font-size: 19px; font-weight: 500; }
+.experience-card > div:last-child { display: flex; flex-direction: column; align-items: flex-start; }
 .experience-card > div:last-child > p { max-width: 680px; margin: 0; font-size: 19px; line-height: 1.55; }
+.career-index-return { width: fit-content; margin-top: 26px; padding: 8px 0 5px; border-bottom: 1px solid currentColor; font: 9px/1.2 var(--font-geist-mono), monospace; letter-spacing: 0.09em; text-transform: uppercase; transition: color 160ms ease, border-color 160ms ease; }
+.career-index-return:hover, .career-index-return:focus-visible { color: #16832c; border-color: #16832c; outline: 0; }
 .earlier-experience { padding: clamp(82px, 10vw, 150px) var(--page-padding); background: rgba(98, 232, 121, 0.93); color: var(--ink); }
 .earlier-experience > header { display: grid; grid-template-columns: minmax(160px, 0.27fr) 1fr; gap: 48px; }
 .earlier-experience > header h2 { max-width: 1100px; margin: 0; font-size: clamp(48px, 7vw, 106px); line-height: 0.91; letter-spacing: -0.067em; }
@@ -584,6 +587,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .career-foundation-highlights { margin: 34px 0 30px; padding: 0; list-style: none; border-top: 1px solid rgba(9, 12, 9, 0.24); }
 .career-foundation-highlights li { padding: 10px 0; border-bottom: 1px solid rgba(9, 12, 9, 0.24); font-size: 14px; line-height: 1.4; }
 .career-foundation-list .inline-tags { margin-top: auto; padding-top: 8px; }
+.career-foundation-list .career-index-return { align-self: flex-end; }
 .legacy-client-field { margin-top: clamp(76px, 9vw, 132px); }
 .legacy-client-field > header { display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, 0.52fr); gap: clamp(36px, 6vw, 86px); align-items: end; padding-bottom: 46px; border-bottom: 1px solid rgba(9, 12, 9, 0.34); }
 .legacy-client-field > header h2 { max-width: 1020px; margin: 18px 0 0; font-size: clamp(46px, 6.4vw, 96px); line-height: 0.89; letter-spacing: -0.067em; }
