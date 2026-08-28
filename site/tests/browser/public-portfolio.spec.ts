@@ -318,6 +318,58 @@ test('career portrait connects the homepage to the selected archive and earlier 
   await expect(page.getByRole('link', { name: 'Archive', exact: true }).first()).toBeVisible();
 });
 
+test('homepage career portrait shows exact archival proof with mobile browsing', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/');
+  const proof = page.locator('.career-portrait-proof');
+  const rail = proof.locator(':scope > ol');
+  const links = proof.getByRole('link');
+
+  await expect(proof.getByText('From the archive')).toBeVisible();
+  await expect(proof.getByText('Swipe to browse')).toBeVisible();
+  await expect(links).toHaveCount(4);
+  expect(await links.evaluateAll((elements) => elements.map((element) => element.getAttribute('href')))).toEqual([
+    '/archive#legacy-dkny',
+    '/archive#legacy-gm-defense',
+    '/archive#legacy-gtd-iq',
+    '/archive#legacy-ufc-japan',
+  ]);
+  await expect(proof.locator('strong')).toHaveText([
+    'DKNY e-commerce',
+    'GM Defense immersive training',
+    'GTD IQ application',
+    'UFC Japan social takeover',
+  ]);
+
+  const images = proof.locator('img');
+  await expect(images).toHaveCount(4);
+  for (let index = 0; index < 4; index += 1) {
+    const image = images.nth(index);
+    await image.scrollIntoViewIfNeeded();
+    const dimensions = await image.evaluate((element) => {
+      const source = element as HTMLImageElement;
+      return { naturalWidth: source.naturalWidth, renderedWidth: source.getBoundingClientRect().width };
+    });
+    expect(dimensions.naturalWidth).toBe(240);
+    expect(dimensions.renderedWidth).toBeLessThanOrEqual(240);
+  }
+
+  const railDimensions = await rail.evaluate((element) => ({
+    clientWidth: element.clientWidth,
+    scrollWidth: element.scrollWidth,
+  }));
+  expect(railDimensions.scrollWidth).toBeGreaterThan(railDimensions.clientWidth);
+  await rail.evaluate((element) => { element.scrollLeft = 0; });
+  await links.last().focus();
+  await expect.poll(() => rail.evaluate((element) => element.scrollLeft)).toBeGreaterThan(0);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+
+  await links.first().focus();
+  await links.first().press('Enter');
+  await page.waitForURL(/\/archive#legacy-dkny$/);
+  await expect(page.locator('#legacy-dkny')).toBeInViewport({ timeout: 5000 });
+});
+
 test('recommendations read as professional testimony without publication audit copy', async ({ page }) => {
   await page.goto('/recommendations');
   await expectCorePageContract(page);
@@ -576,6 +628,11 @@ test('server-rendered navigation and content remain available without JavaScript
   await expect(page.getByRole('link', { name: 'View selected work' })).toBeVisible();
   await expect(page.getByRole('region', { name: 'Let’s talk about what you’re building.' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Start a conversation' })).toHaveAttribute('href', '/contact');
+  const homepageArchiveLink = page.getByRole('link', { name: 'View DKNY e-commerce in the archive' });
+  await expect(homepageArchiveLink).toHaveAttribute('href', '/archive#legacy-dkny');
+  await homepageArchiveLink.click();
+  await page.waitForURL(/\/archive#legacy-dkny$/);
+  await expect(page.locator('#legacy-dkny')).toHaveCount(1);
 
   await page.goto('/recommendations');
   await expect(page.getByRole('navigation', { name: 'Recommendation highlights' })).toBeVisible();
