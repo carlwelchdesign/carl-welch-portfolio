@@ -571,7 +571,15 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .capability-index-return:hover, .capability-index-return:focus-visible { color: var(--chapter-tone); border-color: var(--chapter-tone); outline: 0; }
 .capability-method { padding: clamp(86px, 10vw, 150px) var(--page-padding); display: grid; grid-template-columns: 0.32fr 1fr; gap: 48px; background: rgba(9, 12, 9, 0.94); color: var(--paper); }
 .capability-method h2 { max-width: 900px; margin: 0; font-size: clamp(48px, 7vw, 108px); line-height: 0.9; letter-spacing: -0.07em; }
-.capability-method > p:last-child { grid-column: 2; max-width: 780px; margin: 14px 0 0; color: var(--muted); font-size: 18px; line-height: 1.55; }
+.capability-method > p:not(.eyebrow) { grid-column: 2; max-width: 780px; margin: 14px 0 0; color: var(--muted); font-size: 18px; line-height: 1.55; }
+.capability-next-steps { grid-column: 2; margin-top: 4px; }
+.capability-next-steps ul { margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; border: 1px solid var(--line); background: var(--line); list-style: none; }
+.capability-next-steps a { min-height: 210px; padding: 24px; display: flex; flex-direction: column; background: var(--paper); color: var(--ink); transition: background 180ms ease, color 180ms ease; }
+.capability-next-steps a:hover, .capability-next-steps a:focus-visible { background: var(--orange); color: var(--ink); outline: 3px solid var(--paper); outline-offset: -4px; }
+.capability-next-steps a > span:first-child { font: 9px/1.45 var(--font-geist-mono), monospace; letter-spacing: 0.09em; text-transform: uppercase; opacity: 0.68; }
+.capability-next-steps strong { margin-top: 28px; font-size: clamp(26px, 2.7vw, 40px); line-height: 0.96; letter-spacing: -0.05em; overflow-wrap: anywhere; }
+.capability-next-steps a > span:last-child { margin-top: auto; align-self: flex-end; font: 18px/1 var(--font-geist-mono), monospace; }
+.archive, #public-repositories { scroll-margin-top: 72px; }
 
 .contact-panel { padding: clamp(78px, 10vw, 150px) var(--page-padding); background: rgba(255, 67, 56, 0.92); color: var(--ink); }
 .contact-email { padding-bottom: clamp(64px, 8vw, 120px); border-bottom: 1px solid rgba(9, 12, 9, 0.34); }
@@ -1059,7 +1067,9 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .capability-number { display: none; }
   .capability-practices, .capability-evidence { padding-left: 0; }
   .capability-method { grid-template-columns: 1fr; }
-  .capability-method > p:last-child { grid-column: auto; }
+  .capability-method > p:not(.eyebrow), .capability-next-steps { grid-column: auto; }
+  .capability-next-steps ul { grid-template-columns: 1fr; }
+  .capability-next-steps a { min-height: 150px; }
   .experience-card { grid-template-columns: 1fr; }
   .experience-number { display: none; }
   .recommendation-review { gap: 32px; }

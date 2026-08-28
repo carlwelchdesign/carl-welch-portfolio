@@ -135,6 +135,31 @@ export default function CapabilitiesPage() {
             <p>
               Open a case study for the full technical story, visit a repository to inspect the code, or read what managers, teammates, and clients have said about working with Carl.
             </p>
+            <nav className="capability-next-steps" aria-label="Explore proof behind the capabilities">
+              <ul>
+                <li>
+                  <Link href="/work#work-index">
+                    <span>Detailed product stories</span>
+                    <strong>Case studies</strong>
+                    <span aria-hidden="true">→</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/work#public-repositories">
+                    <span>Selected public code</span>
+                    <strong>Repositories</strong>
+                    <span aria-hidden="true">→</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/recommendations#recommendation-highlights">
+                    <span>Managers, peers, and clients</span>
+                    <strong>Recommendations</strong>
+                    <span aria-hidden="true">→</span>
+                  </Link>
+                </li>
+              </ul>
+            </nav>
           </section>
         </main>
       </PageFrame>

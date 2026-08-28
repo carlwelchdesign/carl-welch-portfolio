@@ -65,7 +65,7 @@ export function ArchiveExplorer() {
   }, [deferredQuery, filter, language, sort]);
 
   return (
-    <section className="archive" aria-labelledby="archive-title">
+    <section id="public-repositories" className="archive" aria-labelledby="archive-title">
       <header className="archive-heading">
         <div>
           <p className="eyebrow">GitHub archive</p>
