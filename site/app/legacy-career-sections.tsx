@@ -34,19 +34,32 @@ export function LegacyClientField() {
         tabIndex={0}
       >
         <ul className="legacy-client-mark-grid" aria-label="Organizations and properties represented in Carl's professional archive">
-          {legacyClientMarks.map((mark) => (
-            <li key={mark.name}>
-              <Image
-                src={mark.src}
-                alt=""
-                width={170}
-                height={170}
-                sizes="(max-width: 720px) 112px, (max-width: 1000px) 20vw, 12.5vw"
-                unoptimized
-              />
-              <span>{mark.name}</span>
-            </li>
-          ))}
+          {legacyClientMarks.map((mark) => {
+            const content = (
+              <>
+                <Image
+                  src={mark.src}
+                  alt=""
+                  width={170}
+                  height={170}
+                  sizes="(max-width: 720px) 112px, (max-width: 1000px) 20vw, 12.5vw"
+                  unoptimized
+                />
+                <span className="legacy-client-mark-name">{mark.name}</span>
+              </>
+            );
+
+            return (
+              <li key={mark.name} className={mark.archiveHref ? 'legacy-client-mark-linked' : undefined}>
+                {mark.archiveHref ? (
+                  <a href={mark.archiveHref} aria-label={`View archived work related to ${mark.name}`}>
+                    {content}
+                    <span className="legacy-client-mark-link-cue" aria-hidden="true">↗</span>
+                  </a>
+                ) : content}
+              </li>
+            );
+          })}
           <li className="legacy-client-mark-note">
             <p>Work across direct roles, agencies, studios, and client teams.</p>
           </li>

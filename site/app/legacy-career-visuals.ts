@@ -16,6 +16,7 @@ export type LegacyWorkImage = {
 export type LegacyClientMark = {
   name: string;
   src: `/archive/client-marks/${string}`;
+  archiveHref?: `/archive#legacy-${string}`;
 };
 
 export const legacyWorkImages: LegacyWorkImage[] = [
@@ -236,22 +237,22 @@ export const legacyClientMarks: LegacyClientMark[] = [
   { name: 'Boeing', src: '/archive/client-marks/boeing.jpg' },
   { name: 'CBS', src: '/archive/client-marks/cbs.jpg' },
   { name: 'CNBC', src: '/archive/client-marks/cnbc.jpg' },
-  { name: 'Coca-Cola', src: '/archive/client-marks/cocacola.jpg' },
+  { name: 'Coca-Cola', src: '/archive/client-marks/cocacola.jpg', archiveHref: '/archive#legacy-coca-cola' },
   { name: 'David Lynch Foundation', src: '/archive/client-marks/davidlynch.jpg' },
   { name: 'DC Comics', src: '/archive/client-marks/dc.jpg' },
-  { name: 'DKNY', src: '/archive/client-marks/dkny.jpg' },
+  { name: 'DKNY', src: '/archive/client-marks/dkny.jpg', archiveHref: '/archive#legacy-dkny' },
   { name: 'E! Entertainment', src: '/archive/client-marks/eent.jpg' },
   { name: 'Fernet-Branca', src: '/archive/client-marks/fernet.jpg' },
   { name: 'Fox Entertainment', src: '/archive/client-marks/foxent.jpg' },
-  { name: 'General Dynamics', src: '/archive/client-marks/gd.jpg' },
-  { name: 'Getting Things Done', src: '/archive/client-marks/gtd.jpg' },
+  { name: 'General Dynamics', src: '/archive/client-marks/gd.jpg', archiveHref: '/archive#legacy-gm-defense' },
+  { name: 'Getting Things Done', src: '/archive/client-marks/gtd.jpg', archiveHref: '/archive#legacy-gtd-iq' },
   { name: 'GWAR', src: '/archive/client-marks/gwar.jpg' },
   { name: 'HGTV', src: '/archive/client-marks/hgtv.jpg' },
   { name: 'International Monetary Fund', src: '/archive/client-marks/imf.jpg' },
   { name: 'Lifetime', src: '/archive/client-marks/lifetime.jpg' },
   { name: 'Lucasfilm', src: '/archive/client-marks/lucasfilms.jpg' },
-  { name: 'Magento', src: '/archive/client-marks/magento.jpg' },
-  { name: 'Metal Gear Solid', src: '/archive/client-marks/metalgear.jpg' },
+  { name: 'Magento', src: '/archive/client-marks/magento.jpg', archiveHref: '/archive#legacy-magento-social' },
+  { name: 'Metal Gear Solid', src: '/archive/client-marks/metalgear.jpg', archiveHref: '/archive#legacy-metal-gear-solid' },
   { name: 'Mundet', src: '/archive/client-marks/mundet.jpg' },
   { name: 'NBC', src: '/archive/client-marks/nbc.jpg' },
   { name: 'NFL', src: '/archive/client-marks/nfl.jpg' },
@@ -262,9 +263,9 @@ export const legacyClientMarks: LegacyClientMark[] = [
   { name: 'TASER', src: '/archive/client-marks/taser.jpg' },
   { name: 'THQ', src: '/archive/client-marks/thq.jpg' },
   { name: 'TV Land', src: '/archive/client-marks/tvland.jpg' },
-  { name: 'UFC', src: '/archive/client-marks/ufc.jpg' },
-  { name: 'USA Network', src: '/archive/client-marks/usa.jpg' },
+  { name: 'UFC', src: '/archive/client-marks/ufc.jpg', archiveHref: '/archive#legacy-ufc-japan' },
+  { name: 'USA Network', src: '/archive/client-marks/usa.jpg', archiveHref: '/archive#legacy-political-animals' },
   { name: 'Walt Disney Pictures', src: '/archive/client-marks/waltdisney.jpg' },
-  { name: 'Warner Bros.', src: '/archive/client-marks/wb.jpg' },
+  { name: 'Warner Bros.', src: '/archive/client-marks/wb.jpg', archiveHref: '/archive#legacy-300' },
   { name: 'World Bank', src: '/archive/client-marks/worldbank.jpg' },
 ];
