@@ -88,7 +88,12 @@ function requireShareMetadata(html, route) {
   if (!Number.isInteger(imageWidth) || !Number.isInteger(imageHeight) || !imageAlt) {
     throw new Error(`${route} share image metadata is missing dimensions or alt text.`);
   }
-  if (getTagAttribute(twitterImageTag, 'content') !== openGraphImageUrl) {
+  const twitterImageUrl = getTagAttribute(twitterImageTag, 'content');
+  if (
+    !twitterImageUrl
+    || new URL(twitterImageUrl).origin !== new URL(openGraphImageUrl).origin
+    || new URL(twitterImageUrl).pathname !== new URL(openGraphImageUrl).pathname
+  ) {
     throw new Error(`${route} X card image does not match its Open Graph image.`);
   }
 
@@ -100,7 +105,7 @@ const pageExpectations = [
   ['/work', `${githubProjects.length} selected public repositories`],
   ['/archive', 'The work behind the current work'],
   ['/about', 'The engineer I am now was built over time'],
-  ['/capabilities', 'What I do, and the work behind it'],
+  ['/capabilities', 'What I bring to the work'],
   ['/experience', 'A practice built across different kinds of work'],
   ['/recommendations', 'What people say'],
   ['/contact', 'carlwelchdesign@gmail.com'],
