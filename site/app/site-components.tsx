@@ -406,7 +406,8 @@ export function ProjectChapter({ project, priority = false }: { project: Portfol
             ))}
           </ul>
           <Link className="primary-action dark-action" href={`/work/${project.slug}`}>
-            View project <span aria-hidden="true">→</span>
+            <span>View {project.name}</span>
+            <span aria-hidden="true">→</span>
           </Link>
         </Reveal>
 

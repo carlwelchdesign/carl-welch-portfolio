@@ -49,6 +49,8 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .hero-actions { margin-top: 44px; display: flex; flex-wrap: wrap; align-items: center; gap: 24px 30px; }
 .primary-action { width: max-content; min-height: 48px; padding: 0 18px; display: inline-flex; align-items: center; gap: 22px; justify-content: space-between; border: 1px solid currentColor; font-family: var(--font-geist-mono), monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.11em; text-transform: uppercase; transition: background 180ms ease, color 180ms ease; }
 .primary-action:hover { background: var(--paper); color: var(--ink); }
+.project-overview .primary-action { max-width: 100%; width: fit-content; }
+.project-overview .primary-action > span:first-child { min-width: 0; overflow-wrap: anywhere; }
 .text-action { font-family: var(--font-geist-mono), monospace; font-size: 11px; letter-spacing: 0.11em; text-transform: uppercase; }
 .hero-field { position: relative; min-height: 620px; overflow: hidden; }
 .hero-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(9, 12, 9, 0.18) 1px, transparent 1px), linear-gradient(90deg, rgba(9, 12, 9, 0.18) 1px, transparent 1px); background-size: 96px 96px; }
