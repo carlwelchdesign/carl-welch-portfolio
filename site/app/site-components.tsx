@@ -374,6 +374,9 @@ export function ProjectChapter({ project, priority = false }: { project: Portfol
         <div className="project-meta">
           <span>{project.category}</span>
           <span>{project.status}</span>
+          <Link className="project-index-return" href="#work-index">
+            Project index <span aria-hidden="true">↑</span>
+          </Link>
         </div>
       </Reveal>
 
@@ -441,7 +444,7 @@ export function ProjectChapter({ project, priority = false }: { project: Portfol
 
 export function WorkIndex({ items }: { items: PortfolioProject[] }) {
   return (
-    <nav className="work-index" aria-labelledby="work-index-title">
+    <nav id="work-index" className="work-index" aria-labelledby="work-index-title">
       <Reveal className="work-index-heading">
         <p className="eyebrow">Jump to a case study</p>
         <h2 id="work-index-title">Project index</h2>
