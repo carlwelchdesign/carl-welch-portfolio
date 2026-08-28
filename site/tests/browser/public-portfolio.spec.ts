@@ -327,7 +327,7 @@ test('fixed mobile targets preserve author attribution and architecture disclosu
   await page.goto('/recommendations');
   const authorLinks = page.locator('.recommendation-card footer strong a');
   await expect(authorLinks).toHaveCount(13);
-  await expect(page.getByRole('link', { name: 'David Allen', exact: true })).toHaveAttribute(
+  await expect(page.getByRole('link', { name: 'David Allen on LinkedIn (opens in a new tab)', exact: true })).toHaveAttribute(
     'href',
     'https://www.linkedin.com/in/davidallengtd/',
   );
