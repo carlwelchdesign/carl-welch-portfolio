@@ -631,6 +631,31 @@ test('work overview shows every flagship gallery preview without broken media', 
   }
 });
 
+test('flagship case studies publish unique 1200×630 social cards', async ({ page }) => {
+  for (const slug of [
+    'job-search-os',
+    'flight-tracker-ai',
+    'wave-factory-essentials',
+    'supraconscious-avatar-ai',
+    'argent-matchmaking',
+  ]) {
+    await page.goto(`/work/${slug}`);
+    const expectedImage = `http://localhost:3000/social/${slug}.png`;
+    await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', expectedImage);
+    await expect(page.locator('meta[property="og:image:width"]')).toHaveAttribute('content', '1200');
+    await expect(page.locator('meta[property="og:image:height"]')).toHaveAttribute('content', '630');
+    await expect(page.locator('meta[name="twitter:image"]')).toHaveAttribute('content', expectedImage);
+
+    const response = await page.request.get(`/social/${slug}.png`);
+    expect(response.status()).toBe(200);
+    expect(response.headers()['content-type']).toContain('image/png');
+    const image = await response.body();
+    const dimensions = new DataView(image.buffer, image.byteOffset, image.byteLength);
+    expect(dimensions.getUint32(16)).toBe(1200);
+    expect(dimensions.getUint32(20)).toBe(630);
+  }
+});
+
 test('Flight Tracker leads with the dense live regional traffic workspace', async ({ page }) => {
   await page.goto('/work');
   const chapter = page.getByRole('heading', { level: 2, name: 'Flight Tracker AI' }).locator('xpath=ancestor::section');

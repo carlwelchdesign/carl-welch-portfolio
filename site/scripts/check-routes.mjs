@@ -55,7 +55,11 @@ function requireShareMetadata(html, route) {
   const openGraphUrlTag = getTag(html, 'meta', 'property', 'og:url');
   const openGraphTitleTag = getTag(html, 'meta', 'property', 'og:title');
   const openGraphImageTag = getTag(html, 'meta', 'property', 'og:image');
+  const openGraphImageWidthTag = getTag(html, 'meta', 'property', 'og:image:width');
+  const openGraphImageHeightTag = getTag(html, 'meta', 'property', 'og:image:height');
+  const openGraphImageAltTag = getTag(html, 'meta', 'property', 'og:image:alt');
   const twitterTitleTag = getTag(html, 'meta', 'name', 'twitter:title');
+  const twitterImageTag = getTag(html, 'meta', 'name', 'twitter:image');
   const documentTitle = html.match(/<title>([^<]+)<\/title>/)?.[1];
 
   if (getTagAttribute(canonicalTag, 'href') !== canonicalUrl) {
@@ -78,7 +82,17 @@ function requireShareMetadata(html, route) {
     throw new Error(`${route} Open Graph image does not use the configured public origin.`);
   }
 
-  return openGraphImageUrl;
+  const imageWidth = Number.parseInt(getTagAttribute(openGraphImageWidthTag, 'content') || '', 10);
+  const imageHeight = Number.parseInt(getTagAttribute(openGraphImageHeightTag, 'content') || '', 10);
+  const imageAlt = getTagAttribute(openGraphImageAltTag, 'content');
+  if (!Number.isInteger(imageWidth) || !Number.isInteger(imageHeight) || !imageAlt) {
+    throw new Error(`${route} share image metadata is missing dimensions or alt text.`);
+  }
+  if (getTagAttribute(twitterImageTag, 'content') !== openGraphImageUrl) {
+    throw new Error(`${route} X card image does not match its Open Graph image.`);
+  }
+
+  return { url: openGraphImageUrl, width: imageWidth, height: imageHeight };
 }
 
 const pageExpectations = [
@@ -92,7 +106,7 @@ const pageExpectations = [
   ['/contact', 'carlwelchdesign@gmail.com'],
   ...projects.map((project) => [`/work/${project.slug}`, project.name]),
 ];
-const shareImageUrls = new Set();
+const shareImages = new Map();
 const routeEvidenceIds = new Map([
   ['/experience', experience.map((role) => role.sourceId)],
   ['/capabilities', capabilities.flatMap((capability) => capability.evidence.map((evidence) => evidence.id))],
@@ -111,7 +125,8 @@ await Promise.all(pageExpectations.map(async ([route, expectedText]) => {
   const response = await fetchRoute(route);
   const html = await response.text();
   requirePageStructure(html, route);
-  shareImageUrls.add(requireShareMetadata(html, route));
+  const shareImage = requireShareMetadata(html, route);
+  shareImages.set(shareImage.url, shareImage);
   requireText(html, expectedText, route);
   for (const evidenceId of routeEvidenceIds.get(route) || []) {
     requireText(html, `id="${evidenceAnchorId(evidenceId)}"`, route);
@@ -147,18 +162,32 @@ await Promise.all(pageExpectations.map(async ([route, expectedText]) => {
   if (route.startsWith('/work/')) {
     requireText(html, 'id="evidence"', route);
     const project = projects.find((item) => route === `/work/${item.slug}`);
+    if (shareImage.url !== `${baseUrl}/social/${project?.slug}.png`) {
+      throw new Error(`${route} does not use its dedicated project share card.`);
+    }
+    if (shareImage.width !== 1200 || shareImage.height !== 630) {
+      throw new Error(`${route} share metadata is not 1200×630.`);
+    }
     requireText(html, 'id="project-gallery"', route);
     for (const item of project?.gallery ?? []) requireText(html, item.src, route);
   }
 }));
 
-await Promise.all([...shareImageUrls].map(async (imageUrl) => {
+await Promise.all([...shareImages.values()].map(async ({ url: imageUrl, width, height }) => {
   const response = await fetch(imageUrl);
   if (response.status !== 200) {
     throw new Error(`${imageUrl} returned ${response.status}; expected 200.`);
   }
   if (!response.headers.get('content-type')?.startsWith('image/')) {
     throw new Error(`${imageUrl} did not return an image content type.`);
+  }
+  const bytes = Buffer.from(await response.arrayBuffer());
+  if (bytes.subarray(1, 4).toString('ascii') === 'PNG') {
+    const actualWidth = bytes.readUInt32BE(16);
+    const actualHeight = bytes.readUInt32BE(20);
+    if (actualWidth !== width || actualHeight !== height) {
+      throw new Error(`${imageUrl} is ${actualWidth}×${actualHeight}; metadata declares ${width}×${height}.`);
+    }
   }
 }));
 
