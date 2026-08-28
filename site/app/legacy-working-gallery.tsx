@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useRef, useState } from 'react';
+import { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
 import type { KeyboardEvent } from 'react';
 import type { LegacyWorkImage } from './legacy-career-visuals';
 
@@ -9,12 +9,28 @@ type LegacyWorkingGalleryProps = {
   items: LegacyWorkImage[];
 };
 
+function matchesWorkingArchiveQuery(item: LegacyWorkImage, query: string) {
+  if (!query) return true;
+
+  const searchable = [item.project, item.context, item.contribution, ...item.technology]
+    .join(' ')
+    .toLocaleLowerCase();
+
+  return searchable.includes(query.toLocaleLowerCase());
+}
+
 export function LegacyWorkingGallery({ items }: LegacyWorkingGalleryProps) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [query, setQuery] = useState('');
+  const deferredQuery = useDeferredValue(query.trim());
   const gridRef = useRef<HTMLOListElement>(null);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const openerRef = useRef<HTMLButtonElement | null>(null);
-  const activeItem = activeIndex === null ? null : items[activeIndex];
+  const visibleItems = useMemo(
+    () => items.filter((item) => matchesWorkingArchiveQuery(item, deferredQuery)),
+    [deferredQuery, items],
+  );
+  const activeItem = activeIndex === null ? null : visibleItems[activeIndex];
 
   useEffect(() => {
     gridRef.current?.setAttribute('data-inspector-ready', 'true');
@@ -41,8 +57,8 @@ export function LegacyWorkingGallery({ items }: LegacyWorkingGalleryProps) {
 
   function moveInspector(direction: -1 | 1) {
     setActiveIndex((current) => {
-      if (current === null) return null;
-      return (current + direction + items.length) % items.length;
+      if (current === null || visibleItems.length === 0) return null;
+      return (current + direction + visibleItems.length) % visibleItems.length;
     });
   }
 
@@ -59,8 +75,28 @@ export function LegacyWorkingGallery({ items }: LegacyWorkingGalleryProps) {
 
   return (
     <>
+      <div className="legacy-working-controls" role="search" aria-label="Search the visual working archive">
+        <label>
+          <span>Find work by project, organization, or technology</span>
+          <input
+            type="search"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder="Try General Dynamics, fashion, PHP, or animation"
+          />
+        </label>
+        <div className="legacy-working-results">
+          <p aria-live="polite">{visibleItems.length} of {items.length} projects</p>
+          {query ? (
+            <button type="button" onClick={() => setQuery('')}>
+              Clear search
+            </button>
+          ) : null}
+        </div>
+      </div>
+
       <ol ref={gridRef} className="legacy-working-grid" data-inspector-ready="false">
-        {items.map((item, index) => (
+        {visibleItems.map((item, index) => (
           <li
             key={item.id}
             id={item.id}
@@ -105,6 +141,14 @@ export function LegacyWorkingGallery({ items }: LegacyWorkingGalleryProps) {
         ))}
       </ol>
 
+      {visibleItems.length === 0 ? (
+        <div className="legacy-working-empty">
+          <p className="eyebrow">Nothing matched that search</p>
+          <h3>Try a project, organization, discipline, or technology.</h3>
+          <button type="button" onClick={() => setQuery('')}>Show all {items.length} projects</button>
+        </div>
+      ) : null}
+
       <dialog
         ref={dialogRef}
         className="legacy-inspector"
@@ -115,7 +159,7 @@ export function LegacyWorkingGallery({ items }: LegacyWorkingGalleryProps) {
         {activeItem && activeIndex !== null ? (
           <div className="legacy-inspector-shell">
             <header className="legacy-inspector-header">
-              <p>Archive selection / {String(activeIndex + 1).padStart(2, '0')} of {items.length}</p>
+              <p>Archive selection / {String(activeIndex + 1).padStart(2, '0')} of {visibleItems.length}</p>
               <button type="button" onClick={closeInspector} autoFocus>
                 Close <span aria-hidden="true">×</span>
               </button>
