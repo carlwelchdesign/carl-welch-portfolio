@@ -692,6 +692,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .recommendation-card footer time { margin-top: auto; }
 .recommendation-highlights-return { width: fit-content; padding: 8px 0 5px; border-bottom: 1px solid currentColor; font: 9px/1.2 var(--font-geist-mono), monospace; letter-spacing: 0.09em; text-transform: uppercase; transition: color 160ms ease, border-color 160ms ease; }
 .recommendation-highlights-return:hover, .recommendation-highlights-return:focus-visible { color: #a82820; border-color: #a82820; outline: 0; }
+.project-index-return, .archive-map-return, .capability-index-return, .career-index-return, .recommendation-highlights-return { min-width: 44px; min-height: 44px; padding-top: 0; padding-bottom: 0; display: flex; align-items: center; }
 .recommendation-closing { padding: clamp(82px, 10vw, 150px) var(--page-padding); display: grid; grid-template-columns: minmax(150px, 0.28fr) minmax(0, 1fr); gap: 48px; background: var(--green); color: var(--ink); }
 .recommendation-closing > div { max-width: 1080px; }
 .recommendation-closing h2 { margin: 0; font-size: clamp(52px, 7.5vw, 116px); line-height: 0.88; letter-spacing: -0.07em; }
