@@ -62,9 +62,10 @@ export function CareerPortraitPreview() {
       </Reveal>
       <div className="career-portrait-layout">
         <p>
-          Before product systems and applied AI, there were interactive studio sites,
-          motion, client deadlines, technical environments, and teams learning new tools
-          together. That earlier work still shapes how I engineer products now.
+          Before React and applied AI, I was managing designers and programmers, building
+          PHP and MySQL applications, prototyping immersive training systems, shaping
+          Evidence.com workflows, and, yes, making graphics for GWAR. That earlier work still
+          shapes how I engineer products now.
         </p>
         <ol className="career-portrait-steps">
           {careerChapters.map((chapter) => (
