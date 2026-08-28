@@ -655,6 +655,34 @@ for (const [route, nextProject, nextHref] of [
   });
 }
 
+test('flagship project links identify destinations and new-tab behavior', async ({ page }) => {
+  for (const project of projects) {
+    await page.goto(`/work/${project.slug}`);
+    const links = page.getByRole('region', { name: 'Project links' });
+    const repository = links.getByRole('link', {
+      name: `Open ${project.name} repository on GitHub (opens in a new tab)`,
+      exact: true,
+    });
+
+    await expect(repository).toHaveAttribute('href', project.repositoryUrl);
+    await expect(repository).toHaveAttribute('target', '_blank');
+    await expect(repository).toHaveAttribute('rel', /\bnoreferrer\b/);
+
+    if (project.liveUrl) {
+      const liveDemo = links.getByRole('link', {
+        name: `Open ${project.name} live demo (opens in a new tab)`,
+        exact: true,
+      });
+      await expect(liveDemo).toHaveAttribute('href', project.liveUrl);
+      await expect(liveDemo).toHaveAttribute('target', '_blank');
+      await expect(liveDemo).toHaveAttribute('rel', /\bnoreferrer\b/);
+      await expect(links.getByRole('link')).toHaveCount(2);
+    } else {
+      await expect(links.getByRole('link')).toHaveCount(1);
+    }
+  }
+});
+
 test('career portrait connects the homepage to the selected archive and earlier record', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByRole('heading', { name: 'The current work has a history.' })).toBeVisible();
@@ -890,6 +918,31 @@ test('contact page invites conversation without internal policy copy', async ({ 
   await expect(page.locator('body')).not.toContainText(
     /current résumé|no form|message collection|visitor message is stored|reviewed public evidence only|public corpus/i,
   );
+});
+
+test('professional profile links identify destinations and new-tab behavior', async ({ page }) => {
+  await page.goto('/contact');
+
+  const expectedLinks = [
+    ['Open Carl Welch’s LinkedIn profile (opens in a new tab)', 'https://www.linkedin.com/in/carlwelch'],
+    ['Open Carl Welch’s GitHub profile (opens in a new tab)', 'https://github.com/carlwelchdesign'],
+    ['Carl Welch on LinkedIn (opens in a new tab)', 'https://www.linkedin.com/in/carlwelch'],
+    ['Carl Welch on GitHub (opens in a new tab)', 'https://github.com/carlwelchdesign'],
+  ] as const;
+
+  for (const [name, href] of expectedLinks) {
+    const link = page.getByRole('link', { name, exact: true });
+    await expect(link).toHaveAttribute('href', href);
+    await expect(link).toHaveAttribute('target', '_blank');
+    await expect(link).toHaveAttribute('rel', /\bnoreferrer\b/);
+  }
+
+  const emailLinks = page.locator('a[href^="mailto:"]');
+  const resumeLinks = page.locator('a[download]');
+  await expect(emailLinks).toHaveCount(2);
+  await expect(resumeLinks).toHaveCount(2);
+  expect(await emailLinks.evaluateAll((links) => links.every((link) => !link.hasAttribute('target')))).toBe(true);
+  expect(await resumeLinks.evaluateAll((links) => links.every((link) => !link.hasAttribute('target')))).toBe(true);
 });
 
 test('capability index maps every strength to supporting work', async ({ page }) => {
