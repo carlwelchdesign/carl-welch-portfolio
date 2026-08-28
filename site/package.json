@@ -16,6 +16,8 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
     "check:metadata": "node scripts/check-metadata.mjs",
+    "generate:social-cards": "node scripts/generate-project-share-cards.mjs",
+    "check:social-cards": "node scripts/generate-project-share-cards.mjs --check",
     "check:content": "node scripts/check-content.mjs",
     "check:no-em-dashes": "node scripts/check-no-em-dashes.mjs",
     "check:editorial": "node scripts/check-editorial-boundaries.mjs",
@@ -49,7 +51,7 @@
     "check:routes": "node scripts/check-routes.mjs",
     "check:production": "node scripts/check-production-origin.mjs",
     "check:browser": "playwright test",
-    "check": "pnpm typecheck && pnpm lint && pnpm check:metadata && pnpm check:content && pnpm check:no-em-dashes && pnpm check:editorial && pnpm check:archive && pnpm check:legacy-visuals && pnpm check:archive-recovery && pnpm check:release-decisions && pnpm check:github-sync && pnpm check:jolene-contract && pnpm check:jolene-job-fit && pnpm check:jolene-bff && pnpm check:jolene-avatar-brief && pnpm check:analytics && pnpm check:sentry-privacy && pnpm check:sentry-asana && pnpm check:sentry-reconciliation && pnpm check:sentry-release && pnpm check:sentry-operations && pnpm check:research-protocol && pnpm check:recovery && pnpm check:security-headers && pnpm check:release-readiness && pnpm build && pnpm check:no-public-sourcemaps"
+    "check": "pnpm typecheck && pnpm lint && pnpm check:metadata && pnpm check:social-cards && pnpm check:content && pnpm check:no-em-dashes && pnpm check:editorial && pnpm check:archive && pnpm check:legacy-visuals && pnpm check:archive-recovery && pnpm check:release-decisions && pnpm check:github-sync && pnpm check:jolene-contract && pnpm check:jolene-job-fit && pnpm check:jolene-bff && pnpm check:jolene-avatar-brief && pnpm check:analytics && pnpm check:sentry-privacy && pnpm check:sentry-asana && pnpm check:sentry-reconciliation && pnpm check:sentry-release && pnpm check:sentry-operations && pnpm check:research-protocol && pnpm check:recovery && pnpm check:security-headers && pnpm check:release-readiness && pnpm build && pnpm check:no-public-sourcemaps"
   },
   "dependencies": {
     "@sentry/browser": "10.71.0",

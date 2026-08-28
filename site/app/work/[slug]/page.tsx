@@ -27,10 +27,10 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
     description: project.summary,
     path: `/work/${project.slug}`,
     image: {
-      url: project.image.src,
-      width: project.image.width,
-      height: project.image.height,
-      alt: project.image.alt,
+      url: `/social/${project.slug}.png`,
+      width: 1200,
+      height: 630,
+      alt: `${project.name} case study by Carl Welch`,
     },
   });
 }
