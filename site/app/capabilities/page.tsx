@@ -123,7 +123,7 @@ export default function CapabilitiesPage() {
                     <Link
                       className="capability-index-return"
                       href="#capability-index"
-                      aria-label={`Return to capability index from ${capability.name}`}
+                      aria-label={`Return to Capability index from ${capability.name}`}
                     >
                       Capability index <span aria-hidden="true">↑</span>
                     </Link>

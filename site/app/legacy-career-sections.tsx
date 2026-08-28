@@ -92,7 +92,7 @@ export function LegacyWorkingArchive() {
       <Link
         className="archive-map-return"
         href="#archive-map"
-        aria-label="Return to archive map from working archive"
+        aria-label="Return to Archive map from working archive"
       >
         Archive map <span aria-hidden="true">↑</span>
       </Link>

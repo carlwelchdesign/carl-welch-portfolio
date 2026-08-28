@@ -87,7 +87,7 @@ export default function ExperiencePage() {
                       <Link
                         className="career-index-return"
                         href="#career-index"
-                        aria-label={`Return to career index from ${item.role} at ${item.company}`}
+                        aria-label={`Return to Career index from ${item.role} at ${item.company}`}
                       >
                         Career index <span aria-hidden="true">↑</span>
                       </Link>
@@ -127,7 +127,7 @@ export default function ExperiencePage() {
                     <Link
                       className="career-index-return"
                       href="#career-index"
-                      aria-label={`Return to career index from ${foundation.title}`}
+                      aria-label={`Return to Career index from ${foundation.title}`}
                     >
                       Career index <span aria-hidden="true">↑</span>
                     </Link>

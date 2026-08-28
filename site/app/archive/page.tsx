@@ -71,7 +71,7 @@ export default function ArchivePage() {
             <Link
               className="archive-map-return"
               href="#archive-map"
-              aria-label="Return to archive map from career portrait"
+              aria-label="Return to Archive map from career portrait"
             >
               Archive map <span aria-hidden="true">↑</span>
             </Link>
@@ -102,7 +102,7 @@ export default function ArchivePage() {
               <Link
                 className="archive-map-return"
                 href="#archive-map"
-                aria-label="Return to archive map from career chapters"
+                aria-label="Return to Archive map from career chapters"
               >
                 Archive map <span aria-hidden="true">↑</span>
               </Link>
@@ -139,7 +139,7 @@ export default function ArchivePage() {
             <Link
               className="archive-map-return"
               href="#archive-map"
-              aria-label="Return to archive map from earlier professional work"
+              aria-label="Return to Archive map from earlier professional work"
             >
               Archive map <span aria-hidden="true">↑</span>
             </Link>

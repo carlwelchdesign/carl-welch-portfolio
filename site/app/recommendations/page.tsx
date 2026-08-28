@@ -113,7 +113,7 @@ export default function RecommendationsPage() {
                     <a
                       className="recommendation-highlights-return"
                       href="#recommendation-highlights"
-                      aria-label={`Return to recommendation highlights from ${recommendation.name}, ${recommendation.date}`}
+                      aria-label={`Return to Recommendation highlights from ${recommendation.name}, ${recommendation.date}`}
                     >
                       Recommendation highlights <span aria-hidden="true">↑</span>
                     </a>
