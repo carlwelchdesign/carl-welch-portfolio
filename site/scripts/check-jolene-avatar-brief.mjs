@@ -10,12 +10,13 @@ for (const phrase of [
   'No partial alpha',
   'Four artist studies',
   'imageSmoothingEnabled = false',
-  'Carl must select one study',
+  'must still select one study',
   'must not be copied into the repository',
   '“Howdy, folks!”',
   'Play at most once per browser session',
   'The character is a reveal, not a persistent page ornament',
   'prefers-reduced-motion: reduce',
+  'approved this brief and its peek-reveal choreography on August 28, 2026',
 ]) {
   assert.ok(brief.includes(phrase), `Avatar brief is missing: ${phrase}`);
 }
@@ -47,6 +48,10 @@ assert.equal(contract.motion.transformOnly, true);
 assert.equal(contract.motion.layoutShiftAllowed, false);
 assert.equal(contract.motion.continuousIdleMotionAllowed, false);
 assert.equal(contract.motion.reducedMotionBehavior, 'launcher_only');
+assert.equal(contract.status, 'brief_approved_studies_authorized');
+assert.equal(contract.approval.briefApproved, true);
+assert.equal(contract.approval.briefApprovedAt, '2026-08-28');
+assert.equal(contract.approval.reviewStudiesAuthorized, true);
 assert.equal(contract.approval.masterSelected, false);
 assert.equal(contract.approval.productionAuthorized, false);
 assert.equal(contract.approval.publicUseAuthorized, false);

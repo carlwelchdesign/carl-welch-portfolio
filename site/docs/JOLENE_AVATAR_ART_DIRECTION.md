@@ -1,6 +1,6 @@
 # Jolene avatar production art direction
 
-Status: review-ready brief. No artwork in this document is approved for production or public use.
+Status: approved by Carl on August 28, 2026. The four artist studies are authorized for review; no study, production sprite, or public avatar is approved yet.
 
 ## Creative target
 
@@ -110,7 +110,7 @@ The cameo uses CSS transforms and discrete sprite frames only. It must not cause
 
 ### Implementation boundary
 
-This brief defines the motion contract but does not authorize implementation or artwork. The later integration ticket owns session persistence, lifecycle cancellation, chat state wiring, browser tests, and performance validation. The avatar renderer remains independent of Jolene's answer service and does not imply awareness, presence, or agency.
+This brief defines the motion contract and authorizes the four review studies only. It does not authorize production sprite work, renderer implementation, or public use. The later integration ticket owns session persistence, lifecycle cancellation, chat state wiring, browser tests, and performance validation. The avatar renderer remains independent of Jolene's answer service and does not imply awareness, presence, or agency.
 
 ## Four artist studies
 
@@ -159,6 +159,6 @@ Score silhouette, recognizable cues, warmth, professionalism, readability, anima
 
 ## Approval and rights boundary
 
-Carl must select one study and approve its silhouette, likeness cues, palette, grid, anchors, and expression language before sprite-sheet production. The current assumption is personal, noncommercial portfolio exploration. Public deployment of a recognizable living person's likeness remains a separate rights and launch decision; documenting that boundary does not change the visual brief or substitute a different character.
+Carl approved this brief and its peek-reveal choreography on August 28, 2026. He must still select one study and approve its silhouette, likeness cues, palette, grid, anchors, and expression language before sprite-sheet production. The current assumption is personal, noncommercial portfolio exploration. Public deployment of a recognizable living person's likeness remains a separate rights and launch decision; documenting that boundary does not change the visual brief or substitute a different character.
 
 Rejected generated concepts are reference evidence only. They must not be copied into the repository, traced, rigged, or treated as production art.

@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "status": "awaiting_carl_approval",
+  "status": "brief_approved_studies_authorized",
   "nativeFrame": { "width": 48, "height": 56 },
   "occupiedBounds": { "maxWidth": 44, "maxHeight": 54, "edgePadding": 2 },
   "displayScales": [3, 4],
@@ -60,6 +60,9 @@
     "reducedMotionBehavior": "launcher_only"
   },
   "approval": {
+    "briefApproved": true,
+    "briefApprovedAt": "2026-08-28",
+    "reviewStudiesAuthorized": true,
     "masterSelected": false,
     "productionAuthorized": false,
     "publicUseAuthorized": false
