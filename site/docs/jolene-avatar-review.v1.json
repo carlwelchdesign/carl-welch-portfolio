@@ -2,7 +2,7 @@
   "schemaVersion": "1.0.0",
   "status": "candidate_pending_carl_approval",
   "boardPath": "/docs/review/jolene-avatar-state-board.png",
-  "boardSha256": "809ce0e89b200023b9a80c10d4378bacd9e19658c81c0f78529bc91ef85dd6ad",
+  "boardSha256": "c4929f4033b57b5b6b98940714f08420f33b0ca3f2c006ae5f341f62725d7cc8",
   "stateCount": 10,
   "stateOrder": [
     "idle",
@@ -24,7 +24,7 @@
     "evidence",
     "idle"
   ],
-  "offlinePresentation": "poised, lightly humorous shrug; never sad, angry, or apologetic",
+  "offlinePresentation": "poised, lightly humorous pause; never sad, angry, or apologetic",
   "reducedMotion": {
     "animate": false,
     "useStateRepresentativeFrame": true,

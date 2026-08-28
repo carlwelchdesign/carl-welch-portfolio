@@ -118,12 +118,12 @@
     "maximumSettleMs": 600
   },
   "rendering": {
-    "masterPath": "/jolene/jolene-country-host-master.png",
+    "masterPath": "/jolene/sprites/rig-base-v2.png?v=83aecc00ed86",
     "frameCatalogPath": "/app/jolene/avatar-frame-catalog.v1.json",
-    "masterSha256": "4e437fd64b3997bd834bb2310ed0175e75d9958c27871d4ae3857a18fc82cc6f",
-    "frameWidth": 1162,
-    "frameHeight": 1353,
-    "anchor": { "x": 563, "y": 1261 },
+    "masterSha256": "83aecc00ed864b9d8864464901a33581a2cf3672885c3816a49fc877b53b9cc4",
+    "frameWidth": 320,
+    "frameHeight": 460,
+    "anchor": { "x": 160, "y": 448 },
     "staticFallbackFrame": "idle-0",
     "imageSmoothing": false,
     "aspectRatioLocked": true

@@ -49,6 +49,8 @@ for (const state of contract.states) {
 
 assert.deepEqual(contract.interruption.alwaysInterruptFor, ['offline']);
 assert.equal(catalog.imageRendering, 'pixelated');
+assert.equal(new Set(Object.values(catalog.frames).map(({ assetPath }) => assetPath)).size, 1, 'All runtime states must preserve one character identity source.');
+assert.ok(contract.rendering.masterPath.includes('/jolene/sprites/rig-base-v2.png'), 'Fallback must use the corrected rig base.');
 
 for (const signal of Object.keys(contract.signals)) {
   assert.ok(chatSource.includes(`'${signal}'`) || ['answer_finished'].includes(signal), `Chat does not drive avatar signal ${signal}.`);

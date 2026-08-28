@@ -13,13 +13,13 @@ const sha256 = (bytes) => createHash('sha256').update(bytes).digest('hex');
 const labels = Object.freeze({
   idle: ['IDLE', 'ready, warm, breathing'],
   blink: ['BLINK', 'quick natural reset'],
-  greet: ['GREET', 'wave + “Howdy, folks!”'],
-  listen: ['LISTEN', 'attentive head tilt'],
-  think: ['THINK', 'considering the evidence'],
-  speak: ['SPEAK', 'confident conversation'],
-  evidence: ['EVIDENCE', 'points to cited support'],
-  boundary: ['BOUNDARY', 'kind, firm, no bluffing'],
-  offline: ['OFFLINE', 'poised, knowing shrug'],
+  greet: ['GREET', 'warm pop-in + “Howdy, folks!”'],
+  listen: ['LISTEN', 'settles into attention'],
+  think: ['THINK', 'subtle considering lean'],
+  speak: ['SPEAK', 'confident conversational cadence'],
+  evidence: ['EVIDENCE', 'small directional emphasis'],
+  boundary: ['BOUNDARY', 'calm, firm, no bluffing'],
+  offline: ['OFFLINE', 'poised pause with humor'],
   rest: ['REST', 'quiet after inactivity'],
 });
 
@@ -80,7 +80,7 @@ try {
           <div>
             <div class="eyebrow">PORT-AVATAR-003 / MOTION REVIEW</div>
             <h1>Jolene state ensemble</h1>
-            <p class="subhead">Country Host master, ten readable behaviors, one poised and humorous failure response.</p>
+            <p class="subhead">One locked character identity, ten behaviors driven by motion, no generated pose redraws.</p>
           </div>
           <div class="stamp">LOCAL REVIEW ONLY<br />NO DEPLOYMENT</div>
         </header>
@@ -119,7 +119,7 @@ const reviewManifest = {
   stateCount: cards.length,
   stateOrder: cards.map(({ state }) => state),
   primarySequence: ['greet', 'listen', 'think', 'speak', 'evidence', 'idle'],
-  offlinePresentation: 'poised, lightly humorous shrug; never sad, angry, or apologetic',
+  offlinePresentation: 'poised, lightly humorous pause; never sad, angry, or apologetic',
   reducedMotion: stateContract.reducedMotion,
   publicUseAuthorized: false,
 };
@@ -130,7 +130,7 @@ if (checkOnly) {
   assert.equal(sha256(committedBoardBytes), sha256(screenshotBytes), 'Avatar review board is stale.');
   assert.deepEqual(committedReviewManifest, reviewManifest);
   assert.deepEqual(cards.map(({ state }) => state), stateContract.states);
-  assert.equal(cards.find(({ state }) => state === 'offline').note, 'poised, knowing shrug');
+  assert.equal(cards.find(({ state }) => state === 'offline').note, 'poised pause with humor');
   console.log('Jolene avatar review passed: 10-state board, primary transition path, poised offline response, and accessibility rules.');
 } else {
   await mkdir(new URL('../docs/review/', import.meta.url), { recursive: true });

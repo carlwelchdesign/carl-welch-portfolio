@@ -2,26 +2,13 @@
   "schemaVersion": "1.0.0",
   "status": "candidate_pending_visual_approval",
   "source": {
-    "path": "/jolene/review/country-host-state-sheet-source.png",
-    "sha256": "2ffdc3b27d75d91cbb3961f08e19940e2ca43f2e0edf625ec4a2e865fd0dd84f",
-    "width": 1402,
-    "height": 1122,
+    "path": "/jolene/review/country-host-rig-master-v2-source.png",
+    "sha256": "f5b262475980f94985c4817921702ea374b35f6fb8896b6ba6ad178645366d22",
+    "width": 1168,
+    "height": 1347,
     "generatedWith": "built-in image generation edit mode"
   },
-  "overrides": [
-    {
-      "state": "greet",
-      "path": "/jolene/review/country-host-greet-face-corrected-source.png",
-      "sha256": "8f4b705aeb200f44dab4f330c339fdf775db9af4907fe5a0029dc44f11e8159c",
-      "intent": "correct eye whites and replace the isolated tooth with an even friendly smile"
-    },
-    {
-      "state": "offline",
-      "path": "/jolene/review/country-host-offline-shrug-source.png",
-      "sha256": "28962cb39d32dcefaf5732775e45533d6de1a81a9dddf0b47c4a8033adc32851",
-      "intent": "poised, lightly humorous shrug; never sad, angry, or apologetic"
-    }
-  ],
+  "overrides": [],
   "layout": {
     "frameWidth": 320,
     "frameHeight": 460,
@@ -36,207 +23,218 @@
   "frames": [
     {
       "state": "idle",
-      "path": "/jolene/sprites/idle.png",
-      "sha256": "64a6197d6c3924d2191f118de255844bd3f39d108459050ae21fef590e28e6d9",
+      "path": "/jolene/sprites/rig-base-v2.png",
+      "sha256": "83aecc00ed864b9d8864464901a33581a2cf3672885c3816a49fc877b53b9cc4",
       "width": 320,
       "height": 460,
-      "opaquePixels": 76724,
+      "opaquePixels": 93701,
       "sourceBounds": {
-        "x": 20,
-        "y": 113,
-        "width": 245,
-        "height": 403
+        "x": 216,
+        "y": 89,
+        "width": 724,
+        "height": 1146
       },
       "drawBounds": {
-        "x": 38,
-        "y": 45,
-        "width": 245,
-        "height": 403
-      }
+        "x": 21,
+        "y": 8,
+        "width": 278,
+        "height": 440
+      },
+      "removedInteriorMattePixels": 7204
     },
     {
       "state": "blink",
-      "path": "/jolene/sprites/blink.png",
-      "sha256": "36e5bbe543d0c3a1260987e01426a545a9f9b523008070d0098df111768d7475",
+      "path": "/jolene/sprites/rig-base-v2.png",
+      "sha256": "83aecc00ed864b9d8864464901a33581a2cf3672885c3816a49fc877b53b9cc4",
       "width": 320,
       "height": 460,
-      "opaquePixels": 76897,
+      "opaquePixels": 93701,
       "sourceBounds": {
-        "x": 0,
-        "y": 112,
-        "width": 243,
-        "height": 404
+        "x": 216,
+        "y": 89,
+        "width": 724,
+        "height": 1146
       },
       "drawBounds": {
-        "x": 39,
-        "y": 44,
-        "width": 243,
-        "height": 404
-      }
+        "x": 21,
+        "y": 8,
+        "width": 278,
+        "height": 440
+      },
+      "removedInteriorMattePixels": 7204
     },
     {
       "state": "greet",
-      "path": "/jolene/sprites/greet.png",
-      "sha256": "b28f7e3da3cf97be09555a0a1604ea60274061cd5cf581c681da86843625be8c",
+      "path": "/jolene/sprites/rig-base-v2.png",
+      "sha256": "83aecc00ed864b9d8864464901a33581a2cf3672885c3816a49fc877b53b9cc4",
       "width": 320,
       "height": 460,
-      "opaquePixels": 92358,
+      "opaquePixels": 93701,
       "sourceBounds": {
-        "x": 109,
-        "y": 146,
-        "width": 832,
-        "height": 1322
+        "x": 216,
+        "y": 89,
+        "width": 724,
+        "height": 1146
       },
       "drawBounds": {
-        "x": 22,
+        "x": 21,
         "y": 8,
-        "width": 277,
+        "width": 278,
         "height": 440
-      }
+      },
+      "removedInteriorMattePixels": 7204
     },
     {
       "state": "listen",
-      "path": "/jolene/sprites/listen.png",
-      "sha256": "83033712e2663f29b112cfd6e036273d53b1a31f02c840cb5f71f83c8d0e9224",
+      "path": "/jolene/sprites/rig-base-v2.png",
+      "sha256": "83aecc00ed864b9d8864464901a33581a2cf3672885c3816a49fc877b53b9cc4",
       "width": 320,
       "height": 460,
-      "opaquePixels": 76004,
+      "opaquePixels": 93701,
       "sourceBounds": {
-        "x": 15,
-        "y": 113,
-        "width": 241,
-        "height": 403
+        "x": 216,
+        "y": 89,
+        "width": 724,
+        "height": 1146
       },
       "drawBounds": {
-        "x": 40,
-        "y": 45,
-        "width": 241,
-        "height": 403
-      }
+        "x": 21,
+        "y": 8,
+        "width": 278,
+        "height": 440
+      },
+      "removedInteriorMattePixels": 7204
     },
     {
       "state": "think",
-      "path": "/jolene/sprites/think.png",
-      "sha256": "51cc6471d7032cd48204887a845eb665547accd931e7e4c678c2a429d15d1791",
+      "path": "/jolene/sprites/rig-base-v2.png",
+      "sha256": "83aecc00ed864b9d8864464901a33581a2cf3672885c3816a49fc877b53b9cc4",
       "width": 320,
       "height": 460,
-      "opaquePixels": 77634,
+      "opaquePixels": 93701,
       "sourceBounds": {
-        "x": 0,
-        "y": 111,
-        "width": 257,
-        "height": 405
+        "x": 216,
+        "y": 89,
+        "width": 724,
+        "height": 1146
       },
       "drawBounds": {
-        "x": 32,
-        "y": 43,
-        "width": 257,
-        "height": 405
-      }
+        "x": 21,
+        "y": 8,
+        "width": 278,
+        "height": 440
+      },
+      "removedInteriorMattePixels": 7204
     },
     {
       "state": "speak",
-      "path": "/jolene/sprites/speak.png",
-      "sha256": "241b3f0a335f8312cdc1d78b0805ab4c647dc7ca1632d39d13bb6eb99309c699",
+      "path": "/jolene/sprites/rig-base-v2.png",
+      "sha256": "83aecc00ed864b9d8864464901a33581a2cf3672885c3816a49fc877b53b9cc4",
       "width": 320,
       "height": 460,
-      "opaquePixels": 79182,
+      "opaquePixels": 93701,
       "sourceBounds": {
-        "x": 18,
-        "y": 46,
-        "width": 262,
-        "height": 408
+        "x": 216,
+        "y": 89,
+        "width": 724,
+        "height": 1146
       },
       "drawBounds": {
-        "x": 29,
-        "y": 40,
-        "width": 262,
-        "height": 408
-      }
+        "x": 21,
+        "y": 8,
+        "width": 278,
+        "height": 440
+      },
+      "removedInteriorMattePixels": 7204
     },
     {
       "state": "evidence",
-      "path": "/jolene/sprites/evidence.png",
-      "sha256": "c6d15a756133e2b4c41213bef383aafab787a1d1dac02cc4a1866c8b470ad367",
+      "path": "/jolene/sprites/rig-base-v2.png",
+      "sha256": "83aecc00ed864b9d8864464901a33581a2cf3672885c3816a49fc877b53b9cc4",
       "width": 320,
       "height": 460,
-      "opaquePixels": 72138,
+      "opaquePixels": 93701,
       "sourceBounds": {
-        "x": 28,
-        "y": 51,
-        "width": 249,
-        "height": 403
+        "x": 216,
+        "y": 89,
+        "width": 724,
+        "height": 1146
       },
       "drawBounds": {
-        "x": 36,
-        "y": 45,
-        "width": 249,
-        "height": 403
-      }
+        "x": 21,
+        "y": 8,
+        "width": 278,
+        "height": 440
+      },
+      "removedInteriorMattePixels": 7204
     },
     {
       "state": "boundary",
-      "path": "/jolene/sprites/boundary.png",
-      "sha256": "70598759517865bc38809836115063e18127806723d019ab14f327c35b82bfb0",
+      "path": "/jolene/sprites/rig-base-v2.png",
+      "sha256": "83aecc00ed864b9d8864464901a33581a2cf3672885c3816a49fc877b53b9cc4",
       "width": 320,
       "height": 460,
-      "opaquePixels": 72827,
+      "opaquePixels": 93701,
       "sourceBounds": {
-        "x": 20,
-        "y": 51,
-        "width": 233,
-        "height": 403
+        "x": 216,
+        "y": 89,
+        "width": 724,
+        "height": 1146
       },
       "drawBounds": {
-        "x": 44,
-        "y": 45,
-        "width": 233,
-        "height": 403
-      }
+        "x": 21,
+        "y": 8,
+        "width": 278,
+        "height": 440
+      },
+      "removedInteriorMattePixels": 7204
     },
     {
       "state": "offline",
-      "path": "/jolene/sprites/offline.png",
-      "sha256": "d6f2cf61681627542afed2dc6a6a97d89d11bb8e5335b3dbff594df1bc4dd806",
+      "path": "/jolene/sprites/rig-base-v2.png",
+      "sha256": "83aecc00ed864b9d8864464901a33581a2cf3672885c3816a49fc877b53b9cc4",
       "width": 320,
       "height": 460,
-      "opaquePixels": 53952,
+      "opaquePixels": 93701,
       "sourceBounds": {
-        "x": 3,
-        "y": 185,
-        "width": 1041,
-        "height": 1140
+        "x": 216,
+        "y": 89,
+        "width": 724,
+        "height": 1146
       },
       "drawBounds": {
-        "x": 8,
-        "y": 115,
-        "width": 304,
-        "height": 333
-      }
+        "x": 21,
+        "y": 8,
+        "width": 278,
+        "height": 440
+      },
+      "removedInteriorMattePixels": 7204
     },
     {
       "state": "rest",
-      "path": "/jolene/sprites/rest.png",
-      "sha256": "999a36306564f10265b5f710a472416dfa540a032d4b5fa02582740043afe0a9",
+      "path": "/jolene/sprites/rig-base-v2.png",
+      "sha256": "83aecc00ed864b9d8864464901a33581a2cf3672885c3816a49fc877b53b9cc4",
       "width": 320,
       "height": 460,
-      "opaquePixels": 73898,
+      "opaquePixels": 93701,
       "sourceBounds": {
-        "x": 0,
-        "y": 51,
-        "width": 225,
-        "height": 403
+        "x": 216,
+        "y": 89,
+        "width": 724,
+        "height": 1146
       },
       "drawBounds": {
-        "x": 48,
-        "y": 45,
-        "width": 225,
-        "height": 403
-      }
+        "x": 21,
+        "y": 8,
+        "width": 278,
+        "height": 440
+      },
+      "removedInteriorMattePixels": 7204
     }
   ],
   "invariants": {
-    "approvedMasterUnmodified": true,
+    "singleIdentitySource": true,
+    "generatedPoseRedrawsUsedAtRuntime": false,
     "providerIndependent": true,
     "approvedForPublicUse": false
   }

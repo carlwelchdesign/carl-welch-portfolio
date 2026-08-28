@@ -3,9 +3,7 @@ import { createHash } from 'node:crypto';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { chromium } from '@playwright/test';
 
-const sourceUrl = new URL('../public/jolene/review/country-host-state-sheet-source.png', import.meta.url);
-const greetOverrideUrl = new URL('../public/jolene/review/country-host-greet-face-corrected-source.png', import.meta.url);
-const offlineOverrideUrl = new URL('../public/jolene/review/country-host-offline-shrug-source.png', import.meta.url);
+const sourceUrl = new URL('../public/jolene/review/country-host-rig-master-v2-source.png', import.meta.url);
 const outputDirectoryUrl = new URL('../public/jolene/sprites/', import.meta.url);
 const manifestUrl = new URL('../docs/jolene-avatar-sprites.v1.json', import.meta.url);
 const frameCatalogUrl = new URL('../app/jolene/avatar-frame-catalog.v1.json', import.meta.url);
@@ -45,215 +43,6 @@ const frameTransforms = Object.freeze({
 
 const sha256 = (bytes) => createHash('sha256').update(bytes).digest('hex');
 const asDataUrl = (bytes) => `data:image/png;base64,${bytes.toString('base64')}`;
-
-async function buildFrames(sourceBytes) {
-  const browser = await chromium.launch({ headless: true });
-
-  try {
-    const page = await browser.newPage();
-    return await page.evaluate(async ({ source, states, targetWidth, targetHeight, targetAnchor, policy, outline }) => {
-      const image = new Image();
-      image.src = source;
-      await image.decode();
-
-      const sourceCanvas = document.createElement('canvas');
-      sourceCanvas.width = image.width;
-      sourceCanvas.height = image.height;
-      const sourceContext = sourceCanvas.getContext('2d', { willReadFrequently: true });
-      if (!sourceContext) throw new Error('Canvas 2D context is unavailable.');
-      sourceContext.drawImage(image, 0, 0);
-
-      const imageData = sourceContext.getImageData(0, 0, image.width, image.height);
-      const { data, width, height } = imageData;
-      const isBackground = (pixelIndex) => {
-        const offset = pixelIndex * 4;
-        const red = data[offset];
-        const green = data[offset + 1];
-        const blue = data[offset + 2];
-        const minimum = Math.min(red, green, blue);
-        const maximum = Math.max(red, green, blue);
-        return minimum >= policy.minimumChannel && maximum - minimum <= policy.maximumChannelSpread;
-      };
-
-      for (let pixelIndex = 0; pixelIndex < width * height; pixelIndex += 1) {
-        if (isBackground(pixelIndex)) data[pixelIndex * 4 + 3] = 0;
-      }
-
-      sourceContext.putImageData(imageData, 0, 0);
-
-      const frames = [];
-      const columns = 5;
-      const rows = 2;
-      for (let index = 0; index < states.length; index += 1) {
-        const column = index % columns;
-        const row = Math.floor(index / columns);
-        const sourceLeft = Math.round(column * width / columns);
-        const sourceRight = Math.round((column + 1) * width / columns);
-        const sourceTop = Math.round(row * height / rows);
-        const sourceBottom = Math.round((row + 1) * height / rows);
-        const cellWidth = sourceRight - sourceLeft;
-        const cellHeight = sourceBottom - sourceTop;
-        const cellData = sourceContext.getImageData(sourceLeft, sourceTop, cellWidth, cellHeight);
-
-        const cellVisited = new Uint8Array(cellWidth * cellHeight);
-        const cellQueue = new Int32Array(cellWidth * cellHeight);
-        for (let seed = 0; seed < cellWidth * cellHeight; seed += 1) {
-          if (cellVisited[seed] || cellData.data[seed * 4 + 3] === 0) continue;
-          let componentHead = 0;
-          let componentTail = 0;
-          let touchesSideOrTop = false;
-          cellQueue[componentTail++] = seed;
-          cellVisited[seed] = 1;
-
-          while (componentHead < componentTail) {
-            const pixelIndex = cellQueue[componentHead++];
-            const x = pixelIndex % cellWidth;
-            const y = Math.floor(pixelIndex / cellWidth);
-            if (x === 0 || x === cellWidth - 1 || y === 0) touchesSideOrTop = true;
-            const neighbors = [
-              x > 0 ? pixelIndex - 1 : -1,
-              x < cellWidth - 1 ? pixelIndex + 1 : -1,
-              y > 0 ? pixelIndex - cellWidth : -1,
-              y < cellHeight - 1 ? pixelIndex + cellWidth : -1,
-            ];
-            for (const neighbor of neighbors) {
-              if (neighbor >= 0 && !cellVisited[neighbor] && cellData.data[neighbor * 4 + 3] > 0) {
-                cellVisited[neighbor] = 1;
-                cellQueue[componentTail++] = neighbor;
-              }
-            }
-          }
-
-          if (touchesSideOrTop && componentTail < 10_000) {
-            for (let componentIndex = 0; componentIndex < componentTail; componentIndex += 1) {
-              cellData.data[cellQueue[componentIndex] * 4 + 3] = 0;
-            }
-          }
-        }
-
-        let minimumX = cellWidth;
-        let minimumY = cellHeight;
-        let maximumX = -1;
-        let maximumY = -1;
-        for (let pixelIndex = 0; pixelIndex < cellWidth * cellHeight; pixelIndex += 1) {
-          if (cellData.data[pixelIndex * 4 + 3] === 0) continue;
-          const x = pixelIndex % cellWidth;
-          const y = Math.floor(pixelIndex / cellWidth);
-          minimumX = Math.min(minimumX, x);
-          minimumY = Math.min(minimumY, y);
-          maximumX = Math.max(maximumX, x);
-          maximumY = Math.max(maximumY, y);
-        }
-        if (maximumX < minimumX || maximumY < minimumY) throw new Error(`No character pixels found for ${states[index]}.`);
-
-        const cleanCellCanvas = document.createElement('canvas');
-        cleanCellCanvas.width = cellWidth;
-        cleanCellCanvas.height = cellHeight;
-        const cleanCellContext = cleanCellCanvas.getContext('2d');
-        if (!cleanCellContext) throw new Error('Clean cell canvas context is unavailable.');
-        cleanCellContext.putImageData(cellData, 0, 0);
-
-        const boundsWidth = maximumX - minimumX + 1;
-        const boundsHeight = maximumY - minimumY + 1;
-        const scale = Math.min(1, (targetWidth - 16) / boundsWidth, (targetHeight - 20) / boundsHeight);
-        const drawWidth = Math.max(1, Math.round(boundsWidth * scale));
-        const drawHeight = Math.max(1, Math.round(boundsHeight * scale));
-        const destinationX = Math.round(targetAnchor.x - drawWidth / 2);
-        const destinationY = targetAnchor.y - drawHeight;
-
-        const frameCanvas = document.createElement('canvas');
-        frameCanvas.width = targetWidth;
-        frameCanvas.height = targetHeight;
-        const frameContext = frameCanvas.getContext('2d', { willReadFrequently: true });
-        if (!frameContext) throw new Error('Frame canvas context is unavailable.');
-        frameContext.imageSmoothingEnabled = false;
-        frameContext.drawImage(
-          cleanCellCanvas,
-          minimumX,
-          minimumY,
-          boundsWidth,
-          boundsHeight,
-          destinationX,
-          destinationY,
-          drawWidth,
-          drawHeight,
-        );
-
-        const framedImage = frameContext.getImageData(0, 0, targetWidth, targetHeight);
-        const framedPixels = framedImage.data;
-        // Generated source sheets carry a neutral gray/white matte around the
-        // character. Remove only matte-colored pixels connected to transparency.
-        // Repeating the pass clears a multi-pixel fringe without touching white
-        // shirt, eye, or teeth details enclosed by opaque character pixels.
-        let removedMattePixel = true;
-        while (removedMattePixel) {
-          removedMattePixel = false;
-          const pixelsToRemove = [];
-          for (let y = 1; y < targetHeight - 1; y += 1) {
-            for (let x = 1; x < targetWidth - 1; x += 1) {
-              const pixelIndex = y * targetWidth + x;
-              const offset = pixelIndex * 4;
-              if (framedPixels[offset + 3] === 0) continue;
-              const minimum = Math.min(framedPixels[offset], framedPixels[offset + 1], framedPixels[offset + 2]);
-              const maximum = Math.max(framedPixels[offset], framedPixels[offset + 1], framedPixels[offset + 2]);
-              if (minimum < outline.minimumChannel || maximum - minimum > outline.maximumChannelSpread) continue;
-              const neighbors = [pixelIndex - 1, pixelIndex + 1, pixelIndex - targetWidth, pixelIndex + targetWidth];
-              if (neighbors.some((neighbor) => framedPixels[neighbor * 4 + 3] === 0)) pixelsToRemove.push(offset);
-            }
-          }
-          for (const offset of pixelsToRemove) {
-            framedPixels[offset + 3] = 0;
-            removedMattePixel = true;
-          }
-        }
-
-        const outerPerimeter = [];
-        for (let y = 1; y < targetHeight - 1; y += 1) {
-          for (let x = 1; x < targetWidth - 1; x += 1) {
-            const pixelIndex = y * targetWidth + x;
-            const offset = pixelIndex * 4;
-            if (framedPixels[offset + 3] === 0) continue;
-            const neighbors = [pixelIndex - 1, pixelIndex + 1, pixelIndex - targetWidth, pixelIndex + targetWidth];
-            if (neighbors.some((neighbor) => framedPixels[neighbor * 4 + 3] === 0)) outerPerimeter.push(offset);
-          }
-        }
-        for (const offset of outerPerimeter) {
-          framedPixels[offset] = 0;
-          framedPixels[offset + 1] = 0;
-          framedPixels[offset + 2] = 0;
-          framedPixels[offset + 3] = 0;
-        }
-        frameContext.putImageData(framedImage, 0, 0);
-
-        const framePixels = framedPixels;
-        let opaquePixels = 0;
-        for (let pixelIndex = 3; pixelIndex < framePixels.length; pixelIndex += 4) {
-          if (framePixels[pixelIndex] > 0) opaquePixels += 1;
-        }
-
-        frames.push({
-          state: states[index],
-          dataUrl: frameCanvas.toDataURL('image/png'),
-          opaquePixels,
-          sourceBounds: { x: minimumX, y: minimumY, width: boundsWidth, height: boundsHeight },
-          drawBounds: { x: destinationX, y: destinationY, width: drawWidth, height: drawHeight },
-        });
-      }
-
-      return { sourceWidth: width, sourceHeight: height, frames };
-    }, {
-      source: asDataUrl(sourceBytes),
-      states: stateNames,
-      targetWidth: frameWidth,
-      targetHeight: frameHeight,
-      targetAnchor: anchor,
-      policy: removalPolicy,
-      outline: outlinePolicy,
-    });
-  } finally {
-    await browser.close();
-  }
-}
 
 async function normalizeStandaloneFrame(sourceBytes, state) {
   const browser = await chromium.launch({ headless: true });
@@ -311,6 +100,52 @@ async function normalizeStandaloneFrame(sourceBytes, state) {
         imageData.data[offset + 1] = 0;
         imageData.data[offset + 2] = 0;
         imageData.data[offset + 3] = 0;
+      }
+
+      // Generated sources can contain matte islands fully enclosed by the pose,
+      // such as the negative space between an arm and the torso. Remove only
+      // large neutral components; small enclosed whites in the eyes, smile,
+      // earrings, and shirt pattern remain character detail.
+      const neutralVisited = new Uint8Array(pixelCount);
+      const neutralQueue = new Int32Array(pixelCount);
+      let removedInteriorMattePixels = 0;
+      for (let seed = 0; seed < pixelCount; seed += 1) {
+        if (neutralVisited[seed] || imageData.data[seed * 4 + 3] === 0 || !isNeutralBackground(seed)) continue;
+        let neutralHead = 0;
+        let neutralTail = 0;
+        neutralQueue[neutralTail++] = seed;
+        neutralVisited[seed] = 1;
+        while (neutralHead < neutralTail) {
+          const pixelIndex = neutralQueue[neutralHead++];
+          const x = pixelIndex % image.width;
+          const y = Math.floor(pixelIndex / image.width);
+          const neighbors = [
+            x > 0 ? pixelIndex - 1 : -1,
+            x < image.width - 1 ? pixelIndex + 1 : -1,
+            y > 0 ? pixelIndex - image.width : -1,
+            y < image.height - 1 ? pixelIndex + image.width : -1,
+          ];
+          for (const neighbor of neighbors) {
+            if (
+              neighbor >= 0
+              && !neutralVisited[neighbor]
+              && imageData.data[neighbor * 4 + 3] > 0
+              && isNeutralBackground(neighbor)
+            ) {
+              neutralVisited[neighbor] = 1;
+              neutralQueue[neutralTail++] = neighbor;
+            }
+          }
+        }
+        if (neutralTail < 500) continue;
+        removedInteriorMattePixels += neutralTail;
+        for (let componentIndex = 0; componentIndex < neutralTail; componentIndex += 1) {
+          const offset = neutralQueue[componentIndex] * 4;
+          imageData.data[offset] = 0;
+          imageData.data[offset + 1] = 0;
+          imageData.data[offset + 2] = 0;
+          imageData.data[offset + 3] = 0;
+        }
       }
 
       let minimumX = image.width;
@@ -404,6 +239,9 @@ async function normalizeStandaloneFrame(sourceBytes, state) {
       }
       return {
         state: stateName,
+        sourceWidth: image.width,
+        sourceHeight: image.height,
+        removedInteriorMattePixels,
         dataUrl: frameCanvas.toDataURL('image/png'),
         opaquePixels,
         sourceBounds: { x: minimumX, y: minimumY, width: boundsWidth, height: boundsHeight },
@@ -424,34 +262,37 @@ async function normalizeStandaloneFrame(sourceBytes, state) {
 }
 
 const sourceBytes = await readFile(sourceUrl);
-const greetOverrideBytes = await readFile(greetOverrideUrl);
-const offlineOverrideBytes = await readFile(offlineOverrideUrl);
 const stateContract = JSON.parse(await readFile(stateContractUrl, 'utf8'));
-const result = await buildFrames(sourceBytes);
-result.frames[stateNames.indexOf('greet')] = await normalizeStandaloneFrame(greetOverrideBytes, 'greet');
-result.frames[stateNames.indexOf('offline')] = await normalizeStandaloneFrame(offlineOverrideBytes, 'offline');
+const rigBaseFrame = await normalizeStandaloneFrame(sourceBytes, 'rig-base');
+const result = {
+  sourceWidth: rigBaseFrame.sourceWidth,
+  sourceHeight: rigBaseFrame.sourceHeight,
+  frames: stateNames.map((state) => ({ ...rigBaseFrame, state })),
+};
 const outputs = [];
 
+const rigBaseBytes = Buffer.from(rigBaseFrame.dataUrl.split(',')[1], 'base64');
+const rigBasePath = '/jolene/sprites/rig-base-v2.png';
+const rigBaseOutputUrl = new URL(`../public${rigBasePath}`, import.meta.url);
+if (checkOnly) {
+  const committedBytes = await readFile(rigBaseOutputUrl);
+  assert.equal(sha256(committedBytes), sha256(rigBaseBytes), 'The canonical rig base is stale.');
+} else {
+  await mkdir(outputDirectoryUrl, { recursive: true });
+  await writeFile(rigBaseOutputUrl, rigBaseBytes);
+}
+
 for (const frame of result.frames) {
-  const bytes = Buffer.from(frame.dataUrl.split(',')[1], 'base64');
-  const relativePath = `/jolene/sprites/${frame.state}.png`;
-  const outputUrl = new URL(`../public${relativePath}`, import.meta.url);
-  if (checkOnly) {
-    const committedBytes = await readFile(outputUrl);
-    assert.equal(sha256(committedBytes), sha256(bytes), `${frame.state} frame is stale.`);
-  } else {
-    await mkdir(outputDirectoryUrl, { recursive: true });
-    await writeFile(outputUrl, bytes);
-  }
   outputs.push({
     state: frame.state,
-    path: relativePath,
-    sha256: sha256(bytes),
+    path: rigBasePath,
+    sha256: sha256(rigBaseBytes),
     width: frameWidth,
     height: frameHeight,
     opaquePixels: frame.opaquePixels,
     sourceBounds: frame.sourceBounds,
     drawBounds: frame.drawBounds,
+    removedInteriorMattePixels: frame.removedInteriorMattePixels,
   });
 }
 
@@ -459,26 +300,13 @@ const manifest = {
   schemaVersion: '1.0.0',
   status: 'candidate_pending_visual_approval',
   source: {
-    path: '/jolene/review/country-host-state-sheet-source.png',
+    path: '/jolene/review/country-host-rig-master-v2-source.png',
     sha256: sha256(sourceBytes),
     width: result.sourceWidth,
     height: result.sourceHeight,
     generatedWith: 'built-in image generation edit mode',
   },
-  overrides: [
-    {
-      state: 'greet',
-      path: '/jolene/review/country-host-greet-face-corrected-source.png',
-      sha256: sha256(greetOverrideBytes),
-      intent: 'correct eye whites and replace the isolated tooth with an even friendly smile',
-    },
-    {
-      state: 'offline',
-      path: '/jolene/review/country-host-offline-shrug-source.png',
-      sha256: sha256(offlineOverrideBytes),
-      intent: 'poised, lightly humorous shrug; never sad, angry, or apologetic',
-    },
-  ],
+  overrides: [],
   layout: {
     frameWidth,
     frameHeight,
@@ -489,7 +317,8 @@ const manifest = {
   },
   frames: outputs,
   invariants: {
-    approvedMasterUnmodified: true,
+    singleIdentitySource: true,
+    generatedPoseRedrawsUsedAtRuntime: false,
     providerIndependent: true,
     approvedForPublicUse: false,
   },
@@ -509,7 +338,7 @@ const frameCatalog = {
     const output = outputs.find(({ state }) => state === transform.state);
     assert.ok(output, `Missing generated output for ${transform.state}.`);
     return [frameName, {
-      assetPath: `/jolene/sprites/${transform.state}.png?v=${output.sha256.slice(0, 12)}`,
+      assetPath: `${output.path}?v=${output.sha256.slice(0, 12)}`,
       ...transform,
       transformOrigin: `${anchor.x}px ${anchor.y}px`,
     }];
@@ -523,10 +352,13 @@ if (checkOnly) {
   assert.deepEqual(committedFrameCatalog, frameCatalog);
   assert.deepEqual(outputs.map(({ state }) => state), stateNames);
   assert.deepEqual(Object.keys(frameCatalog.frames), referencedFrameNames);
-  assert.ok(outputs.every(({ opaquePixels }) => opaquePixels > 25_000), 'A sprite frame lost too much of the character.');
-  console.log(`Jolene sprite check passed: ${outputs.length} transparent ${frameWidth}×${frameHeight} frames with a shared anchor.`);
+  assert.equal(new Set(outputs.map(({ sha256: fingerprint }) => fingerprint)).size, 1, 'Runtime states must share one character identity source.');
+  assert.equal(new Set(Object.values(frameCatalog.frames).map(({ assetPath }) => assetPath)).size, 1, 'Frame catalog must use one canonical rig base.');
+  assert.ok(outputs.every(({ removedInteriorMattePixels }) => removedInteriorMattePixels >= 500), 'The enclosed arm-to-body matte was not removed.');
+  assert.ok(outputs.every(({ opaquePixels }) => opaquePixels > 25_000), 'The canonical rig base lost too much of the character.');
+  console.log(`Jolene sprite check passed: ${outputs.length} states share one transparent ${frameWidth}×${frameHeight} canonical rig base.`);
 } else {
   await writeFile(manifestUrl, `${JSON.stringify(manifest, null, 2)}\n`);
   await writeFile(frameCatalogUrl, `${JSON.stringify(frameCatalog, null, 2)}\n`);
-  console.log(`Built ${outputs.length} candidate Jolene sprite frames in ${outputDirectoryUrl.pathname}`);
+  console.log(`Built one canonical Jolene rig base for ${outputs.length} states in ${outputDirectoryUrl.pathname}`);
 }

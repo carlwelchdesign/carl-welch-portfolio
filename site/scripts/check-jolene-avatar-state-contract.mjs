@@ -3,8 +3,9 @@ import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 
 const contract = JSON.parse(await readFile(new URL('../app/jolene/avatar-state-contract.v1.json', import.meta.url), 'utf8'));
-const masterManifest = JSON.parse(await readFile(new URL('../docs/jolene-avatar-master.v1.json', import.meta.url), 'utf8'));
-const masterBytes = await readFile(new URL('../public/jolene/jolene-country-host-master.png', import.meta.url));
+const spriteManifest = JSON.parse(await readFile(new URL('../docs/jolene-avatar-sprites.v1.json', import.meta.url), 'utf8'));
+const rigBase = spriteManifest.frames[0];
+const rigBaseBytes = await readFile(new URL(`../public${rigBase.path}`, import.meta.url));
 const source = await readFile(new URL('../app/jolene/avatar-state-contract.ts', import.meta.url), 'utf8');
 
 const expectedStates = ['idle', 'blink', 'greet', 'listen', 'think', 'speak', 'evidence', 'boundary', 'offline', 'rest'];
@@ -48,14 +49,14 @@ assert.deepEqual(contract.interruption.alwaysInterruptFor, ['offline']);
 assert.ok(contract.interruption.maximumSettleMs <= 600);
 assert.equal(contract.reducedMotion.animate, false);
 assert.equal(contract.reducedMotion.unsolicitedIntroState, 'idle');
-assert.equal(contract.rendering.masterPath, masterManifest.output.path);
-assert.equal(contract.rendering.masterSha256, masterManifest.output.sha256);
-assert.equal(contract.rendering.frameWidth, masterManifest.output.width);
-assert.equal(contract.rendering.frameHeight, masterManifest.output.height);
-assert.deepEqual(contract.rendering.anchor, { x: 563, y: 1261 });
-assert.equal(createHash('sha256').update(masterBytes).digest('hex'), contract.rendering.masterSha256);
-assert.equal(masterManifest.status, 'approved_for_sprite_production');
-assert.equal(masterManifest.invariants.approvedForAnimation, true);
+assert.equal(contract.rendering.masterPath.split('?')[0], rigBase.path);
+assert.equal(contract.rendering.masterSha256, rigBase.sha256);
+assert.equal(contract.rendering.frameWidth, rigBase.width);
+assert.equal(contract.rendering.frameHeight, rigBase.height);
+assert.deepEqual(contract.rendering.anchor, spriteManifest.layout.anchor);
+assert.equal(createHash('sha256').update(rigBaseBytes).digest('hex'), contract.rendering.masterSha256);
+assert.equal(spriteManifest.invariants.singleIdentitySource, true);
+assert.equal(spriteManifest.invariants.generatedPoseRedrawsUsedAtRuntime, false);
 
 for (const forbidden of ['openai', 'anthropic', 'gemini', 'ollama', 'language model', 'llm']) {
   assert.equal(JSON.stringify(contract).toLowerCase().includes(forbidden), false, `Avatar contract leaks provider term: ${forbidden}`);
