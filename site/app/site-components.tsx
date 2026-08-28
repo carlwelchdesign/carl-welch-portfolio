@@ -198,7 +198,12 @@ export function SiteFooter() {
         >
           GitHub ↗
         </a>
-        <a href={contact.resumeUrl} download>
+        <a
+          href={contact.resumeUrl}
+          download
+          type="application/pdf"
+          aria-label="Download Carl Welch résumé (PDF)"
+        >
           Résumé ↓
         </a>
       </div>

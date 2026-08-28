@@ -50,7 +50,12 @@ export default function ContactPage() {
                 <strong>GitHub</strong>
                 <span className="contact-route-arrow" aria-hidden="true">↗</span>
               </a>
-              <a href={contact.resumeUrl} download>
+              <a
+                href={contact.resumeUrl}
+                download
+                type="application/pdf"
+                aria-label="Download Carl Welch résumé (PDF)"
+              >
                 <span>Current document</span>
                 <strong>Résumé</strong>
                 <span className="contact-route-arrow" aria-hidden="true">↓</span>

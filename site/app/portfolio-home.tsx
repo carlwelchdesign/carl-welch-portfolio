@@ -27,7 +27,13 @@ export function PortfolioHome() {
                 <Link className="text-action" href="/contact">
                   Discuss a role or project
                 </Link>
-                <a className="text-action" href="/carl-welch-resume.pdf" download>
+                <a
+                  className="text-action"
+                  href="/carl-welch-resume.pdf"
+                  download
+                  type="application/pdf"
+                  aria-label="Download Carl Welch résumé (PDF)"
+                >
                   Résumé ↓
                 </a>
               </div>
@@ -135,7 +141,13 @@ export function PortfolioHome() {
                 <Link className="primary-action dark-action" href="/contact">
                   Start a conversation <span aria-hidden="true">→</span>
                 </Link>
-                <a className="home-closing-resume" href="/carl-welch-resume.pdf" download>
+                <a
+                  className="home-closing-resume"
+                  href="/carl-welch-resume.pdf"
+                  download
+                  type="application/pdf"
+                  aria-label="Download Carl Welch résumé (PDF)"
+                >
                   Résumé <span aria-hidden="true">↓</span>
                 </a>
               </div>
