@@ -1,0 +1,136 @@
+{
+  "schemaVersion": "1.0.0",
+  "contractName": "jolene.avatar-state",
+  "initialState": "idle",
+  "fallbackState": "idle",
+  "states": [
+    "idle",
+    "blink",
+    "greet",
+    "listen",
+    "think",
+    "speak",
+    "evidence",
+    "boundary",
+    "offline",
+    "rest"
+  ],
+  "definitions": {
+    "idle": {
+      "frames": ["idle-0", "idle-1", "idle-2", "idle-1"],
+      "durationsMs": [520, 180, 520, 180],
+      "loop": true,
+      "returnState": null,
+      "reducedMotionFrame": "idle-0"
+    },
+    "blink": {
+      "frames": ["idle-0", "blink-1", "blink-2", "blink-1", "idle-0"],
+      "durationsMs": [80, 70, 90, 70, 120],
+      "loop": false,
+      "returnState": "idle",
+      "reducedMotionFrame": "idle-0"
+    },
+    "greet": {
+      "frames": ["greet-0", "greet-1", "greet-2", "greet-1", "greet-0"],
+      "durationsMs": [100, 100, 220, 100, 180],
+      "loop": false,
+      "returnState": "idle",
+      "reducedMotionFrame": "greet-2"
+    },
+    "listen": {
+      "frames": ["listen-0"],
+      "durationsMs": [1000],
+      "loop": true,
+      "returnState": null,
+      "reducedMotionFrame": "listen-0"
+    },
+    "think": {
+      "frames": ["think-0", "think-1"],
+      "durationsMs": [600, 600],
+      "loop": true,
+      "returnState": null,
+      "reducedMotionFrame": "think-0"
+    },
+    "speak": {
+      "frames": ["speak-0", "speak-1", "speak-2", "speak-1"],
+      "durationsMs": [120, 120, 140, 120],
+      "loop": true,
+      "returnState": null,
+      "reducedMotionFrame": "speak-0"
+    },
+    "evidence": {
+      "frames": ["evidence-0", "evidence-1", "evidence-2", "evidence-0"],
+      "durationsMs": [120, 140, 500, 180],
+      "loop": false,
+      "returnState": "idle",
+      "reducedMotionFrame": "evidence-2"
+    },
+    "boundary": {
+      "frames": ["boundary-0"],
+      "durationsMs": [1000],
+      "loop": true,
+      "returnState": null,
+      "reducedMotionFrame": "boundary-0"
+    },
+    "offline": {
+      "frames": ["offline-0"],
+      "durationsMs": [1000],
+      "loop": true,
+      "returnState": null,
+      "reducedMotionFrame": "offline-0"
+    },
+    "rest": {
+      "frames": ["rest-0", "rest-1"],
+      "durationsMs": [1200, 1200],
+      "loop": true,
+      "returnState": null,
+      "reducedMotionFrame": "rest-0"
+    }
+  },
+  "transitions": {
+    "idle": ["blink", "greet", "listen", "think", "speak", "evidence", "boundary", "offline", "rest"],
+    "blink": ["idle", "offline"],
+    "greet": ["idle", "listen", "offline"],
+    "listen": ["idle", "think", "offline"],
+    "think": ["idle", "speak", "boundary", "offline"],
+    "speak": ["idle", "evidence", "boundary", "offline"],
+    "evidence": ["idle", "speak", "offline"],
+    "boundary": ["idle", "listen", "offline"],
+    "offline": ["idle"],
+    "rest": ["idle", "greet", "offline"]
+  },
+  "signals": {
+    "intro_started": "greet",
+    "chat_opened": "greet",
+    "visitor_input": "listen",
+    "request_started": "think",
+    "answer_started": "speak",
+    "answer_finished": "idle",
+    "evidence_highlighted": "evidence",
+    "cannot_verify": "boundary",
+    "service_unavailable": "offline",
+    "inactive": "rest",
+    "activity_resumed": "idle"
+  },
+  "interruption": {
+    "alwaysInterruptFor": ["offline"],
+    "settleBeforeTransition": ["blink", "greet", "evidence"],
+    "maximumSettleMs": 600
+  },
+  "rendering": {
+    "masterPath": "/jolene/jolene-country-host-master.png",
+    "masterSha256": "ec53fef8888e3faa15b19b2726882844cccc683493892b402dbe04ca394d6ac8",
+    "frameWidth": 1162,
+    "frameHeight": 1353,
+    "anchor": { "x": 563, "y": 1261 },
+    "staticFallbackFrame": "idle-0",
+    "imageSmoothing": false,
+    "aspectRatioLocked": true
+  },
+  "reducedMotion": {
+    "animate": false,
+    "useStateRepresentativeFrame": true,
+    "unsolicitedIntroState": "idle"
+  },
+  "providerIndependent": true
+}
