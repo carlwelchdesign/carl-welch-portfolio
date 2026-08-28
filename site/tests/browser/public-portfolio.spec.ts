@@ -392,6 +392,10 @@ test('recommendation highlights use direct excerpts and link to the full testimo
 
   const highlights = page.getByRole('navigation', { name: 'Recommendation highlights' });
   await expect(highlights.getByRole('link')).toHaveCount(4);
+  await expect(page.locator('.recommendation-highlights-return')).toHaveCount(13);
+  for (const returnLink of await page.locator('.recommendation-highlights-return').all()) {
+    await expect(returnLink).toHaveAttribute('href', '#recommendation-highlights');
+  }
   await expect(highlights).toContainText('Product craft');
   await expect(highlights).toContainText('Carl’s been a true mentor.');
   await expect(highlights).toContainText("Carl's experience, persistence, and (most of all) calm always saved the day.");
@@ -404,7 +408,14 @@ test('recommendation highlights use direct excerpts and link to the full testimo
   );
   await mentorship.click();
   await expect(page).toHaveURL(/#evidence--portfolio--source--recommendation--jason-conover-2017-07-17$/);
-  await expect(page.getByRole('listitem', { name: 'Jason Conover recommendation' })).toBeVisible();
+  const jasonConover = page.getByRole('listitem', { name: 'Jason Conover recommendation' });
+  await expect(jasonConover).toBeVisible();
+  const returnLink = jasonConover.getByRole('link', { name: /Recommendation highlights/ });
+  await returnLink.focus();
+  await expect(returnLink).toBeFocused();
+  await returnLink.click();
+  await expect(page).toHaveURL(/\/recommendations#recommendation-highlights$/);
+  await expect(highlights).toBeInViewport();
 
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
   expect(overflow).toBeLessThanOrEqual(0);
@@ -800,6 +811,10 @@ test('server-rendered navigation and content remain available without JavaScript
     'href',
     '#evidence--portfolio--source--recommendation--jason-conover-2017-07-17',
   );
+  await expect(page.locator('.recommendation-highlights-return')).toHaveCount(13);
+  await expect(page.getByRole('listitem', { name: 'David Allen recommendation' }).getByRole('link', {
+    name: /Recommendation highlights/,
+  })).toHaveAttribute('href', '#recommendation-highlights');
 
   await page.goto('/experience');
   const careerIndex = page.getByRole('navigation', { name: 'Career index' });
