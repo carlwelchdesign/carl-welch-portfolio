@@ -17,6 +17,7 @@ for (const requirement of [
   'data-avatar-state',
   'data-avatar-frame',
   'transition={{ duration: 0 }}',
+  'preloadJoleneAvatarAssets',
 ]) {
   assert.ok(source.includes(requirement), `Jolene avatar renderer is missing ${requirement}.`);
 }

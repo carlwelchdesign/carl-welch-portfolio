@@ -56,6 +56,7 @@ test(`returned ${scenario === 'unavailable' ? 'error' : 'answer'} keeps keyboard
     });
     await expect(errorResponse).toBeFocused();
     await expect(errorResponse).toContainText('I don’t have a reliable answer for that yet.');
+    await expect(panel.locator('.jolene-avatar')).toHaveAttribute('data-avatar-state', 'offline');
     return;
   }
 
@@ -77,4 +78,68 @@ test(`returned ${scenario === 'unavailable' ? 'error' : 'answer'} keeps keyboard
   const followUps = panel.locator('.jolene-starters');
   await expect(followUps.getByText('Ask next')).toBeVisible();
   await expect(followUps.getByRole('button')).toHaveCount(2);
+});
+
+test('country-host cameo appears once, leaves cleanly, and returns only with chat', async ({ page }) => {
+  await page.addInitScript(() => window.sessionStorage.removeItem('jolene-country-host-intro-seen-v1'));
+  await page.goto('/');
+
+  const cameo = page.locator('.jolene-cameo');
+  await expect(cameo).toBeVisible({ timeout: 2_000 });
+  await expect(cameo).toContainText('Howdy, folks!');
+  await expect(cameo.locator('.jolene-avatar')).toHaveCount(1);
+  await expect(cameo).toBeHidden({ timeout: 5_000 });
+  await expect(page.locator('.jolene-avatar')).toHaveCount(0);
+
+  await page.getByRole('button', { name: /Ask Jolene/ }).click();
+  const panel = page.getByRole('dialog', { name: 'Ask Jolene' });
+  const avatar = panel.locator('.jolene-avatar');
+  await expect(avatar).toBeVisible();
+  await expect(avatar).toHaveAttribute('data-avatar-state', /greet|idle/);
+
+  const question = panel.getByLabel('Ask about Carl’s work or experience');
+  await question.fill('Which project best shows Carl’s product engineering work?');
+  await expect(avatar).toHaveAttribute('data-avatar-state', 'listen');
+  await panel.getByRole('button', { name: 'Ask Jolene', exact: true }).click();
+
+  if (scenario === 'unavailable') {
+    await expect(avatar).toHaveAttribute('data-avatar-state', 'offline');
+  } else {
+    await expect(avatar).toHaveAttribute('data-avatar-state', 'speak');
+    const evidence = panel.locator('details.jolene-evidence').last();
+    await evidence.locator(':scope > summary').click();
+    await expect(avatar).toHaveAttribute('data-avatar-state', 'evidence');
+  }
+
+  await panel.getByRole('button', { name: 'Close Jolene chat' }).click();
+  await expect(page.locator('.jolene-avatar')).toHaveCount(0);
+  await page.reload();
+  await page.waitForTimeout(1_000);
+  await expect(cameo).toHaveCount(0);
+});
+
+test('pixel avatar stays clear of controls at an iPhone viewport', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.addInitScript(() => window.sessionStorage.setItem('jolene-country-host-intro-seen-v1', 'true'));
+  await page.goto('/');
+  await page.getByRole('button', { name: /Ask Jolene/ }).click();
+
+  const panel = page.getByRole('dialog', { name: 'Ask Jolene' });
+  const avatar = panel.locator('.jolene-avatar');
+  const close = panel.getByRole('button', { name: 'Close Jolene chat' });
+  const question = panel.getByLabel('Ask about Carl’s work or experience');
+  await expect(panel).toBeVisible();
+  await expect(avatar).toBeVisible();
+  await expect(close).toBeVisible();
+  await expect(question).toBeVisible();
+
+  await expect(avatar).toHaveCSS('pointer-events', 'none');
+  await expect(avatar.locator('img')).toHaveCSS('image-rendering', 'pixelated');
+  const panelBounds = await panel.boundingBox();
+  const closeBounds = await close.boundingBox();
+  expect(panelBounds).not.toBeNull();
+  expect(closeBounds).not.toBeNull();
+  expect(panelBounds!.x).toBeGreaterThanOrEqual(0);
+  expect(panelBounds!.x + panelBounds!.width).toBeLessThanOrEqual(390);
+  expect(closeBounds!.x + closeBounds!.width).toBeLessThanOrEqual(390);
 });

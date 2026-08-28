@@ -40,6 +40,15 @@ export type JoleneAvatarController = {
   settle: (returnState: AvatarState) => void;
 };
 
+export function preloadJoleneAvatarAssets(): void {
+  const assetPaths = new Set(Object.values(frameCatalog).map(({ assetPath }) => assetPath));
+  for (const assetPath of assetPaths) {
+    const image = new Image();
+    image.decoding = 'async';
+    image.src = assetPath;
+  }
+}
+
 export function useJoleneAvatarController(initialState: AvatarState = 'idle'): JoleneAvatarController {
   const [state, setState] = useState<AvatarState>(initialState);
 

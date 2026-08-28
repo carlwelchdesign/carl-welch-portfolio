@@ -15,7 +15,7 @@ import { PublicJoleneContractError } from './public-validation';
 import { JoleneContactIntent } from './jolene-contact-intent';
 import { JoleneJobFit } from './jolene-job-fit';
 import { trackAnalytics } from '../analytics/analytics-client';
-import { JoleneAvatar, useJoleneAvatarController } from './jolene-avatar';
+import { JoleneAvatar, preloadJoleneAvatarAssets, useJoleneAvatarController } from './jolene-avatar';
 
 type ChatMessage = {
   id: string;
@@ -140,6 +140,10 @@ export function JoleneChat({
   useEffect(() => () => {
     if (answerAnimationTimer.current !== null) window.clearTimeout(answerAnimationTimer.current);
   }, []);
+
+  useEffect(() => {
+    if (open) preloadJoleneAvatarAssets();
+  }, [open]);
 
   useEffect(() => {
     if (!open) return;

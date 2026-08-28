@@ -774,7 +774,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .jolene-panel[data-mode='job'] { width: min(580px, calc(100vw - 40px)); }
 .jolene-panel-header { position: relative; min-height: 146px; padding: 20px 190px 20px 20px; display: flex; justify-content: space-between; gap: 20px; align-items: flex-start; overflow: hidden; background: var(--jolene-accent); color: var(--ink); }
 .jolene-panel-heading { position: relative; z-index: 2; }
-.jolene-panel-avatar { position: absolute; z-index: 1; right: 54px; bottom: -44px; width: 146px; }
+.jolene-panel-avatar { position: absolute; z-index: 1; right: 76px; bottom: -44px; width: 146px; }
 .jolene-panel-header p, .jolene-panel-header h2 { margin: 0; }
 .jolene-panel-header p { font: 9px var(--font-geist-mono), monospace; letter-spacing: 0.1em; text-transform: uppercase; }
 .jolene-panel-header h2 { margin-top: 10px; font-size: 34px; line-height: 0.9; letter-spacing: -0.055em; }
@@ -1152,7 +1152,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .jolene-panel { position: fixed; right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); left: 12px; width: auto; height: calc(100svh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); max-height: calc(100svh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); }
   .jolene-panel[data-mode='job'] { width: auto; }
   .jolene-panel-header { min-height: 132px; padding-right: 154px; }
-  .jolene-panel-avatar { right: 45px; bottom: -36px; width: 118px; }
+  .jolene-panel-avatar { right: 70px; bottom: -36px; width: 118px; }
   .jolene-panel-header h2 { font-size: 30px; }
   .jolene-message[data-role='visitor'] { margin-left: 18px; }
   .jolene-mode-switch button { padding: 0 5px; font-size: 8px; }
