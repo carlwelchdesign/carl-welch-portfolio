@@ -631,6 +631,38 @@ test('work overview shows every flagship gallery preview without broken media', 
   }
 });
 
+test('work index lets recruiters jump to each flagship project', async ({ page }) => {
+  await page.goto('/work');
+  const index = page.getByRole('navigation', { name: 'Project index' });
+  const projects = [
+    ['Job Search OS', '#work-job-search-os'],
+    ['Flight Tracker AI', '#work-flight-tracker-ai'],
+    ['Wave Factory Essentials', '#work-wave-factory-essentials'],
+    ['Supraconscious Avatar AI', '#work-supraconscious-avatar-ai'],
+    ['Argent Matchmaking', '#work-argent-matchmaking'],
+  ] as const;
+
+  await expect(index).toBeVisible();
+  const links = index.getByRole('link');
+  await expect(links).toHaveCount(projects.length);
+  for (const [name, href] of projects) {
+    await expect(index.getByRole('link', { name: new RegExp(name) })).toHaveAttribute('href', href);
+    await expect(page.locator(href)).toHaveCount(1);
+  }
+
+  const flightTrackerLink = index.getByRole('link', { name: /Flight Tracker AI/ });
+  await flightTrackerLink.focus();
+  await expect(flightTrackerLink).toBeFocused();
+  await flightTrackerLink.click();
+  await expect(page).toHaveURL(/\/work#work-flight-tracker-ai$/);
+  await expect(page.locator('#work-flight-tracker-ai')).toBeInViewport();
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/work');
+  await expect(page.getByRole('navigation', { name: 'Project index' })).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+});
+
 test('flagship case studies publish unique 1200×630 social cards', async ({ page }) => {
   for (const slug of [
     'job-search-os',
@@ -662,6 +694,7 @@ test('Flight Tracker leads with the dense live regional traffic workspace', asyn
   const leadImage = chapter.locator('.project-image');
   await expect(leadImage).toHaveAttribute('src', /live-traffic-weather\.png/);
   await expect(leadImage).toHaveAttribute('alt', /158 aircraft/);
+  await leadImage.scrollIntoViewIfNeeded();
   await expect.poll(() => leadImage.evaluate((image) => (image as HTMLImageElement).naturalWidth)).toBeGreaterThanOrEqual(1200);
 
   await page.goto('/work/flight-tracker-ai');
@@ -695,6 +728,14 @@ test('server-rendered navigation and content remain available without JavaScript
   await page.waitForURL(/\/archive#legacy-dkny$/);
   await expect(page.locator('#legacy-dkny')).toHaveCount(1);
   await expect(page.locator('.legacy-working-grid > li')).toHaveCount(16);
+
+  await page.goto('/work');
+  const projectIndex = page.getByRole('navigation', { name: 'Project index' });
+  await expect(projectIndex.getByRole('link')).toHaveCount(5);
+  await expect(projectIndex.getByRole('link', { name: /Argent Matchmaking/ })).toHaveAttribute(
+    'href',
+    '#work-argent-matchmaking',
+  );
 
   await page.goto('/recommendations');
   await expect(page.getByRole('navigation', { name: 'Recommendation highlights' })).toBeVisible();
