@@ -138,8 +138,26 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           </section>
 
           <section className="project-links" aria-label="Project links">
-            <a className="primary-action" href={project.repositoryUrl}>Repository <span aria-hidden="true">↗</span></a>
-            {project.liveUrl ? <a className="primary-action" href={project.liveUrl}>Live demo <span aria-hidden="true">↗</span></a> : null}
+            <a
+              className="primary-action"
+              href={project.repositoryUrl}
+              target="_blank"
+              rel="noreferrer"
+              aria-label={`Open ${project.name} repository on GitHub (opens in a new tab)`}
+            >
+              Repository <span aria-hidden="true">↗</span>
+            </a>
+            {project.liveUrl ? (
+              <a
+                className="primary-action"
+                href={project.liveUrl}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={`Open ${project.name} live demo (opens in a new tab)`}
+              >
+                Live demo <span aria-hidden="true">↗</span>
+              </a>
+            ) : null}
           </section>
 
           <section className="project-continuation" aria-labelledby="project-continuation-title">

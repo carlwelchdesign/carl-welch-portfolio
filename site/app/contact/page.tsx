@@ -30,12 +30,22 @@ export default function ContactPage() {
             </Reveal>
 
             <div className="contact-routes" aria-label="Other contact routes">
-              <a href={contact.linkedinUrl}>
+              <a
+                href={contact.linkedinUrl}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Open Carl Welch’s LinkedIn profile (opens in a new tab)"
+              >
                 <span>Professional profile</span>
                 <strong>LinkedIn</strong>
                 <span className="contact-route-arrow" aria-hidden="true">↗</span>
               </a>
-              <a href={contact.githubUrl}>
+              <a
+                href={contact.githubUrl}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Open Carl Welch’s GitHub profile (opens in a new tab)"
+              >
                 <span>Public code</span>
                 <strong>GitHub</strong>
                 <span className="contact-route-arrow" aria-hidden="true">↗</span>

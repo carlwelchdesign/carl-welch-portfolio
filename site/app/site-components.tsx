@@ -182,8 +182,22 @@ export function SiteFooter() {
       </div>
       <div className="footer-links">
         <a href={`mailto:${contact.email}`}>{contact.email}</a>
-        <a href={contact.linkedinUrl}>LinkedIn ↗</a>
-        <a href={contact.githubUrl}>GitHub ↗</a>
+        <a
+          href={contact.linkedinUrl}
+          target="_blank"
+          rel="noreferrer"
+          aria-label="Carl Welch on LinkedIn (opens in a new tab)"
+        >
+          LinkedIn ↗
+        </a>
+        <a
+          href={contact.githubUrl}
+          target="_blank"
+          rel="noreferrer"
+          aria-label="Carl Welch on GitHub (opens in a new tab)"
+        >
+          GitHub ↗
+        </a>
         <a href={contact.resumeUrl} download>
           Résumé ↓
         </a>
