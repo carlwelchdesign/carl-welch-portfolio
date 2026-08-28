@@ -812,6 +812,56 @@ test('work index lets recruiters jump to each flagship project', async ({ page }
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 });
 
+test('homepage project index supports a complete recruiter scan and return path', async ({ page }) => {
+  await page.goto('/');
+  const index = page.getByRole('navigation', { name: 'Project index' });
+  const projects = [
+    ['Job Search OS', '#work-job-search-os'],
+    ['Flight Tracker AI', '#work-flight-tracker-ai'],
+    ['Wave Factory Essentials', '#work-wave-factory-essentials'],
+    ['Supraconscious Avatar AI', '#work-supraconscious-avatar-ai'],
+    ['Argent Matchmaking', '#work-argent-matchmaking'],
+  ] as const;
+
+  await expect(index).toBeVisible();
+  await expect(index.getByRole('link')).toHaveCount(projects.length);
+  await expect(page.locator('.project-index-return')).toHaveCount(projects.length);
+  for (const [name, href] of projects) {
+    await expect(index.getByRole('link', { name: new RegExp(name) })).toHaveAttribute('href', href);
+    await expect(page.locator(href).getByRole('link', { name: /Project index/ })).toHaveAttribute(
+      'href',
+      '#work-index',
+    );
+  }
+
+  const projectLink = index.getByRole('link', { name: /Flight Tracker AI/ });
+  await projectLink.focus();
+  await expect(projectLink).toBeFocused();
+  await projectLink.click();
+  await expect(page).toHaveURL(/\/#work-flight-tracker-ai$/);
+  await expect(page.locator('#work-flight-tracker-ai')).toBeInViewport();
+
+  const returnLink = page.locator('#work-flight-tracker-ai').getByRole('link', { name: /Project index/ });
+  await returnLink.focus();
+  await expect(returnLink).toBeFocused();
+  await returnLink.click();
+  await expect(page).toHaveURL(/\/#work-index$/);
+  await expect(index).toBeInViewport();
+
+  for (const width of [320, 390, 430]) {
+    await page.setViewportSize({ width, height: 844 });
+    await page.goto('/');
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+    const undersizedLinks = await index.getByRole('link').evaluateAll((links) => (
+      links.filter((link) => {
+        const bounds = link.getBoundingClientRect();
+        return bounds.width < 44 || bounds.height < 44;
+      }).length
+    ));
+    expect(undersizedLinks).toBe(0);
+  }
+});
+
 test('flagship case studies publish unique 1200×630 social cards', async ({ page }) => {
   for (const slug of [
     'job-search-os',
@@ -869,6 +919,12 @@ test('server-rendered navigation and content remain available without JavaScript
   await page.goto('/');
   await expectCorePageContract(page);
   await expect(page.getByRole('link', { name: 'View selected work' })).toBeVisible();
+  const homepageProjectIndex = page.getByRole('navigation', { name: 'Project index' });
+  await expect(homepageProjectIndex.getByRole('link')).toHaveCount(5);
+  await expect(homepageProjectIndex.getByRole('link', { name: /Flight Tracker AI/ })).toHaveAttribute(
+    'href',
+    '#work-flight-tracker-ai',
+  );
   await expect(page.getByRole('region', { name: 'Let’s talk about what you’re building.' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Start a conversation' })).toHaveAttribute('href', '/contact');
   const homepageArchiveLink = page.getByRole('link', { name: 'View DKNY e-commerce in the archive' });
