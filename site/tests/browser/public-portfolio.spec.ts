@@ -125,7 +125,7 @@ test('all return-to-index controls meet the mobile touch-target contract', async
   for (const viewport of mobileViewports) {
     await page.setViewportSize(viewport);
     for (const [route, selector, count] of routeControls) {
-      await page.goto(route);
+      await page.goto(route, { waitUntil: 'domcontentloaded' });
       const controls = page.locator(selector);
       await expect(controls).toHaveCount(count);
       const undersized = await controls.evaluateAll((links) => links.flatMap((link) => {
@@ -220,7 +220,7 @@ test('every public route meets the mobile control-size and overflow contract', a
   for (const viewport of mobileViewports) {
     await page.setViewportSize(viewport);
     for (const route of routes) {
-      await page.goto(route);
+      await page.goto(route, { waitUntil: 'domcontentloaded' });
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
       expect(overflow, `${route} overflows at ${viewport.width}px`).toBeLessThanOrEqual(0);
 
@@ -336,7 +336,7 @@ test('collapsed mobile menu communicates the current section at every phone widt
   for (const viewport of mobileViewports) {
     await page.setViewportSize(viewport);
     for (const [route, section] of locationRoutes) {
-      await page.goto(route);
+      await page.goto(route, { waitUntil: 'domcontentloaded' });
       const menu = page.locator('details.mobile-navigation');
       const summary = menu.locator('summary');
       await expect(menu).not.toHaveAttribute('open', '');
