@@ -226,6 +226,42 @@ test('mobile navigation identifies every current primary destination', async ({ 
   }
 });
 
+test('collapsed mobile menu communicates the current section at every phone width', async ({ page }) => {
+  const locationRoutes = [
+    ['/', 'Home'],
+    ['/work', 'Work'],
+    ['/archive', 'Archive'],
+    ['/about', 'About'],
+    ['/capabilities', 'Capabilities'],
+    ['/experience', 'Experience'],
+    ['/recommendations', 'Recommendations'],
+    ['/contact', 'Contact'],
+    ['/work/job-search-os', 'Work'],
+    ['/work/flight-tracker-ai', 'Work'],
+    ['/work/wave-factory-essentials', 'Work'],
+    ['/work/supraconscious-avatar-ai', 'Work'],
+    ['/work/argent-matchmaking', 'Work'],
+  ] as const;
+
+  for (const viewport of mobileViewports) {
+    await page.setViewportSize(viewport);
+    for (const [route, section] of locationRoutes) {
+      await page.goto(route);
+      const menu = page.locator('details.mobile-navigation');
+      const summary = menu.locator('summary');
+      await expect(menu).not.toHaveAttribute('open', '');
+      await expect(summary).toHaveAttribute('aria-label', `Menu, current section: ${section}`);
+      await expect(summary.locator('.mobile-navigation-location')).toHaveText(section);
+
+      const bounds = await summary.boundingBox();
+      expect(bounds, `${route} menu is missing at ${viewport.width}px`).not.toBeNull();
+      expect(bounds?.height, `${route} menu is too short at ${viewport.width}px`).toBeGreaterThanOrEqual(44);
+      const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+      expect(overflow, `${route} overflows at ${viewport.width}px`).toBeLessThanOrEqual(0);
+    }
+  }
+});
+
 test('homepage gives recruiters a synchronized proof summary', async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 720 });
   await page.goto('/');
