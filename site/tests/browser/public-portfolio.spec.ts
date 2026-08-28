@@ -93,6 +93,39 @@ for (const viewport of mobileViewports) {
   });
 }
 
+test('all return-to-index controls meet the mobile touch-target contract', async ({ page }) => {
+  const routeControls = [
+    ['/', '.project-index-return', 5],
+    ['/work', '.project-index-return', 5],
+    ['/archive', '.archive-map-return', 6],
+    ['/capabilities', '.capability-index-return', 5],
+    ['/experience', '.career-index-return', 11],
+    ['/recommendations', '.recommendation-highlights-return', 13],
+  ] as const;
+
+  for (const viewport of mobileViewports) {
+    await page.setViewportSize(viewport);
+    for (const [route, selector, count] of routeControls) {
+      await page.goto(route);
+      const controls = page.locator(selector);
+      await expect(controls).toHaveCount(count);
+      const undersized = await controls.evaluateAll((links) => links.flatMap((link) => {
+        const bounds = link.getBoundingClientRect();
+        if (bounds.width >= 44 && bounds.height >= 44) return [];
+        return [{
+          label: link.textContent?.trim() || link.tagName,
+          width: Math.round(bounds.width),
+          height: Math.round(bounds.height),
+        }];
+      }));
+      expect(
+        undersized,
+        `${route} has undersized return controls at ${viewport.width}px: ${JSON.stringify(undersized)}`,
+      ).toEqual([]);
+    }
+  }
+});
+
 test('homepage gives recruiters a synchronized proof summary', async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 720 });
   await page.goto('/');
