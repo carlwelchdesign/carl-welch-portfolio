@@ -419,7 +419,31 @@ test('experience presents the historical client range with explicit agency and t
   expect(await desktopField.locator('.legacy-client-mark-grid').evaluate((element) => (
     getComputedStyle(element).gridTemplateColumns.split(' ').length
   ))).toBe(8);
+  const linkedMarks = desktopField.locator('.legacy-client-mark-grid a');
+  await expect(linkedMarks).toHaveCount(9);
+  expect(await linkedMarks.evaluateAll((links) => links.map((link) => link.getAttribute('href')))).toEqual([
+    '/archive#legacy-coca-cola',
+    '/archive#legacy-dkny',
+    '/archive#legacy-gm-defense',
+    '/archive#legacy-gtd-iq',
+    '/archive#legacy-magento-social',
+    '/archive#legacy-metal-gear-solid',
+    '/archive#legacy-ufc-japan',
+    '/archive#legacy-political-animals',
+    '/archive#legacy-300',
+  ]);
+  for (const staticMark of ['GWAR', 'TASER', 'Walt Disney Pictures']) {
+    const mark = desktopField.getByText(staticMark, { exact: true });
+    await expect(mark.locator('xpath=parent::li').locator('a')).toHaveCount(0);
+  }
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+
+  const cocaColaLink = page.getByRole('link', { name: 'View archived work related to Coca-Cola' });
+  await cocaColaLink.focus();
+  await expect(cocaColaLink).toBeFocused();
+  await cocaColaLink.press('Enter');
+  await page.waitForURL(/\/archive#legacy-coca-cola$/);
+  await expect(page.locator('#legacy-coca-cola')).toBeInViewport({ timeout: 5000 });
 });
 
 test('archive adds a responsive working contact sheet without stretching the small originals', async ({ page }) => {
@@ -559,6 +583,13 @@ test('server-rendered navigation and content remain available without JavaScript
     'href',
     '#evidence--portfolio--source--recommendation--jason-conover-2017-07-17',
   );
+
+  await page.goto('/experience');
+  const archiveLink = page.getByRole('link', { name: 'View archived work related to Coca-Cola' });
+  await expect(archiveLink).toHaveAttribute('href', '/archive#legacy-coca-cola');
+  await archiveLink.click();
+  await page.waitForURL(/\/archive#legacy-coca-cola$/);
+  await expect(page.locator('#legacy-coca-cola')).toHaveCount(1);
 
   await page.goto('/work/job-search-os#project-gallery');
   await expect(page.locator('#project-gallery img')).toHaveCount(6);
