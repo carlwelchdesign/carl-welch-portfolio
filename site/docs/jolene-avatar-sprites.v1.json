@@ -1,0 +1,236 @@
+{
+  "schemaVersion": "1.0.0",
+  "status": "candidate_pending_visual_approval",
+  "source": {
+    "path": "/jolene/review/country-host-state-sheet-source.png",
+    "sha256": "2ffdc3b27d75d91cbb3961f08e19940e2ca43f2e0edf625ec4a2e865fd0dd84f",
+    "width": 1402,
+    "height": 1122,
+    "generatedWith": "built-in image generation edit mode"
+  },
+  "overrides": [
+    {
+      "state": "offline",
+      "path": "/jolene/review/country-host-offline-chibi-source.png",
+      "sha256": "82b8746844fe2ec62f642d0b3a08f7958be4122eb0bda720fef3b9f602aa55db",
+      "intent": "comic chibi failure reaction; never sad or apologetic"
+    }
+  ],
+  "layout": {
+    "frameWidth": 320,
+    "frameHeight": 460,
+    "anchor": {
+      "x": 160,
+      "y": 448
+    },
+    "imageSmoothing": false,
+    "transparentBackground": true
+  },
+  "frames": [
+    {
+      "state": "idle",
+      "path": "/jolene/sprites/idle.png",
+      "sha256": "ae17010c939d6db89bdbaa90628a2971b84acd1b8ca945b43675e3159355c647",
+      "width": 320,
+      "height": 460,
+      "opaquePixels": 79548,
+      "sourceBounds": {
+        "x": 20,
+        "y": 113,
+        "width": 245,
+        "height": 403
+      },
+      "drawBounds": {
+        "x": 38,
+        "y": 45,
+        "width": 245,
+        "height": 403
+      }
+    },
+    {
+      "state": "blink",
+      "path": "/jolene/sprites/blink.png",
+      "sha256": "9b6e408a2ab96d38b069080a05529b9bc141c6e50b4813a3c45a0d680dd112d1",
+      "width": 320,
+      "height": 460,
+      "opaquePixels": 79674,
+      "sourceBounds": {
+        "x": 0,
+        "y": 112,
+        "width": 243,
+        "height": 404
+      },
+      "drawBounds": {
+        "x": 39,
+        "y": 44,
+        "width": 243,
+        "height": 404
+      }
+    },
+    {
+      "state": "greet",
+      "path": "/jolene/sprites/greet.png",
+      "sha256": "48afd33358fc24a9b8c1cd3cf01a3b484ea17b101aefdd907326459815f25e42",
+      "width": 320,
+      "height": 460,
+      "opaquePixels": 79886,
+      "sourceBounds": {
+        "x": 0,
+        "y": 112,
+        "width": 252,
+        "height": 404
+      },
+      "drawBounds": {
+        "x": 34,
+        "y": 44,
+        "width": 252,
+        "height": 404
+      }
+    },
+    {
+      "state": "listen",
+      "path": "/jolene/sprites/listen.png",
+      "sha256": "52c0e3ebeff485ab704f2b6f08fd8a67d17f9432046deebe620ccfc56b71b920",
+      "width": 320,
+      "height": 460,
+      "opaquePixels": 78719,
+      "sourceBounds": {
+        "x": 15,
+        "y": 113,
+        "width": 241,
+        "height": 403
+      },
+      "drawBounds": {
+        "x": 40,
+        "y": 45,
+        "width": 241,
+        "height": 403
+      }
+    },
+    {
+      "state": "think",
+      "path": "/jolene/sprites/think.png",
+      "sha256": "6b8236e7aa3b8a5677886283994dc8154fb1b84e0e613b913fd73c54d0da4056",
+      "width": 320,
+      "height": 460,
+      "opaquePixels": 80659,
+      "sourceBounds": {
+        "x": 0,
+        "y": 111,
+        "width": 257,
+        "height": 405
+      },
+      "drawBounds": {
+        "x": 32,
+        "y": 43,
+        "width": 257,
+        "height": 405
+      }
+    },
+    {
+      "state": "speak",
+      "path": "/jolene/sprites/speak.png",
+      "sha256": "9bdd1339228d4b6edaba5a36986a7f470c7898d8f090bba19856c61ed402232c",
+      "width": 320,
+      "height": 460,
+      "opaquePixels": 82081,
+      "sourceBounds": {
+        "x": 18,
+        "y": 46,
+        "width": 262,
+        "height": 408
+      },
+      "drawBounds": {
+        "x": 29,
+        "y": 40,
+        "width": 262,
+        "height": 408
+      }
+    },
+    {
+      "state": "evidence",
+      "path": "/jolene/sprites/evidence.png",
+      "sha256": "09641b3744effb5a52551cd5d1330517845875208dc01f3fc9519b1fe8f9a77d",
+      "width": 320,
+      "height": 460,
+      "opaquePixels": 74476,
+      "sourceBounds": {
+        "x": 28,
+        "y": 51,
+        "width": 249,
+        "height": 403
+      },
+      "drawBounds": {
+        "x": 36,
+        "y": 45,
+        "width": 249,
+        "height": 403
+      }
+    },
+    {
+      "state": "boundary",
+      "path": "/jolene/sprites/boundary.png",
+      "sha256": "e5d97039d13cac3d73fa769add603559ecee69156e1f4e8f975d03e2375fa55c",
+      "width": 320,
+      "height": 460,
+      "opaquePixels": 75459,
+      "sourceBounds": {
+        "x": 20,
+        "y": 51,
+        "width": 233,
+        "height": 403
+      },
+      "drawBounds": {
+        "x": 44,
+        "y": 45,
+        "width": 233,
+        "height": 403
+      }
+    },
+    {
+      "state": "offline",
+      "path": "/jolene/sprites/offline.png",
+      "sha256": "da4e534872e96d192375f6f7f32163726603afe5e62bd045836787db953876a1",
+      "width": 320,
+      "height": 460,
+      "opaquePixels": 68464,
+      "sourceBounds": {
+        "x": 26,
+        "y": 152,
+        "width": 1006,
+        "height": 1158
+      },
+      "drawBounds": {
+        "x": 8,
+        "y": 98,
+        "width": 304,
+        "height": 350
+      }
+    },
+    {
+      "state": "rest",
+      "path": "/jolene/sprites/rest.png",
+      "sha256": "42d4ad473741ddf6ca74668ff795bcb37b3b8978cf81fc55448c0786ed084b3a",
+      "width": 320,
+      "height": 460,
+      "opaquePixels": 76662,
+      "sourceBounds": {
+        "x": 0,
+        "y": 51,
+        "width": 225,
+        "height": 403
+      },
+      "drawBounds": {
+        "x": 48,
+        "y": 45,
+        "width": 225,
+        "height": 403
+      }
+    }
+  ],
+  "invariants": {
+    "approvedMasterUnmodified": true,
+    "providerIndependent": true,
+    "approvedForPublicUse": false
+  }
+}

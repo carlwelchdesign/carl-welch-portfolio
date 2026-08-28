@@ -119,6 +119,7 @@
   },
   "rendering": {
     "masterPath": "/jolene/jolene-country-host-master.png",
+    "frameCatalogPath": "/app/jolene/avatar-frame-catalog.v1.json",
     "masterSha256": "ec53fef8888e3faa15b19b2726882844cccc683493892b402dbe04ca394d6ac8",
     "frameWidth": 1162,
     "frameHeight": 1353,
