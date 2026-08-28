@@ -172,7 +172,9 @@ const generatedBytes = Buffer.from(result.outputDataUrl.split(',')[1], 'base64')
 
 const manifest = {
   schemaVersion: '1.0.0',
-  status: 'candidate_awaiting_carl_review',
+  status: 'approved_for_sprite_production',
+  approvedBy: 'Carl Welch',
+  approvedAt: '2026-08-28',
   source: {
     path: '/jolene/review/country-host-selected-direction.png',
     sha256: sha256(sourceBytes),
@@ -195,7 +197,7 @@ const manifest = {
     sourceRgbPreservedForOpaquePixels: true,
     sourceDimensionsPreserved: true,
     generativeRedesignUsed: false,
-    approvedForAnimation: false,
+    approvedForAnimation: true,
     approvedForPublicUse: false,
   },
 };

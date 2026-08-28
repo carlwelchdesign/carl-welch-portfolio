@@ -1,6 +1,6 @@
 # Jolene avatar production art direction
 
-Status: brief approved by Carl on August 28, 2026. Carl selected the Country Host image as the visual master direction; production cleanup, sprite-sheet approval, and public use remain separate gates.
+Status: production master approved by Carl on August 28, 2026. Animation-state and public-use approval remain separate gates.
 
 ## Creative target
 
@@ -10,7 +10,9 @@ The first read is a warm, quick-witted host waiting at the bottom-right of Carl'
 
 The character is a reveal, not a persistent page ornament. On an eligible first load she briefly rises from below the bottom-right edge, says **“Howdy, folks!”**, and drops completely out of sight. After that cameo, the compact Jolene launcher remains visible but the character does not return unless the visitor deliberately opens the chat.
 
-## Locked production proposal
+## Superseded study proposal
+
+The following 48 × 56 constraint governed the rejected exploration studies. Carl's later approval of the more detailed Country Host image supersedes it for production. It remains here as decision history, not as a requirement to simplify or redraw the approved master.
 
 - Native frame: **48 × 56 pixels**, waist-up, transparent background.
 - Occupied silhouette: no more than 44 × 54 pixels; preserve two transparent pixels at every outer edge.
@@ -21,7 +23,7 @@ The character is a reveal, not a persistent page ornament. On an eligible first 
 - Pose: shoulders angled slightly, chin level, one hand or forearm available for a restrained evidence gesture.
 - Bottom-right launcher: keep the face above the chat label and preserve iPhone safe-area insets.
 
-This grid is deliberately smaller than a 64-bit-style portrait while retaining enough pixels for readable eyes, mouth shapes, hair volume, and a tied blouse. Do not increase the native grid to solve drawing problems.
+This grid was deliberately smaller than a 64-bit-style portrait. The selected Country Host direction demonstrated that its additional detail is part of the character Carl wants, so production now preserves the approved 1162 × 1353 transparent master instead.
 
 ## Palette budget
 
@@ -147,9 +149,11 @@ The locked visual qualities are:
 - red patterned tied blouse with a small dark-blue waist accent;
 - visible square-pixel character without chibi, puppet, or caricature proportions.
 
-This exact review PNG is intentionally retained as the taste reference even though it is 1162 × 1353, has no alpha channel, and contains a baked checkerboard. Those are production defects to correct without redesigning the selected character. Failed generative transparency edits are not approved substitutes because they changed the source and introduced edge artifacts.
+This exact review PNG is intentionally retained as the taste reference even though it is 1162 × 1353, has no alpha channel, and contains a baked checkerboard. Those production defects were corrected without redesigning the selected character. Failed generative transparency edits are not approved substitutes because they changed the source and introduced edge artifacts.
 
-Before this ticket can close, the production master must preserve the selected appearance while locking the final native grid, palette, clean silhouette, transparent background, anchor positions, and expression language. Do not simplify away the visual qualities Carl selected merely to satisfy an earlier draft grid.
+Carl approved the clean production master at [`/jolene/jolene-country-host-master.png`](/jolene/jolene-country-host-master.png) on August 28, 2026. Its fingerprint is `sha256:ec53fef8888e3faa15b19b2726882844cccc683493892b402dbe04ca394d6ac8`. The approved master preserves the source RGB values for every retained character pixel, adds true binary transparency, and locks the 1162 × 1353 frame, the 751 × 1173 opaque bounds at `(187, 88)`, and a bottom-center animation anchor at `(563, 1261)`.
+
+Production derivatives must preserve this master’s aspect ratio, color appearance, silhouette, face, hair, flower, earrings, blouse, and pose. Do not simplify away the visual qualities Carl selected merely to satisfy the superseded study grid.
 
 ## Review board
 
@@ -166,16 +170,16 @@ Score silhouette, recognizable cues, warmth, professionalism, readability, anima
 
 ## Rendering contract
 
-- Master assets are indexed-color PNGs or a lossless sprite sheet exported at native resolution.
+- The approved master is a lossless RGBA PNG at 1162 × 1353; animation derivatives must remain lossless.
 - Use integer frame coordinates and one fixed origin across every state.
 - CSS uses `image-rendering: pixelated`; Canvas 2D uses `imageSmoothingEnabled = false`.
-- Never use filtered scaling, fractional CSS dimensions, fractional translation, blur, glow, SVG smoothing, JPEG, or a generated 1254 × 1254 source downsampled into a sprite.
+- Preserve aspect ratio and use the approved master or lossless derivatives. Never use blur, glow, JPEG, nonuniform scaling, or a generative redraw as a substitute.
 - Static fallback is the approved `idle` frame.
 - Reduced motion shows the static frame with at most user-initiated state changes.
 - Renderer and state manifest remain replaceable; no chat/model provider logic belongs in the asset.
 
 ## Approval and rights boundary
 
-Carl approved this brief and its peek-reveal choreography on August 28, 2026, and selected the Country Host visual direction the same day. Final grid, palette, clean master, anchors, and expression language still require approval before sprite-sheet production. The current assumption is personal, noncommercial portfolio exploration. Public deployment of a recognizable living person's likeness remains a separate rights and launch decision; documenting that boundary does not change the visual brief or substitute a different character.
+Carl approved this brief, its peek-reveal choreography, the Country Host visual direction, and the clean transparent production master on August 28, 2026. Sprite-state production is authorized. Public deployment remains a separate launch decision.
 
 Rejected generated concepts are reference evidence only. They must not be copied into the repository, traced, rigged, or treated as production art.

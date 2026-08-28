@@ -17,21 +17,23 @@ for (const phrase of [
   'Play at most once per browser session',
   'The character is a reveal, not a persistent page ornament',
   'prefers-reduced-motion: reduce',
-  'approved this brief and its peek-reveal choreography on August 28, 2026',
+  'approved this brief, its peek-reveal choreography',
   'selected the **Country Host** study',
   '839ade6ea55a69cf4812a238b05204446576eb7241274a06130276b95d0c17b8',
-  'production defects to correct without redesigning the selected character',
+  'production defects were corrected without redesigning the selected character',
+  'clean transparent production master on August 28, 2026',
+  'ec53fef8888e3faa15b19b2726882844cccc683493892b402dbe04ca394d6ac8',
 ]) {
   assert.ok(brief.includes(phrase), `Avatar brief is missing: ${phrase}`);
 }
 
-assert.deepEqual(contract.nativeFrame, { width: 48, height: 56 });
-assert.deepEqual(contract.displayScales, [3, 4]);
-assert.equal(contract.opaqueColorLimit, 15);
+assert.deepEqual(contract.supersededStudyProposal.nativeFrame, { width: 48, height: 56 });
+assert.deepEqual(contract.supersededStudyProposal.displayScales, [3, 4]);
+assert.equal(contract.supersededStudyProposal.opaqueColorLimit, 15);
 assert.equal(contract.partialAlphaAllowed, false);
 assert.equal(contract.requiredStudies.length, 4);
 assert.equal(contract.requiredStates.length, 9);
-assert.equal(contract.rendering.integerScaleOnly, true);
+assert.equal(contract.rendering.integerScaleOnly, false);
 assert.equal(contract.rendering.canvasImageSmoothing, false);
 assert.equal(contract.visibility.defaultCharacterState, 'hidden');
 assert.equal(contract.visibility.launcherAlwaysAvailable, true);
@@ -52,7 +54,7 @@ assert.equal(contract.motion.transformOnly, true);
 assert.equal(contract.motion.layoutShiftAllowed, false);
 assert.equal(contract.motion.continuousIdleMotionAllowed, false);
 assert.equal(contract.motion.reducedMotionBehavior, 'launcher_only');
-assert.equal(contract.status, 'visual_direction_selected_master_cleanup_required');
+assert.equal(contract.status, 'production_master_approved_sprite_work_authorized');
 assert.equal(contract.approval.briefApproved, true);
 assert.equal(contract.approval.briefApprovedAt, '2026-08-28');
 assert.equal(contract.approval.reviewStudiesAuthorized, true);
@@ -62,9 +64,16 @@ assert.equal(contract.selection.referenceSha256, '839ade6ea55a69cf4812a238b05204
 assert.equal(contract.selection.referenceHasAlpha, false);
 assert.equal(contract.selection.bakedCheckerboard, true);
 assert.equal(contract.selection.visualDirectionApproved, true);
-assert.equal(contract.selection.cleanProductionMasterApproved, false);
+assert.equal(contract.selection.cleanProductionMasterApproved, true);
+assert.equal(contract.selection.cleanProductionMasterApprovedAt, '2026-08-28');
+assert.equal(contract.productionMaster.path, '/jolene/jolene-country-host-master.png');
+assert.equal(contract.productionMaster.sha256, 'ec53fef8888e3faa15b19b2726882844cccc683493892b402dbe04ca394d6ac8');
+assert.deepEqual(contract.productionMaster.frame, { width: 1162, height: 1353 });
+assert.deepEqual(contract.productionMaster.bottomCenterAnchor, { x: 563, y: 1261 });
+assert.equal(contract.productionMaster.palettePolicy, 'preserve_source_rgb');
+assert.equal(contract.productionMaster.alphaPolicy, 'binary');
 assert.equal(contract.approval.masterSelected, true);
-assert.equal(contract.approval.productionAuthorized, false);
+assert.equal(contract.approval.productionAuthorized, true);
 assert.equal(contract.approval.publicUseAuthorized, false);
 
 const selectedReferenceDigest = createHash('sha256').update(selectedReference).digest('hex');

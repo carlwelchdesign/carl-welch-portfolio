@@ -1,6 +1,8 @@
 {
   "schemaVersion": "1.0.0",
-  "status": "candidate_awaiting_carl_review",
+  "status": "approved_for_sprite_production",
+  "approvedBy": "Carl Welch",
+  "approvedAt": "2026-08-28",
   "source": {
     "path": "/jolene/review/country-host-selected-direction.png",
     "sha256": "839ade6ea55a69cf4812a238b05204446576eb7241274a06130276b95d0c17b8",
@@ -50,7 +52,7 @@
     "sourceRgbPreservedForOpaquePixels": true,
     "sourceDimensionsPreserved": true,
     "generativeRedesignUsed": false,
-    "approvedForAnimation": false,
+    "approvedForAnimation": true,
     "approvedForPublicUse": false
   }
 }
