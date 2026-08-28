@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useEffect, useRef } from 'react';
 
 const primaryLinks = [
   { href: '/work', label: 'Work' },
@@ -41,6 +42,35 @@ function CurrentLink({ href, label }: { href: string; label: string }) {
 export function SiteHeader() {
   const pathname = usePathname();
   const section = currentSection(pathname);
+  const mobileNavigationRef = useRef<HTMLDetailsElement>(null);
+
+  useEffect(() => {
+    const navigation = mobileNavigationRef.current;
+    if (navigation) navigation.dataset.dismissalReady = 'true';
+
+    const dismissWithKeyboard = (event: KeyboardEvent) => {
+      const currentNavigation = mobileNavigationRef.current;
+      if (event.key !== 'Escape' || !currentNavigation?.open) return;
+
+      event.preventDefault();
+      currentNavigation.open = false;
+      currentNavigation.querySelector('summary')?.focus();
+    };
+
+    const dismissFromOutside = (event: PointerEvent) => {
+      const navigation = mobileNavigationRef.current;
+      if (!navigation?.open || !(event.target instanceof Node) || navigation.contains(event.target)) return;
+      navigation.open = false;
+    };
+
+    document.addEventListener('keydown', dismissWithKeyboard);
+    document.addEventListener('pointerdown', dismissFromOutside);
+    return () => {
+      if (navigation) delete navigation.dataset.dismissalReady;
+      document.removeEventListener('keydown', dismissWithKeyboard);
+      document.removeEventListener('pointerdown', dismissFromOutside);
+    };
+  }, []);
 
   return (
     <header className="site-header">
@@ -62,7 +92,7 @@ export function SiteHeader() {
         {primaryLinks.map((link) => <CurrentLink key={link.href} {...link} />)}
       </nav>
 
-      <details className="mobile-navigation">
+      <details ref={mobileNavigationRef} className="mobile-navigation">
         <summary aria-label={`Menu, current section: ${section}`}>
           <span className="mobile-navigation-location">{section}</span>
         </summary>
