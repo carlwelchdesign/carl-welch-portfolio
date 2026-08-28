@@ -431,6 +431,50 @@ test('contact page invites conversation without internal policy copy', async ({ 
   );
 });
 
+test('capability index maps every strength to supporting work', async ({ page }) => {
+  await page.goto('/capabilities');
+  const index = page.getByRole('navigation', { name: 'Capability index' });
+  const destinations = [
+    ['Product interface systems', '#product-interface-systems', '3 examples'],
+    ['Bounded AI workflows', '#bounded-ai-workflows', '3 examples'],
+    ['Security and platform boundaries', '#security-and-platform-boundaries', '3 examples'],
+    ['Creative technology', '#creative-technology', '3 examples'],
+    ['Technical leadership', '#technical-leadership', '2 examples'],
+  ] as const;
+
+  await expect(index).toBeVisible();
+  await expect(index.getByRole('link')).toHaveCount(destinations.length);
+  await expect(page.locator('.capability-index-return')).toHaveCount(destinations.length);
+  for (const [name, href, count] of destinations) {
+    const link = index.getByRole('link', { name: new RegExp(name) });
+    await expect(link).toHaveAttribute('href', href);
+    await expect(link).toContainText(count);
+    const section = page.locator(href);
+    await expect(section).toHaveCount(1);
+    await expect(section.getByRole('link', { name: /Capability index/ })).toHaveAttribute(
+      'href',
+      '#capability-index',
+    );
+  }
+
+  const leadership = index.getByRole('link', { name: /Technical leadership/ });
+  await leadership.focus();
+  await expect(leadership).toBeFocused();
+  await leadership.click();
+  await expect(page).toHaveURL(/\/capabilities#technical-leadership$/);
+  await expect(page.locator('#technical-leadership')).toBeInViewport();
+  const returnLink = page.locator('#technical-leadership').getByRole('link', { name: /Capability index/ });
+  await returnLink.focus();
+  await expect(returnLink).toBeFocused();
+  await returnLink.click();
+  await expect(page).toHaveURL(/\/capabilities#capability-index$/);
+  await expect(index).toBeInViewport();
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/capabilities');
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+});
+
 test('experience career index exposes the full professional arc', async ({ page }) => {
   await page.goto('/experience');
   const index = page.getByRole('navigation', { name: 'Career index' });
@@ -815,6 +859,19 @@ test('server-rendered navigation and content remain available without JavaScript
   await expect(page.getByRole('listitem', { name: 'David Allen recommendation' }).getByRole('link', {
     name: /Recommendation highlights/,
   })).toHaveAttribute('href', '#recommendation-highlights');
+
+  await page.goto('/capabilities');
+  const capabilityIndex = page.getByRole('navigation', { name: 'Capability index' });
+  await expect(capabilityIndex.getByRole('link')).toHaveCount(5);
+  await expect(capabilityIndex.getByRole('link', { name: /Creative technology/ })).toHaveAttribute(
+    'href',
+    '#creative-technology',
+  );
+  await expect(page.locator('.capability-index-return')).toHaveCount(5);
+  await expect(page.locator('#technical-leadership').getByRole('link', { name: /Capability index/ })).toHaveAttribute(
+    'href',
+    '#capability-index',
+  );
 
   await page.goto('/experience');
   const careerIndex = page.getByRole('navigation', { name: 'Career index' });
