@@ -61,6 +61,8 @@ for (const integrationBoundary of [
   "sendAvatar('chat_opened')",
   "sendAvatar('evidence_highlighted')",
   "'service_unavailable'",
+  'jolene-starter-stage',
+  'jolene-conversation-avatar',
 ]) {
   assert.ok(chatSource.includes(integrationBoundary), `Chat integration is missing ${integrationBoundary}.`);
 }

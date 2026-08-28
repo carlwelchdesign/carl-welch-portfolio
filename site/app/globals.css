@@ -772,9 +772,8 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .jolene-launcher:hover small { color: #565d54; }
 .jolene-panel { position: absolute; right: 0; bottom: 0; width: min(430px, calc(100vw - 40px)); height: min(860px, calc(100svh - 40px)); max-height: calc(100svh - 40px); display: grid; grid-template-rows: auto auto auto minmax(160px, 1fr) auto; overflow: hidden; border: 1px solid rgba(242, 242, 235, 0.72); background: var(--ink); box-shadow: 0 24px 80px rgba(0, 0, 0, 0.42); }
 .jolene-panel[data-mode='job'] { width: min(580px, calc(100vw - 40px)); }
-.jolene-panel-header { position: relative; min-height: 156px; padding: 20px 194px 20px 20px; display: flex; justify-content: space-between; gap: 20px; align-items: flex-start; overflow: hidden; background: var(--jolene-accent); color: var(--ink); }
+.jolene-panel-header { position: relative; min-height: 118px; padding: 20px 82px 20px 20px; display: flex; justify-content: space-between; gap: 20px; align-items: flex-start; overflow: hidden; background: var(--jolene-accent); color: var(--ink); }
 .jolene-panel-heading { position: relative; z-index: 2; }
-.jolene-panel-avatar { position: absolute; z-index: 1; right: 76px; bottom: -58px; width: 160px; }
 .jolene-panel-header p, .jolene-panel-header h2 { margin: 0; }
 .jolene-panel-header p { font: 9px var(--font-geist-mono), monospace; letter-spacing: 0.1em; text-transform: uppercase; }
 .jolene-panel-header h2 { margin-top: 10px; font-size: 34px; line-height: 0.9; letter-spacing: -0.055em; }
@@ -821,7 +820,9 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .jolene-no-evidence { padding: 12px; border: 1px solid var(--jolene-accent); background: rgba(255, 104, 0, 0.08); }
 .jolene-corpus-version { margin-top: 12px !important; color: var(--muted); font: 8px var(--font-geist-mono), monospace !important; letter-spacing: 0.06em; text-transform: uppercase; }
 .jolene-waiting { margin: 0; color: var(--muted); font: 10px var(--font-geist-mono), monospace; letter-spacing: 0.06em; }
-.jolene-starters { margin-top: 10px; display: grid; gap: 7px; }
+.jolene-starter-stage { position: relative; min-height: 178px; margin-top: 10px; }
+.jolene-starters { display: grid; gap: 7px; padding-right: 122px; }
+.jolene-conversation-avatar { position: absolute; z-index: 1; right: -14px; bottom: -16px; width: 132px; }
 .jolene-starters > p { margin: 0; color: var(--muted); font: 8px var(--font-geist-mono), monospace; letter-spacing: 0.08em; text-transform: uppercase; }
 .jolene-starters button { min-height: 44px; padding: 9px 12px; border: 1px solid var(--line); border-radius: 0; background: transparent; color: var(--paper); cursor: pointer; font: 12px/1.35 var(--font-geist-sans), sans-serif; text-align: left; }
 .jolene-starters button:hover { border-color: var(--jolene-accent); background: rgba(255, 104, 0, 0.1); }
@@ -1151,8 +1152,10 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .jolene-cameo .jolene-avatar { width: 164px; }
   .jolene-panel { position: fixed; right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); left: 12px; width: auto; height: calc(100svh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); max-height: calc(100svh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); }
   .jolene-panel[data-mode='job'] { width: auto; }
-  .jolene-panel-header { min-height: 140px; padding-right: 166px; }
-  .jolene-panel-avatar { right: 76px; bottom: -44px; width: 124px; }
+  .jolene-panel-header { min-height: 110px; padding-right: 76px; }
+  .jolene-starter-stage { min-height: 188px; }
+  .jolene-starters { padding-right: 102px; }
+  .jolene-conversation-avatar { right: -12px; bottom: -12px; width: 112px; }
   .jolene-panel-header h2 { font-size: 30px; }
   .jolene-message[data-role='visitor'] { margin-left: 18px; }
   .jolene-mode-switch button { padding: 0 5px; font-size: 8px; }
@@ -1179,6 +1182,38 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .career-foundation-list, .earlier-practice-grid, .earlier-experience-groups, .about-chapters > ol { grid-template-columns: 1fr; }
   .about-chapters > ol > li { min-height: 0; grid-template-columns: 32px minmax(0, 1fr); }
   .archive-current-work > div, .about-actions { align-items: flex-start; flex-direction: column; }
+}
+
+@media (max-width: 720px) and (max-height: 620px) and (orientation: portrait) {
+  .jolene-panel { grid-template-rows: auto auto auto minmax(96px, 1fr) auto; }
+  .jolene-panel-header { min-height: 102px; }
+  .jolene-fixture-notice { padding-top: 6px; padding-bottom: 6px; }
+  .jolene-messages { padding-top: 10px; padding-bottom: 10px; }
+  .jolene-form { padding: 8px 20px 10px; }
+  .jolene-form label { margin-bottom: 4px; }
+  .jolene-form textarea { min-height: 48px; max-height: 60px; padding: 8px; }
+  .jolene-form > div { margin-top: 4px; }
+}
+
+@media (max-height: 520px) and (orientation: landscape) {
+  .jolene-fixture { right: max(8px, env(safe-area-inset-right)); bottom: max(8px, env(safe-area-inset-bottom)); }
+  .jolene-panel,
+  .jolene-panel[data-mode='job'] { width: min(520px, calc(100vw - 16px)); height: calc(100svh - 16px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); max-height: calc(100svh - 16px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); grid-template-rows: 76px 36px minmax(80px, 1fr) auto; }
+  .jolene-panel-header { min-height: 76px; padding: 10px 70px 8px 14px; }
+  .jolene-panel-header h2 { margin-top: 4px; font-size: 27px; }
+  .jolene-panel-header button { top: 10px; right: 10px; }
+  .jolene-fixture-notice { display: none; }
+  .jolene-mode-switch button { min-height: 36px; }
+  .jolene-messages { min-height: 0; padding: 8px 12px; }
+  .jolene-message { margin-bottom: 8px; padding: 9px; }
+  .jolene-starter-stage { min-height: 112px; margin-top: 6px; }
+  .jolene-starters { gap: 5px; padding-right: 96px; }
+  .jolene-starters button { min-height: 36px; padding: 6px 9px; }
+  .jolene-conversation-avatar { right: -8px; bottom: -8px; width: 98px; }
+  .jolene-form { padding: 6px 10px 8px; }
+  .jolene-form label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .jolene-form textarea { min-height: 44px; max-height: 44px; padding: 8px; }
+  .jolene-form > div { min-height: 44px; margin-top: 3px; }
 }
 
 @media (hover: none) {

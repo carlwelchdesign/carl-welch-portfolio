@@ -287,11 +287,6 @@ export function JoleneChat({
                 {mode === 'contact' ? 'Contact Carl' : mode === 'job' ? 'Compare a role' : 'Ask Jolene'}
               </h2>
             </div>
-            <JoleneAvatar
-              state={avatarState}
-              onStateComplete={settleAvatar}
-              className="jolene-panel-avatar"
-            />
             <button ref={closeRef} type="button" onClick={closePanel} aria-label="Close Jolene chat">
               Close
             </button>
@@ -333,16 +328,23 @@ export function JoleneChat({
                 Looking through Carl’s work…
               </p>
             ) : null}
-            {suggestedQuestions.length > 0 ? (
-              <div className="jolene-starters" aria-label="Suggested questions">
-                {messages.length > 1 ? <p>Ask next</p> : null}
-                {suggestedQuestions.map((question) => (
-                  <button type="button" disabled={waiting} key={question} onClick={() => void sendQuestion(question)}>
-                    {question}
-                  </button>
-                ))}
-              </div>
-            ) : null}
+            <div className="jolene-starter-stage" data-has-suggestions={suggestedQuestions.length > 0}>
+              {suggestedQuestions.length > 0 ? (
+                <div className="jolene-starters" aria-label="Suggested questions">
+                  {messages.length > 1 ? <p>Ask next</p> : null}
+                  {suggestedQuestions.map((question) => (
+                    <button type="button" disabled={waiting} key={question} onClick={() => void sendQuestion(question)}>
+                      {question}
+                    </button>
+                  ))}
+                </div>
+              ) : null}
+              <JoleneAvatar
+                state={avatarState}
+                onStateComplete={settleAvatar}
+                className="jolene-conversation-avatar"
+              />
+            </div>
             <div ref={messagesEndRef} aria-hidden="true" />
           </div>
 
