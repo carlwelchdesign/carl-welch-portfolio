@@ -80,6 +80,21 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .career-portrait-steps > li > span, .career-portrait-steps small { font-family: var(--font-geist-mono), monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; }
 .career-portrait-steps small { display: block; margin-bottom: 8px; opacity: 1; }
 .career-portrait-steps strong { font-size: clamp(21px, 2vw, 31px); letter-spacing: -0.035em; }
+.career-portrait-proof { margin: 54px 0 42px; padding-top: 18px; border-top: 1px solid rgba(9, 12, 9, 0.34); }
+.career-portrait-proof > header { margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.career-portrait-proof > header p { margin: 0; }
+.career-portrait-proof > header > p:last-child { font: 9px/1.4 var(--font-geist-mono), monospace; letter-spacing: 0.09em; text-transform: uppercase; }
+.career-portrait-proof > header > p:last-child > span:last-child { display: none; }
+.career-portrait-proof > ol { margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; border: 1px solid rgba(9, 12, 9, 0.32); background: rgba(9, 12, 9, 0.32); list-style: none; }
+.career-portrait-proof li { min-width: 0; background: var(--paper); }
+.career-portrait-proof a { min-height: 360px; display: flex; flex-direction: column; background: var(--paper); color: var(--ink); transition: background 160ms ease, color 160ms ease; }
+.career-portrait-proof a:hover, .career-portrait-proof a:focus-visible { background: var(--ink); color: var(--paper); outline: 3px solid var(--orange); outline-offset: -4px; }
+.career-portrait-proof figure { min-height: 226px; margin: 0; padding: 18px; display: grid; place-items: center; overflow: hidden; background: #e9e5dc; }
+.career-portrait-proof figure img { width: min(100%, 240px); height: auto; display: block; object-fit: contain; }
+.career-portrait-proof a > div { flex: 1; padding: 18px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 11px 18px; align-content: start; }
+.career-portrait-proof small { grid-column: 1 / -1; font: 8px/1.4 var(--font-geist-mono), monospace; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.68; }
+.career-portrait-proof strong { font-size: clamp(22px, 2vw, 31px); line-height: 0.98; letter-spacing: -0.045em; }
+.career-portrait-proof a > div > span { align-self: end; font: 14px/1 var(--font-geist-mono), monospace; }
 
 .project-chapter { padding: clamp(76px, 10vw, 150px) var(--page-padding); background: rgba(242, 242, 235, 0.91); color: var(--ink); border-bottom: 1px solid rgba(9, 12, 9, 0.24); }
 .section-heading { display: grid; grid-template-columns: 1fr auto; gap: 36px; align-items: end; padding-bottom: 36px; border-bottom: 1px solid rgba(9, 12, 9, 0.25); }
@@ -954,6 +969,17 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .career-portrait-layout { margin-top: 42px; grid-template-columns: 1fr; }
   .career-portrait-steps li { grid-template-columns: 42px minmax(0, 1fr); gap: 12px; }
   .career-portrait-steps strong { display: block; line-height: 1.05; }
+  .career-portrait-proof { margin-top: 42px; }
+  .career-portrait-proof > header { align-items: flex-end; }
+  .career-portrait-proof > header > p:last-child > span:first-child { display: none; }
+  .career-portrait-proof > header > p:last-child > span:last-child { display: inline; }
+  .career-portrait-proof > ol { display: flex; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scrollbar-width: thin; scrollbar-color: var(--ink) rgba(9, 12, 9, 0.16); -webkit-overflow-scrolling: touch; }
+  .career-portrait-proof > ol::-webkit-scrollbar { height: 8px; }
+  .career-portrait-proof > ol::-webkit-scrollbar-track { background: rgba(9, 12, 9, 0.16); }
+  .career-portrait-proof > ol::-webkit-scrollbar-thumb { background: var(--ink); }
+  .career-portrait-proof li { flex: 0 0 78vw; scroll-snap-align: start; }
+  .career-portrait-proof a { min-height: 350px; }
+  .career-portrait-proof figure { min-height: 218px; }
   .career-chapter { min-height: 0; grid-template-columns: 1fr; gap: 28px; }
   .career-chapter-number { display: none; }
   .career-chapter-proof { grid-column: auto; }

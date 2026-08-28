@@ -3,6 +3,7 @@ import Link from 'next/link';
 import type { CSSProperties, ReactNode } from 'react';
 import { careerChapters, characterSignals } from './career-story-data';
 import { contact } from './contact-data';
+import { homepageLegacyWork } from './legacy-career-visuals';
 import type { PortfolioProject, ProjectArchitecture, ProjectTone } from './portfolio-data';
 import { ArchitectureFlow, ImageDrift, NodePulse, Reveal } from './motion-elements';
 import { ProjectMediaViewer } from './project-media-viewer';
@@ -75,6 +76,38 @@ export function CareerPortraitPreview() {
                 <small>{chapter.period}</small>
                 <strong>{chapter.title}</strong>
               </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+      <div className="career-portrait-proof">
+        <header>
+          <p className="eyebrow">From the archive</p>
+          <p>
+            <span>Four selected examples</span>
+            <span>Swipe to browse <span aria-hidden="true">→</span></span>
+          </p>
+        </header>
+        <ol>
+          {homepageLegacyWork.map((item) => (
+            <li key={item.id}>
+              <a href={`/archive#${item.id}`} aria-label={`View ${item.project} in the archive`}>
+                <figure>
+                  <Image
+                    src={item.image.src}
+                    alt={item.image.alt}
+                    width={item.image.width}
+                    height={item.image.height}
+                    sizes="(max-width: 720px) 78vw, 25vw"
+                    unoptimized
+                  />
+                </figure>
+                <div>
+                  <small>{item.context}</small>
+                  <strong>{item.project}</strong>
+                  <span aria-hidden="true">↗</span>
+                </div>
+              </a>
             </li>
           ))}
         </ol>

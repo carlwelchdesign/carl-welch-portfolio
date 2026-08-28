@@ -232,6 +232,19 @@ export const legacyWorkImages: LegacyWorkImage[] = [
   },
 ];
 
+const homepageLegacyWorkIds = [
+  'legacy-dkny',
+  'legacy-gm-defense',
+  'legacy-gtd-iq',
+  'legacy-ufc-japan',
+] as const;
+
+export const homepageLegacyWork = homepageLegacyWorkIds.map((id) => {
+  const item = legacyWorkImages.find((candidate) => candidate.id === id);
+  if (!item) throw new Error(`Missing approved homepage legacy-work record: ${id}`);
+  return item;
+});
+
 export const legacyClientMarks: LegacyClientMark[] = [
   { name: 'ABC', src: '/archive/client-marks/abc.jpg' },
   { name: 'Boeing', src: '/archive/client-marks/boeing.jpg' },
