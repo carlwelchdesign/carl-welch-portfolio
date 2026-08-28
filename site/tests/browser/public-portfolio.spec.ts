@@ -145,6 +145,33 @@ test('all return-to-index controls meet the mobile touch-target contract', async
   }
 });
 
+test('return-to-index controls expose unique contextual names and preserve their destinations', async ({ page }) => {
+  const routeControls = [
+    ['/', '.project-index-return', 5, '#work-index'],
+    ['/work', '.project-index-return', 5, '#work-index'],
+    ['/archive', '.archive-map-return', 6, '#archive-map'],
+    ['/capabilities', '.capability-index-return', 5, '#capability-index'],
+    ['/experience', '.career-index-return', 11, '#career-index'],
+    ['/recommendations', '.recommendation-highlights-return', 13, '#recommendation-highlights'],
+  ] as const;
+
+  for (const [route, selector, count, destination] of routeControls) {
+    await page.goto(route);
+    const controls = page.locator(selector);
+    await expect(controls).toHaveCount(count);
+
+    const links = await controls.evaluateAll((elements) => elements.map((element) => ({
+      accessibleName: element.getAttribute('aria-label'),
+      destination: element.getAttribute('href'),
+    })));
+    const accessibleNames = links.map(({ accessibleName }) => accessibleName);
+
+    expect(accessibleNames.every((name) => name?.startsWith('Return to ')), route).toBe(true);
+    expect(new Set(accessibleNames).size, `${route} has repeated return-control names`).toBe(count);
+    expect(links.every((link) => link.destination === destination), route).toBe(true);
+  }
+});
+
 test('every public route meets the mobile control-size and overflow contract', async ({ page }) => {
   for (const viewport of mobileViewports) {
     await page.setViewportSize(viewport);
