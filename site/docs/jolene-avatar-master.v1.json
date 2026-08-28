@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "1.0.0",
+  "status": "candidate_awaiting_carl_review",
+  "source": {
+    "path": "/jolene/review/country-host-selected-direction.png",
+    "sha256": "839ade6ea55a69cf4812a238b05204446576eb7241274a06130276b95d0c17b8",
+    "width": 1162,
+    "height": 1353
+  },
+  "output": {
+    "path": "/jolene/jolene-country-host-master.png",
+    "sha256": "ec53fef8888e3faa15b19b2726882844cccc683493892b402dbe04ca394d6ac8",
+    "width": 1162,
+    "height": 1353,
+    "hasAlpha": true,
+    "opaquePixels": 694435,
+    "transparentPixels": 877751,
+    "opaqueBounds": {
+      "x": 187,
+      "y": 88,
+      "width": 751,
+      "height": 1173
+    }
+  },
+  "removalPolicy": {
+    "minimumChannel": 238,
+    "maximumChannelSpread": 10,
+    "minimumInteriorComponentPixels": 150,
+    "connectivity": 4
+  },
+  "removedComponents": [
+    {
+      "pixels": 870785,
+      "touchesEdge": true
+    },
+    {
+      "pixels": 342,
+      "touchesEdge": false
+    },
+    {
+      "pixels": 192,
+      "touchesEdge": false
+    },
+    {
+      "pixels": 6432,
+      "touchesEdge": false
+    }
+  ],
+  "invariants": {
+    "sourceRgbPreservedForOpaquePixels": true,
+    "sourceDimensionsPreserved": true,
+    "generativeRedesignUsed": false,
+    "approvedForAnimation": false,
+    "approvedForPublicUse": false
+  }
+}
