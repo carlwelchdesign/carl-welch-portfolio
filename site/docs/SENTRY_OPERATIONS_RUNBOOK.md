@@ -130,11 +130,15 @@ does not retain raw webhook bodies or full Sentry events.
 ## Severity and response expectations
 
 The reviewable provider configuration contract is
-`operations/sentry-alert-policy.v1.json`. It keeps production activation off,
-leaves notification destinations and provider rule IDs empty, and leaves
-sustained-rate and availability thresholds unset until Carl approves them.
-`pnpm check:sentry-alert-policy` prevents a proposed policy from silently
-becoming active or allowing sensitive notification fields.
+`operations/sentry-alert-policy.v1.json`. Carl approved direct Sentry-member
+notifications and the five-minute P0 and 30-minute P1 cooldowns. Provider rules
+3910542 and 3914366 are configured, and Sentry's built-in notification test
+passed. Sentry has not observed an environment yet, so both rules retain the
+provider's all-environments scope until production exists as a selectable
+environment. Sustained-rate and availability thresholds remain unset until a
+real traffic baseline exists. `pnpm check:sentry-alert-policy` keeps provider
+IDs, destinations, cooldowns, data minimization, and pending transition checks
+explicit.
 
 | Severity | Condition | Owner action | Automation boundary |
 | --- | --- | --- | --- |

@@ -1,12 +1,13 @@
 {
   "schemaVersion": "1.0.0",
-  "status": "proposed",
+  "status": "provider_configured_pending_transition_validation",
   "activation": {
-    "enabled": false,
-    "ownerApprovalState": "pending",
+    "enabled": true,
+    "ownerApprovalState": "approved",
     "environments": ["production"],
-    "approvedDestinations": [],
-    "providerRuleIds": []
+    "approvedDestinations": ["sentry_member:Carl Welch"],
+    "providerRuleIds": ["3910542", "3914366"],
+    "providerEnvironmentScope": "all_environments_until_production_is_observed"
   },
   "deduplication": {
     "keyFields": ["project", "environment", "service", "issueId"],
@@ -77,9 +78,32 @@
     ]
   },
   "thresholds": {
-    "approvalState": "pending_owner_review",
+    "approvalState": "new_and_regressed_approved_metric_thresholds_pending_baseline",
     "newAndRegressedIssues": true,
     "sustainedErrorRate": null,
     "availabilityDegradation": null
+  },
+  "providerRules": [
+    {
+      "id": "3910542",
+      "severity": "P0",
+      "triggers": ["new_high_priority_issue", "existing_issue_becomes_high_priority"],
+      "cooldownSeconds": 300,
+      "destination": "sentry_member:Carl Welch"
+    },
+    {
+      "id": "3914366",
+      "severity": "P1",
+      "triggers": ["new_issue", "resolved_issue", "escalated_issue", "regressed_issue"],
+      "cooldownSeconds": 1800,
+      "destination": "sentry_member:Carl Welch"
+    }
+  ],
+  "validation": {
+    "builtInTestNotification": "passed",
+    "p0Transition": "pending",
+    "p1Transition": "pending",
+    "resolutionTransition": "pending",
+    "regressionTransition": "pending"
   }
 }

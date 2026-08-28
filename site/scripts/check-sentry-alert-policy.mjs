@@ -8,12 +8,16 @@ const policy = JSON.parse(await readFile(
 ));
 
 assert.equal(policy.schemaVersion, '1.0.0');
-assert.equal(policy.status, 'proposed');
-assert.equal(policy.activation.enabled, false);
-assert.equal(policy.activation.ownerApprovalState, 'pending');
+assert.equal(policy.status, 'provider_configured_pending_transition_validation');
+assert.equal(policy.activation.enabled, true);
+assert.equal(policy.activation.ownerApprovalState, 'approved');
 assert.deepEqual(policy.activation.environments, ['production']);
-assert.deepEqual(policy.activation.approvedDestinations, []);
-assert.deepEqual(policy.activation.providerRuleIds, []);
+assert.deepEqual(policy.activation.approvedDestinations, ['sentry_member:Carl Welch']);
+assert.deepEqual(policy.activation.providerRuleIds, ['3910542', '3914366']);
+assert.equal(
+  policy.activation.providerEnvironmentScope,
+  'all_environments_until_production_is_observed',
+);
 
 assert.deepEqual(
   policy.deduplication.keyFields,
@@ -77,9 +81,37 @@ for (const prohibited of [
   assert(!allowedFields.has(prohibited), `${prohibited} cannot be notification-safe`);
 }
 
-assert.equal(policy.thresholds.approvalState, 'pending_owner_review');
+assert.equal(
+  policy.thresholds.approvalState,
+  'new_and_regressed_approved_metric_thresholds_pending_baseline',
+);
 assert.equal(policy.thresholds.newAndRegressedIssues, true);
 assert.equal(policy.thresholds.sustainedErrorRate, null);
 assert.equal(policy.thresholds.availabilityDegradation, null);
+
+assert.deepEqual(
+  policy.providerRules.map(({ id }) => id),
+  policy.activation.providerRuleIds,
+);
+
+const providerRules = new Map(policy.providerRules.map((rule) => [rule.severity, rule]));
+assert.equal(providerRules.get('P0').cooldownSeconds, severities.get('P0').cooldownSeconds);
+assert.equal(providerRules.get('P1').cooldownSeconds, severities.get('P1').cooldownSeconds);
+assert.equal(providerRules.get('P0').destination, 'sentry_member:Carl Welch');
+assert.equal(providerRules.get('P1').destination, 'sentry_member:Carl Welch');
+assert(providerRules.get('P0').triggers.includes('new_high_priority_issue'));
+assert(providerRules.get('P1').triggers.includes('new_issue'));
+assert(providerRules.get('P1').triggers.includes('resolved_issue'));
+assert(providerRules.get('P1').triggers.includes('regressed_issue'));
+
+assert.equal(policy.validation.builtInTestNotification, 'passed');
+for (const transition of [
+  'p0Transition',
+  'p1Transition',
+  'resolutionTransition',
+  'regressionTransition',
+]) {
+  assert.equal(policy.validation[transition], 'pending');
+}
 
 console.log('Sentry alert policy checks passed: severity, deduplication, cooldown, minimization, and activation gates are explicit.');
