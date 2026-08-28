@@ -379,6 +379,43 @@ test('experience presents the full early-career foundation without flattening it
   await expect(page.locator('body')).not.toContainText('805-403-4819');
 });
 
+test('experience presents the historical client range with explicit agency and team context', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/experience#career-foundations');
+  const field = page.locator('.legacy-client-field');
+  await expect(field.getByRole('heading', { name: 'The work moved from defense and finance to entertainment, commerce, and culture.' })).toBeVisible();
+  await expect(field).toContainText('Some were direct roles. Many came through agencies, studios, and project teams.');
+  await expect(field.locator('.legacy-client-mark-grid img')).toHaveCount(35);
+  await expect(field.locator('.legacy-client-mark-grid > li')).toHaveCount(36);
+
+  for (const index of [0, 17, 34]) {
+    const image = field.locator('.legacy-client-mark-grid img').nth(index);
+    await image.scrollIntoViewIfNeeded();
+    await expect.poll(() => image.evaluate((element) => (element as HTMLImageElement).naturalWidth)).toBe(170);
+  }
+
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+});
+
+test('archive adds a responsive working contact sheet without stretching the small originals', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/archive#legacy-gm-defense');
+  const archive = page.locator('.legacy-working-archive');
+  await expect(archive.getByRole('heading', { name: 'The hands-on years left a lot of fingerprints.' })).toBeVisible();
+  await expect(archive.locator('.legacy-working-grid > li')).toHaveCount(16);
+  await expect(archive.locator('.legacy-working-grid img')).toHaveCount(16);
+  await expect(archive).toContainText('PETROL Advertising');
+  await expect(archive).toContainText('PHP and MySQL');
+
+  for (const index of [0, 7, 15]) {
+    const image = archive.locator('.legacy-working-grid img').nth(index);
+    await image.scrollIntoViewIfNeeded();
+    await expect.poll(() => image.evaluate((element) => (element as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+  }
+
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+});
+
 test('visitor-facing routes avoid internal editorial and evidence-system language', async ({ page }) => {
   const rejectedCopy = /supported role|reviewed image record|reviewed public evidence only|public corpus|evidence model|view evidence map|claim limitations|requirement evidence|current résumé|message collection|privacy-safe crop|date unverified|source-verified recommendation|review-only lead channels|approved career facts|explicitly approval-gated|current boundaries/i;
   for (const viewport of [{ width: 1440, height: 1000 }, { width: 390, height: 844 }]) {
