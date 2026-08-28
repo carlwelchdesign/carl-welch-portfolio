@@ -1440,7 +1440,8 @@ test('homepage project index supports a complete recruiter scan and return path'
   }
 });
 
-test('flagship case studies publish unique 1200×630 social cards', async ({ page }) => {
+test('flagship case studies publish unique 1200×630 social cards', async ({ page }, testInfo) => {
+  const expectedOrigin = new URL(testInfo.project.use.baseURL as string).origin;
   for (const slug of [
     'job-search-os',
     'flight-tracker-ai',
@@ -1449,7 +1450,7 @@ test('flagship case studies publish unique 1200×630 social cards', async ({ pag
     'argent-matchmaking',
   ]) {
     await page.goto(`/work/${slug}`);
-    const expectedImage = `http://localhost:3000/social/${slug}.png`;
+    const expectedImage = `${expectedOrigin}/social/${slug}.png`;
     await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', expectedImage);
     await expect(page.locator('meta[property="og:image:width"]')).toHaveAttribute('content', '1200');
     await expect(page.locator('meta[property="og:image:height"]')).toHaveAttribute('content', '630');
