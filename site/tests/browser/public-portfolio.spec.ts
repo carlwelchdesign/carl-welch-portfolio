@@ -517,6 +517,45 @@ test('capability index maps every strength to supporting work', async ({ page })
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 });
 
+test('capabilities closing routes recruiters to deeper proof', async ({ page }) => {
+  await page.goto('/capabilities');
+  const nextSteps = page.getByRole('navigation', { name: 'Explore proof behind the capabilities' });
+  const destinations = [
+    ['Case studies', '/work#work-index', '#work-index'],
+    ['Repositories', '/work#public-repositories', '#public-repositories'],
+    ['Recommendations', '/recommendations#recommendation-highlights', '#recommendation-highlights'],
+  ] as const;
+
+  await expect(nextSteps).toBeVisible();
+  await expect(nextSteps.getByRole('link')).toHaveCount(destinations.length);
+  for (const [name, href] of destinations) {
+    const link = nextSteps.getByRole('link', { name: new RegExp(name) });
+    await expect(link).toHaveAttribute('href', href);
+    await link.focus();
+    await expect(link).toBeFocused();
+  }
+
+  for (const [name, , target] of destinations) {
+    await page.goto('/capabilities');
+    await nextSteps.getByRole('link', { name: new RegExp(name) }).click();
+    await expect(page.locator(target)).toHaveCount(1);
+    await expect(page.locator(target)).toBeInViewport();
+  }
+
+  for (const width of [320, 390, 430]) {
+    await page.setViewportSize({ width, height: 844 });
+    await page.goto('/capabilities');
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+    const undersizedLinks = await nextSteps.getByRole('link').evaluateAll((links) => (
+      links.filter((link) => {
+        const bounds = link.getBoundingClientRect();
+        return bounds.width < 44 || bounds.height < 44;
+      }).length
+    ));
+    expect(undersizedLinks).toBe(0);
+  }
+});
+
 test('experience career index exposes the full professional arc', async ({ page }) => {
   await page.goto('/experience');
   const index = page.getByRole('navigation', { name: 'Career index' });
@@ -945,6 +984,14 @@ test('server-rendered navigation and content remain available without JavaScript
   await expect(page.locator('#work-argent-matchmaking').getByRole('link', { name: /Project index/ })).toHaveAttribute(
     'href',
     '#work-index',
+  );
+
+  await page.goto('/capabilities');
+  const capabilityNextSteps = page.getByRole('navigation', { name: 'Explore proof behind the capabilities' });
+  await expect(capabilityNextSteps.getByRole('link')).toHaveCount(3);
+  await expect(capabilityNextSteps.getByRole('link', { name: /Repositories/ })).toHaveAttribute(
+    'href',
+    '/work#public-repositories',
   );
 
   await page.goto('/archive');
