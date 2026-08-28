@@ -1,6 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 import { projects } from '../../app/portfolio-data';
+import { recommendations } from '../../app/recommendations-data';
 
 const routes = [
   '/',
@@ -784,6 +785,28 @@ test('recommendations read as professional testimony without publication audit c
   const lauraBaran = page.getByRole('listitem', { name: 'Laura Baran recommendation' });
   await expect(lauraBaran).toContainText('3D virtual & augmented reality program');
   await expect(lauraBaran).not.toContainText('3D hologram program');
+});
+
+test('recommendation profile links identify LinkedIn and new-tab behavior', async ({ page }) => {
+  await page.goto('/recommendations');
+  const profileLinks = page.locator('.recommendation-card footer strong a[target="_blank"]');
+  await expect(profileLinks).toHaveCount(recommendations.length);
+
+  const renderedLinks = await profileLinks.evaluateAll((links) => links.map((link) => ({
+    accessibleName: link.getAttribute('aria-label'),
+    href: link.getAttribute('href'),
+    rel: link.getAttribute('rel'),
+    target: link.getAttribute('target'),
+    visibleName: link.textContent?.trim(),
+  })));
+
+  expect(renderedLinks).toEqual(recommendations.map((recommendation) => ({
+    accessibleName: `${recommendation.name} on LinkedIn (opens in a new tab)`,
+    href: recommendation.authorProfileUrl,
+    rel: 'noreferrer',
+    target: '_blank',
+    visibleName: recommendation.name,
+  })));
 });
 
 test('recommendation highlights use direct excerpts and link to the full testimony', async ({ page }) => {
