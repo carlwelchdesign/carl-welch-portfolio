@@ -22,6 +22,34 @@ const toneColors: Record<ProjectTone, string> = {
   green: '#62e879',
 };
 
+function CapabilityIndex() {
+  return (
+    <nav id="capability-index" className="capability-index" aria-labelledby="capability-index-title">
+      <header>
+        <p className="eyebrow">Jump through the strengths</p>
+        <h2 id="capability-index-title">Capability index</h2>
+        <p>Five capabilities, with practices and supporting work.</p>
+      </header>
+      <ol>
+        {capabilities.map((capability) => {
+          const style = { '--chapter-tone': toneColors[capability.tone] } as ToneStyle;
+          return (
+            <li key={capability.id} style={style}>
+              <Link href={`#${capability.id}`}>
+                <span>{capability.number}</span>
+                <strong>{capability.name}</strong>
+                <p>{capability.summary}</p>
+                <small>{capability.evidence.length} examples</small>
+                <span aria-hidden="true">↓</span>
+              </Link>
+            </li>
+          );
+        })}
+      </ol>
+    </nav>
+  );
+}
+
 export default function CapabilitiesPage() {
   return (
     <MotionRuntime>
@@ -37,6 +65,7 @@ export default function CapabilitiesPage() {
             title="What I bring to the work"
             summary="Explore each strength through the projects, roles, and recommendations that shaped it."
           />
+          <CapabilityIndex />
 
           <ol className="capability-list">
             {capabilities.map((capability) => {
@@ -91,6 +120,9 @@ export default function CapabilitiesPage() {
                         })}
                       </ArchitectureFlow>
                     </div>
+                    <Link className="capability-index-return" href="#capability-index">
+                      Capability index <span aria-hidden="true">↑</span>
+                    </Link>
                   </div>
                 </li>
               );
