@@ -517,6 +517,42 @@ test('archive adds a responsive working contact sheet without stretching the sma
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 });
 
+test('working archive search finds source-backed projects and keeps inspection inside the result set', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/archive');
+
+  const archive = page.locator('.legacy-working-archive');
+  const search = archive.getByRole('search', { name: 'Search the visual working archive' });
+  const input = search.getByRole('searchbox', { name: 'Find work by project, organization, or technology' });
+  const gridItems = archive.locator('.legacy-working-grid > li');
+
+  await expect(archive.locator('.legacy-working-grid')).toHaveAttribute('data-inspector-ready', 'true');
+  await expect(search.getByText('16 of 16 projects')).toBeVisible();
+  await input.fill('General Dynamics');
+  await expect(search.getByText('1 of 16 projects')).toBeVisible();
+  await expect(gridItems).toHaveCount(1);
+  await expect(archive.getByRole('heading', { name: 'GM Defense immersive training' })).toBeVisible();
+  await expect(archive.getByRole('heading', { name: 'GTD IQ application' })).toHaveCount(0);
+
+  await archive.getByRole('button', { name: 'Inspect GM Defense immersive training' }).click();
+  const dialog = page.locator('.legacy-inspector');
+  await expect(dialog).toContainText('01 of 1');
+  await dialog.getByRole('button', { name: /^Next/ }).click();
+  await expect(dialog.getByRole('heading', { name: 'GM Defense immersive training' })).toBeVisible();
+  await page.keyboard.press('Escape');
+
+  await search.getByRole('button', { name: 'Clear search' }).click();
+  await expect(search.getByText('16 of 16 projects')).toBeVisible();
+  await expect(gridItems).toHaveCount(16);
+
+  await input.fill('not a project in this archive');
+  await expect(search.getByText('0 of 16 projects')).toBeVisible();
+  await expect(archive.getByRole('heading', { name: 'Try a project, organization, discipline, or technology.' })).toBeVisible();
+  await archive.getByRole('button', { name: 'Show all 16 projects' }).click();
+  await expect(gridItems).toHaveCount(16);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+});
+
 test('archive inspector supports focused keyboard and mobile review without upscaling small sources', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.emulateMedia({ reducedMotion: 'reduce' });
@@ -633,6 +669,7 @@ test('server-rendered navigation and content remain available without JavaScript
   await homepageArchiveLink.click();
   await page.waitForURL(/\/archive#legacy-dkny$/);
   await expect(page.locator('#legacy-dkny')).toHaveCount(1);
+  await expect(page.locator('.legacy-working-grid > li')).toHaveCount(16);
 
   await page.goto('/recommendations');
   await expect(page.getByRole('navigation', { name: 'Recommendation highlights' })).toBeVisible();
