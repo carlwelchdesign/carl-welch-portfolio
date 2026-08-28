@@ -71,6 +71,14 @@ function getSuggestedQuestions(messages: ChatMessage[]): string[] {
   return [];
 }
 
+function getLatestAssistantMessageId(messages: ChatMessage[]): string | null {
+  for (let index = messages.length - 1; index >= 0; index -= 1) {
+    if (messages[index].role === 'assistant') return messages[index].id;
+  }
+
+  return null;
+}
+
 export function JoleneChat({
   mode: connectionMode,
   scenario: scenarioValue = 'success',
@@ -88,6 +96,8 @@ export function JoleneChat({
   const launcherRef = useRef<HTMLButtonElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const latestAssistantRef = useRef<HTMLElement>(null);
+  const focusedAssistantId = useRef<string | null>(null);
   const messageSequence = useRef(0);
   const [open, setOpen] = useState(false);
   const [mode, setMode] = useState<'chat' | 'job' | 'contact'>('chat');
@@ -95,6 +105,7 @@ export function JoleneChat({
   const [waiting, setWaiting] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([initialMessage(connectionMode)]);
   const suggestedQuestions = getSuggestedQuestions(messages);
+  const latestAssistantMessageId = getLatestAssistantMessageId(messages);
 
   useEffect(() => {
     if (!open) return;
@@ -110,6 +121,19 @@ export function JoleneChat({
   useEffect(() => {
     if (open) messagesEndRef.current?.scrollIntoView({ block: 'end' });
   }, [messages, open, waiting]);
+
+  useEffect(() => {
+    if (
+      !open
+      || waiting
+      || messages.length === 1
+      || !latestAssistantMessageId
+      || focusedAssistantId.current === latestAssistantMessageId
+    ) return;
+
+    latestAssistantRef.current?.focus({ preventScroll: true });
+    focusedAssistantId.current = latestAssistantMessageId;
+  }, [latestAssistantMessageId, messages.length, open, waiting]);
 
   function closePanel() {
     setOpen(false);
@@ -225,7 +249,13 @@ export function JoleneChat({
 
           {mode === 'chat' ? <><div className="jolene-messages" role="log" aria-live="polite" aria-busy={waiting}>
             {messages.map((message) => (
-              <article className="jolene-message" data-role={message.role} key={message.id}>
+              <article
+                className="jolene-message"
+                data-role={message.role}
+                key={message.id}
+                ref={message.id === latestAssistantMessageId && messages.length > 1 ? latestAssistantRef : undefined}
+                tabIndex={message.id === latestAssistantMessageId && messages.length > 1 ? -1 : undefined}
+              >
                 <p className="jolene-message-role">{message.role === 'assistant' ? 'Jolene' : 'You'}</p>
                 <p>{message.text}</p>
                 {message.note ? <p className="jolene-message-note">{message.note}</p> : null}
