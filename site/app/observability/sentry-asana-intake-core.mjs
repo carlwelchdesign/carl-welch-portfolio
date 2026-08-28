@@ -245,7 +245,7 @@ async function findIncidentTask(fetcher, config, issueId) {
 }
 
 function makeTaskName(incident) {
-  return `PORT-INC — ${incident.severity} ${incident.service} Sentry issue ${incident.issueId}`.slice(0, 200);
+  return `PORT-INC: ${incident.severity} ${incident.service} Sentry issue ${incident.issueId}`.slice(0, 200);
 }
 
 function makeTaskNotes(incident, digest) {

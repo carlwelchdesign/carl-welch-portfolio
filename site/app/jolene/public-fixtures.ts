@@ -40,7 +40,7 @@ const fixtureReviewedAt = '2026-08-25T19:30:00.000Z';
 const citations: PublicEvidenceCitation[] = [
   {
     evidenceId: 'career:00000000-0000-4000-8000-000000000001',
-    title: 'Job Search OS — review workflow',
+    title: 'Job Search OS: review workflow',
     href: '/work/job-search-os#evidence--portfolio--claim--job-search-os--approval-boundary',
     sourceType: 'portfolio_page',
     strength: 'strong',
@@ -49,7 +49,7 @@ const citations: PublicEvidenceCitation[] = [
   },
   {
     evidenceId: 'career:00000000-0000-4000-8000-000000000002',
-    title: 'Flight Tracker AI — typed product system',
+    title: 'Flight Tracker AI: typed product system',
     href: '/work/flight-tracker-ai#evidence--portfolio--claim--flight-tracker-ai--typed-system',
     sourceType: 'portfolio_page',
     strength: 'moderate',

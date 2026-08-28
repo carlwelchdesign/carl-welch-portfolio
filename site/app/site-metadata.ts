@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 export const siteName = 'Carl Welch Portfolio';
-export const defaultTitle = 'Carl Welch — Senior Product Engineer';
+export const defaultTitle = 'Carl Welch | Senior Product Engineer';
 export const defaultDescription =
   'Senior product engineer Carl Welch: current systems, professional experience, and a selected archive tracing two decades of interactive and product work.';
 

@@ -30,13 +30,13 @@ export default function ExperiencePage() {
                 id={item.id}
                 data-evidence-target
                 tabIndex={-1}
-                aria-label={`${item.company} — ${item.role}`}
+                aria-label={`${item.company}, ${item.role}`}
               >
                 <div
                   id={publicEvidenceAnchorId(item.sourceId)}
                   data-evidence-target
                   tabIndex={-1}
-                  aria-label={`${item.company} — ${item.role}`}
+                  aria-label={`${item.company}, ${item.role}`}
                 >
                   <Reveal className="experience-card">
                     <span className="experience-number">{String(index + 1).padStart(2, '0')}</span>

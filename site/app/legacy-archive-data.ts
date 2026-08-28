@@ -27,7 +27,7 @@ export const legacyArchiveProjects: LegacyArchiveProject[] = [
     period: '2006–2007',
     role: 'Interactive developer',
     contribution:
-      'Interactive development using ActionScript 2, video, XML, and multi-user technology. This was team work—not a claim of sole authorship.',
+      'Interactive development using ActionScript 2, video, XML, and multi-user technology. This was team work, not a claim of sole authorship.',
     technology: ['ActionScript 2', 'Flash video', 'XML', 'Multi-user server'],
     image: {
       src: '/archive/yuco-studio-site.png',

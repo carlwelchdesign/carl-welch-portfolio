@@ -30,7 +30,7 @@ export const careerChapters: CareerChapter[] = [
     period: 'Early interactive practice',
     title: 'Interactive systems came first.',
     summary:
-      'Studio sites, animation, multimedia, and front-end work taught me to treat motion, feedback, and visual hierarchy as parts of the system—not decoration added at the end.',
+      'Studio sites, animation, multimedia, and front-end work taught me to treat motion, feedback, and visual hierarchy as parts of the system, not decoration added at the end.',
     proof: ['yU+co studio website', 'Interactive production', 'Motion + multimedia'],
     href: '/archive#yuco',
     linkLabel: 'See the selected archive',

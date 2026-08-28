@@ -800,7 +800,7 @@ export const experience: ExperienceRole[] = [
     sourceId: 'portfolio:source:experience:yubico',
     company: 'Yubico',
     role: 'Senior Software Engineer',
-    dates: 'Jul 2022 — Mar 2026',
+    dates: 'Jul 2022 to Mar 2026',
     summary:
       'Built enterprise administration interfaces, shared components, Storybook documentation, and test infrastructure for security-product workflows.',
     stack: ['React', 'TypeScript', 'Storybook', 'Testing'],
@@ -810,7 +810,7 @@ export const experience: ExperienceRole[] = [
     sourceId: 'portfolio:source:experience:revenue-io',
     company: 'Revenue.io',
     role: 'Senior Software Engineer',
-    dates: 'Mar 2020 — Jul 2022',
+    dates: 'Mar 2020 to Jul 2022',
     summary:
       'Developed analytics dashboards and helped move a mature application from Backbone toward React and TypeScript.',
     stack: ['React', 'TypeScript', 'Analytics', 'Backbone'],
@@ -820,7 +820,7 @@ export const experience: ExperienceRole[] = [
     sourceId: 'portfolio:source:experience:bosch',
     company: 'Bosch',
     role: 'Lead Frontend Developer',
-    dates: 'Jul 2018 — Mar 2020',
+    dates: 'Jul 2018 to Mar 2020',
     summary:
       'Led frontend delivery for B2B ridesharing products spanning maps, scheduling, responsive interfaces, and coordinated releases.',
     stack: ['React', 'TypeScript', 'Maps', 'Mobile web'],
@@ -830,7 +830,7 @@ export const experience: ExperienceRole[] = [
     sourceId: 'portfolio:source:experience:bridg',
     company: 'Bridg',
     role: 'Senior Frontend Engineer',
-    dates: 'Dec 2017 — Aug 2018',
+    dates: 'Dec 2017 to Aug 2018',
     summary:
       'Built data-rich product interfaces for analytics, audience segmentation, and customer intelligence workflows.',
     stack: ['React', 'Data visualization', 'Analytics'],
@@ -840,7 +840,7 @@ export const experience: ExperienceRole[] = [
     sourceId: 'portfolio:source:experience:grindr',
     company: 'Grindr',
     role: 'Senior Web Developer / Manager',
-    dates: 'Apr 2016 — Aug 2017',
+    dates: 'Apr 2016 to Aug 2017',
     summary:
       'Delivered in-app campaign and content-management tooling while managing web engineering work and cross-functional delivery.',
     stack: ['JavaScript', 'Campaign tooling', 'CMS', 'Engineering management'],

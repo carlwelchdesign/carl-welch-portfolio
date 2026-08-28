@@ -16,7 +16,7 @@ export function PortfolioHome() {
               <h1 id="hero-title">Carl Welch</h1>
               <p className="hero-summary">
                 I build complex product interfaces and the systems behind them. My work spans
-                enterprise security, analytics, mobility, applied AI, and creative software—grounded
+                enterprise security, analytics, mobility, applied AI, and creative software, grounded
                 in two decades of interactive and product work.
               </p>
               <div className="hero-actions">
