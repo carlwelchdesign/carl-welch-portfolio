@@ -154,6 +154,6 @@ export const recommendations: Recommendation[] = ([
     date: 'February 2, 2008',
     relationship: 'Laura worked with Carl on the same team',
     authorProfileUrl: 'https://www.linkedin.com/in/laura-baran-b6786b5/',
-    quote: 'Carl worked on the cutting edge design for a 3D hologram program that broke new ground for commercial and military applications. He was instrumental in the programming of the application software. He is a very focused individual and during his time at General Dynamics I think he surpassed all management expectations with the product he created.',
+    quote: 'Carl worked on the cutting edge design for a 3D virtual & augmented reality program that broke new ground for commercial and military applications. He was instrumental in the programming of the application software. He is a very focused individual and during his time at General Dynamics I think he surpassed all management expectations with the product he created.',
   },
 ] satisfies ReconciledRecommendation[]).map(reconciledRecommendation);

@@ -98,6 +98,11 @@ assert.equal(
   'David was Carl’s employer',
   'David Allen must remain identified as Carl’s employer.',
 );
+assert.equal(
+  recommendations.find((item) => item.id === 'portfolio:recommendation:laura-baran-2008-02-02')?.quote,
+  'Carl worked on the cutting edge design for a 3D virtual & augmented reality program that broke new ground for commercial and military applications. He was instrumental in the programming of the application software. He is a very focused individual and during his time at General Dynamics I think he surpassed all management expectations with the product he created.',
+  'Laura Baran’s recommendation must retain Carl’s approved virtual and augmented reality correction.',
+);
 requireUnique(capabilities.map((capability) => capability.id), 'Capability IDs');
 assert.equal(careerChapters.length, 4, 'The public career portrait must contain four reviewed chapters.');
 requireUnique(careerChapters.map((chapter) => chapter.number), 'Career chapter numbers');

@@ -328,6 +328,10 @@ test('recommendations read as professional testimony without publication audit c
   const davidAllen = page.getByRole('listitem', { name: 'David Allen recommendation' });
   await expect(davidAllen).toContainText('David was Carl’s employer');
   await expect(davidAllen).not.toContainText('David was Carl’s client');
+
+  const lauraBaran = page.getByRole('listitem', { name: 'Laura Baran recommendation' });
+  await expect(lauraBaran).toContainText('3D virtual & augmented reality program');
+  await expect(lauraBaran).not.toContainText('3D hologram program');
 });
 
 test('recommendation highlights use direct excerpts and link to the full testimony', async ({ page }) => {
