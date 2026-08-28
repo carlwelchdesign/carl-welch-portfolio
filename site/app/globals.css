@@ -697,6 +697,8 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .home-closing-copy > p { margin-top: 30px; }
   .home-closing-actions { align-items: flex-start; flex-direction: column; }
   .section-heading, .project-detail-deck, .evidence-grid { grid-template-columns: 1fr; }
+  .section-heading > *, .project-detail-hero > * { min-width: 0; }
+  .section-heading h2, .project-detail-hero h1 { font-size: clamp(46px, 16vw, 64px); overflow-wrap: anywhere; }
   .section-heading h2.long-project-title, .project-detail-hero h1.long-project-title { font-size: clamp(42px, 13vw, 58px); overflow-wrap: anywhere; }
   .project-meta { text-align: left; }
   .project-image-wrap { margin-top: 32px; }

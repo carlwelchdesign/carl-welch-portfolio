@@ -167,6 +167,7 @@ assert(!jobSearchOs?.gallery.some((item) => item.src.includes('system-topology')
 assert(projects.find((project) => project.slug === 'flight-tracker-ai')?.gallery.length >= 3, 'Flight Tracker AI must retain live, replay, and route-comparison views.');
 assert(projects.find((project) => project.slug === 'wave-factory-essentials')?.gallery.length >= 5, 'Wave Factory Essentials must retain its expanded product-family gallery.');
 assert(projects.find((project) => project.slug === 'supraconscious-avatar-ai')?.gallery.length >= 3, 'Supraconscious Avatar AI must retain its product, privacy, and plan views.');
+assert(projects.find((project) => project.slug === 'argent-matchmaking')?.gallery.length >= 3, 'Argent Matchmaking must retain its product-system, direction, and environment views.');
 
 for (const capability of capabilities) {
   if (capability.evidence.length < 2) throw new Error(`${capability.name} does not contain enough supporting evidence.`);

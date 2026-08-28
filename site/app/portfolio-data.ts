@@ -514,6 +514,112 @@ export const projects: PortfolioProject[] = [
     ],
     repositoryUrl: 'https://github.com/carlwelchdesign/supraconscious-avatar-ai',
   },
+  {
+    slug: 'argent-matchmaking',
+    name: 'Argent Matchmaking',
+    category: 'Product strategy / Private services',
+    status: 'Synthetic concept prototype',
+    tone: 'orange',
+    number: '05',
+    summary:
+      'A human-led matchmaking concept spanning a discreet public experience, member mobile surface, matchmaker workspace, shared design system, and the beginnings of a production-minded platform.',
+    role: 'Product engineer and system designer',
+    scope: 'Product strategy, interface art direction, platform architecture, and implementation',
+    image: {
+      src: '/projects/argent-matchmaking/product-system.png',
+      alt: 'Argent Matchmaking product system showing design tokens, public web, mobile introduction, and matchmaker review workspace',
+      width: 1536,
+      height: 1024,
+    },
+    galleryTitle: 'A private-service world across every surface',
+    gallerySummary:
+      'The concept pairs a restrained Nocturne interface system with campaign imagery designed for discretion, intimacy, and a high-touch service rather than mass-market dating mechanics.',
+    gallery: [
+      {
+        src: '/projects/argent-matchmaking/couple-direction.png',
+        alt: 'Argent campaign image of a couple overlooking the coast at sunset',
+        width: 1280,
+        height: 853,
+        label: 'Relationship direction',
+        caption: 'The selected campaign direction presents mature chemistry and privacy without drifting into generic dating-app imagery.',
+        layout: 'wide',
+      },
+      {
+        src: '/projects/argent-matchmaking/coastal-residence.png',
+        alt: 'Argent coastal residence image used for the private-service concept',
+        width: 1672,
+        height: 941,
+        label: 'Service environment',
+        caption: 'A quiet coastal residence establishes the restrained, place-specific atmosphere behind the public introduction experience.',
+        layout: 'wide',
+      },
+      {
+        src: '/projects/argent-matchmaking/gallery-environment.png',
+        alt: 'Argent gallery interior image with sea view and a sculptural branch arrangement',
+        width: 1681,
+        height: 935,
+        label: 'Nocturne image system',
+        caption: 'Architectural imagery gives the brand room to feel considered and editorial while the interface remains disciplined and legible.',
+        layout: 'wide',
+      },
+    ],
+    story: {
+      heading: 'Designing for judgment, discretion, and human review.',
+      problem:
+        'A private matchmaking service cannot borrow the mechanics or tone of a swipe-based marketplace. Applicants, members, matchmakers, consent decisions, and introductions each need a different surface, while sensitive policy and data must stay out of public and mobile bundles.',
+      contribution:
+        'I shaped the product strategy and built the current synthetic concept alongside a multi-app foundation: public and staff web surfaces, a Flutter mobile client, Fastify API, worker, generated contracts, server-only domain and database packages, Docker verification, and a shared cross-platform design system.',
+      decisions: [
+        {
+          title: 'Human-led by design',
+          detail: 'The interface centers matchmaker judgment, consent, provenance, and review state instead of presenting an autonomous matching score as the product.',
+        },
+        {
+          title: 'Separate public and staff surfaces',
+          detail: 'The operational workspace is a distinct application boundary rather than an admin route hidden inside the public experience.',
+        },
+        {
+          title: 'Share contracts and tokens, not sensitive policy',
+          detail: 'Generated clients and semantic design tokens can cross web and mobile, while authorization rules, matchmaking policy, and provider credentials remain server-only.',
+        },
+      ],
+    },
+    stack: ['Next.js', 'TypeScript', 'Fastify', 'Flutter', 'PostgreSQL', 'Docker'],
+    architecture: [
+      { id: 'surfaces', label: 'Public + mobile', detail: 'Synthetic applicant, member, and introduction experiences' },
+      { id: 'contracts', label: 'Generated contracts', detail: 'OpenAPI source with TypeScript and Dart clients' },
+      { id: 'api', label: 'Fastify API', detail: 'Versioned service boundary for future application workflows' },
+      { id: 'domain', label: 'Domain + database', detail: 'Server-only policy, migrations, and synthetic fixture controls' },
+      { id: 'operations', label: 'Staff + worker', detail: 'Separate review workspace and background process foundation' },
+    ],
+    maturity: 'prototype',
+    sourceId: 'portfolio:source:project:argent-matchmaking',
+    evidence: [
+      {
+        id: 'portfolio:claim:argent-matchmaking:multi-app-foundation',
+        sourceIds: ['portfolio:source:project:argent-matchmaking'],
+        text: 'Organizes public web, separate staff web, Flutter mobile, API, worker, domain policy, database, generated contracts, and design-system packages in one monorepo.',
+        strength: 'strong', maturity: 'prototype', limitations: ['The visible experience remains a synthetic concept prototype.'], reviewState: 'approved', publicApproved: true,
+      },
+      {
+        id: 'portfolio:claim:argent-matchmaking:contract-boundaries',
+        sourceIds: ['portfolio:source:project:argent-matchmaking'],
+        text: 'Keeps generated client contracts and design tokens cross-platform while reserving authorization rules, sensitive policy, and provider credentials for server-only packages.',
+        strength: 'strong', maturity: 'prototype', limitations: ['Production identity and provider decisions remain future work.'], reviewState: 'approved', publicApproved: true,
+      },
+      {
+        id: 'portfolio:claim:argent-matchmaking:docker-ci-foundation',
+        sourceIds: ['portfolio:source:project:argent-matchmaking'],
+        text: 'Includes Docker smoke verification across five local services plus quality, secret, dependency, code-scanning, container-security, and SBOM checks in CI.',
+        strength: 'strong', maturity: 'prototype', limitations: ['Local and CI verification do not establish a production service.'], reviewState: 'approved', publicApproved: true,
+      },
+    ],
+    boundaries: [
+      'The current screen uses synthetic content and has no accounts, submissions, stored profiles, real matching, or production workflow.',
+      'The broader architecture is a reviewed direction and implementation foundation; provider selection, production identity, real data, and launch remain separate work.',
+    ],
+    repositoryUrl: 'https://github.com/carlwelchdesign/matchmaker-ai',
+  },
 ];
 
 export type ExperienceRole = {
