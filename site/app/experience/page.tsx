@@ -14,6 +14,38 @@ export const metadata: Metadata = buildPageMetadata({
   path: '/experience',
 });
 
+function CareerIndex() {
+  return (
+    <nav id="career-index" className="career-index" aria-labelledby="career-index-title">
+      <header>
+        <p className="eyebrow">Jump through the career</p>
+        <h2 id="career-index-title">Career index</h2>
+        <p>Recent product roles and six earlier foundations.</p>
+      </header>
+      <ol>
+        <li>
+          <Link href="#recent-product-roles">
+            <span>Now</span>
+            <strong>Recent product engineering</strong>
+            <small>2016 to 2026</small>
+            <span aria-hidden="true">↓</span>
+          </Link>
+        </li>
+        {careerFoundations.map((foundation, index) => (
+          <li key={foundation.id}>
+            <Link href={`#career-${foundation.id}`}>
+              <span>{String(index + 1).padStart(2, '0')}</span>
+              <strong>{foundation.title}</strong>
+              <small>{foundation.period}</small>
+              <span aria-hidden="true">↓</span>
+            </Link>
+          </li>
+        ))}
+      </ol>
+    </nav>
+  );
+}
+
 export default function ExperiencePage() {
   return (
     <MotionRuntime>
@@ -24,7 +56,8 @@ export default function ExperiencePage() {
             title="A practice built across different kinds of work"
             summary="Product engineering, interface systems, technical leadership, client delivery, and an earlier foundation in interactive and creative technology."
           />
-          <ol className="experience-list">
+          <CareerIndex />
+          <ol id="recent-product-roles" className="experience-list">
             {experience.map((item, index) => (
               <li
                 key={item.company}
@@ -69,7 +102,7 @@ export default function ExperiencePage() {
             </header>
             <ol className="career-foundation-list" aria-label="Earlier career foundations">
               {careerFoundations.map((foundation, index) => (
-                <li key={`${foundation.period}-${foundation.title}`}>
+                <li id={`career-${foundation.id}`} key={foundation.id}>
                   <article>
                     <div className="career-foundation-meta">
                       <span>{String(index + 1).padStart(2, '0')}</span>
