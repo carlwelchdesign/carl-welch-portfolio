@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { legacyClientMarks, legacyWorkImages } from './legacy-career-visuals';
+import { LegacyWorkingGallery } from './legacy-working-gallery';
 import { Reveal } from './motion-elements';
 
 export function LegacyClientField() {
@@ -61,43 +62,7 @@ export function LegacyWorkingArchive() {
         </p>
       </header>
 
-      <ol className="legacy-working-grid">
-        {legacyWorkImages.map((item, index) => (
-          <li
-            key={item.id}
-            id={item.id}
-            className={item.display === 'wide' ? 'legacy-working-item-wide' : undefined}
-          >
-            <article>
-              <figure>
-                <div className="legacy-working-image">
-                  <Image
-                    src={item.image.src}
-                    alt={item.image.alt}
-                    width={item.image.width}
-                    height={item.image.height}
-                    sizes={item.display === 'wide'
-                      ? '(max-width: 760px) 100vw, 46vw'
-                      : '(max-width: 760px) 100vw, 24vw'}
-                    unoptimized={item.image.width <= 240}
-                  />
-                </div>
-                <figcaption>
-                  <span>{String(index + 1).padStart(2, '0')}</span>
-                  <span>{item.context}</span>
-                </figcaption>
-              </figure>
-              <div className="legacy-working-copy">
-                <h3>{item.project}</h3>
-                <p>{item.contribution}</p>
-                <ul aria-label={`${item.project} technologies and disciplines`}>
-                  {item.technology.map((technology) => <li key={technology}>{technology}</li>)}
-                </ul>
-              </div>
-            </article>
-          </li>
-        ))}
-      </ol>
+      <LegacyWorkingGallery items={legacyWorkImages} />
     </section>
   );
 }
