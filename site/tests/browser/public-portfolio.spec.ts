@@ -368,6 +368,17 @@ test('contact page invites conversation without internal policy copy', async ({ 
   );
 });
 
+test('experience presents the full early-career foundation without flattening it into a client list', async ({ page }) => {
+  await page.goto('/experience#career-foundations');
+  const foundations = page.locator('.career-foundation-list > li');
+  await expect(foundations).toHaveCount(6);
+  await expect(page.getByRole('heading', { level: 3, name: 'The Army, art school, and GWAR' })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 3, name: 'Immersive systems before AR was a product category' })).toBeVisible();
+  await expect(page.getByText('PHP', { exact: true }).first()).toBeVisible();
+  await expect(page.getByText('MySQL', { exact: true }).first()).toBeVisible();
+  await expect(page.locator('body')).not.toContainText('805-403-4819');
+});
+
 test('visitor-facing routes avoid internal editorial and evidence-system language', async ({ page }) => {
   const rejectedCopy = /supported role|reviewed image record|reviewed public evidence only|public corpus|evidence model|view evidence map|claim limitations|requirement evidence|current résumé|message collection|privacy-safe crop|date unverified|source-verified recommendation|review-only lead channels|approved career facts|explicitly approval-gated|current boundaries/i;
   for (const viewport of [{ width: 1440, height: 1000 }, { width: 390, height: 844 }]) {

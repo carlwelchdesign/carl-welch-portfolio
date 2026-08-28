@@ -61,7 +61,7 @@ const [
   { capabilities },
   { contact },
   { publicEvidenceTargetRecords },
-  { careerChapters, earlierPracticeGroups, characterSignals },
+  { careerChapters, earlierPracticeGroups, characterSignals, careerFoundations },
 ] = await Promise.all([
   loadTypescriptData(resolve(root, 'app/github-projects.ts')),
   loadTypescriptData(resolve(root, 'app/portfolio-data.ts')),
@@ -108,7 +108,16 @@ assert.equal(careerChapters.length, 4, 'The public career portrait must contain 
 requireUnique(careerChapters.map((chapter) => chapter.number), 'Career chapter numbers');
 assert.equal(earlierPracticeGroups.length, 2, 'Earlier practice must retain the two bounded public groups.');
 requireUnique(earlierPracticeGroups.flatMap((group) => group.organizations), 'Earlier practice organizations');
+assert.equal(careerFoundations.length, 6, 'The long-view career narrative must retain six distinct foundations.');
+assert(careerFoundations.some((foundation) => foundation.title === 'The Army, art school, and GWAR'), 'The career narrative must retain Carl’s early GWAR work.');
+assert(careerFoundations.some((foundation) => foundation.technologies.includes('PHP') && foundation.technologies.includes('MySQL')), 'The career narrative must retain Carl’s historical PHP and MySQL foundation.');
+requireUnique(careerFoundations.map((foundation) => `${foundation.period}:${foundation.title}`), 'Career foundation records');
 requireUnique(characterSignals.map((signal) => signal.recommendationId), 'Character signal recommendation IDs');
+
+const historicalResumeSource = await readFile(resolve(root, 'docs/CAREER_SOURCE_2012_RESUME.md'), 'utf8');
+assert(historicalResumeSource.includes('portfolio:source:career:resume-2012'), 'The 2012 resume source must retain its stable source ID.');
+assert(!historicalResumeSource.includes('805-403-4819'), 'The historical phone number must not enter the repository source record.');
+assert(!historicalResumeSource.includes('carlwelchdesign@gmail.com'), 'The historical email address must not enter the repository source record.');
 
 const projectSlugs = new Set(projects.map((project) => project.slug));
 const repositoryNames = new Set(githubProjects.map((project) => project.name));
