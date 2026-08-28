@@ -435,9 +435,13 @@ test('experience career index exposes the full professional arc', async ({ page 
 
   await expect(index).toBeVisible();
   await expect(index.getByRole('link')).toHaveCount(destinations.length);
+  await expect(page.locator('.career-index-return')).toHaveCount(11);
   for (const [label, href] of destinations) {
     await expect(index.getByRole('link', { name: new RegExp(label) })).toHaveAttribute('href', href);
     await expect(page.locator(href)).toHaveCount(1);
+  }
+  for (const returnLink of await page.locator('.career-index-return').all()) {
+    await expect(returnLink).toHaveAttribute('href', '#career-index');
   }
 
   const evidenceLink = index.getByRole('link', { name: /Brand systems, GTD, and Evidence.com/ });
@@ -446,6 +450,12 @@ test('experience career index exposes the full professional arc', async ({ page 
   await evidenceLink.click();
   await expect(page).toHaveURL(/\/experience#career-gtd-evidence-com$/);
   await expect(page.locator('#career-gtd-evidence-com')).toBeInViewport();
+  const returnLink = page.locator('#career-gtd-evidence-com').getByRole('link', { name: /Career index/ });
+  await returnLink.focus();
+  await expect(returnLink).toBeFocused();
+  await returnLink.click();
+  await expect(page).toHaveURL(/\/experience#career-index$/);
+  await expect(index).toBeInViewport();
 
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/experience');
@@ -797,6 +807,11 @@ test('server-rendered navigation and content remain available without JavaScript
   await expect(careerIndex.getByRole('link', { name: /The Army, art school, and GWAR/ })).toHaveAttribute(
     'href',
     '#career-army-art-school-gwar',
+  );
+  await expect(page.locator('.career-index-return')).toHaveCount(11);
+  await expect(page.locator('#career-teaching-code').getByRole('link', { name: /Career index/ })).toHaveAttribute(
+    'href',
+    '#career-index',
   );
   const archiveLink = page.getByRole('link', { name: 'View archived work related to Coca-Cola' });
   await expect(archiveLink).toHaveAttribute('href', '/archive#legacy-coca-cola');
