@@ -105,7 +105,12 @@ export default function RecommendationsPage() {
                   </blockquote>
                   <footer>
                     <strong>
-                      <a href={recommendation.authorProfileUrl} target="_blank" rel="noreferrer">
+                      <a
+                        href={recommendation.authorProfileUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        aria-label={`${recommendation.name} on LinkedIn (opens in a new tab)`}
+                      >
                         {recommendation.name}
                       </a>
                     </strong>
