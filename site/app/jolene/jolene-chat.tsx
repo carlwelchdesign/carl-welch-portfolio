@@ -324,46 +324,48 @@ export function JoleneChat({
             ) : null}
           </nav>
 
-          {mode === 'chat' ? <><div className="jolene-messages" role="log" aria-live="polite" aria-busy={waiting}>
-            {messages.map((message) => (
-              <article
-                className="jolene-message"
-                data-role={message.role}
-                key={message.id}
-                ref={message.id === latestAssistantMessageId && messages.length > 1 ? latestAssistantRef : undefined}
-                tabIndex={message.id === latestAssistantMessageId && messages.length > 1 ? -1 : undefined}
-              >
-                <p className="jolene-message-role">{message.role === 'assistant' ? 'Jolene' : 'You'}</p>
-                <p>{message.text}</p>
-                {message.note ? <p className="jolene-message-note">{message.note}</p> : null}
-                {message.evidence ? (
-                  <JoleneEvidence evidence={message.evidence} onOpen={() => sendAvatar('evidence_highlighted')} />
-                ) : null}
-              </article>
-            ))}
-            {waiting ? (
-              <p className="jolene-waiting" role="status">
-                Looking through Carl’s work…
-              </p>
-            ) : null}
-            <div className="jolene-starter-stage" data-has-suggestions={suggestedQuestions.length > 0}>
-              {suggestedQuestions.length > 0 ? (
-                <div className="jolene-starters" aria-label="Suggested questions">
-                  {messages.length > 1 ? <p>Ask next</p> : null}
-                  {suggestedQuestions.map((question) => (
-                    <button type="button" disabled={waiting} key={question} onClick={() => void sendQuestion(question)}>
-                      {question}
-                    </button>
-                  ))}
-                </div>
+          {mode === 'chat' ? <><div className="jolene-conversation-scroll">
+            <div className="jolene-messages" role="log" aria-live="polite" aria-busy={waiting}>
+              {messages.map((message) => (
+                <article
+                  className="jolene-message"
+                  data-role={message.role}
+                  key={message.id}
+                  ref={message.id === latestAssistantMessageId && messages.length > 1 ? latestAssistantRef : undefined}
+                  tabIndex={message.id === latestAssistantMessageId && messages.length > 1 ? -1 : undefined}
+                >
+                  <p className="jolene-message-role">{message.role === 'assistant' ? 'Jolene' : 'You'}</p>
+                  <p>{message.text}</p>
+                  {message.note ? <p className="jolene-message-note">{message.note}</p> : null}
+                  {message.evidence ? (
+                    <JoleneEvidence evidence={message.evidence} onOpen={() => sendAvatar('evidence_highlighted')} />
+                  ) : null}
+                </article>
+              ))}
+              {waiting ? (
+                <p className="jolene-waiting" role="status">
+                  Looking through Carl’s work…
+                </p>
               ) : null}
-              <JoleneAvatar
-                state={avatarState}
-                onStateComplete={settleAvatar}
-                className="jolene-conversation-avatar"
-              />
+              <div className="jolene-starter-stage" data-has-suggestions={suggestedQuestions.length > 0}>
+                {suggestedQuestions.length > 0 ? (
+                  <div className="jolene-starters" aria-label="Suggested questions">
+                    {messages.length > 1 ? <p>Ask next</p> : null}
+                    {suggestedQuestions.map((question) => (
+                      <button type="button" disabled={waiting} key={question} onClick={() => void sendQuestion(question)}>
+                        {question}
+                      </button>
+                    ))}
+                  </div>
+                ) : null}
+              </div>
+              <div ref={messagesEndRef} aria-hidden="true" />
             </div>
-            <div ref={messagesEndRef} aria-hidden="true" />
+            <JoleneAvatar
+              state={avatarState}
+              onStateComplete={settleAvatar}
+              className="jolene-conversation-avatar"
+            />
           </div>
 
           <form className="jolene-form" onSubmit={submit}>

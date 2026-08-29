@@ -101,6 +101,8 @@ test('country-host cameo appears once, leaves cleanly, and returns only with cha
   await question.pressSequentially('Which project best shows Carl’s product engineering work?', { delay: 20 });
   await expect(avatar).toHaveAttribute('data-avatar-state', 'excited');
   await expect(avatar.locator('img')).toHaveAttribute('src', /typing-excited-v1\.png/);
+  await expect(avatar).toHaveCSS('overflow', 'visible');
+  await expect(avatar).toHaveCSS('contain', 'layout style');
   await page.waitForTimeout(700);
   await expect(avatar).toHaveAttribute('data-avatar-state', 'listen');
   await panel.getByRole('button', { name: 'Ask Jolene', exact: true }).click();
@@ -131,6 +133,7 @@ test('pixel avatar stays clear of controls at an iPhone viewport', async ({ page
   const avatar = panel.locator('.jolene-avatar');
   const close = panel.getByRole('button', { name: 'Close Jolene chat' });
   const starterButtons = panel.locator('.jolene-starters button');
+  const messageScroller = panel.locator('.jolene-messages');
   const question = panel.getByLabel('Ask about Carl’s work or experience');
   await expect(panel).toBeVisible();
   await expect(avatar).toBeVisible();
@@ -144,15 +147,30 @@ test('pixel avatar stays clear of controls at an iPhone viewport', async ({ page
   const avatarBounds = await avatar.boundingBox();
   const closeBounds = await close.boundingBox();
   const lastStarterBounds = await starterButtons.last().boundingBox();
+  const formBounds = await panel.locator('.jolene-form').boundingBox();
   expect(panelBounds).not.toBeNull();
   expect(avatarBounds).not.toBeNull();
   expect(closeBounds).not.toBeNull();
   expect(lastStarterBounds).not.toBeNull();
+  expect(formBounds).not.toBeNull();
   expect(panelBounds!.x).toBeGreaterThanOrEqual(0);
   expect(panelBounds!.x + panelBounds!.width).toBeLessThanOrEqual(390);
   expect(closeBounds!.x + closeBounds!.width).toBeLessThanOrEqual(390);
   expect(lastStarterBounds!.x + lastStarterBounds!.width).toBeLessThanOrEqual(avatarBounds!.x);
-  await expect(avatar.locator('xpath=..')).toHaveClass(/jolene-starter-stage/);
+  expect(Math.abs(avatarBounds!.y + avatarBounds!.height - formBounds!.y)).toBeLessThanOrEqual(6);
+
+  await question.fill('Tell me about Carl');
+  await expect(avatar).toHaveAttribute('data-avatar-state', 'excited');
+  const typingImageBounds = await avatar.locator('img').boundingBox();
+  expect(typingImageBounds).not.toBeNull();
+  expect(typingImageBounds!.width).toBeLessThanOrEqual(avatarBounds!.width + 8);
+  expect(Math.abs(typingImageBounds!.y + typingImageBounds!.height - formBounds!.y)).toBeLessThanOrEqual(6);
+  const avatarTopBeforeScroll = (await avatar.boundingBox())!.y;
+  await messageScroller.evaluate((element) => { element.scrollTop = element.scrollHeight; });
+  await page.waitForTimeout(50);
+  const avatarTopAfterScroll = (await avatar.boundingBox())!.y;
+  expect(Math.abs(avatarTopAfterScroll - avatarTopBeforeScroll)).toBeLessThanOrEqual(1);
+  await expect(avatar.locator('xpath=..')).toHaveClass(/jolene-conversation-scroll/);
 });
 
 test('reduced motion skips the unsolicited cameo and uses static state frames', async ({ page }) => {

@@ -758,7 +758,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .analytics-verifier button { min-height: 32px; border: 1px solid var(--line); color: var(--paper); font: inherit; }
 
 .jolene-fixture { --jolene-accent: var(--orange); position: fixed; z-index: 80; right: max(20px, env(safe-area-inset-right)); bottom: max(20px, env(safe-area-inset-bottom)); color: var(--paper); }
-.jolene-avatar { position: relative; width: 200px; aspect-ratio: 320 / 460; display: block; overflow: visible; contain: layout paint style; pointer-events: none; user-select: none; transform: scaleX(-1); transform-origin: center bottom; }
+.jolene-avatar { position: relative; width: 200px; aspect-ratio: 320 / 460; display: block; overflow: visible; contain: layout style; pointer-events: none; user-select: none; transform: scaleX(-1); transform-origin: center bottom; }
 .jolene-avatar img { width: 100%; height: 100%; display: block; object-fit: contain; object-position: bottom center; image-rendering: pixelated; transform-origin: var(--jolene-frame-origin); backface-visibility: hidden; }
 .jolene-cameo { position: absolute; right: -14px; bottom: 56px; width: 250px; height: 330px; display: grid; align-content: end; justify-items: end; pointer-events: none; }
 .jolene-cameo p { position: absolute; z-index: 2; top: 12px; right: 112px; width: max-content; margin: 0; padding: 10px 12px; border: 1px solid var(--ink); background: var(--paper); color: var(--ink); font: 800 14px/1 var(--font-geist-sans), sans-serif; box-shadow: 7px 7px 0 var(--jolene-accent); }
@@ -784,7 +784,8 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .jolene-mode-switch button { min-height: 44px; border: 0; border-right: 1px solid var(--line); background: #0d100d; color: var(--muted); cursor: pointer; font: 700 9px var(--font-geist-mono), monospace; letter-spacing: 0.08em; text-transform: uppercase; }
 .jolene-mode-switch button:last-child { border-right: 0; }
 .jolene-mode-switch button:hover, .jolene-mode-switch button[aria-pressed='true'] { background: var(--paper); color: var(--ink); }
-.jolene-messages { padding: 18px 20px; overflow-y: auto; overscroll-behavior: contain; scrollbar-color: var(--muted) transparent; }
+.jolene-conversation-scroll { position: relative; min-height: 0; overflow: hidden; }
+.jolene-messages { height: 100%; padding: 18px 20px; display: flex; flex-direction: column; overflow-y: auto; overscroll-behavior: contain; scrollbar-color: var(--muted) transparent; }
 .jolene-message { margin: 0 0 18px; padding: 14px; border: 1px solid var(--line); background: #11150f; }
 .jolene-message[data-role='visitor'] { margin-left: 40px; border-color: rgba(255, 104, 0, 0.72); background: rgba(255, 104, 0, 0.1); }
 .jolene-message p { margin: 0; font-size: 14px; line-height: 1.5; }
@@ -820,9 +821,9 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .jolene-no-evidence { padding: 12px; border: 1px solid var(--jolene-accent); background: rgba(255, 104, 0, 0.08); }
 .jolene-corpus-version { margin-top: 12px !important; color: var(--muted); font: 8px var(--font-geist-mono), monospace !important; letter-spacing: 0.06em; text-transform: uppercase; }
 .jolene-waiting { margin: 0; color: var(--muted); font: 10px var(--font-geist-mono), monospace; letter-spacing: 0.06em; }
-.jolene-starter-stage { position: relative; min-height: 178px; margin-top: 10px; }
+.jolene-starter-stage { position: relative; flex: 0 0 auto; min-height: 178px; margin-top: auto; padding-top: 10px; }
 .jolene-starters { display: grid; gap: 7px; padding-right: 122px; }
-.jolene-conversation-avatar { position: absolute; z-index: 1; right: -14px; bottom: -16px; width: 132px; }
+.jolene-conversation-avatar { position: absolute; z-index: 1; right: 6px; bottom: -6px; width: 132px; }
 .jolene-starters > p { margin: 0; color: var(--muted); font: 8px var(--font-geist-mono), monospace; letter-spacing: 0.08em; text-transform: uppercase; }
 .jolene-starters button { min-height: 44px; padding: 9px 12px; border: 1px solid var(--line); border-radius: 0; background: transparent; color: var(--paper); cursor: pointer; font: 12px/1.35 var(--font-geist-sans), sans-serif; text-align: left; }
 .jolene-starters button:hover { border-color: var(--jolene-accent); background: rgba(255, 104, 0, 0.1); }
@@ -1155,7 +1156,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .jolene-panel-header { min-height: 110px; padding-right: 76px; }
   .jolene-starter-stage { min-height: 188px; }
   .jolene-starters { padding-right: 102px; }
-  .jolene-conversation-avatar { right: -12px; bottom: -12px; width: 112px; }
+  .jolene-conversation-avatar { right: 8px; bottom: -5px; width: 112px; }
   .jolene-panel-header h2 { font-size: 30px; }
   .jolene-message[data-role='visitor'] { margin-left: 18px; }
   .jolene-mode-switch button { padding: 0 5px; font-size: 8px; }
@@ -1206,10 +1207,10 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .jolene-mode-switch button { min-height: 36px; }
   .jolene-messages { min-height: 0; padding: 8px 12px; }
   .jolene-message { margin-bottom: 8px; padding: 9px; }
-  .jolene-starter-stage { min-height: 112px; margin-top: 6px; }
+  .jolene-starter-stage { min-height: 112px; padding-top: 6px; }
   .jolene-starters { gap: 5px; padding-right: 96px; }
   .jolene-starters button { min-height: 36px; padding: 6px 9px; }
-  .jolene-conversation-avatar { right: -8px; bottom: -8px; width: 98px; }
+  .jolene-conversation-avatar { right: 4px; bottom: -5px; width: 98px; }
   .jolene-form { padding: 6px 10px 8px; }
   .jolene-form label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
   .jolene-form textarea { min-height: 44px; max-height: 44px; padding: 8px; }
