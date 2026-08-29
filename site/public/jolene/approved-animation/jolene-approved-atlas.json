@@ -1,0 +1,255 @@
+{
+  "frames": {
+    "idle-rest.png": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 320,
+        "h": 460
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 320,
+        "h": 460
+      },
+      "sourceSize": {
+        "w": 320,
+        "h": 460
+      }
+    },
+    "idle-inhale.png": {
+      "frame": {
+        "x": 320,
+        "y": 0,
+        "w": 320,
+        "h": 460
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 320,
+        "h": 460
+      },
+      "sourceSize": {
+        "w": 320,
+        "h": 460
+      }
+    },
+    "idle-rise.png": {
+      "frame": {
+        "x": 640,
+        "y": 0,
+        "w": 320,
+        "h": 460
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 320,
+        "h": 460
+      },
+      "sourceSize": {
+        "w": 320,
+        "h": 460
+      }
+    },
+    "idle-peak.png": {
+      "frame": {
+        "x": 960,
+        "y": 0,
+        "w": 320,
+        "h": 460
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 320,
+        "h": 460
+      },
+      "sourceSize": {
+        "w": 320,
+        "h": 460
+      }
+    },
+    "blink-half.png": {
+      "frame": {
+        "x": 0,
+        "y": 460,
+        "w": 320,
+        "h": 460
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 320,
+        "h": 460
+      },
+      "sourceSize": {
+        "w": 320,
+        "h": 460
+      }
+    },
+    "blink-closed.png": {
+      "frame": {
+        "x": 320,
+        "y": 460,
+        "w": 320,
+        "h": 460
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 320,
+        "h": 460
+      },
+      "sourceSize": {
+        "w": 320,
+        "h": 460
+      }
+    },
+    "greet-rest.png": {
+      "frame": {
+        "x": 640,
+        "y": 460,
+        "w": 320,
+        "h": 460
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 320,
+        "h": 460
+      },
+      "sourceSize": {
+        "w": 320,
+        "h": 460
+      }
+    },
+    "greet-early.png": {
+      "frame": {
+        "x": 960,
+        "y": 460,
+        "w": 320,
+        "h": 460
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 320,
+        "h": 460
+      },
+      "sourceSize": {
+        "w": 320,
+        "h": 460
+      }
+    },
+    "greet-mid.png": {
+      "frame": {
+        "x": 0,
+        "y": 920,
+        "w": 320,
+        "h": 460
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 320,
+        "h": 460
+      },
+      "sourceSize": {
+        "w": 320,
+        "h": 460
+      }
+    },
+    "greet-apex.png": {
+      "frame": {
+        "x": 320,
+        "y": 920,
+        "w": 320,
+        "h": 460
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 320,
+        "h": 460
+      },
+      "sourceSize": {
+        "w": 320,
+        "h": 460
+      }
+    },
+    "greet-secondary.png": {
+      "frame": {
+        "x": 640,
+        "y": 920,
+        "w": 320,
+        "h": 460
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 320,
+        "h": 460
+      },
+      "sourceSize": {
+        "w": 320,
+        "h": 460
+      }
+    },
+    "greet-settle.png": {
+      "frame": {
+        "x": 960,
+        "y": 920,
+        "w": 320,
+        "h": 460
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 320,
+        "h": 460
+      },
+      "sourceSize": {
+        "w": 320,
+        "h": 460
+      }
+    }
+  },
+  "meta": {
+    "app": "Aseprite-compatible Jolene approved runtime export",
+    "version": "1.0",
+    "image": "jolene-approved-atlas.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 1280,
+      "h": 1380
+    },
+    "scale": "1"
+  }
+}

@@ -7,8 +7,6 @@ const sourceUrl = new URL('../public/jolene/review/country-host-rig-master-v2-so
 const typingExcitedSourceUrl = new URL('../public/jolene/review/country-host-typing-excited-v1-source.png', import.meta.url);
 const outputDirectoryUrl = new URL('../public/jolene/sprites/', import.meta.url);
 const manifestUrl = new URL('../docs/jolene-avatar-sprites.v1.json', import.meta.url);
-const frameCatalogUrl = new URL('../app/jolene/avatar-frame-catalog.v1.json', import.meta.url);
-const stateContractUrl = new URL('../app/jolene/avatar-state-contract.v1.json', import.meta.url);
 const checkOnly = process.argv.includes('--check');
 
 const stateNames = ['idle', 'blink', 'greet', 'excited', 'listen', 'think', 'speak', 'evidence', 'boundary', 'offline', 'rest'];
@@ -17,34 +15,6 @@ const frameHeight = 460;
 const anchor = Object.freeze({ x: 160, y: 448 });
 const removalPolicy = Object.freeze({ minimumChannel: 225, maximumChannelSpread: 16, connectivity: 4 });
 const outlinePolicy = Object.freeze({ minimumChannel: 104, maximumChannelSpread: 38 });
-
-const frameTransforms = Object.freeze({
-  'idle-0': { state: 'idle', translateX: 0, translateY: 0, rotateDeg: 0, scale: 1 },
-  'idle-1': { state: 'idle', translateX: 0, translateY: -1, rotateDeg: 0, scale: 1 },
-  'idle-2': { state: 'idle', translateX: 0, translateY: -2, rotateDeg: 0, scale: 1.002 },
-  'blink-1': { state: 'blink', translateX: 0, translateY: -1, rotateDeg: 0, scale: 1 },
-  'blink-2': { state: 'blink', translateX: 0, translateY: 0, rotateDeg: 0, scale: 1 },
-  'greet-0': { state: 'greet', translateX: 0, translateY: 0, rotateDeg: 0, scale: 1 },
-  'greet-1': { state: 'greet', translateX: 1, translateY: -2, rotateDeg: 0.25, scale: 1 },
-  'greet-2': { state: 'greet', translateX: -1, translateY: -4, rotateDeg: -0.35, scale: 1.004 },
-  'excited-0': { state: 'excited', translateX: 0, translateY: 0, rotateDeg: 0, scale: 1 },
-  'excited-1': { state: 'excited', translateX: -4, translateY: 0, rotateDeg: -1.8, scale: 1 },
-  'excited-2': { state: 'excited', translateX: 3, translateY: 0, rotateDeg: 1.6, scale: 1 },
-  'excited-3': { state: 'excited', translateX: -2, translateY: 0, rotateDeg: -1.2, scale: 1 },
-  'listen-0': { state: 'listen', translateX: 0, translateY: 0, rotateDeg: 0, scale: 1 },
-  'think-0': { state: 'think', translateX: 0, translateY: 0, rotateDeg: 0, scale: 1 },
-  'think-1': { state: 'think', translateX: 1, translateY: -1, rotateDeg: 0.3, scale: 1 },
-  'speak-0': { state: 'speak', translateX: 0, translateY: 0, rotateDeg: 0, scale: 1 },
-  'speak-1': { state: 'speak', translateX: 1, translateY: -1, rotateDeg: 0.2, scale: 1.002 },
-  'speak-2': { state: 'speak', translateX: -1, translateY: -2, rotateDeg: -0.2, scale: 1.004 },
-  'evidence-0': { state: 'evidence', translateX: 0, translateY: 0, rotateDeg: 0, scale: 1 },
-  'evidence-1': { state: 'evidence', translateX: 2, translateY: -1, rotateDeg: 0.25, scale: 1 },
-  'evidence-2': { state: 'evidence', translateX: 3, translateY: -2, rotateDeg: 0.4, scale: 1.003 },
-  'boundary-0': { state: 'boundary', translateX: 0, translateY: 0, rotateDeg: 0, scale: 1 },
-  'offline-0': { state: 'offline', translateX: 0, translateY: 0, rotateDeg: 0, scale: 1 },
-  'rest-0': { state: 'rest', translateX: 0, translateY: 0, rotateDeg: 0, scale: 1 },
-  'rest-1': { state: 'rest', translateX: 0, translateY: 1, rotateDeg: -0.15, scale: 0.998 },
-});
 
 const sha256 = (bytes) => createHash('sha256').update(bytes).digest('hex');
 const asDataUrl = (bytes) => `data:image/png;base64,${bytes.toString('base64')}`;
@@ -268,7 +238,6 @@ async function normalizeStandaloneFrame(sourceBytes, state) {
 
 const sourceBytes = await readFile(sourceUrl);
 const typingExcitedSourceBytes = await readFile(typingExcitedSourceUrl);
-const stateContract = JSON.parse(await readFile(stateContractUrl, 'utf8'));
 const rigBaseFrame = await normalizeStandaloneFrame(sourceBytes, 'rig-base');
 const typingExcitedFrame = await normalizeStandaloneFrame(typingExcitedSourceBytes, 'excited');
 const result = {
@@ -351,43 +320,17 @@ const manifest = {
   },
 };
 
-const referencedFrameNames = [...new Set(Object.values(stateContract.definitions).flatMap(({ frames }) => frames))];
-const frameCatalog = {
-  schemaVersion: '1.0.0',
-  contractName: 'jolene.avatar-frame-catalog',
-  frameWidth,
-  frameHeight,
-  anchor,
-  imageRendering: 'pixelated',
-  frames: Object.fromEntries(referencedFrameNames.map((frameName) => {
-    const transform = frameTransforms[frameName];
-    assert.ok(transform, `Missing transform for ${frameName}.`);
-    const output = outputs.find(({ state }) => state === transform.state);
-    assert.ok(output, `Missing generated output for ${transform.state}.`);
-    return [frameName, {
-      assetPath: `${output.path}?v=${output.sha256.slice(0, 12)}`,
-      ...transform,
-      transformOrigin: `${anchor.x}px ${anchor.y}px`,
-    }];
-  })),
-};
-
 if (checkOnly) {
   const committedManifest = JSON.parse(await readFile(manifestUrl, 'utf8'));
-  const committedFrameCatalog = JSON.parse(await readFile(frameCatalogUrl, 'utf8'));
   assert.deepEqual(committedManifest, manifest);
-  assert.deepEqual(committedFrameCatalog, frameCatalog);
   assert.deepEqual(outputs.map(({ state }) => state), stateNames);
-  assert.deepEqual(Object.keys(frameCatalog.frames), referencedFrameNames);
   const baseOutputs = outputs.filter(({ state }) => state !== 'excited');
   assert.equal(new Set(baseOutputs.map(({ sha256: fingerprint }) => fingerprint)).size, 1, 'Base states must share one character identity source.');
-  assert.equal(new Set(Object.values(frameCatalog.frames).map(({ assetPath }) => assetPath)).size, 2, 'Frame catalog must use the canonical rig base plus one excited typing pose.');
   assert.equal(outputs.find(({ state }) => state === 'excited').path, typingExcitedPath, 'Excited state must use the typing pose.');
   assert.ok(baseOutputs.every(({ removedInteriorMattePixels }) => removedInteriorMattePixels >= 500), 'The enclosed arm-to-body matte was not removed.');
   assert.ok(outputs.every(({ opaquePixels }) => opaquePixels > 25_000), 'The canonical rig base lost too much of the character.');
   console.log(`Jolene sprite check passed: ${baseOutputs.length} base states plus one transparent excited typing pose at ${frameWidth}×${frameHeight}.`);
 } else {
   await writeFile(manifestUrl, `${JSON.stringify(manifest, null, 2)}\n`);
-  await writeFile(frameCatalogUrl, `${JSON.stringify(frameCatalog, null, 2)}\n`);
   console.log(`Built one canonical Jolene rig base and one excited typing pose for ${outputs.length} states in ${outputDirectoryUrl.pathname}`);
 }

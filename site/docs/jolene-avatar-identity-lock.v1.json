@@ -549,7 +549,7 @@
   "reviewBoard": {
     "path": "/docs/review/jolene-avatar-identity-lock.png",
     "sha256": "0761e8ac6c4149220c83e8616bf4254f315a28eea7e1d632c4f629035eb6259e",
-    "renderInputSha256": "815c433f0b84ed62b030457280be4b27a1f60be09f3568e7b42a51b8b2ffeda3"
+    "renderInputSha256": "c54b165d26dab26f592cf1bd183918c2d7b10b1c3aee9edee136430e937d516b"
   },
   "publicUseAuthorized": false
 }

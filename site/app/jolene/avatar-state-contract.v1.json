@@ -18,8 +18,8 @@
   ],
   "definitions": {
     "idle": {
-      "frames": ["idle-0", "idle-1", "idle-2", "idle-1"],
-      "durationsMs": [520, 180, 520, 180],
+      "frames": ["idle-0", "idle-1", "idle-2", "idle-3", "idle-2", "idle-1", "idle-0", "blink-1", "blink-2", "blink-1", "idle-0"],
+      "durationsMs": [600, 320, 280, 360, 280, 320, 700, 70, 85, 70, 600],
       "loop": true,
       "returnState": null,
       "reducedMotionFrame": "idle-0"
@@ -32,15 +32,15 @@
       "reducedMotionFrame": "idle-0"
     },
     "greet": {
-      "frames": ["greet-0", "greet-1", "greet-2", "greet-1", "greet-0"],
-      "durationsMs": [100, 100, 220, 100, 180],
+      "frames": ["greet-0", "greet-1", "greet-2", "greet-3", "greet-4", "greet-3", "greet-5", "greet-2", "greet-1", "greet-0"],
+      "durationsMs": [260, 140, 130, 170, 120, 150, 140, 130, 140, 300],
       "loop": false,
       "returnState": "idle",
-      "reducedMotionFrame": "greet-2"
+      "reducedMotionFrame": "greet-3"
     },
     "excited": {
-      "frames": ["excited-0", "excited-1", "excited-2", "excited-3", "excited-2", "excited-1"],
-      "durationsMs": [100, 110, 110, 110, 110, 110],
+      "frames": ["excited-0"],
+      "durationsMs": [1000],
       "loop": true,
       "returnState": null,
       "reducedMotionFrame": "excited-0"
@@ -53,22 +53,22 @@
       "reducedMotionFrame": "listen-0"
     },
     "think": {
-      "frames": ["think-0", "think-1"],
-      "durationsMs": [600, 600],
+      "frames": ["think-0"],
+      "durationsMs": [1000],
       "loop": true,
       "returnState": null,
       "reducedMotionFrame": "think-0"
     },
     "speak": {
-      "frames": ["speak-0", "speak-1", "speak-2", "speak-1"],
-      "durationsMs": [120, 120, 140, 120],
+      "frames": ["speak-0"],
+      "durationsMs": [1000],
       "loop": true,
       "returnState": null,
       "reducedMotionFrame": "speak-0"
     },
     "evidence": {
-      "frames": ["evidence-0", "evidence-1", "evidence-2", "evidence-0"],
-      "durationsMs": [120, 140, 500, 180],
+      "frames": ["evidence-2"],
+      "durationsMs": [620],
       "loop": false,
       "returnState": "idle",
       "reducedMotionFrame": "evidence-2"
@@ -88,8 +88,8 @@
       "reducedMotionFrame": "offline-0"
     },
     "rest": {
-      "frames": ["rest-0", "rest-1"],
-      "durationsMs": [1200, 1200],
+      "frames": ["rest-0"],
+      "durationsMs": [1200],
       "loop": true,
       "returnState": null,
       "reducedMotionFrame": "rest-0"

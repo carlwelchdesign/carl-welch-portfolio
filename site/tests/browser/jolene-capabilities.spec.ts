@@ -123,7 +123,8 @@ test('country-host cameo appears once, leaves cleanly, and returns only with cha
   const question = panel.getByLabel('Ask about Carl’s work or experience');
   await question.pressSequentially('Which project best shows Carl’s product engineering work?', { delay: 20 });
   await expect(avatar).toHaveAttribute('data-avatar-state', 'excited');
-  await expect(avatar.locator('img')).toHaveAttribute('src', /typing-excited-v1\.png/);
+  await expect(avatar).toHaveAttribute('data-avatar-frame', 'excited-0');
+  await expect(avatar.locator('canvas')).toBeVisible();
   await expect(avatar).toHaveCSS('overflow', 'visible');
   await expect(avatar).toHaveCSS('contain', 'layout style');
   await page.waitForTimeout(700);
@@ -164,7 +165,7 @@ test('pixel avatar stays clear of controls at an iPhone viewport', async ({ page
   await expect(question).toBeVisible();
 
   await expect(avatar).toHaveCSS('pointer-events', 'none');
-  await expect(avatar.locator('img')).toHaveCSS('image-rendering', 'pixelated');
+  await expect(avatar.locator('canvas')).toHaveCSS('image-rendering', 'pixelated');
   await expect(avatar).toHaveAttribute('data-avatar-facing', 'left');
   const panelBounds = await panel.boundingBox();
   const avatarBounds = await avatar.boundingBox();
@@ -184,10 +185,10 @@ test('pixel avatar stays clear of controls at an iPhone viewport', async ({ page
 
   await question.fill('Tell me about Carl');
   await expect(avatar).toHaveAttribute('data-avatar-state', 'excited');
-  const typingImageBounds = await avatar.locator('img').boundingBox();
-  expect(typingImageBounds).not.toBeNull();
-  expect(typingImageBounds!.width).toBeLessThanOrEqual(avatarBounds!.width + 8);
-  expect(Math.abs(typingImageBounds!.y + typingImageBounds!.height - formBounds!.y)).toBeLessThanOrEqual(6);
+  const typingCanvasBounds = await avatar.locator('canvas').boundingBox();
+  expect(typingCanvasBounds).not.toBeNull();
+  expect(typingCanvasBounds!.width).toBeLessThanOrEqual(avatarBounds!.width + 8);
+  expect(Math.abs(typingCanvasBounds!.y + typingCanvasBounds!.height - formBounds!.y)).toBeLessThanOrEqual(6);
   const avatarTopBeforeScroll = (await avatar.boundingBox())!.y;
   await messageScroller.evaluate((element) => { element.scrollTop = element.scrollHeight; });
   await page.waitForTimeout(50);
@@ -208,7 +209,7 @@ test('reduced motion skips the unsolicited cameo and uses static state frames', 
   const initialFrame = await avatar.getAttribute('data-avatar-frame');
   await page.waitForTimeout(750);
   const settledFrame = await avatar.getAttribute('data-avatar-frame');
-  expect(initialFrame).toBe('greet-2');
+  expect(initialFrame).toBe('greet-3');
   expect(settledFrame).toBe('idle-0');
 
   const question = page.getByRole('dialog', { name: 'Ask Jolene' }).getByLabel('Ask about Carl’s work or experience');
@@ -219,8 +220,8 @@ test('reduced motion skips the unsolicited cameo and uses static state frames', 
   await expect(avatar).toHaveAttribute('data-avatar-frame', 'excited-0');
 });
 
-test('missing pose assets fail over to the approved static master', async ({ page }) => {
-  await page.route(/\/jolene\/sprites\/.*\.png(?:\?.*)?$/, (route) => route.abort());
+test('missing animation atlas fails over to the approved static master', async ({ page }) => {
+  await page.route(/\/jolene\/approved-animation\/jolene-approved-atlas\.(?:json|png)(?:\?.*)?$/, (route) => route.abort());
   await page.addInitScript(() => window.sessionStorage.setItem('jolene-country-host-intro-seen-v1', 'true'));
   await page.goto('/');
   await page.getByRole('button', { name: /Ask Jolene/ }).click();
@@ -246,19 +247,19 @@ test('avatar remains stable and contained across compact phone layouts', async (
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/');
   const resourcesBeforeOpen = await page.evaluate(() => (
-    performance.getEntriesByType('resource').filter(({ name }) => name.includes('/jolene/sprites/')).length
+    performance.getEntriesByType('resource').filter(({ name }) => name.includes('/jolene/')).length
   ));
   expect(resourcesBeforeOpen).toBe(0);
 
   await page.locator('[data-jolene-launcher]').click();
   await expect(page.locator('.jolene-conversation-avatar')).toBeVisible();
   await page.waitForTimeout(800);
-  expect(await page.locator('.jolene-avatar img').count()).toBe(1);
+  expect(await page.locator('.jolene-avatar canvas').count()).toBe(1);
 
   const spriteResources = await page.evaluate(() => (
     new Set(performance.getEntriesByType('resource')
       .map(({ name }) => name)
-      .filter((name) => name.includes('/jolene/sprites/'))).size
+      .filter((name) => name.includes('/jolene/'))).size
   ));
   expect(spriteResources).toBeLessThanOrEqual(10);
 

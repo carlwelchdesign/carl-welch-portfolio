@@ -11,12 +11,15 @@ const catalog = JSON.parse(await readFile(new URL('../app/jolene/avatar-frame-ca
 for (const requirement of [
   "from 'motion/react'",
   'useReducedMotion',
+  "import('pixi.js')",
+  "import('pixi.js/unsafe-eval')",
+  'AnimatedSprite',
+  'jolene-approved-atlas.json',
   'useJoleneAvatarController',
   'stateForAvatarSignal',
   'canTransitionAvatar',
   'data-avatar-state',
   'data-avatar-frame',
-  'transition={{ duration: 0 }}',
   'preloadJoleneAvatarAssets',
   'data-avatar-fallback',
   'fallbackToMaster',
@@ -26,11 +29,11 @@ for (const requirement of [
   assert.ok(source.includes(requirement), `Jolene avatar renderer is missing ${requirement}.`);
 }
 
-for (const forbidden of ['canvas', 'webgl', 'openai', 'anthropic', 'gemini', 'requestanimationframe']) {
+for (const forbidden of ['openai', 'anthropic', 'gemini']) {
   assert.equal(source.toLowerCase().includes(forbidden), false, `Jolene renderer includes forbidden coupling: ${forbidden}`);
 }
 
-for (const requirement of ['image-rendering: pixelated', 'pointer-events: none', 'contain: layout style', 'transform: scaleX(-1)']) {
+for (const requirement of ['image-rendering: pixelated', 'pointer-events: none', 'contain: layout style', 'transform: scaleX(-1)', 'jolene-avatar-canvas']) {
   assert.ok(styles.includes(requirement), `Jolene avatar CSS is missing ${requirement}.`);
 }
 assert.equal(styles.includes('contain: layout paint style'), false, 'Paint containment would clip scaled typing frames.');
@@ -50,7 +53,14 @@ for (const state of contract.states) {
 
 assert.deepEqual(contract.interruption.alwaysInterruptFor, ['offline']);
 assert.equal(catalog.imageRendering, 'pixelated');
-assert.equal(new Set(Object.values(catalog.frames).map(({ assetPath }) => assetPath)).size, 2, 'Runtime must use one base identity plus one excited typing pose.');
+const activeFrames = Object.values(contract.definitions).flatMap(({ frames }) => frames);
+const activeAssetPaths = new Set(activeFrames.map((frameName) => catalog.frames[frameName].assetPath));
+assert.ok([...activeAssetPaths].every((assetPath) => assetPath.includes('/jolene/approved-animation/') || assetPath.includes('/jolene/sprites/')), 'Runtime references an unapproved avatar asset location.');
+assert.ok(contract.definitions.idle.frames.length > 3, 'Idle must use the approved breathing and blink loop.');
+assert.ok(contract.definitions.greet.frames.length > 3, 'Greet must use the approved wave loop.');
+for (const state of contract.states.filter((name) => !['idle', 'blink', 'greet'].includes(name))) {
+  assert.equal(contract.definitions[state].frames.length, 1, `${state} must remain a stable pose until its animation is separately approved.`);
+}
 assert.ok(Object.values(catalog.frames).filter(({ state }) => state === 'excited').every(({ assetPath }) => assetPath.includes('typing-excited-v1.png')), 'Excited frames must use the approved typing pose.');
 assert.ok(Object.values(catalog.frames).filter(({ state }) => state === 'excited').every(({ scale, translateY }) => scale === 1 && translateY === 0), 'Excited frames must stay at native scale and remain seated on the divider.');
 assert.ok(contract.rendering.masterPath.includes('/jolene/sprites/rig-base-v2.png'), 'Fallback must use the corrected rig base.');
@@ -80,4 +90,4 @@ for (const integrationBoundary of [
 }
 assert.ok(evidenceSource.includes('onToggle'), 'Evidence expansion must expose a state signal.');
 assert.ok(evidenceSource.includes('onOpen?.()'), 'Evidence expansion must notify the avatar controller.');
-console.log('Jolene avatar renderer passed: stepped playback, central signals, one-time cameo, chat/evidence/error integration, crisp pixels, and reduced motion.');
+console.log('Jolene avatar renderer passed: PixiJS AnimatedSprite playback, central signals, one-time cameo, chat/evidence/error integration, crisp pixels, and reduced motion.');
