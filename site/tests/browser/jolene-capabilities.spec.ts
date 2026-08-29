@@ -44,11 +44,9 @@ test(`returned ${scenario === 'unavailable' ? 'error' : 'answer'} keeps keyboard
   await page.getByRole('button', { name: /Ask Jolene/ }).click();
 
   const panel = page.getByRole('dialog', { name: 'Ask Jolene' });
-  const starter = panel.getByRole('button', {
-    name: 'Which project best shows Carl’s product engineering work?',
-  });
-  await starter.focus();
-  await starter.click();
+  const question = panel.getByLabel('Ask about Carl’s work or experience');
+  await question.fill('Which project best shows Carl’s product engineering work?');
+  await panel.getByRole('button', { name: 'Ask Jolene', exact: true }).click();
 
   if (scenario === 'unavailable') {
     const errorResponse = panel.locator('.jolene-message[data-role="assistant"]').filter({
@@ -57,6 +55,18 @@ test(`returned ${scenario === 'unavailable' ? 'error' : 'answer'} keeps keyboard
     await expect(errorResponse).toBeFocused();
     await expect(errorResponse).toContainText('I don’t have a reliable answer for that yet.');
     await expect(panel.locator('.jolene-avatar')).toHaveAttribute('data-avatar-state', 'offline');
+    await expect.poll(async () => {
+      const [answerBounds, scrollerBounds] = await Promise.all([
+        errorResponse.boundingBox(),
+        panel.locator('.jolene-messages').boundingBox(),
+      ]);
+      return Boolean(
+        answerBounds
+        && scrollerBounds
+        && answerBounds.y >= scrollerBounds.y
+        && answerBounds.y < scrollerBounds.y + scrollerBounds.height,
+      );
+    }).toBe(true);
     return;
   }
 
@@ -65,6 +75,19 @@ test(`returned ${scenario === 'unavailable' ? 'error' : 'answer'} keeps keyboard
   });
   await expect(answer).toBeFocused();
   await expect(answer).toContainText('explicit review boundaries');
+  const messageScroller = panel.locator('.jolene-messages');
+  await expect.poll(async () => {
+    const [answerBounds, scrollerBounds] = await Promise.all([
+      answer.boundingBox(),
+      messageScroller.boundingBox(),
+    ]);
+    return Boolean(
+      answerBounds
+      && scrollerBounds
+      && answerBounds.y >= scrollerBounds.y
+      && answerBounds.y < scrollerBounds.y + scrollerBounds.height,
+    );
+  }).toBe(true);
 
   const evidence = answer.locator('details.jolene-evidence');
   const evidenceSummary = evidence.locator(':scope > summary');

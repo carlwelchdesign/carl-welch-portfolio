@@ -97,6 +97,7 @@ export function JoleneChat({
   );
   const launcherRef = useRef<HTMLButtonElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
+  const messagesRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const latestAssistantRef = useRef<HTMLElement>(null);
   const focusedAssistantId = useRef<string | null>(null);
@@ -160,7 +161,7 @@ export function JoleneChat({
   }, [closePanel, open]);
 
   useEffect(() => {
-    if (open) messagesEndRef.current?.scrollIntoView({ block: 'end' });
+    if (open && waiting) messagesEndRef.current?.scrollIntoView({ block: 'end' });
   }, [messages, open, waiting]);
 
   useEffect(() => {
@@ -172,9 +173,19 @@ export function JoleneChat({
       || focusedAssistantId.current === latestAssistantMessageId
     ) return;
 
-    latestAssistantRef.current?.focus({ preventScroll: true });
+    const messageScroller = messagesRef.current;
+    const latestAssistant = latestAssistantRef.current;
+    if (messageScroller && latestAssistant) {
+      const scrollerBounds = messageScroller.getBoundingClientRect();
+      const answerBounds = latestAssistant.getBoundingClientRect();
+      messageScroller.scrollTo({
+        top: Math.max(0, messageScroller.scrollTop + answerBounds.top - scrollerBounds.top - 8),
+        behavior: reducedMotion ? 'auto' : 'smooth',
+      });
+    }
+    latestAssistant?.focus({ preventScroll: true });
     focusedAssistantId.current = latestAssistantMessageId;
-  }, [latestAssistantMessageId, messages.length, open, waiting]);
+  }, [latestAssistantMessageId, messages.length, open, reducedMotion, waiting]);
 
   async function sendQuestion(question: string) {
     const normalizedQuestion = question.trim();
@@ -325,7 +336,7 @@ export function JoleneChat({
           </nav>
 
           {mode === 'chat' ? <><div className="jolene-conversation-scroll">
-            <div className="jolene-messages" role="log" aria-live="polite" aria-busy={waiting}>
+            <div ref={messagesRef} className="jolene-messages" role="log" aria-live="polite" aria-busy={waiting}>
               {messages.map((message) => (
                 <article
                   className="jolene-message"
