@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "status": "review_only_pending_carl_approval",
+  "status": "review_only_approved_by_carl",
   "ticket": "PORT-AVATAR-005.7A",
   "identityPolicy": {
     "canonicalMasterOnly": true,
