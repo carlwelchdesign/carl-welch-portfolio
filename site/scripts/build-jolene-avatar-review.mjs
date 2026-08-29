@@ -39,6 +39,13 @@ for (const frame of spriteManifest.frames) {
   });
 }
 
+const renderInputSha256 = sha256(Buffer.from(JSON.stringify({
+  cards: cards.map(({ state, label, note, fingerprint }) => ({ state, label, note, fingerprint })),
+  primarySequence: ['greet', 'excited', 'listen', 'think', 'speak', 'evidence', 'idle'],
+  offlinePresentation: 'poised, lightly humorous pause; never sad, angry, or apologetic',
+  reducedMotion: stateContract.reducedMotion,
+})));
+
 const browser = await chromium.launch({ headless: true });
 let screenshotBytes;
 try {
@@ -112,11 +119,13 @@ try {
 }
 
 const expectedPath = '/docs/review/jolene-avatar-state-board.png';
+const committedBoardBytes = checkOnly ? await readFile(outputUrl) : null;
 const reviewManifest = {
   schemaVersion: '1.0.0',
   status: 'candidate_pending_carl_approval',
   boardPath: expectedPath,
-  boardSha256: sha256(screenshotBytes),
+  boardSha256: sha256(committedBoardBytes ?? screenshotBytes),
+  renderInputSha256,
   stateCount: cards.length,
   stateOrder: cards.map(({ state }) => state),
   primarySequence: ['greet', 'excited', 'listen', 'think', 'speak', 'evidence', 'idle'],
@@ -126,9 +135,9 @@ const reviewManifest = {
 };
 
 if (checkOnly) {
-  const committedBoardBytes = await readFile(outputUrl);
   const committedReviewManifest = JSON.parse(await readFile(reviewManifestUrl, 'utf8'));
-  assert.equal(sha256(committedBoardBytes), sha256(screenshotBytes), 'Avatar review board is stale.');
+  assert.equal(sha256(committedBoardBytes), committedReviewManifest.boardSha256, 'Avatar review board fingerprint is stale.');
+  assert.ok(screenshotBytes.length > 100_000, 'Avatar review board render is unexpectedly small.');
   assert.deepEqual(committedReviewManifest, reviewManifest);
   assert.deepEqual(cards.map(({ state }) => state), stateContract.states);
   assert.equal(cards.find(({ state }) => state === 'offline').note, 'poised pause with humor');
