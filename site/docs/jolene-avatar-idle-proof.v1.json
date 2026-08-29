@@ -1,0 +1,120 @@
+{
+  "schemaVersion": "1.0.0",
+  "status": "review_only_pending_carl_approval",
+  "ticket": "PORT-AVATAR-005.7B",
+  "identityLock": "/docs/jolene-avatar-identity-lock.v1.json",
+  "master": {
+    "path": "/jolene/jolene-country-host-master.png",
+    "sha256": "4e437fd64b3997bd834bb2310ed0175e75d9958c27871d4ae3857a18fc82cc6f"
+  },
+  "frame": {
+    "width": 320,
+    "height": 460,
+    "characterHeight": 440,
+    "anchor": {
+      "x": 160,
+      "y": 448
+    },
+    "crownY": 8,
+    "opaqueBottomY": 447,
+    "scale": 1,
+    "rotation": 0,
+    "integerPositionOnly": true,
+    "imageSmoothing": false
+  },
+  "loop": {
+    "state": "idle-blink-proof",
+    "frameCount": 10,
+    "durationsMs": [
+      600,
+      380,
+      300,
+      380,
+      700,
+      90,
+      90,
+      100,
+      450,
+      510
+    ],
+    "loop": true,
+    "motionIntent": [
+      "subtle shoulder breath authored at the silhouette edge",
+      "curl and hoop highlight settle authored inside locked masses",
+      "natural half-close, closed, half-open blink",
+      "quiet return with no scale pump"
+    ]
+  },
+  "authoredRegions": {
+    "leftEye": {
+      "x": 141,
+      "y": 125,
+      "width": 28,
+      "height": 16
+    },
+    "rightEye": {
+      "x": 188,
+      "y": 128,
+      "width": 29,
+      "height": 16
+    },
+    "leftHairSettle": {
+      "x": 35,
+      "y": 145,
+      "width": 60,
+      "height": 115
+    },
+    "rightHairSettle": {
+      "x": 245,
+      "y": 145,
+      "width": 55,
+      "height": 125
+    },
+    "leftHoopSettle": {
+      "x": 105,
+      "y": 160,
+      "width": 28,
+      "height": 50
+    },
+    "rightHoopSettle": {
+      "x": 211,
+      "y": 160,
+      "width": 30,
+      "height": 52
+    },
+    "shoulderBreath": {
+      "x": 45,
+      "y": 245,
+      "width": 235,
+      "height": 85
+    }
+  },
+  "identityInvariants": {
+    "wholeImageTransforms": false,
+    "generatedRedraw": false,
+    "mouthAndToothBandUnchanged": true,
+    "faceOutsideEyeMasksUnchanged": true,
+    "baselineUnchanged": true,
+    "heightUnchanged": true,
+    "binaryAlpha": true,
+    "transparentRgbZero": true,
+    "adultProportionsUnchanged": true
+  },
+  "outputs": {
+    "atlas": {
+      "path": "/docs/review/jolene-avatar-idle-proof-atlas.png",
+      "sha256": "63bd3f7ad10fdec1cec8d141acecb43736dbe9d4d400eed9d6a04bc6322d1a59"
+    },
+    "board": {
+      "path": "/docs/review/jolene-avatar-idle-proof-board.png",
+      "sha256": "a696a36fe80d183044efa26f089ccadf110e71053501d47fbd6aad4e4b1fa6ce"
+    },
+    "player": {
+      "path": "/docs/review/jolene-avatar-idle-proof.html",
+      "sha256": "91f3105aafcd456a09b3f9da07f3e4a33a70f970da9d4c1a7d20df9c5a2d906d"
+    },
+    "renderInputSha256": "c46bcdf45139f7931044b37646a933ba48a4a0e4a53d92e4b6c8ad786b5056d3"
+  },
+  "runtimeIntegrationChanged": false,
+  "publicUseAuthorized": false
+}
