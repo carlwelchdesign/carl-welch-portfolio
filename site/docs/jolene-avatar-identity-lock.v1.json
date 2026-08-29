@@ -1,0 +1,555 @@
+{
+  "schemaVersion": "1.0.0",
+  "status": "review_only_pending_carl_approval",
+  "ticket": "PORT-AVATAR-005.7A",
+  "identityPolicy": {
+    "canonicalMasterOnly": true,
+    "redrawOrRegenerationAllowed": false,
+    "runtimeIntegrationChanged": false,
+    "displayIntent": "Dolly faces left toward the visitor conversation"
+  },
+  "master": {
+    "path": "/jolene/jolene-country-host-master.png",
+    "sha256": "4e437fd64b3997bd834bb2310ed0175e75d9958c27871d4ae3857a18fc82cc6f",
+    "width": 1162,
+    "height": 1353,
+    "alpha": "binary",
+    "opaqueBounds": {
+      "x": 189,
+      "y": 90,
+      "width": 747,
+      "height": 1169
+    }
+  },
+  "productionFrame": {
+    "width": 320,
+    "height": 460,
+    "anchor": {
+      "x": 160,
+      "y": 448
+    },
+    "drawBounds": {
+      "x": 19,
+      "y": 8,
+      "width": 281,
+      "height": 440
+    },
+    "canonicalCharacterHeight": 440,
+    "contactBaselineY": 448,
+    "crownY": 8,
+    "maximumOrganicHeightVariancePx": 2,
+    "stateScaleVariance": 0,
+    "wholeImageScalingAllowed": false,
+    "fractionalTransformsAllowed": false,
+    "imageSmoothing": false
+  },
+  "landmarks": [
+    {
+      "id": "crown-apex",
+      "source": {
+        "x": 563,
+        "y": 90
+      },
+      "frame": {
+        "x": 160,
+        "y": 8
+      },
+      "tolerancePx": 1,
+      "intent": "Locks the height and center of the four major hair masses."
+    },
+    {
+      "id": "flower-center",
+      "source": {
+        "x": 313,
+        "y": 344
+      },
+      "frame": {
+        "x": 66,
+        "y": 104
+      },
+      "tolerancePx": 1,
+      "intent": "Locks the red flower to Dolly's hair rather than the canvas."
+    },
+    {
+      "id": "left-eye-center",
+      "source": {
+        "x": 550,
+        "y": 415
+      },
+      "frame": {
+        "x": 155,
+        "y": 130
+      },
+      "tolerancePx": 1,
+      "intent": "Preserves the approved sclera, iris, pupil, lash, and brow relationship."
+    },
+    {
+      "id": "right-eye-center",
+      "source": {
+        "x": 690,
+        "y": 420
+      },
+      "frame": {
+        "x": 207,
+        "y": 132
+      },
+      "tolerancePx": 1,
+      "intent": "Preserves the approved eye spacing and three-quarter gaze."
+    },
+    {
+      "id": "nose-tip",
+      "source": {
+        "x": 621,
+        "y": 483
+      },
+      "frame": {
+        "x": 182,
+        "y": 156
+      },
+      "tolerancePx": 1,
+      "intent": "Locks the central face plane."
+    },
+    {
+      "id": "mouth-center",
+      "source": {
+        "x": 621,
+        "y": 542
+      },
+      "frame": {
+        "x": 182,
+        "y": 178
+      },
+      "tolerancePx": 1,
+      "intent": "Mouth animation must preserve one continuous upper tooth band."
+    },
+    {
+      "id": "chin-center",
+      "source": {
+        "x": 621,
+        "y": 635
+      },
+      "frame": {
+        "x": 182,
+        "y": 213
+      },
+      "tolerancePx": 1,
+      "intent": "Prevents state-specific face length and jaw changes."
+    },
+    {
+      "id": "left-hoop-center",
+      "source": {
+        "x": 447,
+        "y": 552
+      },
+      "frame": {
+        "x": 116,
+        "y": 182
+      },
+      "tolerancePx": 2,
+      "intent": "Secondary motion may trail the head without resizing the hoop."
+    },
+    {
+      "id": "right-hoop-center",
+      "source": {
+        "x": 735,
+        "y": 557
+      },
+      "frame": {
+        "x": 224,
+        "y": 184
+      },
+      "tolerancePx": 2,
+      "intent": "Secondary motion may trail the head without resizing the hoop."
+    },
+    {
+      "id": "left-shoulder",
+      "source": {
+        "x": 300,
+        "y": 750
+      },
+      "frame": {
+        "x": 61,
+        "y": 256
+      },
+      "tolerancePx": 2,
+      "intent": "Locks adult torso scale and the shallow shoulder diagonal."
+    },
+    {
+      "id": "right-shoulder",
+      "source": {
+        "x": 855,
+        "y": 800
+      },
+      "frame": {
+        "x": 270,
+        "y": 275
+      },
+      "tolerancePx": 2,
+      "intent": "Locks adult torso scale and the shallow shoulder diagonal."
+    },
+    {
+      "id": "blouse-knot",
+      "source": {
+        "x": 665,
+        "y": 1040
+      },
+      "frame": {
+        "x": 198,
+        "y": 366
+      },
+      "tolerancePx": 2,
+      "intent": "Preserves the blouse construction and torso length."
+    },
+    {
+      "id": "waist-baseline",
+      "source": {
+        "x": 563,
+        "y": 1258
+      },
+      "frame": {
+        "x": 160,
+        "y": 448
+      },
+      "tolerancePx": 0,
+      "intent": "Every state and every frame touches the same message-divider baseline."
+    }
+  ],
+  "paletteAnchors": [
+    {
+      "id": "deep-outline",
+      "source": {
+        "x": 550,
+        "y": 415
+      },
+      "rgba": [
+        1,
+        2,
+        3,
+        255
+      ],
+      "intent": "Eyes and deepest separation"
+    },
+    {
+      "id": "hair-shadow",
+      "source": {
+        "x": 500,
+        "y": 300
+      },
+      "rgba": [
+        201,
+        143,
+        87,
+        255
+      ],
+      "intent": "Hair depth"
+    },
+    {
+      "id": "hair-gold",
+      "source": {
+        "x": 563,
+        "y": 90
+      },
+      "rgba": [
+        208,
+        166,
+        107,
+        255
+      ],
+      "intent": "Hair base"
+    },
+    {
+      "id": "hair-cream",
+      "source": {
+        "x": 420,
+        "y": 280
+      },
+      "rgba": [
+        253,
+        235,
+        194,
+        255
+      ],
+      "intent": "Protected hair highlight"
+    },
+    {
+      "id": "skin-base",
+      "source": {
+        "x": 500,
+        "y": 500
+      },
+      "rgba": [
+        239,
+        151,
+        100,
+        255
+      ],
+      "intent": "Face and hand base"
+    },
+    {
+      "id": "skin-highlight",
+      "source": {
+        "x": 555,
+        "y": 480
+      },
+      "rgba": [
+        249,
+        173,
+        124,
+        255
+      ],
+      "intent": "Face highlight"
+    },
+    {
+      "id": "iris-blue",
+      "source": {
+        "x": 555,
+        "y": 407
+      },
+      "rgba": [
+        31,
+        83,
+        129,
+        255
+      ],
+      "intent": "Iris only, never sclera"
+    },
+    {
+      "id": "flower-red",
+      "source": {
+        "x": 313,
+        "y": 344
+      },
+      "rgba": [
+        146,
+        11,
+        5,
+        255
+      ],
+      "intent": "Flower shadow"
+    },
+    {
+      "id": "hoop-gold",
+      "source": {
+        "x": 735,
+        "y": 557
+      },
+      "rgba": [
+        252,
+        189,
+        70,
+        255
+      ],
+      "intent": "Hoop highlight"
+    },
+    {
+      "id": "blouse-red",
+      "source": {
+        "x": 360,
+        "y": 760
+      },
+      "rgba": [
+        207,
+        47,
+        32,
+        255
+      ],
+      "intent": "Blouse base"
+    },
+    {
+      "id": "blouse-shadow",
+      "source": {
+        "x": 470,
+        "y": 1120
+      },
+      "rgba": [
+        68,
+        8,
+        5,
+        255
+      ],
+      "intent": "Blouse depth"
+    },
+    {
+      "id": "waist-navy",
+      "source": {
+        "x": 563,
+        "y": 1258
+      },
+      "rgba": [
+        0,
+        17,
+        49,
+        255
+      ],
+      "intent": "Waist accent"
+    }
+  ],
+  "intentionalWhiteMasks": {
+    "selection": {
+      "minimumChannel": 210,
+      "maximumChannelSpread": 80,
+      "alpha": 255
+    },
+    "regions": [
+      {
+        "id": "hair-highlights",
+        "sourceRect": {
+          "x": 189,
+          "y": 90,
+          "width": 747,
+          "height": 735
+        },
+        "reviewColor": "#ffd166",
+        "intent": "Cream highlights are character pixels, never matte."
+      },
+      {
+        "id": "left-sclera",
+        "sourceRect": {
+          "x": 515,
+          "y": 385,
+          "width": 82,
+          "height": 62
+        },
+        "reviewColor": "#53d8fb",
+        "intent": "Sclera stays warm white and separate from the blue iris."
+      },
+      {
+        "id": "right-sclera",
+        "sourceRect": {
+          "x": 650,
+          "y": 388,
+          "width": 94,
+          "height": 64
+        },
+        "reviewColor": "#53d8fb",
+        "intent": "Sclera stays warm white and separate from the blue iris."
+      },
+      {
+        "id": "tooth-band",
+        "sourceRect": {
+          "x": 585,
+          "y": 525,
+          "width": 80,
+          "height": 28
+        },
+        "selectionOverride": {
+          "minimumChannel": 180,
+          "maximumChannelSpread": 80
+        },
+        "reviewColor": "#ff7aa2",
+        "intent": "One continuous tooth band; never one or two isolated teeth."
+      },
+      {
+        "id": "blouse-pattern",
+        "sourceRect": {
+          "x": 189,
+          "y": 676,
+          "width": 747,
+          "height": 583
+        },
+        "reviewColor": "#ff5b38",
+        "intent": "Cream pattern is protected while exterior matte is removed."
+      }
+    ]
+  },
+  "transparencyRules": {
+    "allowedAlphaValues": [
+      0,
+      255
+    ],
+    "transparentRgb": [
+      0,
+      0,
+      0
+    ],
+    "backgroundKeyRemovalAllowed": false,
+    "brightnessOnlyRemovalAllowed": false,
+    "interiorNegativeSpaceMustRemainTransparent": true,
+    "requiredReviewBackgrounds": [
+      "checkerboard",
+      "#0b100d",
+      "#ff6800",
+      "#f3eee5"
+    ]
+  },
+  "poseReferenceDisposition": [
+    {
+      "state": "idle",
+      "reference": "/jolene/jolene-country-host-master.png",
+      "retain": "canonical neutral pose and identity",
+      "productionPixelsAllowed": true
+    },
+    {
+      "state": "blink",
+      "reference": "/jolene/jolene-country-host-master.png",
+      "retain": "canonical face with eyelids redrawn only",
+      "productionPixelsAllowed": true
+    },
+    {
+      "state": "greet",
+      "reference": "/jolene/review/country-host-greet-face-corrected-source.png",
+      "retain": "raised-hand wave silhouette only",
+      "productionPixelsAllowed": false
+    },
+    {
+      "state": "excited",
+      "reference": "/jolene/review/country-host-typing-excited-v1-source.png",
+      "retain": "clasped hands, forward lean, downward gaze only",
+      "productionPixelsAllowed": false
+    },
+    {
+      "state": "listen",
+      "reference": "/jolene/sprites/listen.png",
+      "retain": "attentive head attitude only",
+      "productionPixelsAllowed": false
+    },
+    {
+      "state": "think",
+      "reference": "/jolene/sprites/think.png",
+      "retain": "hand-to-chin staging only",
+      "productionPixelsAllowed": false
+    },
+    {
+      "state": "speak",
+      "reference": "/jolene/sprites/speak.png",
+      "retain": "conversational hand cue only",
+      "productionPixelsAllowed": false
+    },
+    {
+      "state": "evidence",
+      "reference": "/jolene/sprites/evidence.png",
+      "retain": "leftward evidence gesture only",
+      "productionPixelsAllowed": false
+    },
+    {
+      "state": "boundary",
+      "reference": "/jolene/sprites/boundary.png",
+      "retain": "open-palm boundary silhouette only",
+      "productionPixelsAllowed": false
+    },
+    {
+      "state": "offline",
+      "reference": "/jolene/review/country-host-offline-shrug-source.png",
+      "retain": "poised shrug silhouette only",
+      "productionPixelsAllowed": false
+    },
+    {
+      "state": "rest",
+      "reference": "/jolene/sprites/rest.png",
+      "retain": "closed-eye resting intent only",
+      "productionPixelsAllowed": false
+    }
+  ],
+  "rejectedIdentitySources": [
+    "/jolene/review/country-host-rig-master-v2-source.png",
+    "/jolene/sprites/rig-base-v2.png",
+    "/jolene/sprites/typing-excited-v1.png",
+    "/jolene/review/country-host-state-sheet-source.png"
+  ],
+  "reviewBoard": {
+    "path": "/docs/review/jolene-avatar-identity-lock.png",
+    "sha256": "0761e8ac6c4149220c83e8616bf4254f315a28eea7e1d632c4f629035eb6259e",
+    "renderInputSha256": "815c433f0b84ed62b030457280be4b27a1f60be09f3568e7b42a51b8b2ffeda3"
+  },
+  "publicUseAuthorized": false
+}
