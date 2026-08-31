@@ -13,7 +13,7 @@ for (const requirement of [
   "from 'motion/react'", 'useReducedMotion', 'useJoleneAvatarController', 'stateForAvatarSignal',
   'canTransitionAvatar', 'data-avatar-state', 'data-avatar-frame', 'data-avatar-pose',
   'preloadJoleneAvatarAssets', 'data-avatar-fallback', 'data-avatar-facing="left"',
-  '4_000', '3_001', 'blink-0', 'setFallbackToIdle',
+  '4_000', '3_001', 'blink-0', 'setFallbackToIdle', 'frame.assetPath', 'jolene-avatar-standalone',
 ]) assert.ok(source.includes(requirement), `Jolene static renderer is missing ${requirement}.`);
 
 for (const forbidden of ['pixi.js', 'AnimatedSprite', 'rotateDeg', 'translateX', 'translateY']) {
@@ -27,6 +27,7 @@ for (const requirement of [
   'image-rendering: pixelated', 'pointer-events: none', 'contain: layout paint style',
   'overflow: hidden', 'transform: scaleX(-1)', 'width: calc(var(--jolene-sheet-columns) * 100%)',
   'left: calc(var(--jolene-frame-index) * -100%)',
+  ".jolene-avatar[data-avatar-frame='think-dance-b'] .jolene-avatar-standalone { transform: scaleX(-1); }",
 ]) assert.ok(styles.includes(requirement), `Jolene avatar CSS is missing ${requirement}.`);
 
 for (const playbackRequirement of [
@@ -43,6 +44,8 @@ assert.equal(artManifest.runtimeIntegrated, true);
 assert.equal(artManifest.publicUseAuthorized, false);
 assert.equal(artManifest.invariants.noRuntimeRotationOrScaling, true);
 assert.equal(artManifest.invariants.allCharacterPixelsInsideCell, true);
+assert.deepEqual(contract.definitions.think.frames, ['think-dance-a', 'think-dance-b']);
+assert.equal(catalog.frames['think-dance-a'].assetPath, '/jolene/sprites/loading-dance-v1.png');
 
 for (const state of contract.states) {
   const definition = contract.definitions[state];
@@ -62,4 +65,4 @@ for (const integrationBoundary of [
 
 assert.ok(evidenceSource.includes('onToggle'), 'Evidence expansion must expose a state signal.');
 assert.ok(evidenceSource.includes('onOpen?.()'), 'Evidence expansion must notify the avatar controller.');
-console.log('Jolene avatar renderer passed: authored reactions, timed frame playback, reduced-motion representatives, crisp crop, and idle fallback.');
+console.log('Jolene avatar renderer passed: authored reactions, approved loading dance, timed playback, reduced-motion representatives, crisp crop, and idle fallback.');

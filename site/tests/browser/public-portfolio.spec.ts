@@ -515,14 +515,14 @@ for (const [route, expectedGalleryImages] of [
   });
 }
 
-test('Supraconscious case study uses the current public product screenshots', async ({ page }) => {
+test('Supraconscious case study uses authenticated internal product screenshots', async ({ page }) => {
   await page.goto('/work/supraconscious-avatar-ai#project-gallery');
 
-  await expect(page.locator('.project-detail-image img')).toHaveAttribute('src', /current-landing/);
-  await expect(page.locator('#project-gallery img[src*="reflection-method"]')).toHaveCount(1);
-  await expect(page.locator('#project-gallery img[src*="plans-and-access"]')).toHaveCount(1);
-  await expect(page.locator('#project-gallery img[src*="mobile-landing"]')).toHaveCount(1);
-  await expect(page.locator('img[src*="journal-workspace"], img[src*="privacy-settings"], img[src*="pricing-page"]')).toHaveCount(0);
+  await expect(page.locator('.project-detail-image img')).toHaveAttribute('src', /internal-journal/);
+  await expect(page.locator('#project-gallery img[src*="internal-history"]')).toHaveCount(1);
+  await expect(page.locator('#project-gallery img[src*="internal-guide"]')).toHaveCount(1);
+  await expect(page.locator('#project-gallery img[src*="internal-settings"]')).toHaveCount(1);
+  await expect(page.locator('#project-gallery')).toContainText('Inside the governed reflection product');
 });
 
 test('project media viewer supports full-size keyboard inspection on mobile', async ({ page }) => {

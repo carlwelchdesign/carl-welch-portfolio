@@ -13,6 +13,8 @@
     "greet-0": { "index": 2, "pose": "greet", "state": "greet" },
     "listen-0": { "index": 3, "pose": "listen", "state": "listen" },
     "think-0": { "index": 3, "pose": "attentive", "state": "think" },
+    "think-dance-a": { "index": 3, "assetPath": "/jolene/sprites/loading-dance-v1.png", "pose": "loading-dance", "state": "think" },
+    "think-dance-b": { "index": 3, "assetPath": "/jolene/sprites/loading-dance-v1.png", "pose": "loading-dance", "state": "think" },
     "legacy-speak-0": { "index": 4, "pose": "legacy-speak", "state": "speak" },
     "speak-0": { "index": 11, "pose": "speak", "state": "speak" },
     "evidence-0": { "index": 5, "pose": "evidence", "state": "evidence" },

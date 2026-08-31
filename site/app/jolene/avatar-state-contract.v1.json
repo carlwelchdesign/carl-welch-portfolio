@@ -10,7 +10,7 @@
     "greet": { "frames": ["greet-0"], "durationsMs": [700], "loop": false, "returnState": "idle", "reducedMotionFrame": "greet-0" },
     "excited": { "frames": ["excited-0"], "durationsMs": [1000], "loop": true, "returnState": null, "reducedMotionFrame": "excited-0" },
     "listen": { "frames": ["listen-0", "listen-1", "listen-2"], "durationsMs": [460, 220, 460], "loop": true, "returnState": null, "reducedMotionFrame": "listen-0" },
-    "think": { "frames": ["think-0"], "durationsMs": [1000], "loop": true, "returnState": null, "reducedMotionFrame": "think-0" },
+    "think": { "frames": ["think-dance-a", "think-dance-b"], "durationsMs": [230, 230], "loop": true, "returnState": null, "reducedMotionFrame": "think-dance-a" },
     "speak": { "frames": ["speak-0", "speak-1", "speak-2"], "durationsMs": [360, 90, 360], "loop": true, "returnState": null, "reducedMotionFrame": "speak-0" },
     "evidence": { "frames": ["evidence-0", "evidence-1", "evidence-2", "evidence-3"], "durationsMs": [160, 180, 300, 360], "loop": false, "returnState": "idle", "reducedMotionFrame": "evidence-0" },
     "boundary": { "frames": ["boundary-0", "boundary-1", "boundary-2"], "durationsMs": [420, 260, 420], "loop": true, "returnState": null, "reducedMotionFrame": "boundary-0" },

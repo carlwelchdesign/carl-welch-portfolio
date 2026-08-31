@@ -204,14 +204,14 @@ assert(!jobSearchOs?.gallery.some((item) => item.src.includes('system-topology')
 assert(projects.find((project) => project.slug === 'flight-tracker-ai')?.gallery.length >= 3, 'Flight Tracker AI must retain live, replay, and route-comparison views.');
 assert(projects.find((project) => project.slug === 'wave-factory-essentials')?.gallery.length >= 5, 'Wave Factory Essentials must retain its expanded product-family gallery.');
 const supraconscious = projects.find((project) => project.slug === 'supraconscious-avatar-ai');
-assert(supraconscious?.image.src === '/projects/supraconscious-avatar-ai/current-landing.png', 'Supraconscious Avatar AI must use the current public landing experience as its lead image.');
+assert(supraconscious?.image.src === '/projects/supraconscious-avatar-ai/internal-journal.png', 'Supraconscious Avatar AI must lead with the authenticated journal workspace.');
 assert(
   JSON.stringify(supraconscious?.gallery.map((item) => item.src)) === JSON.stringify([
-    '/projects/supraconscious-avatar-ai/reflection-method.png',
-    '/projects/supraconscious-avatar-ai/plans-and-access.png',
-    '/projects/supraconscious-avatar-ai/mobile-landing.png',
+    '/projects/supraconscious-avatar-ai/internal-history.png',
+    '/projects/supraconscious-avatar-ai/internal-guide.png',
+    '/projects/supraconscious-avatar-ai/internal-settings.png',
   ]),
-  'Supraconscious Avatar AI must retain the current public product gallery.',
+  'Supraconscious Avatar AI must retain its authenticated product gallery.',
 );
 assert(projects.find((project) => project.slug === 'argent-matchmaking')?.gallery.length >= 3, 'Argent Matchmaking must retain its product-system, direction, and environment views.');
 const progressionLab = projects.find((project) => project.slug === 'progression-lab-ai');
