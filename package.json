@@ -75,9 +75,9 @@
     "check": "pnpm check:repository-layout && pnpm typecheck && pnpm lint && pnpm check:metadata && pnpm check:social-card-integrity && pnpm check:social-cards && pnpm check:content && pnpm check:no-em-dashes && pnpm check:editorial && pnpm check:archive && pnpm check:legacy-visuals && pnpm check:archive-recovery && pnpm check:release-decisions && pnpm check:github-sync && pnpm check:jolene-contract && pnpm check:jolene-job-fit && pnpm check:jolene-bff && pnpm check:jolene-avatar-brief && pnpm check:jolene-avatar-master && pnpm check:jolene-avatar-identity-lock && pnpm check:jolene-avatar-state && pnpm check:jolene-avatar-sprites && pnpm check:jolene-avatar-review && pnpm check:jolene-avatar-renderer && pnpm check:jolene-avatar-faces && pnpm check:jolene-greet-review && pnpm check:jolene-approved-runtime && pnpm check:analytics && pnpm check:sentry-privacy && pnpm check:sentry-asana && pnpm check:sentry-reconciliation && pnpm check:sentry-release && pnpm check:sentry-operations && pnpm check:research-protocol && pnpm check:recovery && pnpm check:security-headers && pnpm check:release-readiness && pnpm build && pnpm check:no-public-sourcemaps"
   },
   "dependencies": {
-    "@sentry/browser": "10.71.0",
-    "@sentry/cloudflare": "10.71.0",
-    "@vitejs/plugin-react": "6.0.2",
+    "@sentry/browser": "10.72.0",
+    "@sentry/cloudflare": "10.72.0",
+    "@vitejs/plugin-react": "6.1.1",
     "@vitejs/plugin-rsc": "0.5.34",
     "motion": "13.1.1",
     "next": "16.3.3",
@@ -85,7 +85,7 @@
     "react-dom": "19.2.8",
     "react-server-dom-webpack": "19.2.8",
     "vinext": "1.0.0-beta.8",
-    "vite": "8.0.16"
+    "vite": "8.2.2"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.13.0",
