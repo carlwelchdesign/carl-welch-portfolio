@@ -61,6 +61,17 @@ export type ProjectStory = {
   }>;
 };
 
+export type ProjectRetrospective = {
+  heading: string;
+  summary: string;
+  lessons: Array<{
+    title: string;
+    challenge: string;
+    response: string;
+    result: string;
+  }>;
+};
+
 export type PortfolioProject = {
   slug: string;
   name: string;
@@ -81,6 +92,7 @@ export type PortfolioProject = {
   gallerySummary: string;
   gallery: ProjectMedia[];
   story: ProjectStory;
+  retrospective?: ProjectRetrospective;
   stack: string[];
   architecture: ProjectArchitecture;
   maturity: ProjectMaturity;
@@ -789,31 +801,58 @@ export const projects: PortfolioProject[] = [
     slug: 'jolene-ai',
     name: 'Jolene AI',
     category: 'AI agents / Knowledge systems',
-    status: 'Private local agent with a deployed public delegate',
+    status: 'Deployed public delegate with career-wide expansion in progress',
     tone: 'green',
     number: '06',
     summary:
-      'A governed AI system I designed to combine useful model reasoning with reviewed evidence, durable memory, explicit action boundaries, and a warm, recognizable personality.',
+      'A governed AI system that combines reviewed evidence, bounded conversation continuity, tested model and deterministic responses, explicit action boundaries, and a warm, recognizable personality. Current work is expanding the public delegate across my full 20-plus-year career.',
     role: 'Product architect and lead builder',
-    scope: 'Product direction, agent architecture, evidence design, personality research, implementation, evaluation, and release governance',
+    scope: 'Product direction, agent architecture, evidence design, character and behavior direction, implementation, evaluation, and release governance',
     image: {
       src: '/jolene/jolene-country-host-master.png',
       alt: 'Jolene AI character portrait used for Carl Welch’s personal chief-of-staff agent',
       width: 1162,
       height: 1353,
     },
-    galleryTitle: 'One agent, deliberately separated surfaces',
+    galleryTitle: 'Identity, behavior, and motion as a designed system',
     gallerySummary:
-      'The project is defined less by a single screen than by the boundaries between Carl’s private assistant, Slack, governed evidence, the public portfolio delegate, and separately authorized actions.',
+      'The character work moved from a single portrait to a documented identity lock, state grammar, keyframe sequence, and bounded runtime atlas. These sheets show the design system behind the visible character.',
     gallery: [
       {
-        src: '/jolene/approved-animation/idle-rest.png',
-        alt: 'Jolene AI character portrait used throughout Carl Welch’s governed assistant project',
-        width: 320,
-        height: 460,
-        label: 'Jolene’s identity',
-        caption: 'A recognizable character gives the assistant continuity across local, Slack, and public surfaces while policy and evidence remain shared underneath.',
-        layout: 'portrait',
+        src: '/projects/jolene-ai/state-ensemble.png',
+        alt: 'Jolene state ensemble board showing idle, blink, greet, excited, listen, think, speak, evidence, boundary, offline, and rest behaviors',
+        width: 1500,
+        height: 1531,
+        label: 'Conversation state ensemble',
+        caption: 'A semantic state board maps product events to restrained character behaviors, including reduced-motion and failure rules.',
+        layout: 'wide',
+      },
+      {
+        src: '/projects/jolene-ai/identity-lock.png',
+        alt: 'Jolene canonical model sheet documenting landmarks, silhouette, palette, protected white pixels, and pose-reference rules',
+        width: 1800,
+        height: 1434,
+        label: 'Canonical identity lock',
+        caption: 'Landmarks, silhouette, palette anchors, transparency checks, and intentional-white masks keep every state recognizably the same character.',
+        layout: 'wide',
+      },
+      {
+        src: '/projects/jolene-ai/greet-keyframes.png',
+        alt: 'Ten-frame Jolene greeting contact sheet showing the raised-hand wave from rest through apex and settle',
+        width: 6400,
+        height: 3680,
+        label: 'Greeting keyframes',
+        caption: 'The wave was built as authored key poses with a complete hand silhouette, consistent baseline, and deliberate settle instead of uncontrolled frame generation.',
+        layout: 'wide',
+      },
+      {
+        src: '/projects/jolene-ai/approved-runtime-atlas.png',
+        alt: 'Approved Jolene runtime atlas with idle, blink, greeting, loading dance, and evidence-pointing frames',
+        width: 1280,
+        height: 1380,
+        label: 'Approved runtime atlas',
+        caption: 'Only the approved frames ship. Runtime behavior is event-driven, testable, reduced-motion aware, and independent from answer generation.',
+        layout: 'standard',
       },
     ],
     story: {
@@ -821,7 +860,7 @@ export const projects: PortfolioProject[] = [
       problem:
         'After a March 2026 layoff, I spent two weeks that May on BLM land in Nevada with my daughter while she did fieldwork for her geology master’s research. With a generator, Starlink, and my MacBook, I began building Job Search OS. That work showed me I could build something broader: a chief-of-staff agent that could help me organize work, preserve context, and keep moving.',
       contribution:
-        'I imagined a comforting, capable, Jarvis-like partner. Dolly Parton came to mind because I grew up with her music and interviews and associated her with warmth, humor, resilience, and practical encouragement. Jolene is not Dolly, does not impersonate her, and does not imply her endorsement. From that starting point, I led a multi-agent build spanning the portable agent core, durable task memory, reviewed career evidence, public RAG, Slack delivery, exact-action approvals, Docker runtimes, prompt-injection defenses, release evaluation, and a researched personality system. I kept private and public Jolene as separate deployments with different credentials, stores, and capabilities.',
+        'I imagined a comforting, capable, Jarvis-like partner. Dolly Parton came to mind because I grew up with her music and interviews and associated her with warmth, humor, resilience, and practical encouragement. Jolene is not Dolly, does not impersonate her, and does not imply her endorsement. From that starting point, I led a multi-agent build spanning the portable agent core, private memory, reviewed career evidence, public retrieval, Slack delivery, exact-action approvals, Docker runtimes, prompt-injection defenses, release evaluation, and a researched personality system. I also directed a pixel-character system with a canonical identity, event-driven poses, regression-tested scaling and interaction behavior, and reduced-motion fallbacks. Private and public Jolene remain separate deployments with different credentials, stores, and capabilities.',
       decisions: [
         {
           title: 'Separate public knowledge from private memory',
@@ -832,44 +871,81 @@ export const projects: PortfolioProject[] = [
           detail: 'Retrieval and deterministic validation own the factual answer. Jolene’s warmth, wit, and kindness are rendered afterward and cannot change claims or citations.',
         },
         {
-          title: 'Make consequential actions explicit',
-          detail: 'Jolene can prepare work, but external messages and other consequential actions remain disabled or require a separate, exact human authorization.',
+          title: 'Treat behavior as product state',
+          detail: 'Typing, thinking, answering, evidence, refusal, offline, and loading states drive a bounded character controller. The model never decides which animation runs.',
         },
       ],
     },
-    stack: ['TypeScript', 'OpenAI', 'SQLite', 'Docker', 'Slack', 'Vercel'],
+    retrospective: {
+      heading: 'The character only became reliable when art direction became engineering.',
+      summary:
+        'The difficult part was not making one attractive portrait. It was preserving the same person, proportions, pixel language, baseline, transparency, and product meaning across every state and viewport. The failures produced a stricter production system.',
+      lessons: [
+        {
+          title: 'Identity drift between poses',
+          challenge: 'Pose-by-pose generation changed facial structure, hair volume, body proportions, eye treatment, and scale enough to make Jolene look like a different person.',
+          response: 'Lock one canonical master, named landmarks, a silhouette envelope, palette anchors, a common 320 by 460 canvas, and a shared waist baseline. Every other image became pose reference rather than identity authority.',
+          result: 'The runtime now preserves one recognizable character while allowing restrained pose changes.',
+        },
+        {
+          title: 'Transparency versus intentional white',
+          challenge: 'Removing white edge artifacts also damaged sclera, teeth, blouse highlights, and negative space between the arm and body.',
+          response: 'Separate alpha cleanup from protected color regions. Binary transparency checks and explicit intentional-white masks now distinguish artifacts from authored pixels.',
+          result: 'The asset pipeline can reject halos and holes without erasing facial detail or costume texture.',
+        },
+        {
+          title: 'Animation ambition versus control',
+          challenge: 'Long generated sequences introduced unstable eyes, hair, hands, and whole-body pumping. More frames did not automatically create better motion.',
+          response: 'Author a few strong key poses, interpolate only controlled movement, keep the baseline fixed, and ship a small approved atlas. Loading uses a deliberate two-pose mirror; reduced motion uses static representatives.',
+          result: 'Fewer trusted frames produce cleaner rhythm, lower runtime cost, and more predictable review.',
+        },
+        {
+          title: 'Behavior regressions in the live interface',
+          challenge: 'A pose could be visually correct and still fail when evidence opened, typing began, loading ended, the panel scrolled, or the viewport changed.',
+          response: 'Route UI events through one state contract and add browser regressions for modal opening, pointing, scale, baseline, containment, fallback, reduced motion, and answer focus.',
+          result: 'Character behavior is now verified as part of the product interaction rather than approved only as isolated art.',
+        },
+      ],
+    },
+    stack: ['TypeScript', 'OpenAI', 'Next.js', 'PixiJS', 'SQLite', 'Docker', 'Slack', 'Vercel', 'Playwright'],
     architecture: {
-      title: 'Private chief of staff and isolated public delegate',
-      summary: 'One portable policy core serves bounded adapters, while public evidence, private memory, and release operations remain separate trust zones.',
+      title: 'Private chief of staff, career-wide public delegate, and measured release system',
+      summary: 'Private memory and action tools stay in Carl’s local trust zone. The public path uses a reviewed career artifact, bounded continuity, grounded model or deterministic composition, and a separate evaluation and promotion pipeline.',
       groups: [
-        { id: 'private', label: 'Private Jolene', detail: 'Carl-owned local trust zone', x: 20, y: 35, width: 285, height: 550 },
-        { id: 'public', label: 'Public portfolio delegate', detail: 'Public-safe read-only trust zone', x: 330, y: 35, width: 360, height: 550 },
-        { id: 'ops', label: 'Release and operations', detail: 'Explicit promotion gates', x: 715, y: 35, width: 265, height: 550 },
+        { id: 'private', label: 'Private Jolene', detail: 'Carl-owned memory and action zone', x: 20, y: 35, width: 260, height: 550 },
+        { id: 'public', label: 'Public portfolio delegate', detail: 'Read-only career conversation zone', x: 300, y: 35, width: 430, height: 550 },
+        { id: 'ops', label: 'Composition and release', detail: 'Measured quality and promotion gates', x: 750, y: 35, width: 230, height: 550 },
       ],
       nodes: [
-        { id: 'local', label: 'Local control center', detail: 'Tasks, memory, approvals, reviews', technology: 'TypeScript · HTTP', kind: 'surface', x: 45, y: 105, width: 235 },
-        { id: 'slack', label: 'Owner Slack', detail: 'Verified DM and explicit mentions', technology: 'Socket Mode', kind: 'integration', x: 45, y: 250, width: 235 },
-        { id: 'approvals', label: 'Action approvals', detail: 'Exact intent, recipient, content, expiry', technology: 'Policy gate', kind: 'control', x: 45, y: 380, width: 235 },
-        { id: 'private-store', label: 'Private state', detail: 'Memory, tasks, evidence, audit', technology: 'SQLite · Obsidian retrieval', kind: 'data', x: 45, y: 495, width: 235 },
-        { id: 'bff', label: 'Portfolio BFF', detail: 'Same-origin browser boundary', technology: 'Next.js · server-only token', kind: 'service', x: 360, y: 105, width: 300 },
-        { id: 'delegate', label: 'Public Jolene', detail: 'Bounded answer and job-fit API', technology: 'Vercel · TypeScript', kind: 'ai', x: 360, y: 250, width: 300 },
-        { id: 'corpus', label: 'Reviewed public artifact', detail: 'Versioned claims and revocations', technology: 'Hash-verified JSON', kind: 'data', x: 360, y: 420, width: 300 },
-        { id: 'model', label: 'Grounded synthesis', detail: 'Structured response, no public tools', technology: 'OpenAI Responses API', kind: 'ai', x: 745, y: 105, width: 205 },
-        { id: 'coordination', label: 'Shared controls', detail: 'Rate, budget, audit, telemetry', technology: 'Redis-compatible REST', kind: 'control', x: 745, y: 250, width: 205 },
-        { id: 'release', label: 'Release gates', detail: 'Eval, preview, promotion, rollback', technology: 'CI · Vercel', kind: 'control', x: 745, y: 420, width: 205 },
+        { id: 'owner-surfaces', label: 'Owner surfaces', detail: 'Local control center and verified Slack', technology: 'TypeScript · Socket Mode', kind: 'surface', x: 45, y: 105, width: 210 },
+        { id: 'private-core', label: 'Private agent core', detail: 'Tasks, memory, policy, reviews', technology: 'Portable agent runtime', kind: 'ai', x: 45, y: 255, width: 210 },
+        { id: 'private-store', label: 'Private state', detail: 'Memory, audit, evidence, delivery ledger', technology: 'SQLite · Obsidian', kind: 'data', x: 45, y: 410, width: 210 },
+        { id: 'approvals', label: 'Exact action gate', detail: 'Intent, recipient, content, expiry', technology: 'Human authorization', kind: 'control', x: 45, y: 500, width: 210 },
+        { id: 'portfolio', label: 'Portfolio chat', detail: 'Questions, citations, role comparison', technology: 'Next.js · React', kind: 'surface', x: 325, y: 105, width: 180 },
+        { id: 'bff', label: 'Same-origin BFF', detail: 'Bounded schemas and server-only token', technology: 'Next.js · TypeScript', kind: 'service', x: 525, y: 105, width: 180 },
+        { id: 'delegate', label: 'Public Jolene API', detail: 'Answer, job-fit, policy refusal', technology: 'Vercel · TypeScript', kind: 'ai', x: 325, y: 255, width: 180 },
+        { id: 'retrieval', label: 'Career-wide retrieval', detail: 'Employer, agency, leadership, products', technology: 'Lexical · semantic rank', kind: 'service', x: 525, y: 255, width: 180 },
+        { id: 'corpus', label: 'Reviewed career artifact', detail: 'Five chapters, 16 roles, 92 records in review', technology: 'Versioned · hash verified', kind: 'data', x: 325, y: 430, width: 180 },
+        { id: 'continuity', label: 'Bounded continuity', detail: 'Public context only, short lived, resettable', technology: 'Typed conversationContext', kind: 'control', x: 525, y: 430, width: 180 },
+        { id: 'composer', label: 'Grounded composer', detail: 'Model or deterministic answer, then validate', technology: 'OpenAI · structured output', kind: 'ai', x: 775, y: 105, width: 180 },
+        { id: 'evaluation', label: 'Launch evaluation', detail: '132 cases, 192 turns, red team', technology: 'Playwright · eval runner', kind: 'control', x: 775, y: 270, width: 180 },
+        { id: 'release', label: 'Release gates', detail: 'Preview, corpus pin, promote, rollback', technology: 'CI · Vercel', kind: 'runtime', x: 775, y: 445, width: 180 },
       ],
       edges: [
-        { from: 'local', to: 'private-store', bidirectional: true },
-        { from: 'slack', to: 'local', bidirectional: true },
-        { from: 'local', to: 'approvals' },
-        { from: 'approvals', to: 'slack', dashed: true, label: 'authorized action' },
+        { from: 'owner-surfaces', to: 'private-core', bidirectional: true },
+        { from: 'private-core', to: 'private-store', bidirectional: true },
+        { from: 'private-core', to: 'approvals' },
         { from: 'bff', to: 'delegate' },
-        { from: 'delegate', to: 'corpus' },
-        { from: 'delegate', to: 'model', label: 'grounded prompt' },
-        { from: 'delegate', to: 'coordination', bidirectional: true },
+        { from: 'portfolio', to: 'bff' },
+        { from: 'delegate', to: 'retrieval' },
+        { from: 'retrieval', to: 'corpus' },
+        { from: 'delegate', to: 'continuity', bidirectional: true },
+        { from: 'delegate', to: 'composer', label: 'grounded context' },
+        { from: 'evaluation', to: 'composer', dashed: true, label: 'score' },
+        { from: 'evaluation', to: 'corpus', dashed: true, label: 'coverage' },
         { from: 'release', to: 'delegate', dashed: true, label: 'promote' },
         { from: 'private-store', to: 'corpus', dashed: true, label: 'reviewed export only' },
-        { from: 'release', to: 'bff', dashed: true, label: 'portfolio release' },
+        { from: 'release', to: 'portfolio', dashed: true, label: 'portfolio pin' },
       ],
     },
     maturity: 'deployed_demo',
@@ -877,7 +953,7 @@ export const projects: PortfolioProject[] = [
     evidence: [
       {
         id: 'portfolio:claim:jolene-ai:architecture', sourceIds: ['portfolio:source:project:jolene-ai'],
-        text: 'Carl designed Jolene as one portable agent core behind private local, Slack, scheduled-work, and public portfolio adapters, while keeping the public delegate physically separated from private memory and tools.',
+        text: 'Carl designed Jolene as one portable agent core behind private local and Slack surfaces, plus a physically isolated public portfolio delegate with its own reviewed artifact, bounded continuity, retrieval, evaluation, credentials, and release gates.',
         strength: 'moderate', maturity: 'deployed_demo', limitations: ['The public delegate is intentionally less capable than private Jolene.'], reviewState: 'approved', publicApproved: true,
       },
       {
@@ -892,7 +968,7 @@ export const projects: PortfolioProject[] = [
       },
       {
         id: 'portfolio:claim:jolene-ai:corpus', sourceIds: ['portfolio:source:project:jolene-ai'],
-        text: 'Exports public career knowledge as a versioned, hash-verified, deny-by-default artifact with review timestamps and revocation continuity; private evidence and raw Obsidian content never enter that artifact.',
+        text: 'Exports public career knowledge as a versioned, hash-verified, deny-by-default artifact with review timestamps and revocation continuity. Active expansion work covers five career chapters and 16 detailed roles in a 92-record reviewed candidate artifact without exposing private evidence or raw Obsidian content.',
         strength: 'moderate', maturity: 'deployed_demo', limitations: ['Public answers are limited to the currently published artifact.'], reviewState: 'approved', publicApproved: true,
       },
       {
@@ -902,7 +978,7 @@ export const projects: PortfolioProject[] = [
       },
       {
         id: 'portfolio:claim:jolene-ai:personality', sourceIds: ['portfolio:source:project:jolene-ai'],
-        text: 'Carl directed a transcript-backed personality research program that produced a character graph, behavior specification, evaluated runtime bundle, and neutral rollback so warmth, wit, kindness, and candor remain separate from factual grounding.',
+        text: 'Carl directed a transcript-backed personality research program and a canonical pixel-character system with an identity lock, semantic state contract, approved runtime atlas, and reduced-motion fallback, while keeping warmth, wit, kindness, and candor separate from factual grounding.',
         strength: 'moderate', maturity: 'deployed_demo', limitations: ['Text personality remains under active quality evaluation; voice is future work.'], reviewState: 'approved', publicApproved: true,
       },
       {
@@ -922,7 +998,7 @@ export const projects: PortfolioProject[] = [
       },
       {
         id: 'portfolio:claim:jolene-ai:deployment', sourceIds: ['portfolio:source:project:jolene-ai'],
-        text: 'Separates build, evaluation, preview, production promotion, corpus pinning, and rollback proof into distinct release gates instead of treating a successful local check as a production release.',
+        text: 'Separates build, evaluation, preview, production promotion, corpus pinning, and rollback proof into distinct release gates. The active career-wide launch suite contains 132 cases and 192 turns, with production browser and telemetry verification still required for each release.',
         strength: 'moderate', maturity: 'deployed_demo', limitations: ['Future releases still require their own checks and explicit promotion.'], reviewState: 'approved', publicApproved: true,
       },
       {
@@ -943,8 +1019,9 @@ export const projects: PortfolioProject[] = [
     ],
     boundaries: [
       'Public Jolene can use only the reviewed public artifact. It cannot read Carl’s private Obsidian vault, memory, Slack, SQLite database, or MCP tools.',
-      'Voice remains future work, and external messages or other consequential actions remain disabled or subject to separate human authorization.',
-      'The public chat is deployed as a portfolio demonstration; the broader chief-of-staff runtime remains a private local system for Carl.',
+      'The 92-record career-wide artifact and its broader delivery routing are active release work. The deployed delegate remains pinned to the last separately verified production corpus until that work passes its full gates.',
+      'Audio voice remains future work, and external messages or other consequential actions remain disabled or subject to separate human authorization.',
+      'The public chat is a deployed portfolio demonstration. The broader chief-of-staff runtime remains a private local system for Carl.',
     ],
     repositoryUrl: 'https://github.com/carlwelchdesign/jolene-ai',
   },

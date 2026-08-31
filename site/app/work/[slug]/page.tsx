@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { MotionRuntime, Reveal } from '../../motion-elements';
 import { getProject, projects } from '../../portfolio-data';
-import { ArchitectureDiagram, PageFrame, ProjectGallery, ProjectStory } from '../../site-components';
+import { ArchitectureDiagram, PageFrame, ProjectGallery, ProjectRetrospective, ProjectStory } from '../../site-components';
 import { buildPageMetadata } from '../../site-metadata';
 import { publicEvidenceAnchorId } from '../../jolene/public-evidence-navigation-core';
 
@@ -94,6 +94,8 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           <ProjectStory project={project} />
 
           <ProjectGallery project={project} />
+
+          <ProjectRetrospective project={project} />
 
           <section id="architecture" className="project-detail-section" aria-labelledby="architecture-title">
             <p className="eyebrow">Technical view</p>

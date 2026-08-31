@@ -314,6 +314,26 @@ assert.match(joleneProject.story.problem, /generator, Starlink, and my MacBook/)
 assert.match(joleneProject.story.contribution, /Jolene is not Dolly, does not impersonate her, and does not imply her endorsement/);
 assert.match(joleneOrigin.text, /chief-of-staff agent/);
 assert.deepEqual(joleneOrigin.limitations, ['Jolene is not Dolly Parton, does not impersonate her, and does not imply her endorsement.']);
+assert.equal(joleneProject.gallery.length, 4, 'Jolene case study must publish four character-system views.');
+assert.equal(
+  new Set(joleneProject.gallery.map((item) => item.src)).size,
+  joleneProject.gallery.length,
+  'Jolene case-study views must use distinct image assets.',
+);
+assert.deepEqual(
+  joleneProject.gallery.map((item) => item.label),
+  ['Conversation state ensemble', 'Canonical identity lock', 'Greeting keyframes', 'Approved runtime atlas'],
+);
+assert.equal(joleneProject.retrospective?.lessons.length, 4, 'Jolene retrospective must retain all four production lessons.');
+assert.match(joleneProject.retrospective?.heading ?? '', /art direction became engineering/);
+assert(
+  joleneProject.architecture.nodes.some((node) => node.id === 'corpus' && /92 records in review/.test(node.detail)),
+  'Jolene architecture must identify the active reviewed career artifact.',
+);
+assert(
+  joleneProject.architecture.nodes.some((node) => node.id === 'evaluation' && /132 cases, 192 turns/.test(node.detail)),
+  'Jolene architecture must identify the current launch-evaluation scale.',
+);
 assert(
   publicEvidenceTargetRecords.some(([evidenceId, path, label, status]) =>
     evidenceId === 'portfolio:claim:jolene-ai:origin'
