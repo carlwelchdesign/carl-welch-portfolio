@@ -75,6 +75,14 @@ function buildProviderCitationAliases(): ReadonlyMap<string, PublicEvidenceTarge
     status: 'available',
   });
 
+  aliases.set('/carl-welch-resume.pdf', {
+    evidenceId: 'portfolio:source:resume',
+    href: '/carl-welch-resume.pdf',
+    anchorId: '',
+    label: 'Carl Welch résumé',
+    status: 'available',
+  });
+
   for (const item of available) {
     const project = item.evidenceId.match(/^portfolio:source:project:([a-z0-9-]+)$/)?.[1];
     if (project) {
