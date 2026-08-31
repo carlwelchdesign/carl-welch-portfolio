@@ -41,8 +41,8 @@ type PixiRuntime = {
 const frameCatalog = frameCatalogJson.frames as Record<string, FrameDefinition>;
 const stateDefinitions = stateContractJson.definitions as Record<AvatarState, StateDefinition>;
 const interruptStates = new Set<AvatarState>(stateContractJson.interruption.alwaysInterruptFor as AvatarState[]);
-const atlasManifestPath = '/jolene/approved-animation/jolene-approved-atlas.json?v=f761806433d1';
-const atlasImagePath = '/jolene/approved-animation/jolene-approved-atlas.png?v=ff9e65504266';
+const atlasManifestPath = '/jolene/approved-animation/jolene-approved-atlas.json?v=df2a3bd0a3a7';
+const atlasImagePath = '/jolene/approved-animation/jolene-approved-atlas.png?v=e4d4375e596e';
 
 export type JoleneAvatarController = {
   state: AvatarState;
