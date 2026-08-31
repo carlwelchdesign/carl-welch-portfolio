@@ -225,14 +225,30 @@ try {
       name: 'Fixture Visitor', email: 'visitor@example.com', message: 'Please review.', consent: true,
     }),
   ]);
+  const conversationContext = {
+    corpusVersion: answer.corpusVersion,
+    projectPath: '/work/jolene-ai',
+    evidenceIds: [answer.citations[0].evidenceId],
+    turnCount: 1,
+    expiresAt: new Date(Date.now() + 15 * 60_000).toISOString(),
+  };
   const browserCalls = [];
   const browserAdapter = browserAdapterModule.createBrowserPublicJoleneAdapter(async (url, init) => {
     browserCalls.push({ url, init });
-    return json(answer);
+    return json({ ...answer, conversationContext });
   });
-  assert.equal((await browserAdapter.answer({ question: 'What does Carl build?' })).corpusVersion, answer.corpusVersion);
+  const browserAnswer = await browserAdapter.answer({
+    question: 'What about its security?',
+    conversationContext,
+  });
+  assert.equal(browserAnswer.corpusVersion, answer.corpusVersion);
+  assert.deepEqual(browserAnswer.conversationContext, conversationContext);
   assert.equal(browserCalls[0].url, '/api/jolene/answer');
   assert.equal(new Headers(browserCalls[0].init.headers).has('authorization'), false);
+  assert.deepEqual(JSON.parse(browserCalls[0].init.body), {
+    question: 'What about its security?',
+    conversationContext,
+  });
 
   const disabledBrowserAdapter = browserAdapterModule.createBrowserPublicJoleneAdapter(async () => (
     Response.json({ error: 'service_disabled' }, { status: 503, headers: { 'X-Request-Id': 'request-1' } })
@@ -243,14 +259,24 @@ try {
   );
   const upstreamCalls = [];
   const successful = await handler.handlePublicJoleneBff(
-    request('answer', 'POST', { question: 'What does Carl build?' }),
+    request('answer', 'POST', {
+      question: 'What about its security?',
+      conversationContext,
+    }),
     'answer',
     {
       environment,
       admission: admission(policy),
       fetchImpl: async (url, init) => {
-        upstreamCalls.push({ url, method: init.method, authorization: new Headers(init.headers).get('authorization') });
-        return json(url.toString().endsWith('/manifest') ? manifest : answer);
+        upstreamCalls.push({
+          url,
+          method: init.method,
+          authorization: new Headers(init.headers).get('authorization'),
+          body: init.body,
+        });
+        return json(url.toString().endsWith('/manifest')
+          ? manifest
+          : { ...answer, conversationContext });
       },
       logger: () => {},
     },
@@ -259,6 +285,10 @@ try {
   assert.equal((await successful.json()).corpusVersion, manifest.corpusVersion);
   assert.deepEqual(upstreamCalls.map((call) => call.method), ['POST', 'GET']);
   assert.ok(upstreamCalls.every((call) => call.authorization === 'Bearer fixture-server-token'));
+  assert.deepEqual(JSON.parse(upstreamCalls[0].body), {
+    question: 'What about its security?',
+    conversationContext,
+  });
 
   let unauthorizedAttempts = 0;
   const unauthorized = await handler.handlePublicJoleneBff(

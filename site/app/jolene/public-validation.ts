@@ -17,6 +17,7 @@ import {
   type PortfolioAnswerResponse,
   type ProjectMaturity,
   type PublicClaim,
+  type PublicConversationContext,
   type PublicEvidenceCitation,
   type PublicEvidenceManifest,
   type PublicEvidenceSourceType,
@@ -178,6 +179,77 @@ function parseClaim(value: unknown, path: string): PublicClaim {
   };
 }
 
+function parsePublicConversationContext(
+  value: unknown,
+  path: string,
+): PublicConversationContext {
+  const item = readRecord(value, path);
+  requireOnlyKeys(
+    item,
+    ['corpusVersion', 'projectPath', 'evidenceIds', 'turnCount', 'expiresAt'],
+    path,
+  );
+  const projectPath = item.projectPath === undefined
+    ? undefined
+    : readPattern(
+      item.projectPath,
+      `${path}.projectPath`,
+      /^\/work\/[a-z0-9-]+$/,
+      'published project path',
+    );
+  const evidenceIds = item.evidenceIds === undefined
+    ? undefined
+    : readStringArray(
+      item.evidenceIds,
+      `${path}.evidenceIds`,
+      PUBLIC_JOLENE_LIMITS.conversationEvidenceIds,
+    );
+  if (evidenceIds) {
+    if (evidenceIds.length === 0) {
+      throw new PublicJoleneContractError(`${path}.evidenceIds`, 'must not be empty');
+    }
+    evidenceIds.forEach((evidenceId, index) => readPattern(
+      evidenceId,
+      `${path}.evidenceIds[${index}]`,
+      /^career:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/,
+      'public career evidence ID',
+    ));
+    requireUnique(evidenceIds, `${path}.evidenceIds`);
+  }
+  if (!projectPath && !evidenceIds) {
+    throw new PublicJoleneContractError(path, 'must contain a public project or evidence anchor');
+  }
+  if (
+    !Number.isInteger(item.turnCount) ||
+    (item.turnCount as number) < 1 ||
+    (item.turnCount as number) > PUBLIC_JOLENE_LIMITS.conversationTurns
+  ) {
+    throw new PublicJoleneContractError(
+      `${path}.turnCount`,
+      `must be an integer from 1 to ${PUBLIC_JOLENE_LIMITS.conversationTurns}`,
+    );
+  }
+  return {
+    corpusVersion: readPattern(
+      item.corpusVersion,
+      `${path}.corpusVersion`,
+      /^career:[a-f0-9]{64}$/,
+      'corpus version',
+    ),
+    ...(projectPath ? { projectPath } : {}),
+    ...(evidenceIds ? { evidenceIds } : {}),
+    turnCount: item.turnCount as number,
+    expiresAt: readIsoDate(item.expiresAt, `${path}.expiresAt`),
+  };
+}
+
+export function activePublicConversationContext(
+  context: PublicConversationContext | undefined,
+  now = Date.now(),
+): PublicConversationContext | undefined {
+  return context && Date.parse(context.expiresAt) > now ? context : undefined;
+}
+
 function validateEvidenceReferences(
   citations: readonly PublicEvidenceCitation[],
   references: readonly { evidenceIds: readonly string[] }[],
@@ -309,9 +381,17 @@ export function parsePublicEvidenceManifest(value: unknown): PublicEvidenceManif
 
 export function parsePortfolioAnswerRequest(value: unknown): PortfolioAnswerRequest {
   const item = readRecord(value, 'answerRequest');
-  requireOnlyKeys(item, ['question'], 'answerRequest');
+  requireOnlyKeys(item, ['question', 'conversationContext'], 'answerRequest');
   return {
     question: readString(item.question, 'answerRequest.question', PUBLIC_JOLENE_LIMITS.questionCharacters),
+    ...(item.conversationContext === undefined
+      ? {}
+      : {
+        conversationContext: parsePublicConversationContext(
+          item.conversationContext,
+          'answerRequest.conversationContext',
+        ),
+      }),
   };
 }
 
@@ -328,6 +408,24 @@ export function parsePortfolioAnswerResponse(value: unknown): PortfolioAnswerRes
   requireUnique(citations.map((citation) => citation.evidenceId), 'answerResponse.citations');
   validateEvidenceReferences(citations, claims, 'answerResponse.claims');
   validateClaimMaturity(citations, claims);
+  const corpusVersion = readPattern(
+    item.corpusVersion,
+    'answerResponse.corpusVersion',
+    /^career:[a-f0-9]{64}$/,
+    'corpus version',
+  );
+  const conversationContext = item.conversationContext === undefined
+    ? undefined
+    : parsePublicConversationContext(
+      item.conversationContext,
+      'answerResponse.conversationContext',
+    );
+  if (conversationContext && conversationContext.corpusVersion !== corpusVersion) {
+    throw new PublicJoleneContractError(
+      'answerResponse.conversationContext.corpusVersion',
+      'must match the response corpus version',
+    );
+  }
   return {
     schemaVersion: readSchemaVersion(item.schemaVersion, 'answerResponse.schemaVersion'),
     answer: readString(item.answer, 'answerResponse.answer', PUBLIC_JOLENE_LIMITS.answerCharacters),
@@ -345,12 +443,8 @@ export function parsePortfolioAnswerResponse(value: unknown): PortfolioAnswerRes
       PUBLIC_JOLENE_LIMITS.followUpQuestions,
       PUBLIC_JOLENE_LIMITS.followUpQuestionCharacters,
     ),
-    corpusVersion: readPattern(
-      item.corpusVersion,
-      'answerResponse.corpusVersion',
-      /^career:[a-f0-9]{64}$/,
-      'corpus version',
-    ),
+    corpusVersion,
+    ...(conversationContext ? { conversationContext } : {}),
   };
 }
 

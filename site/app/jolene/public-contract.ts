@@ -38,6 +38,8 @@ export const PUBLIC_JOLENE_LIMITS = {
   contactResponseMessageCharacters: 1_000,
   errorMessageCharacters: 240,
   supportedSchemaVersions: 4,
+  conversationTurns: 4,
+  conversationEvidenceIds: 5,
 } as const;
 
 export const evidenceStrengths = ['strong', 'moderate', 'limited'] as const;
@@ -115,8 +117,17 @@ export type PublicClaim = {
   limitations: string[];
 };
 
+export type PublicConversationContext = {
+  corpusVersion: string;
+  projectPath?: string;
+  evidenceIds?: string[];
+  turnCount: number;
+  expiresAt: string;
+};
+
 export type PortfolioAnswerRequest = {
   question: string;
+  conversationContext?: PublicConversationContext;
 };
 
 export type PortfolioAnswerResponse = {
@@ -127,6 +138,7 @@ export type PortfolioAnswerResponse = {
   limitations: string[];
   suggestedFollowUpQuestions: string[];
   corpusVersion: string;
+  conversationContext?: PublicConversationContext;
 };
 
 export type JobFitRequest = {
