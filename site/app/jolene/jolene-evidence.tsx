@@ -90,6 +90,7 @@ export function JoleneCitationLink({
 export function JoleneEvidence({ evidence, onOpen }: JoleneEvidenceProps) {
   const sourceCount = evidence.citations.length;
   const hasClaims = evidence.claims.length > 0;
+  if (!hasClaims && sourceCount === 0 && evidence.limitations.length === 0) return null;
   const citationsById = new Map(evidence.citations.map((citation) => [citation.evidenceId, citation]));
 
   return (
