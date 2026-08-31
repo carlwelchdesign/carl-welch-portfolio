@@ -19,7 +19,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Verify repository security configuration
-        run: node site/scripts/check-repository-security.mjs
+        run: node scripts/check-repository-security.mjs
 
       - name: Set up Node.js
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
@@ -30,19 +30,16 @@ jobs:
         run: corepack enable
 
       - name: Install dependencies
-        working-directory: site
         run: pnpm install --frozen-lockfile
 
       - name: Install quality-check browser
-        working-directory: site
         run: pnpm exec playwright install --with-deps chromium
 
       - name: Verify portfolio quality
-        working-directory: site
         run: pnpm check
 
       - name: Build portfolio image
-        run: docker build --tag carl-welch-portfolio:ci site
+        run: docker build --tag carl-welch-portfolio:ci .
 
       - name: Scan production image
         uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
@@ -83,7 +80,7 @@ jobs:
           test "$(docker exec portfolio-ci id -u)" = "1000"
           docker exec portfolio-ci test ! -e /app/.env
           docker exec portfolio-ci test ! -e /app/.env.local
-          node site/scripts/check-container.mjs
+          node scripts/check-container.mjs
 
       - name: Show logs on failure
         if: failure()
@@ -92,9 +89,6 @@ jobs:
   browser-regression:
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    defaults:
-      run:
-        working-directory: site
     steps:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -133,6 +127,6 @@ jobs:
         with:
           name: portfolio-playwright-report
           path: |
-            site/playwright-report
-            site/test-results
+            playwright-report
+            test-results
           retention-days: 7

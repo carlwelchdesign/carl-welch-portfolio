@@ -3,9 +3,8 @@ import { readdir, readFile } from 'node:fs/promises';
 import { extname, resolve } from 'node:path';
 
 const siteRoot = process.cwd();
-const repositoryRoot = resolve(siteRoot, '..');
 const brief = await readFile(resolve(siteRoot, 'docs/PORTFOLIO_MESSAGING_BRIEF.md'), 'utf8');
-const releaseGates = await readOptionalFile(resolve(repositoryRoot, 'RELEASE_GATES.md'));
+const releaseGates = await readOptionalFile(resolve(siteRoot, 'RELEASE_GATES.md'));
 
 const requiredSections = [
   '## Audience hierarchy',

@@ -1,7 +1,7 @@
 version: 2
 updates:
   - package-ecosystem: npm
-    directory: /site
+    directory: /
     schedule:
       interval: weekly
       day: monday
@@ -26,7 +26,7 @@ updates:
           - patch
 
   - package-ecosystem: docker
-    directory: /site
+    directory: /
     schedule:
       interval: weekly
       day: monday
