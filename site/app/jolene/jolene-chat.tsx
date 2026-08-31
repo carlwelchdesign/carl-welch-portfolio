@@ -37,10 +37,10 @@ function initialMessage(mode: JoleneMode): ChatMessage {
     id: `${mode}-welcome`,
     role: 'assistant',
     text: mode === 'live'
-      ? 'Hi. I’m Jolene. Ask me about Carl’s work, experience, or qualifications.'
-      : 'Hi. I’m Jolene. Try a question about Carl’s work, experience, or qualifications.',
+      ? 'Well, hey there. I’m Jolene. I know Carl’s work well enough to tell you what’s strong, what’s still a question, and why the right team should pay attention.'
+      : 'Well, hey there. I’m Jolene. Try a question about Carl’s work, experience, or qualifications.',
     note: mode === 'live'
-      ? 'I’ll point you to the work behind every answer.'
+      ? 'What are you curious about?'
       : 'Sample answers are standing in while Jolene’s live connection is off.',
   };
 }
