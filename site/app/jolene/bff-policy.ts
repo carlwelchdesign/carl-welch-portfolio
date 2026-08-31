@@ -76,7 +76,7 @@ export function readBffConfig(environment: NodeJS.ProcessEnv): BffConfig {
     clientHashSalt: environment.JOLENE_BFF_CLIENT_HASH_SALT,
     controlUrl: environment.JOLENE_BFF_CONTROL_URL,
     controlToken: environment.JOLENE_BFF_CONTROL_TOKEN,
-    requestTimeoutMs: readBoundedInteger(environment.JOLENE_BFF_TIMEOUT_MS, 12_000, 1_000, 30_000),
+    requestTimeoutMs: readBoundedInteger(environment.JOLENE_BFF_TIMEOUT_MS, 30_000, 1_000, 30_000),
     rateLimitWindowMs: readBoundedInteger(environment.JOLENE_BFF_RATE_WINDOW_MS, 60_000, 10_000, 3_600_000),
     rateLimitRequests: readBoundedInteger(environment.JOLENE_BFF_RATE_REQUESTS, 12, 1, 1_000),
     dailyCostUnits: readBoundedInteger(environment.JOLENE_BFF_DAILY_COST_UNITS, 1_000, 1, 1_000_000),

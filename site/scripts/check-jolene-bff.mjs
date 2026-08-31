@@ -27,7 +27,13 @@ try {
   const browserAdapterModule = await import(pathToFileURL(resolve(outputRoot, 'public-browser-adapter.js')).href);
   const fixtures = await import(pathToFileURL(resolve(outputRoot, 'public-fixtures.js')).href);
 
-  assert.equal(policy.readBffConfig({}).enabled, false);
+  const disabledConfig = policy.readBffConfig({});
+  assert.equal(disabledConfig.enabled, false);
+  assert.equal(
+    disabledConfig.requestTimeoutMs,
+    30_000,
+    'the default BFF timeout must absorb a production model cold start',
+  );
   assert.throws(
     () => policy.readBffConfig({ JOLENE_PUBLIC_BFF_ENABLED: 'true' }),
     /requires server-only origin, expected corpus version, and client-hash salt/,
