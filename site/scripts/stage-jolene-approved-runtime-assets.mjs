@@ -11,22 +11,10 @@ const sha256 = (bytes) => createHash('sha256').update(bytes).digest('hex');
 const decodeDataUrl = (url) => Buffer.from(url.split(',')[1], 'base64');
 
 const idleAtlas = await readFile(new URL('jolene-idle-blink-v5-atlas-1x.png', reviewDirectory));
-const greetNames = ['rest', 'early', 'mid', 'apex', 'secondary', 'settle'];
-const greetFrames = Object.fromEntries(await Promise.all(greetNames.map(async (name) => [
-  name,
-  await readFile(new URL(`jolene-greet-v2-${name}.png`, reviewDirectory)),
-])));
+const greetWave = await readFile(new URL('../public/jolene/sprites/greet.png', import.meta.url));
+const loadingDance = await readFile(new URL('../public/jolene/sprites/loading-dance-v1.png', import.meta.url));
 
 assert.equal(sha256(idleAtlas), '041692e505323a7d14c96df9b197829814516e661a43191e6aecab402023122c');
-const expectedGreetHashes = {
-  rest: 'a21a02ca80e28ce7c9e816cf9bf6c0ec9afcab8879e53ddcacebf1ee488387ed',
-  early: 'a33d7511c8e4dc07531d82dfc405a79bddd57000d45d1f6e2acea2aec08f7489',
-  mid: '275bac376d15c93ce4ca1c9a7e7db60c520f5fab42880952c9ca0cec09c0d7a4',
-  apex: 'a4b741620e625e5e25ad1b6f4fa73346dbb4adc4a69413b478b11b715b66b388',
-  secondary: '99bbd6cf85ac2ceb9d2d22804369ccad096d5be85bb6dddadb4c64cea24c3043',
-  settle: '4b17632c258a46a67a5b4131ad9e8cb81534da1a5651a422dc33c5b0ca0e6348',
-};
-for (const name of greetNames) assert.equal(sha256(greetFrames[name]), expectedGreetHashes[name]);
 
 const browser = await chromium.launch({ headless: true });
 let idleFrames;
@@ -66,10 +54,14 @@ const frameOutputs = {
   'idle-peak.png': decodeDataUrl(idleFrames.peak),
   'blink-half.png': decodeDataUrl(idleFrames.half),
   'blink-closed.png': decodeDataUrl(idleFrames.closed),
-  ...Object.fromEntries(greetNames.map((name) => [`greet-${name}.png`, greetFrames[name]])),
+  'greet-wave.png': greetWave,
+  'loading-dance-a.png': loadingDance,
+  'loading-dance-b.png': loadingDance,
 };
 
 const atlasFrameNames = Object.keys(frameOutputs);
+const atlasColumns = 4;
+const atlasRows = Math.ceil(atlasFrameNames.length / atlasColumns);
 const atlasBrowser = await chromium.launch({ headless: true });
 let atlasBytes;
 try {
@@ -98,7 +90,7 @@ try {
 }
 
 const atlasFrames = Object.fromEntries(atlasFrameNames.map((name, index) => [name, {
-  frame: { x: (index % 4) * 320, y: Math.floor(index / 4) * 460, w: 320, h: 460 },
+  frame: { x: (index % atlasColumns) * 320, y: Math.floor(index / atlasColumns) * 460, w: 320, h: 460 },
   rotated: false,
   trimmed: false,
   spriteSourceSize: { x: 0, y: 0, w: 320, h: 460 },
@@ -111,7 +103,7 @@ const atlasManifest = Buffer.from(`${JSON.stringify({
     version: '1.0',
     image: 'jolene-approved-atlas.png',
     format: 'RGBA8888',
-    size: { w: 1280, h: 1380 },
+    size: { w: atlasColumns * 320, h: atlasRows * 460 },
     scale: '1',
   },
 }, null, 2)}\n`);

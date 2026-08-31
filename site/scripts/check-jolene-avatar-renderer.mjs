@@ -37,6 +37,7 @@ for (const requirement of ['image-rendering: pixelated', 'pointer-events: none',
   assert.ok(styles.includes(requirement), `Jolene avatar CSS is missing ${requirement}.`);
 }
 assert.equal(styles.includes('contain: layout paint style'), false, 'Paint containment would clip scaled typing frames.');
+assert.ok(styles.includes("[data-avatar-frame='think-dance-b']"), 'Loading dance must mirror its second beat.');
 
 const primarySequence = ['greet', 'excited', 'listen', 'think', 'speak', 'evidence', 'idle'];
 for (let index = 0; index < primarySequence.length - 1; index += 1) {
@@ -57,16 +58,20 @@ const activeFrames = Object.values(contract.definitions).flatMap(({ frames }) =>
 const activeAssetPaths = new Set(activeFrames.map((frameName) => catalog.frames[frameName].assetPath));
 assert.ok([...activeAssetPaths].every((assetPath) => assetPath.includes('/jolene/approved-animation/') || assetPath.includes('/jolene/sprites/')), 'Runtime references an unapproved avatar asset location.');
 assert.ok(contract.definitions.idle.frames.length > 3, 'Idle must use the approved breathing and blink loop.');
-assert.ok(contract.definitions.greet.frames.length > 3, 'Greet must use the approved wave loop.');
-for (const state of contract.states.filter((name) => !['idle', 'blink', 'greet'].includes(name))) {
+assert.deepEqual(contract.definitions.greet.frames, ['greet-wave'], 'Greet must use the original one-frame wave.');
+assert.deepEqual(contract.definitions.think.frames, ['think-dance-a', 'think-dance-b'], 'Loading must alternate the mirrored dance pose.');
+for (const state of contract.states.filter((name) => !['idle', 'blink', 'greet', 'think'].includes(name))) {
   assert.equal(contract.definitions[state].frames.length, 1, `${state} must remain a stable pose until its animation is separately approved.`);
 }
 assert.ok(Object.values(catalog.frames).filter(({ state }) => state === 'excited').every(({ assetPath }) => assetPath.includes('typing-excited-v1.png')), 'Excited frames must use the approved typing pose.');
 assert.ok(Object.values(catalog.frames).filter(({ state }) => state === 'excited').every(({ scale, translateY }) => scale === 1 && translateY === 0), 'Excited frames must stay at native scale and remain seated on the divider.');
+assert.ok(Object.values(catalog.frames).filter(({ state }) => state === 'think').every(({ assetPath }) => assetPath.includes('loading-dance-')), 'Think frames must use the loading dance pose.');
 assert.ok(contract.rendering.masterPath.includes('/jolene/sprites/rig-base-v2.png'), 'Fallback must use the corrected rig base.');
+assert.equal(chatSource.includes('answerAnimationTimer'), false, 'A received answer must stop the loading dance immediately.');
+assert.ok(chatSource.includes("sendAvatar('answer_finished')"), 'A received answer must restore the default pose.');
 
 for (const signal of Object.keys(contract.signals)) {
-  assert.ok(chatSource.includes(`'${signal}'`) || ['answer_finished'].includes(signal), `Chat does not drive avatar signal ${signal}.`);
+  assert.ok(chatSource.includes(`'${signal}'`) || ['answer_started'].includes(signal), `Chat does not drive avatar signal ${signal}.`);
 }
 for (const integrationBoundary of [
   'Howdy, folks!',

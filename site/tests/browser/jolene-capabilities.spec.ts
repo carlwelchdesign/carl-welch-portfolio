@@ -134,7 +134,11 @@ test('country-host cameo appears once, leaves cleanly, and returns only with cha
   if (scenario === 'unavailable') {
     await expect(avatar).toHaveAttribute('data-avatar-state', 'offline');
   } else {
-    await expect(avatar).toHaveAttribute('data-avatar-state', 'speak');
+    await expect(avatar).toHaveAttribute('data-avatar-state', 'think');
+    await expect(avatar).toHaveAttribute('data-avatar-frame', 'think-dance-a');
+    await expect(avatar).toHaveAttribute('data-avatar-frame', 'think-dance-b', { timeout: 500 });
+    await expect(avatar.locator('.jolene-avatar-pixi')).toHaveCSS('transform', /matrix\(-1, 0, 0, 1, 0, 0\)/);
+    await expect(avatar).toHaveAttribute('data-avatar-state', 'idle');
     const evidence = panel.locator('details.jolene-evidence').last();
     await evidence.locator(':scope > summary').click();
     await expect(avatar).toHaveAttribute('data-avatar-state', 'evidence');
@@ -209,7 +213,7 @@ test('reduced motion skips the unsolicited cameo and uses static state frames', 
   const initialFrame = await avatar.getAttribute('data-avatar-frame');
   await page.waitForTimeout(750);
   const settledFrame = await avatar.getAttribute('data-avatar-frame');
-  expect(initialFrame).toBe('greet-3');
+  expect(initialFrame).toBe('greet-wave');
   expect(settledFrame).toBe('idle-0');
 
   const question = page.getByRole('dialog', { name: 'Ask Jolene' }).getByLabel('Ask about Carl’s work or experience');

@@ -14,6 +14,12 @@
       "path": "/jolene/review/country-host-typing-excited-v1-source.png",
       "sha256": "3f3b683ace207b3497c0f650900627f85d0c4e302ca314a3a794a9a339ccc8e2",
       "intent": "hands clasped at chest, slight forward lean, soft downward gaze toward visitor input"
+    },
+    {
+      "state": "think",
+      "path": "/jolene/review/country-host-loading-dance-v1-source.png",
+      "sha256": "d835fa6a1d1915723d8b62fb14efabb12d6725e5e22ea4ea82456c370d5db806",
+      "intent": "asymmetric bent arms close to chest for the mirrored response-loading dance"
     }
   ],
   "layout": {
@@ -135,24 +141,24 @@
     },
     {
       "state": "think",
-      "path": "/jolene/sprites/rig-base-v2.png",
-      "sha256": "83aecc00ed864b9d8864464901a33581a2cf3672885c3816a49fc877b53b9cc4",
+      "path": "/jolene/sprites/loading-dance-v1.png",
+      "sha256": "4a3e25235f5f9f5e4921964b5fa62dfe3a245c3b66d5e89f7c3ef108350bfb50",
       "width": 320,
       "height": 460,
-      "opaquePixels": 93701,
+      "opaquePixels": 86404,
       "sourceBounds": {
-        "x": 216,
-        "y": 89,
-        "width": 724,
-        "height": 1146
+        "x": 50,
+        "y": 27,
+        "width": 950,
+        "height": 1442
       },
       "drawBounds": {
-        "x": 21,
+        "x": 15,
         "y": 8,
-        "width": 278,
+        "width": 290,
         "height": 440
       },
-      "removedInteriorMattePixels": 7204
+      "removedInteriorMattePixels": 0
     },
     {
       "state": "speak",
@@ -263,7 +269,8 @@
   "invariants": {
     "baseStatesShareIdentitySource": true,
     "distinctPoseStates": [
-      "excited"
+      "excited",
+      "think"
     ],
     "providerIndependent": true,
     "approvedForPublicUse": false

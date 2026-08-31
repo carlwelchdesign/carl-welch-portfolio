@@ -5,6 +5,7 @@ import { chromium } from '@playwright/test';
 
 const sourceUrl = new URL('../public/jolene/review/country-host-rig-master-v2-source.png', import.meta.url);
 const typingExcitedSourceUrl = new URL('../public/jolene/review/country-host-typing-excited-v1-source.png', import.meta.url);
+const loadingDanceSourceUrl = new URL('../public/jolene/review/country-host-loading-dance-v1-source.png', import.meta.url);
 const outputDirectoryUrl = new URL('../public/jolene/sprites/', import.meta.url);
 const manifestUrl = new URL('../docs/jolene-avatar-sprites.v1.json', import.meta.url);
 const checkOnly = process.argv.includes('--check');
@@ -238,23 +239,30 @@ async function normalizeStandaloneFrame(sourceBytes, state) {
 
 const sourceBytes = await readFile(sourceUrl);
 const typingExcitedSourceBytes = await readFile(typingExcitedSourceUrl);
+const loadingDanceSourceBytes = await readFile(loadingDanceSourceUrl);
 const rigBaseFrame = await normalizeStandaloneFrame(sourceBytes, 'rig-base');
 const typingExcitedFrame = await normalizeStandaloneFrame(typingExcitedSourceBytes, 'excited');
+const loadingDanceFrame = await normalizeStandaloneFrame(loadingDanceSourceBytes, 'think');
 const result = {
   sourceWidth: rigBaseFrame.sourceWidth,
   sourceHeight: rigBaseFrame.sourceHeight,
-  frames: stateNames.map((state) => state === 'excited'
-    ? typingExcitedFrame
-    : { ...rigBaseFrame, state }),
+  frames: stateNames.map((state) => {
+    if (state === 'excited') return typingExcitedFrame;
+    if (state === 'think') return loadingDanceFrame;
+    return { ...rigBaseFrame, state };
+  }),
 };
 const outputs = [];
 
 const rigBaseBytes = Buffer.from(rigBaseFrame.dataUrl.split(',')[1], 'base64');
 const typingExcitedBytes = Buffer.from(typingExcitedFrame.dataUrl.split(',')[1], 'base64');
+const loadingDanceBytes = Buffer.from(loadingDanceFrame.dataUrl.split(',')[1], 'base64');
 const rigBasePath = '/jolene/sprites/rig-base-v2.png';
 const typingExcitedPath = '/jolene/sprites/typing-excited-v1.png';
+const loadingDancePath = '/jolene/sprites/loading-dance-v1.png';
 const rigBaseOutputUrl = new URL(`../public${rigBasePath}`, import.meta.url);
 const typingExcitedOutputUrl = new URL(`../public${typingExcitedPath}`, import.meta.url);
+const loadingDanceOutputUrl = new URL(`../public${loadingDancePath}`, import.meta.url);
 if (checkOnly) {
   const committedBytes = await readFile(rigBaseOutputUrl);
   assert.equal(sha256(committedBytes), sha256(rigBaseBytes), 'The canonical rig base is stale.');
@@ -268,13 +276,28 @@ if (checkOnly) {
 } else {
   await writeFile(typingExcitedOutputUrl, typingExcitedBytes);
 }
+if (checkOnly) {
+  const committedBytes = await readFile(loadingDanceOutputUrl);
+  assert.equal(sha256(committedBytes), sha256(loadingDanceBytes), 'The loading dance pose is stale.');
+} else {
+  await writeFile(loadingDanceOutputUrl, loadingDanceBytes);
+}
 
 for (const frame of result.frames) {
   const usesTypingPose = frame.state === 'excited';
-  const frameBytes = usesTypingPose ? typingExcitedBytes : rigBaseBytes;
+  const usesLoadingDancePose = frame.state === 'think';
+  const frameBytes = usesTypingPose
+    ? typingExcitedBytes
+    : usesLoadingDancePose
+      ? loadingDanceBytes
+      : rigBaseBytes;
   outputs.push({
     state: frame.state,
-    path: usesTypingPose ? typingExcitedPath : rigBasePath,
+    path: usesTypingPose
+      ? typingExcitedPath
+      : usesLoadingDancePose
+        ? loadingDancePath
+        : rigBasePath,
     sha256: sha256(frameBytes),
     width: frameWidth,
     height: frameHeight,
@@ -302,6 +325,12 @@ const manifest = {
       sha256: sha256(typingExcitedSourceBytes),
       intent: 'hands clasped at chest, slight forward lean, soft downward gaze toward visitor input',
     },
+    {
+      state: 'think',
+      path: '/jolene/review/country-host-loading-dance-v1-source.png',
+      sha256: sha256(loadingDanceSourceBytes),
+      intent: 'asymmetric bent arms close to chest for the mirrored response-loading dance',
+    },
   ],
   layout: {
     frameWidth,
@@ -314,7 +343,7 @@ const manifest = {
   frames: outputs,
   invariants: {
     baseStatesShareIdentitySource: true,
-    distinctPoseStates: ['excited'],
+    distinctPoseStates: ['excited', 'think'],
     providerIndependent: true,
     approvedForPublicUse: false,
   },
@@ -324,13 +353,16 @@ if (checkOnly) {
   const committedManifest = JSON.parse(await readFile(manifestUrl, 'utf8'));
   assert.deepEqual(committedManifest, manifest);
   assert.deepEqual(outputs.map(({ state }) => state), stateNames);
-  const baseOutputs = outputs.filter(({ state }) => state !== 'excited');
+  const baseOutputs = outputs.filter(({ state }) => state !== 'excited' && state !== 'think');
   assert.equal(new Set(baseOutputs.map(({ sha256: fingerprint }) => fingerprint)).size, 1, 'Base states must share one character identity source.');
   assert.equal(outputs.find(({ state }) => state === 'excited').path, typingExcitedPath, 'Excited state must use the typing pose.');
+  assert.equal(outputs.find(({ state }) => state === 'think').path, loadingDancePath, 'Think state must use the loading dance pose.');
+  assert.ok(outputs.every(({ drawBounds }) => drawBounds.y === 8 && drawBounds.height === 440), 'Every pose must keep the shared 440 px character height.');
+  assert.ok(outputs.every(({ drawBounds }) => drawBounds.y + drawBounds.height === anchor.y), 'Every pose must meet the shared y=448 baseline.');
   assert.ok(baseOutputs.every(({ removedInteriorMattePixels }) => removedInteriorMattePixels >= 500), 'The enclosed arm-to-body matte was not removed.');
   assert.ok(outputs.every(({ opaquePixels }) => opaquePixels > 25_000), 'The canonical rig base lost too much of the character.');
-  console.log(`Jolene sprite check passed: ${baseOutputs.length} base states plus one transparent excited typing pose at ${frameWidth}×${frameHeight}.`);
+  console.log(`Jolene sprite check passed: ${baseOutputs.length} base states plus transparent typing and loading poses at ${frameWidth}×${frameHeight}.`);
 } else {
   await writeFile(manifestUrl, `${JSON.stringify(manifest, null, 2)}\n`);
-  console.log(`Built one canonical Jolene rig base and one excited typing pose for ${outputs.length} states in ${outputDirectoryUrl.pathname}`);
+  console.log(`Built one canonical Jolene rig base plus typing and loading poses for ${outputs.length} states in ${outputDirectoryUrl.pathname}`);
 }
