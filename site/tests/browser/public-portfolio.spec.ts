@@ -613,6 +613,28 @@ for (const [route, heading, decision] of [
   });
 }
 
+test('Jolene case study publishes the approved origin story and stable evidence anchor', async ({ page }) => {
+  const originAnchor = '#evidence--portfolio--claim--jolene-ai--origin';
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(`/work/jolene-ai${originAnchor}`);
+
+  const story = page.locator('#case-study');
+  await expect(story.getByRole('heading', { name: 'From a Nevada field camp to a governed chief-of-staff agent.' })).toBeVisible();
+  await expect(story).toContainText('After a March 2026 layoff');
+  await expect(story).toContainText('BLM land in Nevada');
+  await expect(story).toContainText('generator, Starlink, and my MacBook');
+  await expect(story).toContainText('Jolene is not Dolly, does not impersonate her, and does not imply her endorsement.');
+
+  const originEvidence = page.locator(originAnchor);
+  await expect(originEvidence).toBeVisible();
+  await expect(originEvidence).toContainText('comforting, capable chief-of-staff agent');
+  await expect(originEvidence).toBeFocused();
+
+  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+  expect(overflow).toBeLessThanOrEqual(0);
+});
+
 for (const [route, role, scope] of [
   ['/work/job-search-os', 'Independent product engineer', 'Product strategy, interface design, and full-stack implementation'],
   ['/work/flight-tracker-ai', 'Independent product engineer', 'Product design, frontend engineering, and Rust service integration'],

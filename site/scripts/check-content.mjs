@@ -304,6 +304,25 @@ for (const [evidenceId, path, , status] of publicEvidenceTargetRecords) {
   if (status !== expectedStatus) throw new Error(`${evidenceId} has an inconsistent navigation publication state.`);
 }
 
+const joleneProject = projects.find((project) => project.slug === 'jolene-ai');
+assert(joleneProject, 'Jolene case study must remain published.');
+const joleneOrigin = joleneProject.evidence.find((item) => item.id === 'portfolio:claim:jolene-ai:origin');
+assert(joleneOrigin, 'Jolene origin evidence must remain published.');
+assert.match(joleneProject.story.problem, /March 2026 layoff/);
+assert.match(joleneProject.story.problem, /BLM land in Nevada/);
+assert.match(joleneProject.story.problem, /generator, Starlink, and my MacBook/);
+assert.match(joleneProject.story.contribution, /Jolene is not Dolly, does not impersonate her, and does not imply her endorsement/);
+assert.match(joleneOrigin.text, /chief-of-staff agent/);
+assert.deepEqual(joleneOrigin.limitations, ['Jolene is not Dolly Parton, does not impersonate her, and does not imply her endorsement.']);
+assert(
+  publicEvidenceTargetRecords.some(([evidenceId, path, label, status]) =>
+    evidenceId === 'portfolio:claim:jolene-ai:origin'
+      && path === '/work/jolene-ai'
+      && label === 'Why Carl built Jolene'
+      && status === 'available'),
+  'Jolene origin evidence must resolve to its public case-study anchor.',
+);
+
 if (recommendations.length !== recommendationReview.candidateCount) {
   throw new Error(
     `Recommendation count mismatch: data contains ${recommendations.length}, summary expects ${recommendationReview.candidateCount}.`,

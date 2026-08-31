@@ -817,11 +817,11 @@ export const projects: PortfolioProject[] = [
       },
     ],
     story: {
-      heading: 'Building an agent that can be useful without becoming careless.',
+      heading: 'From a Nevada field camp to a governed chief-of-staff agent.',
       problem:
-        'A personal AI can quickly become a pile of disconnected chats, broad data access, unreliable recollection, and hidden automation. A public portfolio assistant adds another risk: it must know enough to be helpful without becoming a tunnel into private notes, memory, credentials, or tools.',
+        'After a March 2026 layoff, I spent two weeks that May on BLM land in Nevada with my daughter while she did fieldwork for her geology master’s research. With a generator, Starlink, and my MacBook, I began building Job Search OS. That work showed me I could build something broader: a chief-of-staff agent that could help me organize work, preserve context, and keep moving.',
       contribution:
-        'I originated Jolene’s product direction and led a multi-agent build spanning the portable agent core, durable task memory, reviewed career evidence, public RAG, Slack delivery, exact-action approvals, Docker runtimes, prompt-injection defenses, release evaluation, and a researched personality system. I kept private and public Jolene as separate deployments with different credentials, stores, and capabilities.',
+        'I imagined a comforting, capable, Jarvis-like partner. Dolly Parton came to mind because I grew up with her music and interviews and associated her with warmth, humor, resilience, and practical encouragement. Jolene is not Dolly, does not impersonate her, and does not imply her endorsement. From that starting point, I led a multi-agent build spanning the portable agent core, durable task memory, reviewed career evidence, public RAG, Slack delivery, exact-action approvals, Docker runtimes, prompt-injection defenses, release evaluation, and a researched personality system. I kept private and public Jolene as separate deployments with different credentials, stores, and capabilities.',
       decisions: [
         {
           title: 'Separate public knowledge from private memory',
@@ -929,6 +929,11 @@ export const projects: PortfolioProject[] = [
         id: 'portfolio:claim:jolene-ai:carl-role', sourceIds: ['portfolio:source:project:jolene-ai'],
         text: 'Carl originated Jolene’s product direction and directed its architecture, evidence policy, personality goals, safety boundaries, implementation priorities, evaluation standards, and release decisions across a multi-agent development process.',
         strength: 'moderate', maturity: 'deployed_demo', limitations: ['This describes Carl’s direction and contribution without claiming he wrote every generated line unaided.'], reviewState: 'approved', publicApproved: true,
+      },
+      {
+        id: 'portfolio:claim:jolene-ai:origin', sourceIds: ['portfolio:source:project:jolene-ai'],
+        text: 'After a March 2026 layoff, Carl began Job Search OS during two weeks on BLM land in Nevada while accompanying his daughter’s geology master’s fieldwork, using a generator, Starlink, and a MacBook. The experience led him to imagine Jolene as a comforting, capable chief-of-staff agent, informed by the warmth, humor, resilience, and practical encouragement he associated with growing up around Dolly Parton’s music and interviews.',
+        strength: 'moderate', maturity: 'deployed_demo', limitations: ['Jolene is not Dolly Parton, does not impersonate her, and does not imply her endorsement.'], reviewState: 'approved', publicApproved: true,
       },
       {
         id: 'portfolio:claim:jolene-ai:limitations', sourceIds: ['portfolio:source:project:jolene-ai'],
