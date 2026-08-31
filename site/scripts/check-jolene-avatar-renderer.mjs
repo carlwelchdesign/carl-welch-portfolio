@@ -66,6 +66,7 @@ for (const state of contract.states.filter((name) => !['idle', 'blink', 'greet',
 assert.ok(Object.values(catalog.frames).filter(({ state }) => state === 'excited').every(({ assetPath }) => assetPath.includes('typing-excited-v1.png')), 'Excited frames must use the approved typing pose.');
 assert.ok(Object.values(catalog.frames).filter(({ state }) => state === 'excited').every(({ scale, translateY }) => scale === 1 && translateY === 0), 'Excited frames must stay at native scale and remain seated on the divider.');
 assert.ok(Object.values(catalog.frames).filter(({ state }) => state === 'think').every(({ assetPath }) => assetPath.includes('loading-dance-')), 'Think frames must use the loading dance pose.');
+assert.match(catalog.frames['evidence-2'].assetPath, /^\/jolene\/approved-animation\/evidence-point\.png\?v=/, 'Evidence must use the approved pointing pose, not the idle master.');
 assert.ok(contract.rendering.masterPath.includes('/jolene/sprites/rig-base-v2.png'), 'Fallback must use the corrected rig base.');
 assert.equal(chatSource.includes('answerAnimationTimer'), false, 'A received answer must stop the loading dance immediately.');
 assert.ok(chatSource.includes("sendAvatar('answer_finished')"), 'A received answer must restore the default pose.');
