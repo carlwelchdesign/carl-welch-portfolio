@@ -95,4 +95,9 @@ for (const integrationBoundary of [
 }
 assert.ok(evidenceSource.includes('onToggle'), 'Evidence expansion must expose a state signal.');
 assert.ok(evidenceSource.includes('onOpen?.()'), 'Evidence expansion must notify the avatar controller.');
+assert.match(
+  evidenceSource,
+  /className="jolene-claim"[\s\S]*?onToggle=[\s\S]*?event\.currentTarget\.open[\s\S]*?onOpen\?\.\(\)/,
+  'Opening an individual evidence Point must notify the avatar controller.',
+);
 console.log('Jolene avatar renderer passed: PixiJS AnimatedSprite playback, central signals, one-time cameo, chat/evidence/error integration, crisp pixels, and reduced motion.');
