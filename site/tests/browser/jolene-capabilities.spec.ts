@@ -1,8 +1,40 @@
 import AxeBuilder from '@axe-core/playwright';
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 
 const contactIntentEnabled = process.env.JOLENE_UI_CONTACT_ENABLED === 'true';
 const scenario = process.env.JOLENE_UI_SCENARIO ?? 'success';
+
+type OpaqueBounds = {
+  minY: number;
+  maxY: number;
+  height: number;
+};
+
+async function readOpaqueBounds(page: Page, source: string): Promise<OpaqueBounds> {
+  return page.evaluate(async (assetSource) => {
+    const response = await fetch(assetSource);
+    if (!response.ok) throw new Error(`Unable to load avatar frame: ${response.status}`);
+    const bitmap = await createImageBitmap(await response.blob());
+    const canvas = document.createElement('canvas');
+    canvas.width = bitmap.width;
+    canvas.height = bitmap.height;
+    const context = canvas.getContext('2d', { willReadFrequently: true });
+    if (!context) throw new Error('Unable to inspect avatar frame pixels.');
+    context.drawImage(bitmap, 0, 0);
+    const pixels = context.getImageData(0, 0, canvas.width, canvas.height).data;
+    let minY = canvas.height;
+    let maxY = -1;
+    for (let y = 0; y < canvas.height; y += 1) {
+      for (let x = 0; x < canvas.width; x += 1) {
+        if (pixels[(y * canvas.width + x) * 4 + 3] <= 16) continue;
+        minY = Math.min(minY, y);
+        maxY = Math.max(maxY, y);
+      }
+    }
+    if (maxY < minY) throw new Error('Avatar frame contains no visible pixels.');
+    return { minY, maxY, height: maxY - minY + 1 };
+  }, source);
+}
 
 test('standalone client hydrates and the mobile launcher opens the modal', async ({ page }) => {
   const failedClientChunks = new Set<string>();
@@ -288,6 +320,44 @@ test('opening an evidence Point visibly renders Dolly pointing', async ({ page }
     Array.from(pointingRenderedPixels),
     'The Point reaction must visibly replace the idle pixels with the pointing pose.',
   ).not.toEqual(Array.from(idleRenderedPixels));
+});
+
+test('opening an evidence Point preserves Dolly character height and baseline', async ({ page }) => {
+  test.skip(scenario !== 'success' || contactIntentEnabled, 'Runs once in the canonical success configuration.');
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.addInitScript(() => window.sessionStorage.setItem('jolene-country-host-intro-seen-v1', 'true'));
+  await page.goto('/');
+  await page.getByRole('button', { name: /Ask Jolene/ }).click();
+
+  const panel = page.getByRole('dialog', { name: 'Ask Jolene' });
+  const avatar = panel.locator('.jolene-avatar');
+  const question = panel.getByLabel('Ask about Carl’s work or experience');
+  await question.fill('Which project best shows Carl’s product engineering work?');
+  await panel.getByRole('button', { name: 'Ask Jolene', exact: true }).click();
+  await expect(avatar).toHaveAttribute('data-avatar-state', 'idle');
+
+  const idleTransform = await avatar.evaluate((element) => getComputedStyle(element).transform);
+  const idleBounds = await readOpaqueBounds(page, '/jolene/approved-animation/idle-rest.png');
+  const evidence = panel.locator('details.jolene-evidence').last();
+  await evidence.locator(':scope > summary').click();
+  await expect(avatar).toHaveAttribute('data-avatar-state', 'idle', { timeout: 1_500 });
+
+  const firstPoint = evidence.locator('details.jolene-claim').first();
+  await firstPoint.locator(':scope > summary').click();
+  await expect(avatar).toHaveAttribute('data-avatar-state', 'evidence');
+  await expect(avatar).toHaveAttribute('data-avatar-frame', 'evidence-2');
+
+  const pointingTransform = await avatar.evaluate((element) => getComputedStyle(element).transform);
+  const pointingBounds = await readOpaqueBounds(page, '/jolene/approved-animation/evidence-point.png');
+  expect(pointingTransform, 'The Point reaction must not apply a different CSS scale.').toBe(idleTransform);
+  expect(
+    Math.abs(pointingBounds.height - idleBounds.height),
+    'The pointing silhouette must preserve Dolly’s canonical 440-pixel character height.',
+  ).toBeLessThanOrEqual(2);
+  expect(
+    Math.abs(pointingBounds.maxY - idleBounds.maxY),
+    'The pointing silhouette must remain seated on the same bottom baseline.',
+  ).toBeLessThanOrEqual(2);
 });
 
 test('pixel avatar stays clear of controls at an iPhone viewport', async ({ page }) => {

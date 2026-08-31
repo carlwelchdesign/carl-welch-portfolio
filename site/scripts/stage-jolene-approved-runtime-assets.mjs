@@ -29,6 +29,7 @@ assert.equal(
 
 const browser = await chromium.launch({ headless: true });
 let idleFrames;
+let normalizedEvidencePoint;
 try {
   const page = await browser.newPage();
   idleFrames = await page.evaluate(async (idleSource) => {
@@ -104,6 +105,58 @@ try {
       closed: frameAt(8),
     };
   }, `data:image/png;base64,${idleAtlas.toString('base64')}`);
+  normalizedEvidencePoint = decodeDataUrl(await page.evaluate(async (evidenceSource) => {
+    const image = new Image();
+    image.src = evidenceSource;
+    await image.decode();
+    if (image.width !== 320 || image.height !== 460) throw new Error('Unexpected pointing-frame dimensions.');
+
+    const sourceCanvas = document.createElement('canvas');
+    sourceCanvas.width = image.width;
+    sourceCanvas.height = image.height;
+    const sourceContext = sourceCanvas.getContext('2d', { willReadFrequently: true });
+    sourceContext.imageSmoothingEnabled = false;
+    sourceContext.drawImage(image, 0, 0);
+    const pixels = sourceContext.getImageData(0, 0, image.width, image.height).data;
+    let minX = image.width;
+    let minY = image.height;
+    let maxX = -1;
+    let maxY = -1;
+    for (let y = 0; y < image.height; y += 1) {
+      for (let x = 0; x < image.width; x += 1) {
+        if (pixels[(y * image.width + x) * 4 + 3] === 0) continue;
+        minX = Math.min(minX, x);
+        minY = Math.min(minY, y);
+        maxX = Math.max(maxX, x);
+        maxY = Math.max(maxY, y);
+      }
+    }
+    if (maxX < minX || maxY < minY) throw new Error('The pointing frame contains no visible pixels.');
+
+    const sourceWidth = maxX - minX + 1;
+    const sourceHeight = maxY - minY + 1;
+    const targetHeight = 440;
+    const targetWidth = Math.round(sourceWidth * targetHeight / sourceHeight);
+    const targetX = Math.round((320 - targetWidth) / 2);
+    const targetY = 448 - targetHeight;
+    const outputCanvas = document.createElement('canvas');
+    outputCanvas.width = 320;
+    outputCanvas.height = 460;
+    const outputContext = outputCanvas.getContext('2d');
+    outputContext.imageSmoothingEnabled = false;
+    outputContext.drawImage(
+      image,
+      minX,
+      minY,
+      sourceWidth,
+      sourceHeight,
+      targetX,
+      targetY,
+      targetWidth,
+      targetHeight,
+    );
+    return outputCanvas.toDataURL('image/png');
+  }, `data:image/png;base64,${evidencePoint.toString('base64')}`));
 } finally {
   await browser.close();
 }
@@ -118,7 +171,7 @@ const frameOutputs = {
   'greet-wave.png': greetWave,
   'loading-dance-a.png': loadingDance,
   'loading-dance-b.png': loadingDance,
-  'evidence-point.png': evidencePoint,
+  'evidence-point.png': normalizedEvidencePoint,
 };
 
 for (const [name, frame] of Object.entries(idleFrames)) {
