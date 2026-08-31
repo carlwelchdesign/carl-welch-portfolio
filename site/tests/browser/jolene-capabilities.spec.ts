@@ -4,6 +4,35 @@ import { expect, test } from '@playwright/test';
 const contactIntentEnabled = process.env.JOLENE_UI_CONTACT_ENABLED === 'true';
 const scenario = process.env.JOLENE_UI_SCENARIO ?? 'success';
 
+test('standalone client hydrates and the mobile launcher opens the modal', async ({ page }) => {
+  const failedClientChunks = new Set<string>();
+  const rememberChunkFailure = (url: string) => {
+    if (url.includes('/_next/static/chunks/')) failedClientChunks.add(url);
+  };
+
+  page.on('requestfailed', (request) => rememberChunkFailure(request.url()));
+  page.on('response', (response) => {
+    if (response.status() >= 400) rememberChunkFailure(response.url());
+  });
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.addInitScript(() => window.sessionStorage.setItem('jolene-country-host-intro-seen-v1', 'true'));
+  await page.goto('/', { waitUntil: 'networkidle' });
+
+  expect([...failedClientChunks], 'standalone build served a missing client chunk').toEqual([]);
+
+  const launcher = page.locator('[data-jolene-launcher]');
+  await expect(launcher).toBeVisible();
+  await expect(launcher).toHaveAttribute('aria-expanded', 'false');
+  await launcher.click();
+
+  const panel = page.getByRole('dialog', { name: 'Ask Jolene' });
+  await expect(panel).toBeVisible();
+  await expect(panel.getByRole('button', { name: 'Close Jolene chat' })).toBeFocused();
+  await expect(launcher).toHaveAttribute('aria-expanded', 'true');
+  expect([...failedClientChunks], 'client chunk failed while opening the modal').toEqual([]);
+});
+
 test(`contact intent is ${contactIntentEnabled ? 'available' : 'hidden'} when configured`, async ({ page }) => {
   await page.goto('/');
 
