@@ -19,6 +19,7 @@ Motion-led portfolio site for Carl Welch. The application is intentionally kept 
 The application requires Node.js 22.13 or newer.
 
 Repository changes follow the pull-request, verification, secret-boundary, and deployment-approval rules in [`DELIVERY_POLICY.md`](../DELIVERY_POLICY.md).
+Confirmed regressions additionally follow the permanent failing-before/passing-after test requirement in [`docs/REGRESSION_TEST_POLICY.md`](docs/REGRESSION_TEST_POLICY.md).
 
 The Jolene topology, trust boundaries, observability policy, failure ownership, and MCP/RAG/graph decisions are documented in [`PUBLIC_JOLENE_DEPLOYMENT_ARCHITECTURE.md`](../PUBLIC_JOLENE_DEPLOYMENT_ARCHITECTURE.md). The local integration is implemented and verified; deployment and public enablement remain approval-gated.
 
