@@ -20,6 +20,7 @@ import { JoleneContactIntent } from './jolene-contact-intent';
 import { JoleneJobFit } from './jolene-job-fit';
 import { trackAnalytics } from '../analytics/analytics-client';
 import { JoleneAvatar, preloadJoleneAvatarAssets, useJoleneAvatarController } from './jolene-avatar';
+import { normalizeQuestion, selectConversationStarters } from './conversation-starters';
 
 type ChatMessage = {
   id: string;
@@ -28,12 +29,6 @@ type ChatMessage = {
   note?: string;
   evidence?: JoleneAnswerEvidence;
 };
-
-const conversationStarters = [
-  'Which project best shows Carl’s product engineering work?',
-  'How does Carl handle risk in AI-assisted systems?',
-  'What should I ask Carl about in an interview?',
-];
 
 type JoleneMode = 'fixture' | 'live';
 
@@ -66,15 +61,41 @@ function describeError(error: unknown): string {
   return 'Jolene could not complete that request.';
 }
 
-function getSuggestedQuestions(messages: ChatMessage[]): string[] {
-  if (messages.length === 1) return conversationStarters;
+function getSuggestedQuestions(
+  messages: ChatMessage[],
+  starterSeed: number,
+  initialQuestions: readonly string[],
+): string[] {
+  if (messages.length === 1) return [...initialQuestions];
+
+  const asked = messages
+    .filter((message) => message.role === 'visitor')
+    .map((message) => message.text);
+  const previouslySuggested = messages
+    .slice(0, -1)
+    .flatMap((message) => message.evidence?.suggestedFollowUpQuestions ?? []);
+  const excluded = new Set(
+    [...asked, ...initialQuestions, ...previouslySuggested].map(normalizeQuestion),
+  );
 
   for (let index = messages.length - 1; index >= 0; index -= 1) {
     const questions = messages[index].evidence?.suggestedFollowUpQuestions;
-    if (questions) return questions;
+    if (!questions) continue;
+    const contextual = questions.filter((question, questionIndex) =>
+      !excluded.has(normalizeQuestion(question))
+      && questions.findIndex((candidate) => normalizeQuestion(candidate) === normalizeQuestion(question)) === questionIndex
+    );
+    return [
+      ...contextual,
+      ...selectConversationStarters(
+        starterSeed + (messages.length * 7),
+        3,
+        [...excluded, ...contextual.map(normalizeQuestion)],
+      ),
+    ].slice(0, 3);
   }
 
-  return [];
+  return selectConversationStarters(starterSeed + messages.length, 3, [...excluded]);
 }
 
 function getLatestAssistantMessageId(messages: ChatMessage[]): string | null {
@@ -116,7 +137,12 @@ export function JoleneChat({
   const [draft, setDraft] = useState('');
   const [waiting, setWaiting] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([initialMessage(connectionMode)]);
-  const suggestedQuestions = getSuggestedQuestions(messages);
+  const [starterSeed, setStarterSeed] = useState(0);
+  const initialQuestions = useMemo(
+    () => selectConversationStarters(starterSeed),
+    [starterSeed],
+  );
+  const suggestedQuestions = getSuggestedQuestions(messages, starterSeed, initialQuestions);
   const latestAssistantMessageId = getLatestAssistantMessageId(messages);
 
   const closePanel = useCallback(() => {
@@ -126,6 +152,14 @@ export function JoleneChat({
     setMode('chat');
     requestAnimationFrame(() => launcherRef.current?.focus());
   }, [sendAvatar]);
+
+  useEffect(() => {
+    const storageKey = 'jolene-question-rotation-v1';
+    const stored = Number.parseInt(window.sessionStorage.getItem(storageKey) ?? '0', 10);
+    const seed = Number.isFinite(stored) ? stored : 0;
+    setStarterSeed(seed);
+    window.sessionStorage.setItem(storageKey, String(seed + 11));
+  }, []);
 
   useEffect(() => {
     if (reducedMotion) return;
