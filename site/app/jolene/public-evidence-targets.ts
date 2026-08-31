@@ -44,6 +44,7 @@ export const publicEvidenceTargetRecords: readonly PublicEvidenceTargetRecord[] 
   ['portfolio:claim:jolene-ai:portfolio-bff', '/work/jolene-ai', 'Jolene portfolio integration', 'available'],
   ['portfolio:claim:jolene-ai:deployment', '/work/jolene-ai', 'Jolene release system', 'available'],
   ['portfolio:claim:jolene-ai:carl-role', '/work/jolene-ai', 'Carl’s role building Jolene', 'available'],
+  ['portfolio:claim:jolene-ai:origin', '/work/jolene-ai', 'Why Carl built Jolene', 'available'],
   ['portfolio:claim:jolene-ai:limitations', '/work/jolene-ai', 'What public Jolene can and cannot do', 'available'],
   ['portfolio:limitation:project:jolene-ai', '/work/jolene-ai', 'Jolene AI case study', 'available'],
   ['portfolio:source:experience:yubico', '/experience', 'Yubico experience', 'available'],
