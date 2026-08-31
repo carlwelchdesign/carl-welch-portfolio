@@ -51,7 +51,12 @@ export type JoleneAvatarController = {
 };
 
 export function preloadJoleneAvatarAssets(): void {
-  for (const assetPath of [atlasImagePath, stateContractJson.rendering.masterPath, frameCatalog['excited-0'].assetPath]) {
+  for (const assetPath of [
+    atlasImagePath,
+    stateContractJson.rendering.masterPath,
+    frameCatalog['excited-0'].assetPath,
+    frameCatalog['evidence-2'].assetPath,
+  ]) {
     const image = new Image();
     image.decoding = 'async';
     image.src = assetPath;
@@ -261,7 +266,11 @@ function PixiAvatarCanvas({
           powerPreference: 'low-power',
         });
         const sheet = await Assets.load<Spritesheet>(atlasManifestPath);
-        await Assets.load([stateContractJson.rendering.masterPath, frameCatalog['excited-0'].assetPath]);
+        await Assets.load([
+          stateContractJson.rendering.masterPath,
+          frameCatalog['excited-0'].assetPath,
+          frameCatalog['evidence-2'].assetPath,
+        ]);
         if (cancelled || !hostRef.current) {
           app.destroy({ removeView: true }, { children: true, context: true });
           return;

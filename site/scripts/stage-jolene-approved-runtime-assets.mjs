@@ -13,12 +13,18 @@ const decodeDataUrl = (url) => Buffer.from(url.split(',')[1], 'base64');
 const idleAtlas = await readFile(new URL('jolene-idle-blink-v5-atlas-1x.png', reviewDirectory));
 const greetWave = await readFile(new URL('../public/jolene/sprites/greet.png', import.meta.url));
 const loadingDance = await readFile(new URL('../public/jolene/sprites/loading-dance-v1.png', import.meta.url));
+const evidencePoint = await readFile(new URL('../public/jolene/sprites/evidence.png', import.meta.url));
 
 assert.equal(sha256(idleAtlas), '041692e505323a7d14c96df9b197829814516e661a43191e6aecab402023122c');
 assert.equal(
   sha256(greetWave),
   '185259c7634741878473e834a77ab23ac888d9cd5c766472bab5d828f347580c',
   'The approved single-frame wave changed. Preserve the canonical face, eyes, teeth, hair, hand, and alpha exactly.',
+);
+assert.equal(
+  sha256(evidencePoint),
+  'c6d15a756133e2b4c41213bef383aafab787a1d1dac02cc4a1866c8b470ad367',
+  'The approved pointing pose changed.',
 );
 
 const browser = await chromium.launch({ headless: true });
@@ -112,6 +118,7 @@ const frameOutputs = {
   'greet-wave.png': greetWave,
   'loading-dance-a.png': loadingDance,
   'loading-dance-b.png': loadingDance,
+  'evidence-point.png': evidencePoint,
 };
 
 for (const [name, frame] of Object.entries(idleFrames)) {

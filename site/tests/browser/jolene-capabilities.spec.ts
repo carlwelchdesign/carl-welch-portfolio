@@ -184,10 +184,16 @@ test('country-host cameo appears once, leaves cleanly, and returns only with cha
     await expect(avatar).toHaveAttribute('data-avatar-state', 'idle', { timeout: 1_500 });
 
     const firstPoint = evidence.locator('details.jolene-claim').first();
+    const idleRenderedPixels = await avatar.screenshot();
     await firstPoint.locator(':scope > summary').click();
     await expect(firstPoint).toHaveAttribute('open', '');
     await expect(avatar).toHaveAttribute('data-avatar-state', 'evidence');
     await expect(avatar).toHaveAttribute('data-avatar-frame', 'evidence-2');
+    const pointingRenderedPixels = await avatar.screenshot();
+    expect(
+      Array.from(pointingRenderedPixels),
+      'The Point reaction must visibly replace the idle pixels with the pointing pose.',
+    ).not.toEqual(Array.from(idleRenderedPixels));
     await expect(avatar).toHaveAttribute('data-avatar-state', 'idle', { timeout: 1_500 });
 
     await firstPoint.locator(':scope > summary').click();
