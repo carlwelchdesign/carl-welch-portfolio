@@ -11,7 +11,11 @@ import {
   type PublicJoleneFixtureScenario,
 } from './public-fixtures';
 import { JoleneEvidence, type JoleneAnswerEvidence } from './jolene-evidence';
-import { PublicJoleneContractError } from './public-validation';
+import {
+  activePublicConversationContext,
+  PublicJoleneContractError,
+} from './public-validation';
+import type { PublicConversationContext } from './public-contract';
 import { JoleneContactIntent } from './jolene-contact-intent';
 import { JoleneJobFit } from './jolene-job-fit';
 import { trackAnalytics } from '../analytics/analytics-client';
@@ -104,6 +108,7 @@ export function JoleneChat({
   const messageSequence = useRef(0);
   const answerAnimationTimer = useRef<number | null>(null);
   const typingAnimationTimer = useRef<number | null>(null);
+  const conversationContextRef = useRef<PublicConversationContext | undefined>(undefined);
   const reducedMotion = useReducedMotion() === true;
   const { state: avatarState, send: sendAvatar, settle: settleAvatar } = useJoleneAvatarController();
   const [open, setOpen] = useState(false);
@@ -206,12 +211,19 @@ export function JoleneChat({
     setWaiting(true);
 
     try {
-      const response = await adapter.answer({ question: normalizedQuestion });
+      const conversationContext = activePublicConversationContext(conversationContextRef.current);
+      conversationContextRef.current = conversationContext;
+      const response = await adapter.answer({
+        question: normalizedQuestion,
+        ...(conversationContext ? { conversationContext } : {}),
+      });
+      conversationContextRef.current = activePublicConversationContext(response.conversationContext);
+      const isConversationalResponse = response.claims.length === 0 && response.limitations.length === 0;
       trackAnalytics('jolene_response', {
         operation: 'answer',
-        state: response.claims.length > 0 ? 'success' : 'no_evidence',
+        state: response.claims.length > 0 || isConversationalResponse ? 'success' : 'no_evidence',
       });
-      sendAvatar(response.claims.length > 0 ? 'answer_started' : 'cannot_verify');
+      sendAvatar(response.claims.length > 0 || isConversationalResponse ? 'answer_started' : 'cannot_verify');
       setMessages((current) => [
         ...current,
         {
@@ -232,10 +244,11 @@ export function JoleneChat({
           },
         },
       ]);
-      if (response.claims.length > 0) {
+      if (response.claims.length > 0 || isConversationalResponse) {
         answerAnimationTimer.current = window.setTimeout(() => sendAvatar('answer_finished'), 2_200);
       }
     } catch (error) {
+      conversationContextRef.current = undefined;
       sendAvatar(error instanceof PublicJoleneAdapterError && error.code === 'unavailable'
         ? 'service_unavailable'
         : 'cannot_verify');
