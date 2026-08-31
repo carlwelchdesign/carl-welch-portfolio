@@ -21,6 +21,22 @@ jobs:
       - name: Verify repository security configuration
         run: node site/scripts/check-repository-security.mjs
 
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22.22.0
+
+      - name: Enable pnpm
+        run: corepack enable
+
+      - name: Install dependencies
+        working-directory: site
+        run: pnpm install --frozen-lockfile
+
+      - name: Verify portfolio quality
+        working-directory: site
+        run: pnpm check
+
       - name: Build portfolio image
         run: docker build --tag carl-welch-portfolio:ci site
 

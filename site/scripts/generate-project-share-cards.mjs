@@ -4,6 +4,7 @@ import { resolve } from 'node:path';
 import { createElement as h } from 'react';
 import { ImageResponse } from 'next/og.js';
 import { loadTypescriptData } from './load-typescript-data.mjs';
+import { assertSocialCardCurrent } from './social-card-integrity.mjs';
 
 const [{ projects }] = await Promise.all([
   loadTypescriptData(resolve(process.cwd(), 'app/portfolio-data.ts')),
@@ -141,7 +142,7 @@ for (const project of projects) {
 
   if (checkOnly) {
     const existing = await readFile(outputPath);
-    assert.deepEqual(existing, rendered, `${project.slug} share card is stale; run pnpm generate:social-cards.`);
+    assertSocialCardCurrent(existing, rendered, project.slug);
   } else {
     await writeFile(outputPath, rendered);
   }
