@@ -21,6 +21,10 @@ import { JoleneJobFit } from './jolene-job-fit';
 import { trackAnalytics } from '../analytics/analytics-client';
 import { JoleneAvatar, preloadJoleneAvatarAssets, useJoleneAvatarController } from './jolene-avatar';
 import { normalizeQuestion, selectConversationStarters } from './conversation-starters';
+import {
+  playFirstOpenJoleneMusic,
+  stopFirstOpenJoleneMusic,
+} from './jolene-first-open-music';
 
 type ChatMessage = {
   id: string;
@@ -136,6 +140,7 @@ export function JoleneChat({
   const [mode, setMode] = useState<'chat' | 'job' | 'contact'>('chat');
   const [draft, setDraft] = useState('');
   const [waiting, setWaiting] = useState(false);
+  const [introMusicState, setIntroMusicState] = useState<'idle' | 'loading' | 'playing'>('idle');
   const [messages, setMessages] = useState<ChatMessage[]>([initialMessage(connectionMode)]);
   const [starterSeed, setStarterSeed] = useState(0);
   const initialQuestions = useMemo(
@@ -147,6 +152,7 @@ export function JoleneChat({
 
   const closePanel = useCallback(() => {
     if (typingAnimationTimer.current !== null) window.clearTimeout(typingAnimationTimer.current);
+    stopFirstOpenJoleneMusic(setIntroMusicState);
     sendAvatar('inactive');
     setOpen(false);
     setMode('chat');
@@ -179,6 +185,7 @@ export function JoleneChat({
 
   useEffect(() => () => {
     if (typingAnimationTimer.current !== null) window.clearTimeout(typingAnimationTimer.current);
+    stopFirstOpenJoleneMusic(() => undefined);
   }, []);
 
   useEffect(() => {
@@ -356,9 +363,20 @@ export function JoleneChat({
                 {mode === 'contact' ? 'Contact Carl' : mode === 'job' ? 'Compare a role' : 'Ask Jolene'}
               </h2>
             </div>
-            <button ref={closeRef} type="button" onClick={closePanel} aria-label="Close Jolene chat">
-              Close
-            </button>
+            <div className="jolene-panel-header-actions">
+              {introMusicState !== 'idle' ? (
+                <button
+                  type="button"
+                  onClick={() => stopFirstOpenJoleneMusic(setIntroMusicState)}
+                  aria-label="Stop intro music"
+                >
+                  Stop tune
+                </button>
+              ) : null}
+              <button ref={closeRef} type="button" onClick={closePanel} aria-label="Close Jolene chat">
+                Close
+              </button>
+            </div>
           </header>
 
           <p className="jolene-fixture-notice" id="jolene-panel-description">
@@ -458,6 +476,7 @@ export function JoleneChat({
             setIntroVisible(false);
             sendAvatar('chat_opened');
             setOpen(true);
+            void playFirstOpenJoleneMusic(setIntroMusicState);
           }
         }}
         data-jolene-launcher

@@ -74,6 +74,7 @@
   "dependencies": {
     "@sentry/browser": "10.71.0",
     "@sentry/cloudflare": "10.71.0",
+    "@tonejs/midi": "2.0.28",
     "@vitejs/plugin-react": "6.0.2",
     "@vitejs/plugin-rsc": "0.5.34",
     "motion": "13.1.1",

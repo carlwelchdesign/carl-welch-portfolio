@@ -65,6 +65,41 @@ test('standalone client hydrates and the mobile launcher opens the modal', async
   expect([...failedClientChunks], 'client chunk failed while opening the modal').toEqual([]);
 });
 
+test('first Jolene open plays one bounded MIDI excerpt and exposes a stop control', async ({ page }) => {
+  await page.addInitScript(() => {
+    window.localStorage.removeItem('jolene-first-open-music-played-v1');
+  });
+  await page.goto('/');
+
+  await page.getByRole('button', { name: /Ask Jolene/ }).click();
+  const panel = page.getByRole('dialog', { name: 'Ask Jolene' });
+  const stopMusic = panel.getByRole('button', { name: 'Stop intro music' });
+  await expect(stopMusic).toBeVisible();
+  await expect.poll(() => page.evaluate(() => (
+    window.localStorage.getItem('jolene-first-open-music-played-v1')
+  ))).toBe('true');
+
+  await stopMusic.click();
+  await expect(stopMusic).toHaveCount(0);
+  await panel.getByRole('button', { name: 'Close Jolene chat' }).click();
+  await page.getByRole('button', { name: /Ask Jolene/ }).click();
+  await expect(page.getByRole('button', { name: 'Stop intro music' })).toHaveCount(0);
+});
+
+test('first-open MIDI fades out and stops after its ten-second excerpt', async ({ page }) => {
+  await page.addInitScript(() => {
+    window.localStorage.removeItem('jolene-first-open-music-played-v1');
+  });
+  await page.goto('/');
+  await page.clock.install();
+
+  await page.getByRole('button', { name: /Ask Jolene/ }).click();
+  const stopMusic = page.getByRole('button', { name: 'Stop intro music' });
+  await expect(stopMusic).toBeVisible();
+  await page.clock.fastForward(10_500);
+  await expect(stopMusic).toHaveCount(0);
+});
+
 test('quick questions rotate across visits instead of repeating one fixed trio', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/');
