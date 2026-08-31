@@ -274,6 +274,13 @@ try {
   );
   assert.equal(
     publicNavigation.resolvePublicEvidenceCitation(
+      { evidenceId: `career:${'c6'.repeat(16)}`, href: '/carl-welch-resume.pdf' },
+      { corpusVersion: manifest.corpusVersion, expectedCorpusVersion: manifest.corpusVersion },
+    ).target.href,
+    '/carl-welch-resume.pdf',
+  );
+  assert.equal(
+    publicNavigation.resolvePublicEvidenceCitation(
       { evidenceId: `career:${'c5'.repeat(16)}`, href: '/capabilities' },
       {
         corpusVersion: manifest.corpusVersion,
