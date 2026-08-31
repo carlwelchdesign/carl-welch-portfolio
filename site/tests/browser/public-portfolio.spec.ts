@@ -669,7 +669,7 @@ test('Jolene case study presents distinct character sheets, the build retrospect
   const architecture = page.locator('#architecture');
   const architectureMap = architecture.locator('.architecture-map').last();
   await expect(architectureMap.locator('[data-architecture-node="corpus"]')).toContainText('Reviewed career artifact');
-  await expect(architectureMap.locator('[data-architecture-node="corpus"]')).toContainText('Five chapters, 16 roles, 92 records in review');
+  await expect(architectureMap.locator('[data-architecture-node="corpus"]')).toContainText('Five chapters, 16 roles, 92 published records');
   await expect(architectureMap.locator('[data-architecture-node="evaluation"]')).toContainText('132 cases, 192 turns, red team');
 
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);

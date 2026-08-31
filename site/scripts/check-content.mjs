@@ -306,6 +306,7 @@ for (const [evidenceId, path, , status] of publicEvidenceTargetRecords) {
 
 const joleneProject = projects.find((project) => project.slug === 'jolene-ai');
 assert(joleneProject, 'Jolene case study must remain published.');
+assert.equal(joleneProject.status, 'Deployed career-wide public delegate');
 const joleneOrigin = joleneProject.evidence.find((item) => item.id === 'portfolio:claim:jolene-ai:origin');
 assert(joleneOrigin, 'Jolene origin evidence must remain published.');
 assert.match(joleneProject.story.problem, /March 2026 layoff/);
@@ -327,8 +328,8 @@ assert.deepEqual(
 assert.equal(joleneProject.retrospective?.lessons.length, 4, 'Jolene retrospective must retain all four production lessons.');
 assert.match(joleneProject.retrospective?.heading ?? '', /art direction became engineering/);
 assert(
-  joleneProject.architecture.nodes.some((node) => node.id === 'corpus' && /92 records in review/.test(node.detail)),
-  'Jolene architecture must identify the active reviewed career artifact.',
+  joleneProject.architecture.nodes.some((node) => node.id === 'corpus' && /92 published records/.test(node.detail)),
+  'Jolene architecture must identify the deployed reviewed career artifact.',
 );
 assert(
   joleneProject.architecture.nodes.some((node) => node.id === 'evaluation' && /132 cases, 192 turns/.test(node.detail)),
