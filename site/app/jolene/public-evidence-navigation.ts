@@ -83,6 +83,14 @@ function buildProviderCitationAliases(): ReadonlyMap<string, PublicEvidenceTarge
     status: 'available',
   });
 
+  aliases.set('/experience#career-foundations', {
+    evidenceId: 'portfolio:source:career-foundations',
+    href: '/experience#career-foundations',
+    anchorId: 'career-foundations',
+    label: 'Career foundations',
+    status: 'available',
+  });
+
   for (const item of available) {
     const project = item.evidenceId.match(/^portfolio:source:project:([a-z0-9-]+)$/)?.[1];
     if (project) {
