@@ -45,6 +45,7 @@
     "build:jolene-avatar-review": "node scripts/build-jolene-avatar-review.mjs",
     "check:jolene-avatar-review": "node scripts/build-jolene-avatar-review.mjs --check",
     "check:jolene-avatar-renderer": "node scripts/check-jolene-avatar-renderer.mjs",
+    "check:jolene-avatar-faces": "python3 scripts/check-jolene-avatar-face-consistency.py",
     "build:jolene-approved-runtime": "node scripts/stage-jolene-approved-runtime-assets.mjs",
     "check:jolene-approved-runtime": "node scripts/stage-jolene-approved-runtime-assets.mjs --check",
     "build:jolene-greet-review": "node scripts/build-jolene-greet-v2-review.mjs",
@@ -70,17 +71,15 @@
     "check:jolene-ui:enabled": "JOLENE_UI_CONTACT_ENABLED=true playwright test --config=playwright.jolene.config.ts",
     "check:jolene-ui:error": "JOLENE_UI_CONTACT_ENABLED=false JOLENE_UI_SCENARIO=unavailable playwright test --config=playwright.jolene.config.ts",
     "check:jolene-ui": "pnpm check:jolene-ui:disabled && pnpm check:jolene-ui:enabled && pnpm check:jolene-ui:error",
-    "check": "pnpm typecheck && pnpm lint && pnpm check:metadata && pnpm check:social-card-integrity && pnpm check:social-cards && pnpm check:content && pnpm check:no-em-dashes && pnpm check:editorial && pnpm check:archive && pnpm check:legacy-visuals && pnpm check:archive-recovery && pnpm check:release-decisions && pnpm check:github-sync && pnpm check:jolene-contract && pnpm check:jolene-job-fit && pnpm check:jolene-bff && pnpm check:jolene-avatar-brief && pnpm check:jolene-avatar-master && pnpm check:jolene-avatar-identity-lock && pnpm check:jolene-avatar-state && pnpm check:jolene-avatar-sprites && pnpm check:jolene-avatar-review && pnpm check:jolene-avatar-renderer && pnpm check:jolene-greet-review && pnpm check:jolene-approved-runtime && pnpm check:analytics && pnpm check:sentry-privacy && pnpm check:sentry-asana && pnpm check:sentry-reconciliation && pnpm check:sentry-release && pnpm check:sentry-operations && pnpm check:research-protocol && pnpm check:recovery && pnpm check:security-headers && pnpm check:release-readiness && pnpm build && pnpm check:no-public-sourcemaps"
+    "check": "pnpm typecheck && pnpm lint && pnpm check:metadata && pnpm check:social-card-integrity && pnpm check:social-cards && pnpm check:content && pnpm check:no-em-dashes && pnpm check:editorial && pnpm check:archive && pnpm check:legacy-visuals && pnpm check:archive-recovery && pnpm check:release-decisions && pnpm check:github-sync && pnpm check:jolene-contract && pnpm check:jolene-job-fit && pnpm check:jolene-bff && pnpm check:jolene-avatar-brief && pnpm check:jolene-avatar-master && pnpm check:jolene-avatar-identity-lock && pnpm check:jolene-avatar-state && pnpm check:jolene-avatar-sprites && pnpm check:jolene-avatar-review && pnpm check:jolene-avatar-renderer && pnpm check:jolene-avatar-faces && pnpm check:jolene-greet-review && pnpm check:jolene-approved-runtime && pnpm check:analytics && pnpm check:sentry-privacy && pnpm check:sentry-asana && pnpm check:sentry-reconciliation && pnpm check:sentry-release && pnpm check:sentry-operations && pnpm check:research-protocol && pnpm check:recovery && pnpm check:security-headers && pnpm check:release-readiness && pnpm build && pnpm check:no-public-sourcemaps"
   },
   "dependencies": {
     "@sentry/browser": "10.71.0",
     "@sentry/cloudflare": "10.71.0",
-    "@tonejs/midi": "2.0.28",
     "@vitejs/plugin-react": "6.0.2",
     "@vitejs/plugin-rsc": "0.5.34",
     "motion": "13.1.1",
     "next": "16.3.3",
-    "pixi.js": "8.18.1",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "react-server-dom-webpack": "19.2.8",

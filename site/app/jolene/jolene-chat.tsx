@@ -21,10 +21,7 @@ import { JoleneJobFit } from './jolene-job-fit';
 import { trackAnalytics } from '../analytics/analytics-client';
 import { JoleneAvatar, preloadJoleneAvatarAssets, useJoleneAvatarController } from './jolene-avatar';
 import { normalizeQuestion, selectConversationStarters } from './conversation-starters';
-import {
-  playFirstOpenJoleneMusic,
-  stopFirstOpenJoleneMusic,
-} from './jolene-first-open-music';
+import avatarStateContract from './avatar-state-contract.v1.json';
 
 type ChatMessage = {
   id: string;
@@ -131,7 +128,9 @@ export function JoleneChat({
   const latestAssistantRef = useRef<HTMLElement>(null);
   const focusedAssistantId = useRef<string | null>(null);
   const messageSequence = useRef(0);
+  const answerAnimationTimer = useRef<number | null>(null);
   const typingAnimationTimer = useRef<number | null>(null);
+  const inactivityTimer = useRef<number | null>(null);
   const conversationContextRef = useRef<PublicConversationContext | undefined>(undefined);
   const reducedMotion = useReducedMotion() === true;
   const { state: avatarState, send: sendAvatar, settle: settleAvatar } = useJoleneAvatarController();
@@ -140,7 +139,6 @@ export function JoleneChat({
   const [mode, setMode] = useState<'chat' | 'job' | 'contact'>('chat');
   const [draft, setDraft] = useState('');
   const [waiting, setWaiting] = useState(false);
-  const [introMusicState, setIntroMusicState] = useState<'idle' | 'loading' | 'playing'>('idle');
   const [messages, setMessages] = useState<ChatMessage[]>([initialMessage(connectionMode)]);
   const [starterSeed, setStarterSeed] = useState(0);
   const initialQuestions = useMemo(
@@ -150,9 +148,18 @@ export function JoleneChat({
   const suggestedQuestions = getSuggestedQuestions(messages, starterSeed, initialQuestions);
   const latestAssistantMessageId = getLatestAssistantMessageId(messages);
 
+  const scheduleInactivity = useCallback(() => {
+    if (inactivityTimer.current !== null) window.clearTimeout(inactivityTimer.current);
+    inactivityTimer.current = window.setTimeout(() => {
+      sendAvatar('inactive');
+      inactivityTimer.current = null;
+    }, avatarStateContract.inactivity.restAfterMs);
+  }, [sendAvatar]);
+
   const closePanel = useCallback(() => {
+    if (answerAnimationTimer.current !== null) window.clearTimeout(answerAnimationTimer.current);
     if (typingAnimationTimer.current !== null) window.clearTimeout(typingAnimationTimer.current);
-    stopFirstOpenJoleneMusic(setIntroMusicState);
+    if (inactivityTimer.current !== null) window.clearTimeout(inactivityTimer.current);
     sendAvatar('inactive');
     setOpen(false);
     setMode('chat');
@@ -184,9 +191,18 @@ export function JoleneChat({
   }, [reducedMotion, sendAvatar]);
 
   useEffect(() => () => {
+    if (answerAnimationTimer.current !== null) window.clearTimeout(answerAnimationTimer.current);
     if (typingAnimationTimer.current !== null) window.clearTimeout(typingAnimationTimer.current);
-    stopFirstOpenJoleneMusic(() => undefined);
+    if (inactivityTimer.current !== null) window.clearTimeout(inactivityTimer.current);
   }, []);
+
+  useEffect(() => {
+    if (!open || waiting) return;
+    scheduleInactivity();
+    return () => {
+      if (inactivityTimer.current !== null) window.clearTimeout(inactivityTimer.current);
+    };
+  }, [draft, messages.length, mode, open, scheduleInactivity, waiting]);
 
   useEffect(() => {
     if (open) preloadJoleneAvatarAssets();
@@ -260,7 +276,7 @@ export function JoleneChat({
         operation: 'answer',
         state: response.claims.length > 0 || isConversationalResponse ? 'success' : 'no_evidence',
       });
-      sendAvatar('answer_finished');
+      sendAvatar(response.claims.length > 0 || isConversationalResponse ? 'answer_started' : 'cannot_verify');
       setMessages((current) => [
         ...current,
         {
@@ -281,6 +297,9 @@ export function JoleneChat({
           },
         },
       ]);
+      if (response.claims.length > 0 || isConversationalResponse) {
+        answerAnimationTimer.current = window.setTimeout(() => sendAvatar('answer_finished'), 2_200);
+      }
     } catch (error) {
       conversationContextRef.current = undefined;
       sendAvatar(error instanceof PublicJoleneAdapterError && error.code === 'unavailable'
@@ -364,15 +383,6 @@ export function JoleneChat({
               </h2>
             </div>
             <div className="jolene-panel-header-actions">
-              {introMusicState !== 'idle' ? (
-                <button
-                  type="button"
-                  onClick={() => stopFirstOpenJoleneMusic(setIntroMusicState)}
-                  aria-label="Stop intro music"
-                >
-                  Stop tune
-                </button>
-              ) : null}
               <button ref={closeRef} type="button" onClick={closePanel} aria-label="Close Jolene chat">
                 Close
               </button>
@@ -386,8 +396,8 @@ export function JoleneChat({
           </p>
 
           <nav className="jolene-mode-switch" aria-label="Jolene panel sections">
-            <button type="button" aria-pressed={mode === 'chat'} onClick={() => { setMode('chat'); sendAvatar('activity_resumed'); }}>Questions</button>
-            <button type="button" aria-pressed={mode === 'job'} onClick={() => { setMode('job'); sendAvatar('visitor_input'); }}>Compare role</button>
+            <button type="button" aria-pressed={mode === 'chat'} onClick={() => { setMode('chat'); sendAvatar('activity_resumed'); scheduleInactivity(); }}>Questions</button>
+            <button type="button" aria-pressed={mode === 'job'} onClick={() => { setMode('job'); sendAvatar('visitor_input'); scheduleInactivity(); }}>Compare role</button>
             {contactIntentEnabled ? (
               <button type="button" aria-pressed={mode === 'contact'} onClick={() => { setMode('contact'); sendAvatar('inactive'); }}>Request contact</button>
             ) : null}
@@ -407,7 +417,10 @@ export function JoleneChat({
                   <p>{message.text}</p>
                   {message.note ? <p className="jolene-message-note">{message.note}</p> : null}
                   {message.evidence ? (
-                    <JoleneEvidence evidence={message.evidence} onOpen={() => sendAvatar('evidence_highlighted')} />
+                    <JoleneEvidence evidence={message.evidence} onOpen={() => {
+                      sendAvatar('evidence_highlighted');
+                      scheduleInactivity();
+                    }} />
                   ) : null}
                 </article>
               ))}
@@ -476,7 +489,6 @@ export function JoleneChat({
             setIntroVisible(false);
             sendAvatar('chat_opened');
             setOpen(true);
-            void playFirstOpenJoleneMusic(setIntroMusicState);
           }
         }}
         data-jolene-launcher

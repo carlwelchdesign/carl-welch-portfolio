@@ -7,100 +7,59 @@ const evidenceSource = await readFile(new URL('../app/jolene/jolene-evidence.tsx
 const styles = await readFile(new URL('../app/globals.css', import.meta.url), 'utf8');
 const contract = JSON.parse(await readFile(new URL('../app/jolene/avatar-state-contract.v1.json', import.meta.url), 'utf8'));
 const catalog = JSON.parse(await readFile(new URL('../app/jolene/avatar-frame-catalog.v1.json', import.meta.url), 'utf8'));
+const artManifest = JSON.parse(await readFile(new URL('../art-source/jolene-four-frame-reactions/v1-static-sheet/manifest.json', import.meta.url), 'utf8'));
 
 for (const requirement of [
-  "from 'motion/react'",
-  'useReducedMotion',
-  "import('pixi.js')",
-  "import('pixi.js/unsafe-eval')",
-  'AnimatedSprite',
-  'jolene-approved-atlas.json',
-  'useJoleneAvatarController',
-  'stateForAvatarSignal',
-  'canTransitionAvatar',
-  'data-avatar-state',
-  'data-avatar-frame',
-  'preloadJoleneAvatarAssets',
-  'data-avatar-fallback',
-  'fallbackToMaster',
-  'maximumSettleMs',
-  'data-avatar-facing="left"',
-]) {
-  assert.ok(source.includes(requirement), `Jolene avatar renderer is missing ${requirement}.`);
+  "from 'motion/react'", 'useReducedMotion', 'useJoleneAvatarController', 'stateForAvatarSignal',
+  'canTransitionAvatar', 'data-avatar-state', 'data-avatar-frame', 'data-avatar-pose',
+  'preloadJoleneAvatarAssets', 'data-avatar-fallback', 'data-avatar-facing="left"',
+  '4_000', '3_001', 'blink-0', 'setFallbackToIdle',
+]) assert.ok(source.includes(requirement), `Jolene static renderer is missing ${requirement}.`);
+
+for (const forbidden of ['pixi.js', 'AnimatedSprite', 'rotateDeg', 'translateX', 'translateY']) {
+  assert.equal(source.includes(forbidden), false, `Jolene v1 renderer still includes ${forbidden}.`);
+}
+for (const provider of ['openai', 'anthropic', 'gemini']) {
+  assert.equal(source.toLowerCase().includes(provider), false, `Jolene renderer includes forbidden coupling: ${provider}`);
 }
 
-for (const forbidden of ['openai', 'anthropic', 'gemini']) {
-  assert.equal(source.toLowerCase().includes(forbidden), false, `Jolene renderer includes forbidden coupling: ${forbidden}`);
-}
+for (const requirement of [
+  'image-rendering: pixelated', 'pointer-events: none', 'contain: layout paint style',
+  'overflow: hidden', 'transform: scaleX(-1)', 'width: calc(var(--jolene-sheet-columns) * 100%)',
+  'left: calc(var(--jolene-frame-index) * -100%)',
+]) assert.ok(styles.includes(requirement), `Jolene avatar CSS is missing ${requirement}.`);
 
-for (const requirement of ['image-rendering: pixelated', 'pointer-events: none', 'contain: layout style', 'transform: scaleX(-1)', 'jolene-avatar-canvas']) {
-  assert.ok(styles.includes(requirement), `Jolene avatar CSS is missing ${requirement}.`);
-}
-assert.equal(styles.includes('contain: layout paint style'), false, 'Paint containment would clip scaled typing frames.');
-assert.ok(styles.includes("[data-avatar-frame='think-dance-b']"), 'Loading dance must mirror its second beat.');
-assert.match(source, /jolene-approved-atlas\.json\?v=[a-f0-9]{12}/, 'The atlas manifest URL must be content-versioned.');
-assert.match(source, /jolene-approved-atlas\.png\?v=[a-f0-9]{12}/, 'The atlas image URL must be content-versioned.');
+for (const playbackRequirement of [
+  'animatedFrame', 'definition.frames.length <= 1', 'definition.durationsMs[frameIndex]',
+  'setAnimatedFrame({ state, index: 0 })', 'setAnimatedFrame({ state, index: frameIndex })', "'--jolene-sheet-columns'",
+]) assert.ok(source.includes(playbackRequirement), `Jolene renderer is missing timed playback: ${playbackRequirement}.`);
 
-const primarySequence = ['greet', 'excited', 'listen', 'think', 'speak', 'evidence', 'idle'];
-for (let index = 0; index < primarySequence.length - 1; index += 1) {
-  const from = primarySequence[index];
-  const to = primarySequence[index + 1];
-  assert.ok(contract.transitions[from].includes(to), `Primary avatar sequence cannot transition ${from} → ${to}.`);
-}
+assert.equal(catalog.sheetPath, artManifest.sheet.runtimePath);
+assert.equal(catalog.frameWidth, 105);
+assert.equal(catalog.frameHeight, 115);
+assert.equal(catalog.columns, artManifest.sheet.columns);
+assert.equal(catalog.columns, 22);
+assert.equal(artManifest.runtimeIntegrated, true);
+assert.equal(artManifest.publicUseAuthorized, false);
+assert.equal(artManifest.invariants.noRuntimeRotationOrScaling, true);
+assert.equal(artManifest.invariants.allCharacterPixelsInsideCell, true);
 
 for (const state of contract.states) {
   const definition = contract.definitions[state];
-  for (const frameName of definition.frames) assert.ok(catalog.frames[frameName], `${state} references missing frame ${frameName}.`);
-  assert.ok(catalog.frames[definition.reducedMotionFrame], `${state} reduced-motion frame is missing.`);
+  assert.equal(definition.frames.length, definition.durationsMs.length, `${state} must provide timing for every frame.`);
+  assert.ok(catalog.frames[definition.frames[0]], `${state} references a missing frame.`);
 }
-
-assert.deepEqual(contract.interruption.alwaysInterruptFor, ['offline']);
-assert.equal(catalog.imageRendering, 'pixelated');
-const activeFrames = Object.values(contract.definitions).flatMap(({ frames }) => frames);
-const activeAssetPaths = new Set(activeFrames.map((frameName) => catalog.frames[frameName].assetPath));
-assert.ok([...activeAssetPaths].every((assetPath) => assetPath.includes('/jolene/approved-animation/') || assetPath.includes('/jolene/sprites/')), 'Runtime references an unapproved avatar asset location.');
-assert.ok(contract.definitions.idle.frames.length > 3, 'Idle must use the approved breathing and blink loop.');
-assert.deepEqual(contract.definitions.greet.frames, ['greet-wave'], 'Greet must use the original one-frame wave.');
-assert.deepEqual(contract.definitions.think.frames, ['think-dance-a', 'think-dance-b'], 'Loading must alternate the mirrored dance pose.');
-for (const state of contract.states.filter((name) => !['idle', 'blink', 'greet', 'think'].includes(name))) {
-  assert.equal(contract.definitions[state].frames.length, 1, `${state} must remain a stable pose until its animation is separately approved.`);
-}
-assert.ok(Object.values(catalog.frames).filter(({ state }) => state === 'excited').every(({ assetPath }) => assetPath.includes('typing-excited-v1.png')), 'Excited frames must use the approved typing pose.');
-assert.ok(Object.values(catalog.frames).filter(({ state }) => state === 'excited').every(({ scale, translateY }) => scale === 1 && translateY === 0), 'Excited frames must stay at native scale and remain seated on the divider.');
-assert.ok(Object.values(catalog.frames).filter(({ state }) => state === 'think').every(({ assetPath }) => assetPath.includes('loading-dance-')), 'Think frames must use the loading dance pose.');
-assert.match(catalog.frames['evidence-2'].assetPath, /^\/jolene\/approved-animation\/evidence-point\.png\?v=/, 'Evidence must use the approved pointing pose, not the idle master.');
-assert.ok(contract.rendering.masterPath.includes('/jolene/sprites/rig-base-v2.png'), 'Fallback must use the corrected rig base.');
-assert.equal(chatSource.includes('answerAnimationTimer'), false, 'A received answer must stop the loading dance immediately.');
-assert.ok(chatSource.includes("sendAvatar('answer_finished')"), 'A received answer must restore the default pose.');
 
 for (const signal of Object.keys(contract.signals)) {
-  assert.ok(chatSource.includes(`'${signal}'`) || ['answer_started'].includes(signal), `Chat does not drive avatar signal ${signal}.`);
+  assert.ok(chatSource.includes(`'${signal}'`) || signal === 'answer_finished', `Chat does not drive avatar signal ${signal}.`);
 }
 for (const integrationBoundary of [
-  'Howdy, folks!',
-  'jolene-country-host-intro-seen-v1',
-  'introVisible && !open',
-  '<JoleneAvatar',
-  "sendAvatar('chat_opened')",
-  "sendAvatar('evidence_highlighted')",
-  "'service_unavailable'",
-  'jolene-starter-stage',
-  'jolene-conversation-scroll',
-  'jolene-conversation-avatar',
-  'messagesRef',
-  'messageScroller.scrollTo',
-  "behavior: reducedMotion ? 'auto' : 'smooth'",
-  "sendAvatar('visitor_typing')",
-  'typingAnimationTimer',
-  '650',
-]) {
-  assert.ok(chatSource.includes(integrationBoundary), `Chat integration is missing ${integrationBoundary}.`);
-}
+  'Howdy, folks!', 'jolene-country-host-intro-seen-v1', 'introVisible && !open', '<JoleneAvatar',
+  "sendAvatar('chat_opened')", "sendAvatar('evidence_highlighted')", "'service_unavailable'",
+  "sendAvatar('visitor_typing')", 'typingAnimationTimer', 'scheduleInactivity',
+  'avatarStateContract.inactivity.restAfterMs', "sendAvatar('inactive')",
+]) assert.ok(chatSource.includes(integrationBoundary), `Chat integration is missing ${integrationBoundary}.`);
+
 assert.ok(evidenceSource.includes('onToggle'), 'Evidence expansion must expose a state signal.');
 assert.ok(evidenceSource.includes('onOpen?.()'), 'Evidence expansion must notify the avatar controller.');
-assert.match(
-  evidenceSource,
-  /className="jolene-claim"[\s\S]*?onToggle=[\s\S]*?event\.currentTarget\.open[\s\S]*?onOpen\?\.\(\)/,
-  'Opening an individual evidence Point must notify the avatar controller.',
-);
-console.log('Jolene avatar renderer passed: PixiJS AnimatedSprite playback, central signals, one-time cameo, chat/evidence/error integration, crisp pixels, and reduced motion.');
+console.log('Jolene avatar renderer passed: authored reactions, timed frame playback, reduced-motion representatives, crisp crop, and idle fallback.');

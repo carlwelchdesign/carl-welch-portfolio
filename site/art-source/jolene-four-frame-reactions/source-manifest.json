@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "1.0.0",
+  "status": "SOURCE_REVIEW_ONLY",
+  "runtimeIntegrated": false,
+  "publicUseAuthorized": false,
+  "sources": [
+    {
+      "file": "references/exec-298dd526-dc20-4db4-a521-9b16f8081bda.png",
+      "sha256": "95a407bbd6bcc89d6cee41fc77e0856c95863c83a20b11b48ebb369f78922b00",
+      "width": 2048,
+      "height": 768,
+      "mode": "RGB",
+      "frameCount": 4,
+      "candidateStates": ["idle", "blink", "listen"]
+    },
+    {
+      "file": "references/exec-83bf7940-2a70-459c-81cf-1f7d4d008a5f.png",
+      "sha256": "5bb954d40bcda84c06412bc93f3baa1f13834cec8c76e93618102e92d9ca20b8",
+      "width": 1672,
+      "height": 941,
+      "mode": "RGB",
+      "frameCount": 4,
+      "candidateStates": ["greet"]
+    },
+    {
+      "file": "references/exec-9a363e5e-8203-4da6-a90b-b7aeb04251b9.png",
+      "sha256": "b52d5d393c0201477673c9bcbaa09d9d534052c02f1591a977629651c9f9cbcb",
+      "width": 2172,
+      "height": 724,
+      "mode": "RGB",
+      "frameCount": 4,
+      "candidateStates": ["offline", "boundary"]
+    },
+    {
+      "file": "references/exec-a174c933-aa69-42ca-a7c4-dbcdb591e32c.png",
+      "sha256": "d4ad38aa9a7d0d93cc684cd06b363d7b23c5bc186550468025ad3e8038530c75",
+      "width": 2046,
+      "height": 768,
+      "mode": "RGB",
+      "frameCount": 4,
+      "candidateStates": ["evidence"]
+    },
+    {
+      "file": "references/exec-bd7ef225-a69e-41a2-ad4e-7f146150cfb7.png",
+      "sha256": "d2da116497bc53379a292dd41a363249d5127d64d5cbee17014508112cc5ff6d",
+      "width": 1672,
+      "height": 941,
+      "mode": "RGB",
+      "frameCount": 4,
+      "candidateStates": ["speak", "think"]
+    }
+  ],
+  "requiredOutputContract": {
+    "frameWidth": 320,
+    "frameHeight": 460,
+    "anchorX": 160,
+    "anchorY": 448,
+    "binaryAlpha": true,
+    "imageSmoothing": false,
+    "crossStateReviewRequired": true
+  }
+}

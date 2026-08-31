@@ -1,0 +1,400 @@
+{
+  "schemaVersion": "1.0.0",
+  "status": "V1_LOCAL_RUNTIME_REVIEW",
+  "runtimeIntegrated": true,
+  "publicUseAuthorized": false,
+  "nativeCell": {
+    "width": 105,
+    "height": 115
+  },
+  "integerDisplaySizes": [
+    {
+      "scale": 3,
+      "width": 315,
+      "height": 345
+    },
+    {
+      "scale": 4,
+      "width": 420,
+      "height": 460
+    }
+  ],
+  "sheet": {
+    "columns": 22,
+    "rows": 1,
+    "width": 2310,
+    "height": 115,
+    "png": "jolene-v1-static-sheet.png",
+    "pngSha256": "d439231dd156a08a862992f1ba16bb1a192be1577d5047b193b024ab26444d0e",
+    "gif": "jolene-v1-static-sheet.gif",
+    "gifSha256": "33f2de0d4378982e92ccc0b2f528f52beb6f9c665e8370bff3722a4768fc37b9",
+    "review": "jolene-v1-static-sheet-review-4x.png",
+    "reviewSha256": "762ae75e01b2d74a44123f1d27798ea959bc901f8d3bcb2afdd6128371824abb",
+    "labeledReview": "jolene-v1-static-sheet-labeled-review.png",
+    "labeledReviewSha256": "06d1d92482ee9f43394ecc13932e106d507a451fef9e87b7fd2b0b6ceb0be4e7",
+    "runtimePath": "/jolene/v1-static-sheet/jolene-v1-static-sheet.png",
+    "runtimeSha256": "d439231dd156a08a862992f1ba16bb1a192be1577d5047b193b024ab26444d0e",
+    "runtimeFallbackPath": "/jolene/v1-static-sheet/idle-fallback.png",
+    "runtimeFallbackSha256": "18d07bb4ba1be79b09a198635e4607670a01b9e8f8566dd6ef79807fd36a7d1a"
+  },
+  "frames": [
+    {
+      "index": 0,
+      "id": "idle",
+      "source": "references/exec-298dd526-dc20-4db4-a521-9b16f8081bda.png",
+      "sourceFrame": 0,
+      "frame": "frames-105x115/00-idle.png",
+      "frameSha256": "fc08e44fdc09efe58242e2bea786517c5a702c9b32b7c6712966b03b2199f6ba",
+      "nativeBounds": [
+        19,
+        2,
+        85,
+        112
+      ]
+    },
+    {
+      "index": 1,
+      "id": "blink",
+      "source": "references/exec-298dd526-dc20-4db4-a521-9b16f8081bda.png",
+      "sourceFrame": 2,
+      "frame": "frames-105x115/01-blink.png",
+      "frameSha256": "de0474b059ac24d9a12f0e922c17493f653bf932d485c8368d2b8fd695aed478",
+      "nativeBounds": [
+        19,
+        2,
+        85,
+        112
+      ]
+    },
+    {
+      "index": 2,
+      "id": "greet",
+      "source": "references/exec-83bf7940-2a70-459c-81cf-1f7d4d008a5f.png",
+      "sourceFrame": 0,
+      "frame": "frames-105x115/02-greet.png",
+      "frameSha256": "05777ad2d7c1693d995e5a7661da244023b146b11ab42307d5e0c67e7d275cde",
+      "nativeBounds": [
+        18,
+        2,
+        80,
+        112
+      ]
+    },
+    {
+      "index": 3,
+      "id": "attentive",
+      "source": "references/exec-298dd526-dc20-4db4-a521-9b16f8081bda.png",
+      "sourceFrame": 1,
+      "frame": "frames-105x115/03-attentive.png",
+      "frameSha256": "5792c3d99f44817438a269fc6d9eec1554cf04add582a7ee276e4eb06dfbdfb3",
+      "nativeBounds": [
+        18,
+        2,
+        87,
+        112
+      ]
+    },
+    {
+      "index": 4,
+      "id": "speak",
+      "source": "references/exec-bd7ef225-a69e-41a2-ad4e-7f146150cfb7.png",
+      "sourceFrame": 1,
+      "frame": "frames-105x115/04-speak.png",
+      "frameSha256": "aa4b7d05205bc3c1af8526f98acfff4733eafee0f0c28f421a2265ddc0442278",
+      "nativeBounds": [
+        22,
+        2,
+        82,
+        112
+      ]
+    },
+    {
+      "index": 5,
+      "id": "evidence",
+      "source": "references/exec-a174c933-aa69-42ca-a7c4-dbcdb591e32c.png",
+      "sourceFrame": 0,
+      "frame": "frames-105x115/05-evidence.png",
+      "frameSha256": "2f444643ebe4ed95ab46ababed64882435f6ca57193792bfa11d95f24d61bc89",
+      "nativeBounds": [
+        14,
+        2,
+        84,
+        112
+      ]
+    },
+    {
+      "index": 6,
+      "id": "boundary-offline",
+      "source": "references/exec-9a363e5e-8203-4da6-a90b-b7aeb04251b9.png",
+      "sourceFrame": 0,
+      "frame": "frames-105x115/06-boundary-offline.png",
+      "frameSha256": "b1a97855fbe908e4ab1076889b4fd447316f53d2a8dbac6ff7cb5108a4086597",
+      "nativeBounds": [
+        2,
+        2,
+        103,
+        112
+      ]
+    },
+    {
+      "index": 7,
+      "id": "rest",
+      "source": "references/exec-bd7ef225-a69e-41a2-ad4e-7f146150cfb7.png",
+      "sourceFrame": 2,
+      "frame": "frames-105x115/07-rest.png",
+      "frameSha256": "12ccfdcb6202fdb44c9e3f6e8f1c8e5ed570916420bb56d377e4ea5be01095c9",
+      "nativeBounds": [
+        22,
+        2,
+        82,
+        112
+      ]
+    },
+    {
+      "index": 8,
+      "id": "typing-peek",
+      "source": "public/jolene/sprites/typing-excited-v1.png",
+      "sourceFrame": 0,
+      "frame": "frames-105x115/08-typing-peek.png",
+      "frameSha256": "521e61a34277bc8e7b193a50a6625092357f320f7242f5e2e0bc51df9cef2794",
+      "nativeBounds": [
+        22,
+        2,
+        89,
+        112
+      ]
+    },
+    {
+      "index": 9,
+      "id": "listen-1",
+      "source": "references/exec-298dd526-dc20-4db4-a521-9b16f8081bda.png",
+      "sourceFrame": 0,
+      "frame": "frames-105x115/09-listen-1.png",
+      "frameSha256": "4ebcef31b851b68671b92827c745ac717a73b88dde105b87a2196ad7d077af75",
+      "nativeBounds": [
+        19,
+        2,
+        85,
+        112
+      ]
+    },
+    {
+      "index": 10,
+      "id": "listen-2",
+      "source": "references/exec-298dd526-dc20-4db4-a521-9b16f8081bda.png",
+      "sourceFrame": 3,
+      "frame": "frames-105x115/10-listen-2.png",
+      "frameSha256": "b85e085a64a34bfc1c6fc114c1f6fc8b9e6d7ee0e10f368a32daa186f1a9360f",
+      "nativeBounds": [
+        19,
+        2,
+        85,
+        112
+      ]
+    },
+    {
+      "index": 11,
+      "id": "speak-1",
+      "source": "references/exec-bd7ef225-a69e-41a2-ad4e-7f146150cfb7.png",
+      "sourceFrame": 0,
+      "frame": "frames-105x115/11-speak-1.png",
+      "frameSha256": "1f7117b20e4c49387ec2d140d843cc64f2f464958b0e77843e250639bce310a3",
+      "nativeBounds": [
+        22,
+        2,
+        82,
+        112
+      ]
+    },
+    {
+      "index": 12,
+      "id": "speak-mouth",
+      "source": "references/exec-bd7ef225-a69e-41a2-ad4e-7f146150cfb7.png",
+      "sourceFrame": 1,
+      "frame": "frames-105x115/12-speak-mouth.png",
+      "frameSha256": "790e2bf41ff2afb627226fef436b33d6f6d3f65fdd6d5c057ec589146d163f64",
+      "nativeBounds": [
+        22,
+        2,
+        82,
+        112
+      ]
+    },
+    {
+      "index": 13,
+      "id": "speak-3",
+      "source": "references/exec-bd7ef225-a69e-41a2-ad4e-7f146150cfb7.png",
+      "sourceFrame": 3,
+      "frame": "frames-105x115/13-speak-3.png",
+      "frameSha256": "f2463e45525c7e34777f6698926006440b35e8276f571def39cb082a5a931795",
+      "nativeBounds": [
+        22,
+        2,
+        82,
+        112
+      ]
+    },
+    {
+      "index": 14,
+      "id": "evidence-1",
+      "source": "references/exec-a174c933-aa69-42ca-a7c4-dbcdb591e32c.png",
+      "sourceFrame": 1,
+      "frame": "frames-105x115/14-evidence-1.png",
+      "frameSha256": "59ad55037979a7641c60f62ce4e2d4d312cc4f9487f79d8fab0462de715f59cc",
+      "nativeBounds": [
+        14,
+        2,
+        85,
+        112
+      ]
+    },
+    {
+      "index": 15,
+      "id": "evidence-2",
+      "source": "references/exec-a174c933-aa69-42ca-a7c4-dbcdb591e32c.png",
+      "sourceFrame": 2,
+      "frame": "frames-105x115/15-evidence-2.png",
+      "frameSha256": "b9bf2f32495d2224350f553b22e02492d42d11650de156231f47624dfd77e8e5",
+      "nativeBounds": [
+        14,
+        2,
+        86,
+        112
+      ]
+    },
+    {
+      "index": 16,
+      "id": "evidence-3",
+      "source": "references/exec-a174c933-aa69-42ca-a7c4-dbcdb591e32c.png",
+      "sourceFrame": 3,
+      "frame": "frames-105x115/16-evidence-3.png",
+      "frameSha256": "468e194d8faed67c3792bf8e191043305687d354a385c37e45438fb0cb368349",
+      "nativeBounds": [
+        14,
+        2,
+        87,
+        112
+      ]
+    },
+    {
+      "index": 17,
+      "id": "boundary-1",
+      "source": "references/exec-9a363e5e-8203-4da6-a90b-b7aeb04251b9.png",
+      "sourceFrame": 2,
+      "frame": "frames-105x115/17-boundary-1.png",
+      "frameSha256": "289f6452d36295871aa72588125d5a860aaff4dc12d9a3ef4fc1e3510ecdff7f",
+      "nativeBounds": [
+        9,
+        2,
+        101,
+        112
+      ]
+    },
+    {
+      "index": 18,
+      "id": "boundary-2",
+      "source": "references/exec-9a363e5e-8203-4da6-a90b-b7aeb04251b9.png",
+      "sourceFrame": 3,
+      "frame": "frames-105x115/18-boundary-2.png",
+      "frameSha256": "7f2c2a25ffe7a33934a199336fc752651ae5f61bddbe352b5233c7c47d731508",
+      "nativeBounds": [
+        7,
+        2,
+        103,
+        112
+      ]
+    },
+    {
+      "index": 19,
+      "id": "offline-0",
+      "source": "references/exec-9a363e5e-8203-4da6-a90b-b7aeb04251b9.png",
+      "sourceFrame": 1,
+      "frame": "frames-105x115/19-offline-0.png",
+      "frameSha256": "444dfeb755839691297a25260a27b94db4014b637eec84e9c5a89e43009125ae",
+      "nativeBounds": [
+        10,
+        2,
+        102,
+        112
+      ]
+    },
+    {
+      "index": 20,
+      "id": "offline-1",
+      "source": "references/exec-9a363e5e-8203-4da6-a90b-b7aeb04251b9.png",
+      "sourceFrame": 2,
+      "frame": "frames-105x115/20-offline-1.png",
+      "frameSha256": "289f6452d36295871aa72588125d5a860aaff4dc12d9a3ef4fc1e3510ecdff7f",
+      "nativeBounds": [
+        9,
+        2,
+        101,
+        112
+      ]
+    },
+    {
+      "index": 21,
+      "id": "offline-2",
+      "source": "references/exec-9a363e5e-8203-4da6-a90b-b7aeb04251b9.png",
+      "sourceFrame": 3,
+      "frame": "frames-105x115/21-offline-2.png",
+      "frameSha256": "7f2c2a25ffe7a33934a199336fc752651ae5f61bddbe352b5233c7c47d731508",
+      "nativeBounds": [
+        7,
+        2,
+        103,
+        112
+      ]
+    }
+  ],
+  "appendOnlyCompatibility": {
+    "preservedLeadingCellCount": 9,
+    "preservedLeadingWidth": 945,
+    "preservedLeadingRgbaSha256": "05d3a7e4cb29953dec80f6ca702216d74f652094f7a87862909bc84bff5c6070"
+  },
+  "signalToPose": {
+    "intro_started": "greet",
+    "chat_opened": "greet",
+    "visitor_typing": "typing-peek",
+    "visitor_input": "listen",
+    "request_started": "attentive",
+    "answer_started": "speak",
+    "answer_finished": "idle",
+    "evidence_highlighted": "evidence",
+    "cannot_verify": "boundary",
+    "service_unavailable": "offline",
+    "inactive": "rest",
+    "activity_resumed": "idle"
+  },
+  "blink": {
+    "onlyWhilePose": "idle",
+    "runtimeIntervalMs": {
+      "minimum": 4000,
+      "maximum": 7000
+    },
+    "blinkDurationMs": 120,
+    "sequence": [
+      "idle",
+      "blink",
+      "idle"
+    ],
+    "disabledForReducedMotion": true,
+    "eyePatch": [
+      43,
+      27,
+      65,
+      39
+    ],
+    "changesOutsideEyePatch": 0
+  },
+  "invariants": {
+    "singleStaticFramePerPose": false,
+    "noPoseInterpolation": true,
+    "noRuntimeRotationOrScaling": true,
+    "binaryAlpha": true,
+    "allCharacterPixelsInsideCell": true,
+    "nearestNeighborOnly": true,
+    "blinkPreservesIdleOutsideEyePatch": true,
+    "animatedFacesLockedToStateAnchor": true
+  }
+}

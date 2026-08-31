@@ -1025,6 +1025,127 @@ export const projects: PortfolioProject[] = [
     ],
     repositoryUrl: 'https://github.com/carlwelchdesign/jolene-ai',
   },
+  {
+    slug: 'progression-lab-ai',
+    name: 'ProgressionLab',
+    category: 'Creative technology / AI music systems',
+    status: 'Deployed public web product',
+    tone: 'green',
+    number: '07',
+    summary:
+      'An AI-assisted harmony and songwriting workspace that turns musical intent into playable chord progressions, practical voicings, visual explanations, and exportable session material.',
+    role: 'Creator and independent product engineer',
+    scope: 'Product strategy, interaction design, full-stack engineering, AI orchestration, and music playback',
+    image: {
+      src: '/projects/progression-lab-ai/generator.png',
+      alt: 'ProgressionLab generator with seed chord, mood, mode, genre, style reference, and adventurousness controls',
+      width: 1280,
+      height: 806,
+    },
+    galleryTitle: 'A complete loop for harmonic exploration',
+    gallerySummary:
+      'The product connects musical intent to structured suggestions, playable voicings, audible previews, reusable examples, public sharing, and session-ready exports.',
+    gallery: [
+      {
+        src: '/projects/progression-lab-ai/generated-result.png',
+        alt: 'ProgressionLab result showing a chord suggestion, musical rationale, playback, MIDI and PDF controls, voicing notes, and a piano diagram',
+        width: 1221,
+        height: 1310,
+        label: 'Playable suggestion',
+        caption: 'A generated idea becomes inspectable product data with rationale, tension and confidence cues, practical voicings, playback, and export controls.',
+      },
+      {
+        src: '/projects/progression-lab-ai/public-library.png',
+        alt: 'ProgressionLab public examples library with filters and curated beginner chord progressions',
+        width: 1280,
+        height: 1077,
+        label: 'Examples library',
+        caption: 'Curated starting points and filters help musicians continue from a useful progression instead of beginning with an empty prompt every time.',
+      },
+    ],
+    story: {
+      heading: 'Turning harmonic intent into something a musician can hear, inspect, and keep.',
+      problem:
+        'Music ideas lose momentum when harmonic exploration, playable voicings, audio preview, and export are split across disconnected tools. A generated answer is not enough; the material has to fit a musician’s working process.',
+      contribution:
+        'I designed and built a deployed browser product that joins structured AI generation, music-theory logic, tempo-aware playback, piano and guitar diagrams, progression management, public sharing, and MIDI and PDF export. I also built a separate operational surface for prompts, marketing content, translations, analytics, entitlements, and security controls.',
+      decisions: [
+        {
+          title: 'Constrain model output',
+          detail: 'Strict JSON schemas and deterministic voicing normalization turn generated responses into typed chord, progression, and arrangement data the interface can reliably use.',
+        },
+        {
+          title: 'Keep music interactive',
+          detail: 'Tone.js playback, visual voicings, diagrams, and MIDI-aware exploration keep the experience grounded in sound and performance rather than text alone.',
+        },
+        {
+          title: 'Build the operating controls too',
+          detail: 'Prompt versioning, entitlements, marketing draft and rollback workflows, human-reviewed translation, analytics, WebAuthn, and a separate admin deployment make the product operable beyond one demo flow.',
+        },
+      ],
+    },
+    stack: ['Next.js', 'TypeScript', 'OpenAI Responses API', 'Tone.js', 'Prisma + PostgreSQL', 'WebAuthn'],
+    architecture: {
+      title: 'Playable AI music workspace',
+      summary: 'Musician-facing tools share one typed application boundary, while persistence, prompts, access policy, and operational controls remain behind server-owned interfaces.',
+      groups: [
+        { id: 'creative', label: 'Creative surfaces', detail: 'Hear, inspect, and continue ideas', x: 20, y: 35, width: 225, height: 550 },
+        { id: 'application', label: 'Application + music logic', detail: 'Typed generation and playback boundary', x: 270, y: 35, width: 390, height: 550 },
+        { id: 'operations', label: 'Persistence + operations', detail: 'Access, content, prompts, and telemetry', x: 685, y: 35, width: 295, height: 550 },
+      ],
+      nodes: [
+        { id: 'generator', label: 'Harmony generator', detail: 'Intent, mood, mode, and style', technology: 'Next.js · React', kind: 'surface', x: 45, y: 105, width: 175 },
+        { id: 'explorer', label: 'Chord Explorer', detail: 'MIDI input and harmonic context', technology: 'Web MIDI · Canvas', kind: 'surface', x: 45, y: 260, width: 175 },
+        { id: 'library', label: 'Library + sharing', detail: 'Saved, public, and curated ideas', technology: 'React · App Router', kind: 'surface', x: 45, y: 430, width: 175 },
+        { id: 'api', label: 'Generation API', detail: 'Validation, access, and normalization', technology: 'Next.js route handlers', kind: 'service', x: 300, y: 105, width: 165 },
+        { id: 'ai', label: 'Structured suggestions', detail: 'Chords, voicings, and structure', technology: 'OpenAI · strict schema', kind: 'ai', x: 470, y: 105, width: 165 },
+        { id: 'audio', label: 'Playback engine', detail: 'Tempo-aware chord audition', technology: 'Tone.js', kind: 'runtime', x: 300, y: 270, width: 165 },
+        { id: 'export', label: 'Session exports', detail: 'Portable musical material', technology: 'MIDI · PDF', kind: 'service', x: 470, y: 270, width: 165 },
+        { id: 'theory', label: 'Music-theory model', detail: 'Voicings, diagrams, and inference', technology: 'Typed TypeScript', kind: 'control', x: 385, y: 440, width: 165 },
+        { id: 'postgres', label: 'Product record', detail: 'Users, progressions, and prompts', technology: 'Prisma · PostgreSQL', kind: 'data', x: 715, y: 105, width: 235 },
+        { id: 'admin', label: 'Operations console', detail: 'Prompts, content, pricing, analytics', technology: 'Separate Next.js app', kind: 'surface', x: 715, y: 245, width: 235 },
+        { id: 'access', label: 'Identity + entitlement', detail: 'Protected actions and security keys', technology: 'Sessions · WebAuthn', kind: 'control', x: 715, y: 385, width: 235 },
+        { id: 'telemetry', label: 'Operational telemetry', detail: 'Errors, usage, and funnel events', technology: 'Sentry · server events', kind: 'integration', x: 715, y: 505, width: 235 },
+      ],
+      edges: [
+        { from: 'generator', to: 'api' }, { from: 'explorer', to: 'theory' },
+        { from: 'library', to: 'api' }, { from: 'api', to: 'ai' },
+        { from: 'api', to: 'theory' }, { from: 'theory', to: 'audio' },
+        { from: 'theory', to: 'export' }, { from: 'api', to: 'postgres' },
+        { from: 'api', to: 'access' }, { from: 'admin', to: 'postgres' },
+        { from: 'admin', to: 'ai', label: 'prompts' }, { from: 'library', to: 'postgres' },
+        { from: 'api', to: 'telemetry', dashed: true }, { from: 'admin', to: 'telemetry', dashed: true },
+      ],
+    },
+    maturity: 'production',
+    sourceId: 'portfolio:source:project:progression-lab-ai',
+    evidence: [
+      {
+        id: 'portfolio:claim:progression-lab-ai:structured-generation',
+        sourceIds: ['portfolio:source:project:progression-lab-ai'],
+        text: 'Turns normalized musical inputs into typed chord, voicing, progression, and song-structure suggestions using strict structured output and versioned prompt fallback behavior.',
+        strength: 'strong', maturity: 'production', limitations: ['Generated suggestions remain creative inputs for the musician to assess.'], reviewState: 'approved', publicApproved: true,
+      },
+      {
+        id: 'portfolio:claim:progression-lab-ai:playable-workflow',
+        sourceIds: ['portfolio:source:project:progression-lab-ai'],
+        text: 'Connects browser playback and piano or guitar diagrams to saved progressions, public sharing, and MIDI and PDF export.',
+        strength: 'strong', maturity: 'production', limitations: ['Some saved and export actions require authentication and plan entitlement.'], reviewState: 'approved', publicApproved: true,
+      },
+      {
+        id: 'portfolio:claim:progression-lab-ai:operational-controls',
+        sourceIds: ['portfolio:source:project:progression-lab-ai'],
+        text: 'Separates musician-facing workflows from admin controls for prompt versions, marketing content, translation drafts, pricing configuration, and funnel analytics.',
+        strength: 'strong', maturity: 'production', limitations: ['Operational tooling does not establish adoption or commercial performance.'], reviewState: 'approved', publicApproved: true,
+      },
+    ],
+    boundaries: [
+      'The public product is deployed, but user count, revenue, retention, conversion, and production-scale usage have not been independently established.',
+      'AI suggestions support musical exploration; they do not establish musical correctness or replace the musician’s judgment.',
+    ],
+    repositoryUrl: 'https://github.com/carlwelchdesign/progression-lab-ai',
+    liveUrl: 'https://progressionlab.app',
+  },
 ];
 
 export type ExperienceRole = {

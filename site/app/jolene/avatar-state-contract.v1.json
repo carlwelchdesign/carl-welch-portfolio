@@ -1,112 +1,34 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "2.0.0",
   "contractName": "jolene.avatar-state",
   "initialState": "idle",
   "fallbackState": "idle",
-  "states": [
-    "idle",
-    "blink",
-    "greet",
-    "excited",
-    "listen",
-    "think",
-    "speak",
-    "evidence",
-    "boundary",
-    "offline",
-    "rest"
-  ],
+  "states": ["idle", "blink", "greet", "excited", "listen", "think", "speak", "evidence", "boundary", "offline", "rest"],
   "definitions": {
-    "idle": {
-      "frames": ["idle-0", "idle-1", "idle-2", "idle-3", "idle-2", "idle-1", "idle-0", "blink-1", "blink-2", "blink-1", "idle-0"],
-      "durationsMs": [600, 320, 280, 360, 280, 320, 700, 70, 85, 70, 600],
-      "loop": true,
-      "returnState": null,
-      "reducedMotionFrame": "idle-0"
-    },
-    "blink": {
-      "frames": ["idle-0", "blink-1", "blink-2", "blink-1", "idle-0"],
-      "durationsMs": [80, 70, 90, 70, 120],
-      "loop": false,
-      "returnState": "idle",
-      "reducedMotionFrame": "idle-0"
-    },
-    "greet": {
-      "frames": ["greet-wave"],
-      "durationsMs": [1000],
-      "loop": false,
-      "returnState": "idle",
-      "reducedMotionFrame": "greet-wave"
-    },
-    "excited": {
-      "frames": ["excited-0"],
-      "durationsMs": [1000],
-      "loop": true,
-      "returnState": null,
-      "reducedMotionFrame": "excited-0"
-    },
-    "listen": {
-      "frames": ["listen-0"],
-      "durationsMs": [1000],
-      "loop": true,
-      "returnState": null,
-      "reducedMotionFrame": "listen-0"
-    },
-    "think": {
-      "frames": ["think-dance-a", "think-dance-b"],
-      "durationsMs": [230, 230],
-      "loop": true,
-      "returnState": null,
-      "reducedMotionFrame": "think-dance-a"
-    },
-    "speak": {
-      "frames": ["speak-0"],
-      "durationsMs": [1000],
-      "loop": true,
-      "returnState": null,
-      "reducedMotionFrame": "speak-0"
-    },
-    "evidence": {
-      "frames": ["evidence-2"],
-      "durationsMs": [620],
-      "loop": false,
-      "returnState": "idle",
-      "reducedMotionFrame": "evidence-2"
-    },
-    "boundary": {
-      "frames": ["boundary-0"],
-      "durationsMs": [1000],
-      "loop": true,
-      "returnState": null,
-      "reducedMotionFrame": "boundary-0"
-    },
-    "offline": {
-      "frames": ["offline-0"],
-      "durationsMs": [1000],
-      "loop": true,
-      "returnState": null,
-      "reducedMotionFrame": "offline-0"
-    },
-    "rest": {
-      "frames": ["rest-0"],
-      "durationsMs": [1200],
-      "loop": true,
-      "returnState": null,
-      "reducedMotionFrame": "rest-0"
-    }
+    "idle": { "frames": ["idle-0"], "durationsMs": [1000], "loop": true, "returnState": null, "reducedMotionFrame": "idle-0" },
+    "blink": { "frames": ["blink-0"], "durationsMs": [120], "loop": false, "returnState": "idle", "reducedMotionFrame": "idle-0" },
+    "greet": { "frames": ["greet-0"], "durationsMs": [700], "loop": false, "returnState": "idle", "reducedMotionFrame": "greet-0" },
+    "excited": { "frames": ["excited-0"], "durationsMs": [1000], "loop": true, "returnState": null, "reducedMotionFrame": "excited-0" },
+    "listen": { "frames": ["listen-0", "listen-1", "listen-2"], "durationsMs": [460, 220, 460], "loop": true, "returnState": null, "reducedMotionFrame": "listen-0" },
+    "think": { "frames": ["think-0"], "durationsMs": [1000], "loop": true, "returnState": null, "reducedMotionFrame": "think-0" },
+    "speak": { "frames": ["speak-0", "speak-1", "speak-2"], "durationsMs": [360, 90, 360], "loop": true, "returnState": null, "reducedMotionFrame": "speak-0" },
+    "evidence": { "frames": ["evidence-0", "evidence-1", "evidence-2", "evidence-3"], "durationsMs": [160, 180, 300, 360], "loop": false, "returnState": "idle", "reducedMotionFrame": "evidence-0" },
+    "boundary": { "frames": ["boundary-0", "boundary-1", "boundary-2"], "durationsMs": [420, 260, 420], "loop": true, "returnState": null, "reducedMotionFrame": "boundary-0" },
+    "offline": { "frames": ["offline-0", "offline-1", "offline-2"], "durationsMs": [520, 300, 520], "loop": true, "returnState": null, "reducedMotionFrame": "offline-0" },
+    "rest": { "frames": ["rest-0"], "durationsMs": [1000], "loop": true, "returnState": null, "reducedMotionFrame": "rest-0" }
   },
   "transitions": {
     "idle": ["blink", "greet", "excited", "listen", "think", "speak", "evidence", "boundary", "offline", "rest"],
-    "blink": ["idle", "excited", "offline"],
-    "greet": ["idle", "excited", "listen", "offline"],
-    "excited": ["idle", "listen", "think", "offline"],
-    "listen": ["idle", "excited", "think", "offline"],
-    "think": ["idle", "excited", "speak", "boundary", "offline"],
-    "speak": ["idle", "excited", "evidence", "boundary", "offline"],
-    "evidence": ["idle", "excited", "speak", "offline"],
-    "boundary": ["idle", "excited", "listen", "offline"],
-    "offline": ["idle", "excited"],
-    "rest": ["idle", "greet", "excited", "offline"]
+    "blink": ["idle", "greet", "excited", "listen", "think", "speak", "evidence", "boundary", "offline", "rest"],
+    "greet": ["idle", "blink", "excited", "listen", "think", "speak", "evidence", "boundary", "offline", "rest"],
+    "excited": ["idle", "blink", "greet", "listen", "think", "speak", "evidence", "boundary", "offline", "rest"],
+    "listen": ["idle", "blink", "greet", "excited", "think", "speak", "evidence", "boundary", "offline", "rest"],
+    "think": ["idle", "blink", "greet", "excited", "listen", "speak", "evidence", "boundary", "offline", "rest"],
+    "speak": ["idle", "blink", "greet", "excited", "listen", "think", "evidence", "boundary", "offline", "rest"],
+    "evidence": ["idle", "blink", "greet", "excited", "listen", "think", "speak", "boundary", "offline", "rest"],
+    "boundary": ["idle", "blink", "greet", "excited", "listen", "think", "speak", "evidence", "offline", "rest"],
+    "offline": ["idle", "blink", "greet", "excited", "listen", "think", "speak", "evidence", "boundary", "rest"],
+    "rest": ["idle", "blink", "greet", "excited", "listen", "think", "speak", "evidence", "boundary", "offline"]
   },
   "signals": {
     "intro_started": "greet",
@@ -125,19 +47,27 @@
   "interruption": {
     "alwaysInterruptFor": ["offline"],
     "settleBeforeTransition": ["blink", "greet", "evidence"],
-    "maximumSettleMs": 600
+    "maximumSettleMs": 1000
   },
   "rendering": {
-    "masterPath": "/jolene/sprites/rig-base-v2.png?v=83aecc00ed86",
+    "sheetPath": "/jolene/v1-static-sheet/jolene-v1-static-sheet.png",
+    "fallbackPath": "/jolene/v1-static-sheet/idle-fallback.png",
     "frameCatalogPath": "/app/jolene/avatar-frame-catalog.v1.json",
-    "masterSha256": "83aecc00ed864b9d8864464901a33581a2cf3672885c3816a49fc877b53b9cc4",
-    "frameWidth": 320,
-    "frameHeight": 460,
-    "anchor": { "x": 160, "y": 448 },
+    "sheetSha256": "d439231dd156a08a862992f1ba16bb1a192be1577d5047b193b024ab26444d0e",
+    "frameWidth": 105,
+    "frameHeight": 115,
+    "columns": 22,
     "staticFallbackFrame": "idle-0",
     "imageSmoothing": false,
     "aspectRatioLocked": true
   },
+  "blink": {
+    "onlyWhileState": "idle",
+    "minimumIntervalMs": 4000,
+    "maximumIntervalMs": 7000,
+    "durationMs": 120
+  },
+  "inactivity": { "restAfterMs": 20000 },
   "reducedMotion": {
     "animate": false,
     "useStateRepresentativeFrame": true,

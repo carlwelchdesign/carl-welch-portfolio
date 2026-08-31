@@ -1,229 +1,35 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "2.0.0",
   "contractName": "jolene.avatar-frame-catalog",
-  "frameWidth": 320,
-  "frameHeight": 460,
-  "anchor": {
-    "x": 160,
-    "y": 448
-  },
+  "sheetPath": "/jolene/v1-static-sheet/jolene-v1-static-sheet.png",
+  "fallbackPath": "/jolene/v1-static-sheet/idle-fallback.png",
+  "frameWidth": 105,
+  "frameHeight": 115,
+  "columns": 22,
   "imageRendering": "pixelated",
   "frames": {
-    "idle-0": {
-      "assetPath": "/jolene/approved-animation/idle-rest.png",
-      "state": "idle",
-      "translateX": 0,
-      "translateY": 0,
-      "rotateDeg": 0,
-      "scale": 1,
-      "transformOrigin": "160px 448px"
-    },
-    "idle-1": {
-      "assetPath": "/jolene/approved-animation/idle-inhale.png",
-      "state": "idle",
-      "translateX": 0,
-      "translateY": 0,
-      "rotateDeg": 0,
-      "scale": 1,
-      "transformOrigin": "160px 448px"
-    },
-    "idle-2": {
-      "assetPath": "/jolene/approved-animation/idle-rise.png",
-      "state": "idle",
-      "translateX": 0,
-      "translateY": 0,
-      "rotateDeg": 0,
-      "scale": 1,
-      "transformOrigin": "160px 448px"
-    },
-    "idle-3": {
-      "assetPath": "/jolene/approved-animation/idle-peak.png",
-      "state": "idle",
-      "translateX": 0,
-      "translateY": 0,
-      "rotateDeg": 0,
-      "scale": 1,
-      "transformOrigin": "160px 448px"
-    },
-    "blink-1": {
-      "assetPath": "/jolene/approved-animation/blink-half.png",
-      "state": "blink",
-      "translateX": 0,
-      "translateY": 0,
-      "rotateDeg": 0,
-      "scale": 1,
-      "transformOrigin": "160px 448px"
-    },
-    "blink-2": {
-      "assetPath": "/jolene/approved-animation/blink-closed.png",
-      "state": "blink",
-      "translateX": 0,
-      "translateY": 0,
-      "rotateDeg": 0,
-      "scale": 1,
-      "transformOrigin": "160px 448px"
-    },
-    "greet-wave": {
-      "assetPath": "/jolene/approved-animation/greet-wave.png",
-      "state": "greet",
-      "translateX": 0,
-      "translateY": 0,
-      "rotateDeg": 0,
-      "scale": 1,
-      "transformOrigin": "160px 448px"
-    },
-    "excited-0": {
-      "assetPath": "/jolene/sprites/typing-excited-v1.png?v=89b896f51e17",
-      "state": "excited",
-      "translateX": 0,
-      "translateY": 0,
-      "rotateDeg": 0,
-      "scale": 1,
-      "transformOrigin": "160px 448px"
-    },
-    "excited-1": {
-      "assetPath": "/jolene/sprites/typing-excited-v1.png?v=89b896f51e17",
-      "state": "excited",
-      "translateX": -4,
-      "translateY": 0,
-      "rotateDeg": -1.8,
-      "scale": 1,
-      "transformOrigin": "160px 448px"
-    },
-    "excited-2": {
-      "assetPath": "/jolene/sprites/typing-excited-v1.png?v=89b896f51e17",
-      "state": "excited",
-      "translateX": 3,
-      "translateY": 0,
-      "rotateDeg": 1.6,
-      "scale": 1,
-      "transformOrigin": "160px 448px"
-    },
-    "excited-3": {
-      "assetPath": "/jolene/sprites/typing-excited-v1.png?v=89b896f51e17",
-      "state": "excited",
-      "translateX": -2,
-      "translateY": 0,
-      "rotateDeg": -1.2,
-      "scale": 1,
-      "transformOrigin": "160px 448px"
-    },
-    "listen-0": {
-      "assetPath": "/jolene/sprites/rig-base-v2.png?v=83aecc00ed86",
-      "state": "listen",
-      "translateX": 0,
-      "translateY": 0,
-      "rotateDeg": 0,
-      "scale": 1,
-      "transformOrigin": "160px 448px"
-    },
-    "think-dance-a": {
-      "assetPath": "/jolene/approved-animation/loading-dance-a.png",
-      "state": "think",
-      "translateX": 0,
-      "translateY": 0,
-      "rotateDeg": 0,
-      "scale": 1,
-      "transformOrigin": "160px 448px"
-    },
-    "think-dance-b": {
-      "assetPath": "/jolene/approved-animation/loading-dance-b.png",
-      "state": "think",
-      "translateX": 0,
-      "translateY": 0,
-      "rotateDeg": 0,
-      "scale": 1,
-      "transformOrigin": "160px 448px"
-    },
-    "speak-0": {
-      "assetPath": "/jolene/sprites/rig-base-v2.png?v=83aecc00ed86",
-      "state": "speak",
-      "translateX": 0,
-      "translateY": 0,
-      "rotateDeg": 0,
-      "scale": 1,
-      "transformOrigin": "160px 448px"
-    },
-    "speak-1": {
-      "assetPath": "/jolene/sprites/rig-base-v2.png?v=83aecc00ed86",
-      "state": "speak",
-      "translateX": 1,
-      "translateY": -1,
-      "rotateDeg": 0.2,
-      "scale": 1.002,
-      "transformOrigin": "160px 448px"
-    },
-    "speak-2": {
-      "assetPath": "/jolene/sprites/rig-base-v2.png?v=83aecc00ed86",
-      "state": "speak",
-      "translateX": -1,
-      "translateY": -2,
-      "rotateDeg": -0.2,
-      "scale": 1.004,
-      "transformOrigin": "160px 448px"
-    },
-    "evidence-0": {
-      "assetPath": "/jolene/approved-animation/evidence-point.png?v=11318b4e49e2",
-      "state": "evidence",
-      "translateX": 0,
-      "translateY": 0,
-      "rotateDeg": 0,
-      "scale": 1,
-      "transformOrigin": "160px 448px"
-    },
-    "evidence-1": {
-      "assetPath": "/jolene/approved-animation/evidence-point.png?v=11318b4e49e2",
-      "state": "evidence",
-      "translateX": 2,
-      "translateY": -1,
-      "rotateDeg": 0.25,
-      "scale": 1,
-      "transformOrigin": "160px 448px"
-    },
-    "evidence-2": {
-      "assetPath": "/jolene/approved-animation/evidence-point.png?v=11318b4e49e2",
-      "state": "evidence",
-      "translateX": 3,
-      "translateY": -2,
-      "rotateDeg": 0.4,
-      "scale": 1.003,
-      "transformOrigin": "160px 448px"
-    },
-    "boundary-0": {
-      "assetPath": "/jolene/sprites/rig-base-v2.png?v=83aecc00ed86",
-      "state": "boundary",
-      "translateX": 0,
-      "translateY": 0,
-      "rotateDeg": 0,
-      "scale": 1,
-      "transformOrigin": "160px 448px"
-    },
-    "offline-0": {
-      "assetPath": "/jolene/sprites/rig-base-v2.png?v=83aecc00ed86",
-      "state": "offline",
-      "translateX": 0,
-      "translateY": 0,
-      "rotateDeg": 0,
-      "scale": 1,
-      "transformOrigin": "160px 448px"
-    },
-    "rest-0": {
-      "assetPath": "/jolene/sprites/rig-base-v2.png?v=83aecc00ed86",
-      "state": "rest",
-      "translateX": 0,
-      "translateY": 0,
-      "rotateDeg": 0,
-      "scale": 1,
-      "transformOrigin": "160px 448px"
-    },
-    "rest-1": {
-      "assetPath": "/jolene/sprites/rig-base-v2.png?v=83aecc00ed86",
-      "state": "rest",
-      "translateX": 0,
-      "translateY": 1,
-      "rotateDeg": -0.15,
-      "scale": 0.998,
-      "transformOrigin": "160px 448px"
-    }
+    "idle-0": { "index": 0, "pose": "idle", "state": "idle" },
+    "blink-0": { "index": 1, "pose": "blink", "state": "blink" },
+    "greet-0": { "index": 2, "pose": "greet", "state": "greet" },
+    "listen-0": { "index": 3, "pose": "listen", "state": "listen" },
+    "think-0": { "index": 3, "pose": "attentive", "state": "think" },
+    "legacy-speak-0": { "index": 4, "pose": "legacy-speak", "state": "speak" },
+    "speak-0": { "index": 11, "pose": "speak", "state": "speak" },
+    "evidence-0": { "index": 5, "pose": "evidence", "state": "evidence" },
+    "boundary-0": { "index": 6, "pose": "boundary", "state": "boundary" },
+    "listen-1": { "index": 9, "pose": "listen", "state": "listen" },
+    "listen-2": { "index": 10, "pose": "listen", "state": "listen" },
+    "speak-1": { "index": 12, "pose": "speak", "state": "speak" },
+    "speak-2": { "index": 13, "pose": "speak", "state": "speak" },
+    "evidence-1": { "index": 14, "pose": "evidence", "state": "evidence" },
+    "evidence-2": { "index": 15, "pose": "evidence", "state": "evidence" },
+    "evidence-3": { "index": 16, "pose": "evidence", "state": "evidence" },
+    "boundary-1": { "index": 17, "pose": "boundary", "state": "boundary" },
+    "boundary-2": { "index": 18, "pose": "boundary", "state": "boundary" },
+    "offline-0": { "index": 19, "pose": "offline", "state": "offline" },
+    "offline-1": { "index": 20, "pose": "offline", "state": "offline" },
+    "offline-2": { "index": 21, "pose": "offline", "state": "offline" },
+    "rest-0": { "index": 7, "pose": "rest", "state": "rest" },
+    "excited-0": { "index": 8, "pose": "typing-peek", "state": "excited" }
   }
 }

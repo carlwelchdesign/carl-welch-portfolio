@@ -214,6 +214,15 @@ assert(
   'Supraconscious Avatar AI must retain the current public product gallery.',
 );
 assert(projects.find((project) => project.slug === 'argent-matchmaking')?.gallery.length >= 3, 'Argent Matchmaking must retain its product-system, direction, and environment views.');
+const progressionLab = projects.find((project) => project.slug === 'progression-lab-ai');
+assert.equal(progressionLab?.maturity, 'production', 'ProgressionLab must retain its deployed product boundary.');
+assert.equal(progressionLab?.liveUrl, 'https://progressionlab.app', 'ProgressionLab must retain its public product URL.');
+assert.equal(progressionLab?.image.src, '/projects/progression-lab-ai/generator.png', 'ProgressionLab must lead with the live generator capture.');
+assert(progressionLab?.gallery.length >= 2, 'ProgressionLab must retain its generated-result and public-library product tour.');
+assert(
+  progressionLab?.boundaries.some((boundary) => boundary.includes('user count, revenue, retention, conversion')),
+  'ProgressionLab must retain its adoption and commercial-performance boundary.',
+);
 
 for (const capability of capabilities) {
   if (capability.evidence.length < 2) throw new Error(`${capability.name} does not contain enough supporting evidence.`);
