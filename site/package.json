@@ -45,7 +45,7 @@
     "build:jolene-avatar-review": "node scripts/build-jolene-avatar-review.mjs",
     "check:jolene-avatar-review": "node scripts/build-jolene-avatar-review.mjs --check",
     "check:jolene-avatar-renderer": "node scripts/check-jolene-avatar-renderer.mjs",
-    "check:jolene-avatar-faces": "python3 scripts/check-jolene-avatar-face-consistency.py",
+    "check:jolene-avatar-faces": "node scripts/check-jolene-avatar-face-consistency.mjs",
     "build:jolene-approved-runtime": "node scripts/stage-jolene-approved-runtime-assets.mjs",
     "check:jolene-approved-runtime": "node scripts/stage-jolene-approved-runtime-assets.mjs --check",
     "build:jolene-greet-review": "node scripts/build-jolene-greet-v2-review.mjs",
