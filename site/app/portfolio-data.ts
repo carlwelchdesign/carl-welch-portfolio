@@ -785,6 +785,164 @@ export const projects: PortfolioProject[] = [
     ],
     repositoryUrl: 'https://github.com/carlwelchdesign/matchmaker-ai',
   },
+  {
+    slug: 'jolene-ai',
+    name: 'Jolene AI',
+    category: 'AI agents / Knowledge systems',
+    status: 'Private local agent with a deployed public delegate',
+    tone: 'green',
+    number: '06',
+    summary:
+      'A governed AI system I designed to combine useful model reasoning with reviewed evidence, durable memory, explicit action boundaries, and a warm, recognizable personality.',
+    role: 'Product architect and lead builder',
+    scope: 'Product direction, agent architecture, evidence design, personality research, implementation, evaluation, and release governance',
+    image: {
+      src: '/jolene/jolene-country-host-master.png',
+      alt: 'Jolene AI character portrait used for Carl Welch’s personal chief-of-staff agent',
+      width: 1162,
+      height: 1353,
+    },
+    galleryTitle: 'One agent, deliberately separated surfaces',
+    gallerySummary:
+      'The project is defined less by a single screen than by the boundaries between Carl’s private assistant, Slack, governed evidence, the public portfolio delegate, and separately authorized actions.',
+    gallery: [
+      {
+        src: '/jolene/approved-animation/idle-rest.png',
+        alt: 'Jolene AI character portrait used throughout Carl Welch’s governed assistant project',
+        width: 320,
+        height: 460,
+        label: 'Jolene’s identity',
+        caption: 'A recognizable character gives the assistant continuity across local, Slack, and public surfaces while policy and evidence remain shared underneath.',
+        layout: 'portrait',
+      },
+    ],
+    story: {
+      heading: 'Building an agent that can be useful without becoming careless.',
+      problem:
+        'A personal AI can quickly become a pile of disconnected chats, broad data access, unreliable recollection, and hidden automation. A public portfolio assistant adds another risk: it must know enough to be helpful without becoming a tunnel into private notes, memory, credentials, or tools.',
+      contribution:
+        'I originated Jolene’s product direction and led a multi-agent build spanning the portable agent core, durable task memory, reviewed career evidence, public RAG, Slack delivery, exact-action approvals, Docker runtimes, prompt-injection defenses, release evaluation, and a researched personality system. I kept private and public Jolene as separate deployments with different credentials, stores, and capabilities.',
+      decisions: [
+        {
+          title: 'Separate public knowledge from private memory',
+          detail: 'The portfolio receives a versioned, hash-verified public artifact. It cannot query the private vault, SQLite database, Slack history, MCP tools, or durable memory.',
+        },
+        {
+          title: 'Ground first, style second',
+          detail: 'Retrieval and deterministic validation own the factual answer. Jolene’s warmth, wit, and kindness are rendered afterward and cannot change claims or citations.',
+        },
+        {
+          title: 'Make consequential actions explicit',
+          detail: 'Jolene can prepare work, but external messages and other consequential actions remain disabled or require a separate, exact human authorization.',
+        },
+      ],
+    },
+    stack: ['TypeScript', 'OpenAI', 'SQLite', 'Docker', 'Slack', 'Vercel'],
+    architecture: {
+      title: 'Private chief of staff and isolated public delegate',
+      summary: 'One portable policy core serves bounded adapters, while public evidence, private memory, and release operations remain separate trust zones.',
+      groups: [
+        { id: 'private', label: 'Private Jolene', detail: 'Carl-owned local trust zone', x: 20, y: 35, width: 285, height: 550 },
+        { id: 'public', label: 'Public portfolio delegate', detail: 'Public-safe read-only trust zone', x: 330, y: 35, width: 360, height: 550 },
+        { id: 'ops', label: 'Release and operations', detail: 'Explicit promotion gates', x: 715, y: 35, width: 265, height: 550 },
+      ],
+      nodes: [
+        { id: 'local', label: 'Local control center', detail: 'Tasks, memory, approvals, reviews', technology: 'TypeScript · HTTP', kind: 'surface', x: 45, y: 105, width: 235 },
+        { id: 'slack', label: 'Owner Slack', detail: 'Verified DM and explicit mentions', technology: 'Socket Mode', kind: 'integration', x: 45, y: 250, width: 235 },
+        { id: 'approvals', label: 'Action approvals', detail: 'Exact intent, recipient, content, expiry', technology: 'Policy gate', kind: 'control', x: 45, y: 380, width: 235 },
+        { id: 'private-store', label: 'Private state', detail: 'Memory, tasks, evidence, audit', technology: 'SQLite · Obsidian retrieval', kind: 'data', x: 45, y: 495, width: 235 },
+        { id: 'bff', label: 'Portfolio BFF', detail: 'Same-origin browser boundary', technology: 'Next.js · server-only token', kind: 'service', x: 360, y: 105, width: 300 },
+        { id: 'delegate', label: 'Public Jolene', detail: 'Bounded answer and job-fit API', technology: 'Vercel · TypeScript', kind: 'ai', x: 360, y: 250, width: 300 },
+        { id: 'corpus', label: 'Reviewed public artifact', detail: 'Versioned claims and revocations', technology: 'Hash-verified JSON', kind: 'data', x: 360, y: 420, width: 300 },
+        { id: 'model', label: 'Grounded synthesis', detail: 'Structured response, no public tools', technology: 'OpenAI Responses API', kind: 'ai', x: 745, y: 105, width: 205 },
+        { id: 'coordination', label: 'Shared controls', detail: 'Rate, budget, audit, telemetry', technology: 'Redis-compatible REST', kind: 'control', x: 745, y: 250, width: 205 },
+        { id: 'release', label: 'Release gates', detail: 'Eval, preview, promotion, rollback', technology: 'CI · Vercel', kind: 'control', x: 745, y: 420, width: 205 },
+      ],
+      edges: [
+        { from: 'local', to: 'private-store', bidirectional: true },
+        { from: 'slack', to: 'local', bidirectional: true },
+        { from: 'local', to: 'approvals' },
+        { from: 'approvals', to: 'slack', dashed: true, label: 'authorized action' },
+        { from: 'bff', to: 'delegate' },
+        { from: 'delegate', to: 'corpus' },
+        { from: 'delegate', to: 'model', label: 'grounded prompt' },
+        { from: 'delegate', to: 'coordination', bidirectional: true },
+        { from: 'release', to: 'delegate', dashed: true, label: 'promote' },
+        { from: 'private-store', to: 'corpus', dashed: true, label: 'reviewed export only' },
+        { from: 'release', to: 'bff', dashed: true, label: 'portfolio release' },
+      ],
+    },
+    maturity: 'deployed_demo',
+    sourceId: 'portfolio:source:project:jolene-ai',
+    evidence: [
+      {
+        id: 'portfolio:claim:jolene-ai:architecture', sourceIds: ['portfolio:source:project:jolene-ai'],
+        text: 'Carl designed Jolene as one portable agent core behind private local, Slack, scheduled-work, and public portfolio adapters, while keeping the public delegate physically separated from private memory and tools.',
+        strength: 'moderate', maturity: 'deployed_demo', limitations: ['The public delegate is intentionally less capable than private Jolene.'], reviewState: 'approved', publicApproved: true,
+      },
+      {
+        id: 'portfolio:claim:jolene-ai:model', sourceIds: ['portfolio:source:project:jolene-ai'],
+        text: 'Uses OpenAI for grounded answer synthesis through the Responses API, with structured outputs, bounded time and token budgets, no model tools on the public path, and deterministic validation before an answer can be shown.',
+        strength: 'moderate', maturity: 'deployed_demo', limitations: ['Provider availability and answer quality remain measured release concerns.'], reviewState: 'approved', publicApproved: true,
+      },
+      {
+        id: 'portfolio:claim:jolene-ai:rag', sourceIds: ['portfolio:source:project:jolene-ai'],
+        text: 'Uses hybrid retrieval over only the approved public artifact, combining lexical and semantic ranks in a bounded in-memory index instead of adding a separate vector database for a small corpus.',
+        strength: 'moderate', maturity: 'deployed_demo', limitations: ['The public index cannot search private career evidence or Obsidian notes.'], reviewState: 'approved', publicApproved: true,
+      },
+      {
+        id: 'portfolio:claim:jolene-ai:corpus', sourceIds: ['portfolio:source:project:jolene-ai'],
+        text: 'Exports public career knowledge as a versioned, hash-verified, deny-by-default artifact with review timestamps and revocation continuity; private evidence and raw Obsidian content never enter that artifact.',
+        strength: 'moderate', maturity: 'deployed_demo', limitations: ['Public answers are limited to the currently published artifact.'], reviewState: 'approved', publicApproved: true,
+      },
+      {
+        id: 'portfolio:claim:jolene-ai:security', sourceIds: ['portfolio:source:project:jolene-ai'],
+        text: 'Treats visitor prompts, retrieved notes, imported text, and tool results as untrusted data, applies prompt-injection and disclosure checks, and either keeps public actions read-only or requires Carl to approve the exact action.',
+        strength: 'moderate', maturity: 'deployed_demo', limitations: ['Security tests reduce risk but do not make any model immune to every adversarial input.'], reviewState: 'approved', publicApproved: true,
+      },
+      {
+        id: 'portfolio:claim:jolene-ai:personality', sourceIds: ['portfolio:source:project:jolene-ai'],
+        text: 'Carl directed a transcript-backed personality research program that produced a character graph, behavior specification, evaluated runtime bundle, and neutral rollback so warmth, wit, kindness, and candor remain separate from factual grounding.',
+        strength: 'moderate', maturity: 'deployed_demo', limitations: ['Text personality remains under active quality evaluation; voice is future work.'], reviewState: 'approved', publicApproved: true,
+      },
+      {
+        id: 'portfolio:claim:jolene-ai:docker', sourceIds: ['portfolio:source:project:jolene-ai'],
+        text: 'Dockerizes the private runtime as separate API, Slack, and monitoring processes sharing durable SQLite state, while the public delegate uses a different image, state volume, environment, and network boundary.',
+        strength: 'moderate', maturity: 'deployed_demo', limitations: ['The private runtime remains a Carl-owned local service rather than a public product.'], reviewState: 'approved', publicApproved: true,
+      },
+      {
+        id: 'portfolio:claim:jolene-ai:slack', sourceIds: ['portfolio:source:project:jolene-ai'],
+        text: 'Connects through Slack Socket Mode for Carl’s verified owner direct messages and explicit mentions, with channel-aware disclosure policy and a durable delivery ledger that avoids duplicate model calls during retries.',
+        strength: 'moderate', maturity: 'deployed_demo', limitations: ['Shared Slack channels do not receive private-vault retrieval.'], reviewState: 'approved', publicApproved: true,
+      },
+      {
+        id: 'portfolio:claim:jolene-ai:portfolio-bff', sourceIds: ['portfolio:source:project:jolene-ai'],
+        text: 'Connects the portfolio through a same-origin backend-for-frontend that holds the shared bearer token server-side and forwards only bounded public answer, evidence-manifest, and job-fit contracts to an isolated hosted delegate.',
+        strength: 'moderate', maturity: 'deployed_demo', limitations: ['The browser never receives the service bearer token or private runtime access.'], reviewState: 'approved', publicApproved: true,
+      },
+      {
+        id: 'portfolio:claim:jolene-ai:deployment', sourceIds: ['portfolio:source:project:jolene-ai'],
+        text: 'Separates build, evaluation, preview, production promotion, corpus pinning, and rollback proof into distinct release gates instead of treating a successful local check as a production release.',
+        strength: 'moderate', maturity: 'deployed_demo', limitations: ['Future releases still require their own checks and explicit promotion.'], reviewState: 'approved', publicApproved: true,
+      },
+      {
+        id: 'portfolio:claim:jolene-ai:carl-role', sourceIds: ['portfolio:source:project:jolene-ai'],
+        text: 'Carl originated Jolene’s product direction and directed its architecture, evidence policy, personality goals, safety boundaries, implementation priorities, evaluation standards, and release decisions across a multi-agent development process.',
+        strength: 'moderate', maturity: 'deployed_demo', limitations: ['This describes Carl’s direction and contribution without claiming he wrote every generated line unaided.'], reviewState: 'approved', publicApproved: true,
+      },
+      {
+        id: 'portfolio:claim:jolene-ai:limitations', sourceIds: ['portfolio:source:project:jolene-ai'],
+        text: 'Public Jolene cannot read Carl’s private Obsidian vault, private memory, Slack, SQLite, or MCP tools; voice remains future work, and consequential external actions remain disabled or subject to separate human authorization.',
+        strength: 'moderate', maturity: 'deployed_demo', limitations: ['These boundaries are intentional product controls rather than missing public permissions.'], reviewState: 'approved', publicApproved: true,
+      },
+    ],
+    boundaries: [
+      'Public Jolene can use only the reviewed public artifact. It cannot read Carl’s private Obsidian vault, memory, Slack, SQLite database, or MCP tools.',
+      'Voice remains future work, and external messages or other consequential actions remain disabled or subject to separate human authorization.',
+      'The public chat is deployed as a portfolio demonstration; the broader chief-of-staff runtime remains a private local system for Carl.',
+    ],
+    repositoryUrl: 'https://github.com/carlwelchdesign/jolene-ai',
+  },
 ];
 
 export type ExperienceRole = {

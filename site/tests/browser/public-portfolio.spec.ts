@@ -18,6 +18,7 @@ const routes = [
   '/work/wave-factory-essentials',
   '/work/supraconscious-avatar-ai',
   '/work/argent-matchmaking',
+  '/work/jolene-ai',
 ] as const;
 
 const mobileViewports = [
@@ -116,8 +117,8 @@ for (const viewport of mobileViewports) {
 
 test('all return-to-index controls meet the mobile touch-target contract', async ({ page }) => {
   const routeControls = [
-    ['/', '.project-index-return', 5],
-    ['/work', '.project-index-return', 5],
+    ['/', '.project-index-return', 6],
+    ['/work', '.project-index-return', 6],
     ['/archive', '.archive-map-return', 6],
     ['/capabilities', '.capability-index-return', 5],
     ['/experience', '.career-index-return', 11],
@@ -149,8 +150,8 @@ test('all return-to-index controls meet the mobile touch-target contract', async
 
 test('return-to-index controls expose unique contextual names and preserve their destinations', async ({ page }) => {
   const routeControls = [
-    ['/', '.project-index-return', 5, '#work-index'],
-    ['/work', '.project-index-return', 5, '#work-index'],
+    ['/', '.project-index-return', 6, '#work-index'],
+    ['/work', '.project-index-return', 6, '#work-index'],
     ['/archive', '.archive-map-return', 6, '#archive-map'],
     ['/capabilities', '.capability-index-return', 5, '#capability-index'],
     ['/experience', '.career-index-return', 11, '#career-index'],
@@ -459,7 +460,7 @@ test('homepage gives recruiters a synchronized proof summary', async ({ page }) 
 
   const proof = page.getByRole('region', { name: 'Portfolio at a glance' });
   await expect(proof.locator('dt')).toHaveCount(4);
-  await expect(proof.locator('dd')).toHaveText(['20+', '5', '13', '5']);
+  await expect(proof.locator('dd')).toHaveText(['20+', '5', '13', '6']);
   await expect(proof).toContainText('Years across interactive and product work');
   await expect(proof).toContainText('Product engineering roles since 2016');
   await expect(proof).toContainText('Professional recommendations');
@@ -618,6 +619,7 @@ for (const [route, role, scope] of [
   ['/work/wave-factory-essentials', 'Creator and plug-in engineer', 'DSP, plug-in architecture, interface design, and product direction'],
   ['/work/supraconscious-avatar-ai', 'Independent product engineer', 'Product strategy, AI system design, and full-stack implementation'],
   ['/work/argent-matchmaking', 'Product engineer and system designer', 'Product strategy, interface art direction, platform architecture, and implementation'],
+  ['/work/jolene-ai', 'Product architect and lead builder', 'Product direction, agent architecture, evidence design, personality research, implementation, evaluation, and release governance'],
 ] as const) {
   test(`${route} presents recruiter-readable project facts above the fold`, async ({ page }) => {
     await page.setViewportSize({ width: 320, height: 720 });
@@ -640,7 +642,8 @@ for (const [route, nextProject, nextHref] of [
   ['/work/flight-tracker-ai', 'Wave Factory Essentials', '/work/wave-factory-essentials'],
   ['/work/wave-factory-essentials', 'Supraconscious Avatar AI', '/work/supraconscious-avatar-ai'],
   ['/work/supraconscious-avatar-ai', 'Argent Matchmaking', '/work/argent-matchmaking'],
-  ['/work/argent-matchmaking', 'Job Search OS', '/work/job-search-os'],
+  ['/work/argent-matchmaking', 'Jolene AI', '/work/jolene-ai'],
+  ['/work/jolene-ai', 'Job Search OS', '/work/job-search-os'],
 ] as const) {
   test(`${route} continues to the next flagship case study`, async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
@@ -1358,6 +1361,7 @@ test('work index lets recruiters jump to each flagship project', async ({ page }
     ['Wave Factory Essentials', '#work-wave-factory-essentials'],
     ['Supraconscious Avatar AI', '#work-supraconscious-avatar-ai'],
     ['Argent Matchmaking', '#work-argent-matchmaking'],
+    ['Jolene AI', '#work-jolene-ai'],
   ] as const;
 
   await expect(index).toBeVisible();
@@ -1399,6 +1403,7 @@ test('homepage project index supports a complete recruiter scan and return path'
     ['Wave Factory Essentials', '#work-wave-factory-essentials'],
     ['Supraconscious Avatar AI', '#work-supraconscious-avatar-ai'],
     ['Argent Matchmaking', '#work-argent-matchmaking'],
+    ['Jolene AI', '#work-jolene-ai'],
   ] as const;
 
   await expect(index).toBeVisible();
@@ -1499,7 +1504,7 @@ test('server-rendered navigation and content remain available without JavaScript
   await expectCorePageContract(page);
   await expect(page.getByRole('link', { name: 'View selected work' })).toBeVisible();
   const homepageProjectIndex = page.getByRole('navigation', { name: 'Project index' });
-  await expect(homepageProjectIndex.getByRole('link')).toHaveCount(5);
+  await expect(homepageProjectIndex.getByRole('link')).toHaveCount(6);
   await expect(homepageProjectIndex.getByRole('link', { name: /Flight Tracker AI/ })).toHaveAttribute(
     'href',
     '#work-flight-tracker-ai',
@@ -1515,12 +1520,12 @@ test('server-rendered navigation and content remain available without JavaScript
 
   await page.goto('/work');
   const projectIndex = page.getByRole('navigation', { name: 'Project index' });
-  await expect(projectIndex.getByRole('link')).toHaveCount(5);
+  await expect(projectIndex.getByRole('link')).toHaveCount(6);
   await expect(projectIndex.getByRole('link', { name: /Argent Matchmaking/ })).toHaveAttribute(
     'href',
     '#work-argent-matchmaking',
   );
-  await expect(page.locator('.project-index-return')).toHaveCount(5);
+  await expect(page.locator('.project-index-return')).toHaveCount(6);
   await expect(page.locator('#work-argent-matchmaking').getByRole('link', { name: /Project index/ })).toHaveAttribute(
     'href',
     '#work-index',
