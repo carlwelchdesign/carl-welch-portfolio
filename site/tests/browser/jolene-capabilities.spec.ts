@@ -184,16 +184,10 @@ test('country-host cameo appears once, leaves cleanly, and returns only with cha
     await expect(avatar).toHaveAttribute('data-avatar-state', 'idle', { timeout: 1_500 });
 
     const firstPoint = evidence.locator('details.jolene-claim').first();
-    const idleRenderedPixels = await avatar.screenshot();
     await firstPoint.locator(':scope > summary').click();
     await expect(firstPoint).toHaveAttribute('open', '');
     await expect(avatar).toHaveAttribute('data-avatar-state', 'evidence');
     await expect(avatar).toHaveAttribute('data-avatar-frame', 'evidence-2');
-    const pointingRenderedPixels = await avatar.screenshot();
-    expect(
-      Array.from(pointingRenderedPixels),
-      'The Point reaction must visibly replace the idle pixels with the pointing pose.',
-    ).not.toEqual(Array.from(idleRenderedPixels));
     await expect(avatar).toHaveAttribute('data-avatar-state', 'idle', { timeout: 1_500 });
 
     await firstPoint.locator(':scope > summary').click();
@@ -209,6 +203,38 @@ test('country-host cameo appears once, leaves cleanly, and returns only with cha
   await page.reload();
   await page.waitForTimeout(1_000);
   await expect(cameo).toHaveCount(0);
+});
+
+test('opening an evidence Point visibly renders Dolly pointing', async ({ page }) => {
+  test.skip(scenario !== 'success' || contactIntentEnabled, 'Runs once in the canonical success configuration.');
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.addInitScript(() => window.sessionStorage.setItem('jolene-country-host-intro-seen-v1', 'true'));
+  await page.goto('/');
+  await page.getByRole('button', { name: /Ask Jolene/ }).click();
+
+  const panel = page.getByRole('dialog', { name: 'Ask Jolene' });
+  const avatar = panel.locator('.jolene-avatar');
+  const question = panel.getByLabel('Ask about Carl’s work or experience');
+  await question.fill('Which project best shows Carl’s product engineering work?');
+  await panel.getByRole('button', { name: 'Ask Jolene', exact: true }).click();
+  await expect(avatar).toHaveAttribute('data-avatar-state', 'idle');
+
+  const evidence = panel.locator('details.jolene-evidence').last();
+  await evidence.locator(':scope > summary').click();
+  await expect(avatar).toHaveAttribute('data-avatar-state', 'evidence');
+  await expect(avatar).toHaveAttribute('data-avatar-state', 'idle', { timeout: 1_500 });
+
+  const idleRenderedPixels = await avatar.screenshot();
+  const firstPoint = evidence.locator('details.jolene-claim').first();
+  await firstPoint.locator(':scope > summary').click();
+  await expect(firstPoint).toHaveAttribute('open', '');
+  await expect(avatar).toHaveAttribute('data-avatar-state', 'evidence');
+  await expect(avatar).toHaveAttribute('data-avatar-frame', 'evidence-2');
+  const pointingRenderedPixels = await avatar.screenshot();
+  expect(
+    Array.from(pointingRenderedPixels),
+    'The Point reaction must visibly replace the idle pixels with the pointing pose.',
+  ).not.toEqual(Array.from(idleRenderedPixels));
 });
 
 test('pixel avatar stays clear of controls at an iPhone viewport', async ({ page }) => {

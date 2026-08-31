@@ -14,6 +14,12 @@ This repository is private at `https://github.com/carlwelchdesign/carl-welch-por
 
 Direct pushes to `main`, skipped checks, and merging during an unresolved CI outage are prohibited by project policy. An emergency exception requires Carl's explicit approval and a documented follow-up verification run.
 
+## Regression test rule
+
+Every confirmed regression must add or strengthen an automated test that reproduces the observed failure before the fix and passes afterward. A regression is not complete and must not be reported as fixed until that test and the proportionate broader verification suite pass.
+
+The test must assert the failed public behavior or contract boundary. Internal state labels alone are insufficient for visual, interactive, timing-sensitive, caching, or integration regressions; those cases require rendered output, user interaction, network behavior, or end-to-end evidence that would have caught the reported defect. Keep the regression test permanently unless the protected behavior is intentionally removed and that removal is reviewed in the same change.
+
 ## Enforcement boundary
 
 GitHub's enforced branch-protection feature is not available for this private repository on the current account tier. Until Carl approves either a supporting account change or a visibility change, the pull-request and required-check rules above are enforced as an owner policy rather than a GitHub ruleset.
