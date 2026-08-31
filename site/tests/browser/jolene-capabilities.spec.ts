@@ -214,14 +214,20 @@ test('pixel avatar stays clear of controls at an iPhone viewport', async ({ page
   expect(panelBounds!.x + panelBounds!.width).toBeLessThanOrEqual(390);
   expect(closeBounds!.x + closeBounds!.width).toBeLessThanOrEqual(390);
   expect(lastStarterBounds!.x + lastStarterBounds!.width).toBeLessThanOrEqual(avatarBounds!.x);
-  expect(Math.abs(avatarBounds!.y + avatarBounds!.height - formBounds!.y)).toBeLessThanOrEqual(6);
+  const greetTransparentFoot = avatarBounds!.height * (13 / 460);
+  const greetClipDepth = avatarBounds!.y + avatarBounds!.height - formBounds!.y;
+  expect(greetClipDepth).toBeLessThanOrEqual(greetTransparentFoot + 0.25);
+  expect(Math.abs(greetClipDepth - greetTransparentFoot)).toBeLessThanOrEqual(0.5);
 
   await question.fill('Tell me about Carl');
   await expect(avatar).toHaveAttribute('data-avatar-state', 'excited');
   const typingCanvasBounds = await avatar.locator('canvas').boundingBox();
   expect(typingCanvasBounds).not.toBeNull();
   expect(typingCanvasBounds!.width).toBeLessThanOrEqual(avatarBounds!.width + 8);
-  expect(Math.abs(typingCanvasBounds!.y + typingCanvasBounds!.height - formBounds!.y)).toBeLessThanOrEqual(6);
+  const typingTransparentFoot = typingCanvasBounds!.height * (13 / 460);
+  const typingClipDepth = typingCanvasBounds!.y + typingCanvasBounds!.height - formBounds!.y;
+  expect(typingClipDepth).toBeLessThanOrEqual(typingTransparentFoot + 0.25);
+  expect(Math.abs(typingClipDepth - typingTransparentFoot)).toBeLessThanOrEqual(0.5);
   const avatarTopBeforeScroll = (await avatar.boundingBox())!.y;
   await messageScroller.evaluate((element) => { element.scrollTop = element.scrollHeight; });
   await page.waitForTimeout(50);

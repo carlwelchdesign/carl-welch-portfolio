@@ -144,10 +144,13 @@ async function normalizeStandaloneFrame(sourceBytes, state) {
       const boundsWidth = maximumX - minimumX + 1;
       const boundsHeight = maximumY - minimumY + 1;
       const scale = Math.min((targetWidth - 16) / boundsWidth, (targetHeight - 20) / boundsHeight);
+      const visualScale = stateName === 'think' ? 1.1 : 1;
       const drawWidth = Math.max(1, Math.round(boundsWidth * scale));
       const drawHeight = Math.max(1, Math.round(boundsHeight * scale));
-      const destinationX = Math.round(targetAnchor.x - drawWidth / 2);
-      const destinationY = targetAnchor.y - drawHeight;
+      const scaledDrawWidth = Math.max(1, Math.round(drawWidth * visualScale));
+      const scaledDrawHeight = Math.max(1, Math.round(drawHeight * visualScale));
+      const destinationX = Math.round(targetAnchor.x - scaledDrawWidth / 2);
+      const destinationY = stateName === 'think' ? 8 : targetAnchor.y - scaledDrawHeight;
       const frameCanvas = document.createElement('canvas');
       frameCanvas.width = targetWidth;
       frameCanvas.height = targetHeight;
@@ -162,12 +165,23 @@ async function normalizeStandaloneFrame(sourceBytes, state) {
         boundsHeight,
         destinationX,
         destinationY,
-        drawWidth,
-        drawHeight,
+        scaledDrawWidth,
+        scaledDrawHeight,
       );
 
       const framedImage = frameContext.getImageData(0, 0, targetWidth, targetHeight);
       const framedPixels = framedImage.data;
+      if (stateName === 'think') {
+        for (let y = targetAnchor.y; y < targetHeight; y += 1) {
+          for (let x = 0; x < targetWidth; x += 1) {
+            const offset = (y * targetWidth + x) * 4;
+            framedPixels[offset] = 0;
+            framedPixels[offset + 1] = 0;
+            framedPixels[offset + 2] = 0;
+            framedPixels[offset + 3] = 0;
+          }
+        }
+      }
       let removedMattePixel = true;
       while (removedMattePixel) {
         removedMattePixel = false;
@@ -210,8 +224,28 @@ async function normalizeStandaloneFrame(sourceBytes, state) {
 
       const framePixels = framedPixels;
       let opaquePixels = 0;
+      let identityMinimumX = targetWidth;
+      let identityMinimumY = targetHeight;
+      let identityMaximumX = -1;
+      let identityMaximumY = -1;
       for (let pixelIndex = 3; pixelIndex < framePixels.length; pixelIndex += 4) {
         if (framePixels[pixelIndex] > 0) opaquePixels += 1;
+      }
+      for (let pixelIndex = 0; pixelIndex < targetWidth * targetHeight; pixelIndex += 1) {
+        const offset = pixelIndex * 4;
+        if (framePixels[offset + 3] === 0) continue;
+        const x = pixelIndex % targetWidth;
+        const y = Math.floor(pixelIndex / targetWidth);
+        if (y > 140) continue;
+        const red = framePixels[offset];
+        const green = framePixels[offset + 1];
+        const blue = framePixels[offset + 2];
+        const matchesIdentityMass = red > 120 && green > 75 && blue < 135 && red > green * 1.15 && green > blue * 1.2;
+        if (!matchesIdentityMass) continue;
+        identityMinimumX = Math.min(identityMinimumX, x);
+        identityMinimumY = Math.min(identityMinimumY, y);
+        identityMaximumX = Math.max(identityMaximumX, x);
+        identityMaximumY = Math.max(identityMaximumY, y);
       }
       return {
         state: stateName,
@@ -221,7 +255,19 @@ async function normalizeStandaloneFrame(sourceBytes, state) {
         dataUrl: frameCanvas.toDataURL('image/png'),
         opaquePixels,
         sourceBounds: { x: minimumX, y: minimumY, width: boundsWidth, height: boundsHeight },
-        drawBounds: { x: destinationX, y: destinationY, width: drawWidth, height: drawHeight },
+        drawBounds: {
+          x: destinationX,
+          y: stateName === 'think' ? 8 : destinationY,
+          width: scaledDrawWidth,
+          height: stateName === 'think' ? targetAnchor.y - 8 : scaledDrawHeight,
+        },
+        identityBounds: {
+          x: identityMinimumX,
+          y: identityMinimumY,
+          width: identityMaximumX - identityMinimumX + 1,
+          height: identityMaximumY - identityMinimumY + 1,
+        },
+        visualScale,
       };
     }, {
       source: asDataUrl(sourceBytes),
@@ -304,6 +350,8 @@ for (const frame of result.frames) {
     opaquePixels: frame.opaquePixels,
     sourceBounds: frame.sourceBounds,
     drawBounds: frame.drawBounds,
+    identityBounds: frame.identityBounds,
+    visualScale: frame.visualScale,
     removedInteriorMattePixels: frame.removedInteriorMattePixels,
   });
 }
@@ -330,6 +378,8 @@ const manifest = {
       path: '/jolene/review/country-host-loading-dance-v1-source.png',
       sha256: sha256(loadingDanceSourceBytes),
       intent: 'asymmetric bent arms close to chest for the mirrored response-loading dance',
+      visualScale: 1.1,
+      alignment: 'canonical upper-body identity scale with top alignment and y=448 crop',
     },
   ],
   layout: {
@@ -357,6 +407,8 @@ if (checkOnly) {
   assert.equal(new Set(baseOutputs.map(({ sha256: fingerprint }) => fingerprint)).size, 1, 'Base states must share one character identity source.');
   assert.equal(outputs.find(({ state }) => state === 'excited').path, typingExcitedPath, 'Excited state must use the typing pose.');
   assert.equal(outputs.find(({ state }) => state === 'think').path, loadingDancePath, 'Think state must use the loading dance pose.');
+  assert.equal(outputs.find(({ state }) => state === 'think').visualScale, 1.1, 'Think state must preserve the approved upper-body scale correction.');
+  assert.ok(Math.abs(loadingDanceFrame.identityBounds.width - rigBaseFrame.identityBounds.width) <= 14, 'Loading dance head scale drifted from the canonical pose.');
   assert.ok(outputs.every(({ drawBounds }) => drawBounds.y === 8 && drawBounds.height === 440), 'Every pose must keep the shared 440 px character height.');
   assert.ok(outputs.every(({ drawBounds }) => drawBounds.y + drawBounds.height === anchor.y), 'Every pose must meet the shared y=448 baseline.');
   assert.ok(baseOutputs.every(({ removedInteriorMattePixels }) => removedInteriorMattePixels >= 500), 'The enclosed arm-to-body matte was not removed.');

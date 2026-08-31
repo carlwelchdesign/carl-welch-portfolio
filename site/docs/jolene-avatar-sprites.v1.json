@@ -19,7 +19,9 @@
       "state": "think",
       "path": "/jolene/review/country-host-loading-dance-v1-source.png",
       "sha256": "d835fa6a1d1915723d8b62fb14efabb12d6725e5e22ea4ea82456c370d5db806",
-      "intent": "asymmetric bent arms close to chest for the mirrored response-loading dance"
+      "intent": "asymmetric bent arms close to chest for the mirrored response-loading dance",
+      "visualScale": 1.1,
+      "alignment": "canonical upper-body identity scale with top alignment and y=448 crop"
     }
   ],
   "layout": {
@@ -53,6 +55,13 @@
         "width": 278,
         "height": 440
       },
+      "identityBounds": {
+        "x": 55,
+        "y": 9,
+        "width": 212,
+        "height": 132
+      },
+      "visualScale": 1,
       "removedInteriorMattePixels": 7204
     },
     {
@@ -74,6 +83,13 @@
         "width": 278,
         "height": 440
       },
+      "identityBounds": {
+        "x": 55,
+        "y": 9,
+        "width": 212,
+        "height": 132
+      },
+      "visualScale": 1,
       "removedInteriorMattePixels": 7204
     },
     {
@@ -95,6 +111,13 @@
         "width": 278,
         "height": 440
       },
+      "identityBounds": {
+        "x": 55,
+        "y": 9,
+        "width": 212,
+        "height": 132
+      },
+      "visualScale": 1,
       "removedInteriorMattePixels": 7204
     },
     {
@@ -116,6 +139,13 @@
         "width": 270,
         "height": 440
       },
+      "identityBounds": {
+        "x": 74,
+        "y": 9,
+        "width": 214,
+        "height": 132
+      },
+      "visualScale": 1,
       "removedInteriorMattePixels": 2088
     },
     {
@@ -137,15 +167,22 @@
         "width": 278,
         "height": 440
       },
+      "identityBounds": {
+        "x": 55,
+        "y": 9,
+        "width": 212,
+        "height": 132
+      },
+      "visualScale": 1,
       "removedInteriorMattePixels": 7204
     },
     {
       "state": "think",
       "path": "/jolene/sprites/loading-dance-v1.png",
-      "sha256": "4a3e25235f5f9f5e4921964b5fa62dfe3a245c3b66d5e89f7c3ef108350bfb50",
+      "sha256": "36d51dae69c9f2c32008f4845772a2c4625d4ad041406315048943304eaeadf8",
       "width": 320,
       "height": 460,
-      "opaquePixels": 86404,
+      "opaquePixels": 96698,
       "sourceBounds": {
         "x": 50,
         "y": 27,
@@ -153,11 +190,18 @@
         "height": 1442
       },
       "drawBounds": {
-        "x": 15,
+        "x": 1,
         "y": 8,
-        "width": 290,
+        "width": 319,
         "height": 440
       },
+      "identityBounds": {
+        "x": 38,
+        "y": 9,
+        "width": 202,
+        "height": 132
+      },
+      "visualScale": 1.1,
       "removedInteriorMattePixels": 0
     },
     {
@@ -179,6 +223,13 @@
         "width": 278,
         "height": 440
       },
+      "identityBounds": {
+        "x": 55,
+        "y": 9,
+        "width": 212,
+        "height": 132
+      },
+      "visualScale": 1,
       "removedInteriorMattePixels": 7204
     },
     {
@@ -200,6 +251,13 @@
         "width": 278,
         "height": 440
       },
+      "identityBounds": {
+        "x": 55,
+        "y": 9,
+        "width": 212,
+        "height": 132
+      },
+      "visualScale": 1,
       "removedInteriorMattePixels": 7204
     },
     {
@@ -221,6 +279,13 @@
         "width": 278,
         "height": 440
       },
+      "identityBounds": {
+        "x": 55,
+        "y": 9,
+        "width": 212,
+        "height": 132
+      },
+      "visualScale": 1,
       "removedInteriorMattePixels": 7204
     },
     {
@@ -242,6 +307,13 @@
         "width": 278,
         "height": 440
       },
+      "identityBounds": {
+        "x": 55,
+        "y": 9,
+        "width": 212,
+        "height": 132
+      },
+      "visualScale": 1,
       "removedInteriorMattePixels": 7204
     },
     {
@@ -263,6 +335,13 @@
         "width": 278,
         "height": 440
       },
+      "identityBounds": {
+        "x": 55,
+        "y": 9,
+        "width": 212,
+        "height": 132
+      },
+      "visualScale": 1,
       "removedInteriorMattePixels": 7204
     }
   ],

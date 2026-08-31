@@ -15,14 +15,19 @@ const greetWave = await readFile(new URL('../public/jolene/sprites/greet.png', i
 const loadingDance = await readFile(new URL('../public/jolene/sprites/loading-dance-v1.png', import.meta.url));
 
 assert.equal(sha256(idleAtlas), '041692e505323a7d14c96df9b197829814516e661a43191e6aecab402023122c');
+assert.equal(
+  sha256(greetWave),
+  '47b6e47b923e5682497014fbd1e5239ccb5e8a76df3f059ab67ea5b623e879c9',
+  'The approved single-frame wave changed. Preserve the canonical face, eyes, teeth, hair, hand, and alpha exactly.',
+);
 
 const browser = await chromium.launch({ headless: true });
 let idleFrames;
 try {
   const page = await browser.newPage();
-  idleFrames = await page.evaluate(async (source) => {
+  idleFrames = await page.evaluate(async (idleSource) => {
     const image = new Image();
-    image.src = source;
+    image.src = idleSource;
     await image.decode();
     if (image.width !== 3520 || image.height !== 460) throw new Error('Unexpected approved idle atlas dimensions.');
     const frameAt = (index) => {
