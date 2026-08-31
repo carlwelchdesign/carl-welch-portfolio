@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "1.0.0",
+  "status": "approved_for_sprite_production",
+  "approvedBy": "Carl Welch",
+  "approvedAt": "2026-08-28",
+  "source": {
+    "path": "/jolene/review/country-host-selected-direction.png",
+    "sha256": "839ade6ea55a69cf4812a238b05204446576eb7241274a06130276b95d0c17b8",
+    "width": 1162,
+    "height": 1353
+  },
+  "output": {
+    "path": "/jolene/jolene-country-host-master.png",
+    "sha256": "4e437fd64b3997bd834bb2310ed0175e75d9958c27871d4ae3857a18fc82cc6f",
+    "width": 1162,
+    "height": 1353,
+    "hasAlpha": true,
+    "opaquePixels": 684564,
+    "transparentPixels": 887622,
+    "opaqueBounds": {
+      "x": 189,
+      "y": 90,
+      "width": 747,
+      "height": 1169
+    }
+  },
+  "removalPolicy": {
+    "minimumChannel": 238,
+    "maximumChannelSpread": 10,
+    "minimumInteriorComponentPixels": 150,
+    "connectivity": 4
+  },
+  "removedComponents": [
+    {
+      "pixels": 870785,
+      "touchesEdge": true
+    },
+    {
+      "pixels": 342,
+      "touchesEdge": false
+    },
+    {
+      "pixels": 192,
+      "touchesEdge": false
+    },
+    {
+      "pixels": 6432,
+      "touchesEdge": false
+    }
+  ],
+  "matteCleanup": {
+    "strategy": "connected neutral fringe and outer perimeter removed",
+    "removedFringePixels": 4448,
+    "removedPerimeterPixels": 5423
+  },
+  "invariants": {
+    "sourceRgbPreservedForOpaquePixels": true,
+    "sourceDimensionsPreserved": true,
+    "generativeRedesignUsed": false,
+    "approvedForAnimation": true,
+    "approvedForPublicUse": false
+  }
+}

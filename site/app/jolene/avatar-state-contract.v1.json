@@ -1,0 +1,147 @@
+{
+  "schemaVersion": "1.0.0",
+  "contractName": "jolene.avatar-state",
+  "initialState": "idle",
+  "fallbackState": "idle",
+  "states": [
+    "idle",
+    "blink",
+    "greet",
+    "excited",
+    "listen",
+    "think",
+    "speak",
+    "evidence",
+    "boundary",
+    "offline",
+    "rest"
+  ],
+  "definitions": {
+    "idle": {
+      "frames": ["idle-0", "idle-1", "idle-2", "idle-3", "idle-2", "idle-1", "idle-0", "blink-1", "blink-2", "blink-1", "idle-0"],
+      "durationsMs": [600, 320, 280, 360, 280, 320, 700, 70, 85, 70, 600],
+      "loop": true,
+      "returnState": null,
+      "reducedMotionFrame": "idle-0"
+    },
+    "blink": {
+      "frames": ["idle-0", "blink-1", "blink-2", "blink-1", "idle-0"],
+      "durationsMs": [80, 70, 90, 70, 120],
+      "loop": false,
+      "returnState": "idle",
+      "reducedMotionFrame": "idle-0"
+    },
+    "greet": {
+      "frames": ["greet-0", "greet-1", "greet-2", "greet-3", "greet-4", "greet-3", "greet-5", "greet-2", "greet-1", "greet-0"],
+      "durationsMs": [260, 140, 130, 170, 120, 150, 140, 130, 140, 300],
+      "loop": false,
+      "returnState": "idle",
+      "reducedMotionFrame": "greet-3"
+    },
+    "excited": {
+      "frames": ["excited-0"],
+      "durationsMs": [1000],
+      "loop": true,
+      "returnState": null,
+      "reducedMotionFrame": "excited-0"
+    },
+    "listen": {
+      "frames": ["listen-0"],
+      "durationsMs": [1000],
+      "loop": true,
+      "returnState": null,
+      "reducedMotionFrame": "listen-0"
+    },
+    "think": {
+      "frames": ["think-0"],
+      "durationsMs": [1000],
+      "loop": true,
+      "returnState": null,
+      "reducedMotionFrame": "think-0"
+    },
+    "speak": {
+      "frames": ["speak-0"],
+      "durationsMs": [1000],
+      "loop": true,
+      "returnState": null,
+      "reducedMotionFrame": "speak-0"
+    },
+    "evidence": {
+      "frames": ["evidence-2"],
+      "durationsMs": [620],
+      "loop": false,
+      "returnState": "idle",
+      "reducedMotionFrame": "evidence-2"
+    },
+    "boundary": {
+      "frames": ["boundary-0"],
+      "durationsMs": [1000],
+      "loop": true,
+      "returnState": null,
+      "reducedMotionFrame": "boundary-0"
+    },
+    "offline": {
+      "frames": ["offline-0"],
+      "durationsMs": [1000],
+      "loop": true,
+      "returnState": null,
+      "reducedMotionFrame": "offline-0"
+    },
+    "rest": {
+      "frames": ["rest-0"],
+      "durationsMs": [1200],
+      "loop": true,
+      "returnState": null,
+      "reducedMotionFrame": "rest-0"
+    }
+  },
+  "transitions": {
+    "idle": ["blink", "greet", "excited", "listen", "think", "speak", "evidence", "boundary", "offline", "rest"],
+    "blink": ["idle", "excited", "offline"],
+    "greet": ["idle", "excited", "listen", "offline"],
+    "excited": ["idle", "listen", "think", "offline"],
+    "listen": ["idle", "excited", "think", "offline"],
+    "think": ["idle", "excited", "speak", "boundary", "offline"],
+    "speak": ["idle", "excited", "evidence", "boundary", "offline"],
+    "evidence": ["idle", "excited", "speak", "offline"],
+    "boundary": ["idle", "excited", "listen", "offline"],
+    "offline": ["idle", "excited"],
+    "rest": ["idle", "greet", "excited", "offline"]
+  },
+  "signals": {
+    "intro_started": "greet",
+    "chat_opened": "greet",
+    "visitor_typing": "excited",
+    "visitor_input": "listen",
+    "request_started": "think",
+    "answer_started": "speak",
+    "answer_finished": "idle",
+    "evidence_highlighted": "evidence",
+    "cannot_verify": "boundary",
+    "service_unavailable": "offline",
+    "inactive": "rest",
+    "activity_resumed": "idle"
+  },
+  "interruption": {
+    "alwaysInterruptFor": ["offline"],
+    "settleBeforeTransition": ["blink", "greet", "evidence"],
+    "maximumSettleMs": 600
+  },
+  "rendering": {
+    "masterPath": "/jolene/sprites/rig-base-v2.png?v=83aecc00ed86",
+    "frameCatalogPath": "/app/jolene/avatar-frame-catalog.v1.json",
+    "masterSha256": "83aecc00ed864b9d8864464901a33581a2cf3672885c3816a49fc877b53b9cc4",
+    "frameWidth": 320,
+    "frameHeight": 460,
+    "anchor": { "x": 160, "y": 448 },
+    "staticFallbackFrame": "idle-0",
+    "imageSmoothing": false,
+    "aspectRatioLocked": true
+  },
+  "reducedMotion": {
+    "animate": false,
+    "useStateRepresentativeFrame": true,
+    "unsolicitedIntroState": "idle"
+  },
+  "providerIndependent": true
+}

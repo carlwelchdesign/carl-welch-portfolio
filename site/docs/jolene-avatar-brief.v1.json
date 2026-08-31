@@ -1,24 +1,95 @@
 {
   "schemaVersion": "1.0.0",
-  "status": "awaiting_carl_approval",
-  "nativeFrame": { "width": 48, "height": 56 },
-  "occupiedBounds": { "maxWidth": 44, "maxHeight": 54, "edgePadding": 2 },
-  "displayScales": [3, 4],
-  "opaqueColorLimit": 15,
+  "status": "production_master_approved_sprite_work_authorized",
+  "supersededStudyProposal": {
+    "nativeFrame": { "width": 48, "height": 56 },
+    "occupiedBounds": { "maxWidth": 44, "maxHeight": 54, "edgePadding": 2 },
+    "displayScales": [3, 4],
+    "opaqueColorLimit": 15
+  },
   "partialAlphaAllowed": false,
   "requiredStudies": ["cabinet_portrait", "country_host", "glam_close_up", "porch_wave_host"],
   "requiredStates": ["idle", "blink", "greet", "listen", "think", "speak", "evidence", "boundary", "offline"],
   "requiredReviewBackgrounds": ["transparent", "portfolio_light", "portfolio_red", "portfolio_orange", "portfolio_green", "mobile_390x844"],
   "rendering": {
-    "integerScaleOnly": true,
+    "integerScaleOnly": false,
     "cssImageRendering": "pixelated",
     "canvasImageSmoothing": false,
     "staticFallback": "idle",
     "reducedMotionDefault": "idle"
   },
+  "visibility": {
+    "defaultCharacterState": "hidden",
+    "launcherAlwaysAvailable": true,
+    "showCharacterWhileChatOpen": true,
+    "hideCharacterWhenChatClosed": true,
+    "intro": {
+      "sessionFrequency": "once",
+      "greeting": "Howdy, folks!",
+      "startDelayMs": 700,
+      "riseDurationMs": 360,
+      "settleDurationMs": 140,
+      "holdDurationMs": 1300,
+      "exitDurationMs": 300,
+      "hiddenAfterExit": true,
+      "cancelToChatOpen": true,
+      "resumeAfterTabHidden": false,
+      "replayOnRouteChange": false,
+      "replayAfterChatClose": false
+    },
+    "states": [
+      "hidden",
+      "intro_rising",
+      "intro_greeting",
+      "intro_exiting",
+      "launcher_only",
+      "chat_open",
+      "chat_closing"
+    ]
+  },
+  "interaction": {
+    "introAriaHidden": true,
+    "introFocusable": false,
+    "introPointerEvents": "none",
+    "autoAnnounceGreeting": false,
+    "launcherAccessibleName": "Ask Jolene about Carl's work."
+  },
+  "motion": {
+    "transformOnly": true,
+    "layoutShiftAllowed": false,
+    "continuousIdleMotionAllowed": false,
+    "integerDisplayPixels": true,
+    "reducedMotionBehavior": "launcher_only"
+  },
+  "selection": {
+    "selectedDirection": "country_host",
+    "selectedAt": "2026-08-28",
+    "referencePath": "/jolene/review/country-host-selected-direction.png",
+    "referenceSha256": "839ade6ea55a69cf4812a238b05204446576eb7241274a06130276b95d0c17b8",
+    "referenceWidth": 1162,
+    "referenceHeight": 1353,
+    "referenceHasAlpha": false,
+    "bakedCheckerboard": true,
+    "visualDirectionApproved": true,
+    "cleanProductionMasterApproved": true,
+    "cleanProductionMasterApprovedAt": "2026-08-28"
+  },
+  "productionMaster": {
+    "path": "/jolene/jolene-country-host-master.png",
+    "sha256": "4e437fd64b3997bd834bb2310ed0175e75d9958c27871d4ae3857a18fc82cc6f",
+    "frame": { "width": 1162, "height": 1353 },
+    "opaqueBounds": { "x": 189, "y": 90, "width": 747, "height": 1169 },
+    "bottomCenterAnchor": { "x": 563, "y": 1261 },
+    "palettePolicy": "preserve_source_rgb",
+    "alphaPolicy": "binary",
+    "aspectRatioLocked": true
+  },
   "approval": {
-    "masterSelected": false,
-    "productionAuthorized": false,
+    "briefApproved": true,
+    "briefApprovedAt": "2026-08-28",
+    "reviewStudiesAuthorized": true,
+    "masterSelected": true,
+    "productionAuthorized": true,
     "publicUseAuthorized": false
   }
 }

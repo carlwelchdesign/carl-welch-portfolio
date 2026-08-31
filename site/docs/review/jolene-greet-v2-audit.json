@@ -1,0 +1,164 @@
+{
+  "schemaVersion": "1.0.0",
+  "status": "review_only_approved_for_next_integration_gate",
+  "ticket": "PORT-AVATAR-005.7C",
+  "runtimeIntegrationChanged": false,
+  "deploymentAuthorized": false,
+  "qa": {
+    "actualSpeedCyclesReviewed": 5,
+    "native1x": "pass",
+    "exact4x": "pass",
+    "motion": "pass",
+    "identity": "pass",
+    "anatomy": "pass",
+    "alphaAndArtifacts": "pass"
+  },
+  "totalDurationMs": 1680,
+  "schedule": [
+    {
+      "name": "REST",
+      "frame": "rest",
+      "durationMs": 260,
+      "sha256": "a21a02ca80e28ce7c9e816cf9bf6c0ec9afcab8879e53ddcacebf1ee488387ed"
+    },
+    {
+      "name": "EARLY",
+      "frame": "early",
+      "durationMs": 140,
+      "sha256": "a33d7511c8e4dc07531d82dfc405a79bddd57000d45d1f6e2acea2aec08f7489"
+    },
+    {
+      "name": "MID",
+      "frame": "mid",
+      "durationMs": 130,
+      "sha256": "275bac376d15c93ce4ca1c9a7e7db60c520f5fab42880952c9ca0cec09c0d7a4"
+    },
+    {
+      "name": "APEX",
+      "frame": "apex",
+      "durationMs": 170,
+      "sha256": "a4b741620e625e5e25ad1b6f4fa73346dbb4adc4a69413b478b11b715b66b388"
+    },
+    {
+      "name": "SECONDARY",
+      "frame": "secondary",
+      "durationMs": 120,
+      "sha256": "99bbd6cf85ac2ceb9d2d22804369ccad096d5be85bb6dddadb4c64cea24c3043"
+    },
+    {
+      "name": "APEX_REUSE",
+      "frame": "apex",
+      "durationMs": 150,
+      "sha256": "a4b741620e625e5e25ad1b6f4fa73346dbb4adc4a69413b478b11b715b66b388"
+    },
+    {
+      "name": "SETTLE",
+      "frame": "settle",
+      "durationMs": 140,
+      "sha256": "4b17632c258a46a67a5b4131ad9e8cb81534da1a5651a422dc33c5b0ca0e6348"
+    },
+    {
+      "name": "MID_REUSE",
+      "frame": "mid",
+      "durationMs": 130,
+      "sha256": "275bac376d15c93ce4ca1c9a7e7db60c520f5fab42880952c9ca0cec09c0d7a4"
+    },
+    {
+      "name": "EARLY_REUSE",
+      "frame": "early",
+      "durationMs": 140,
+      "sha256": "a33d7511c8e4dc07531d82dfc405a79bddd57000d45d1f6e2acea2aec08f7489"
+    },
+    {
+      "name": "REST_REUSE",
+      "frame": "rest",
+      "durationMs": 300,
+      "sha256": "a21a02ca80e28ce7c9e816cf9bf6c0ec9afcab8879e53ddcacebf1ee488387ed"
+    }
+  ],
+  "sourceFrameSha256": {
+    "rest": "a21a02ca80e28ce7c9e816cf9bf6c0ec9afcab8879e53ddcacebf1ee488387ed",
+    "early": "a33d7511c8e4dc07531d82dfc405a79bddd57000d45d1f6e2acea2aec08f7489",
+    "mid": "275bac376d15c93ce4ca1c9a7e7db60c520f5fab42880952c9ca0cec09c0d7a4",
+    "apex": "a4b741620e625e5e25ad1b6f4fa73346dbb4adc4a69413b478b11b715b66b388",
+    "secondary": "99bbd6cf85ac2ceb9d2d22804369ccad096d5be85bb6dddadb4c64cea24c3043",
+    "settle": "4b17632c258a46a67a5b4131ad9e8cb81534da1a5651a422dc33c5b0ca0e6348"
+  },
+  "frameAudits": {
+    "rest": {
+      "bboxExclusive": [
+        19,
+        8,
+        300,
+        448
+      ],
+      "characterHeight": 440,
+      "nonBinaryAlphaPixels": 0,
+      "transparentRgbPixels": 0
+    },
+    "early": {
+      "bboxExclusive": [
+        19,
+        8,
+        300,
+        448
+      ],
+      "characterHeight": 440,
+      "nonBinaryAlphaPixels": 0,
+      "transparentRgbPixels": 0
+    },
+    "mid": {
+      "bboxExclusive": [
+        19,
+        8,
+        300,
+        448
+      ],
+      "characterHeight": 440,
+      "nonBinaryAlphaPixels": 0,
+      "transparentRgbPixels": 0
+    },
+    "apex": {
+      "bboxExclusive": [
+        19,
+        8,
+        300,
+        448
+      ],
+      "characterHeight": 440,
+      "nonBinaryAlphaPixels": 0,
+      "transparentRgbPixels": 0
+    },
+    "secondary": {
+      "bboxExclusive": [
+        19,
+        8,
+        300,
+        448
+      ],
+      "characterHeight": 440,
+      "nonBinaryAlphaPixels": 0,
+      "transparentRgbPixels": 0
+    },
+    "settle": {
+      "bboxExclusive": [
+        19,
+        8,
+        300,
+        448
+      ],
+      "characterHeight": 440,
+      "nonBinaryAlphaPixels": 0,
+      "transparentRgbPixels": 0
+    }
+  },
+  "exactReverseReuse": {
+    "rest": true,
+    "early": true,
+    "mid": true,
+    "apex": true
+  },
+  "advisoryAccepted": [
+    "Half-open travel hands have lower contour density than the spread-finger apex; specialist native-size visual QA passed without adding artificial stipple."
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "1.0.0",
+  "status": "candidate_pending_carl_approval",
+  "boardPath": "/docs/review/jolene-avatar-state-board.png",
+  "boardSha256": "de877aa70366bb20f80ccae1dec227d09684d05e3294ae49d02881c1b6e26d76",
+  "renderInputSha256": "22d309ad97378dfe20529c4fb43ed0ae6d0a4e0e8d21fa6649a541176f281552",
+  "stateCount": 11,
+  "stateOrder": [
+    "idle",
+    "blink",
+    "greet",
+    "excited",
+    "listen",
+    "think",
+    "speak",
+    "evidence",
+    "boundary",
+    "offline",
+    "rest"
+  ],
+  "primarySequence": [
+    "greet",
+    "excited",
+    "listen",
+    "think",
+    "speak",
+    "evidence",
+    "idle"
+  ],
+  "offlinePresentation": "poised, lightly humorous pause; never sad, angry, or apologetic",
+  "reducedMotion": {
+    "animate": false,
+    "useStateRepresentativeFrame": true,
+    "unsolicitedIntroState": "idle"
+  },
+  "publicUseAuthorized": false
+}

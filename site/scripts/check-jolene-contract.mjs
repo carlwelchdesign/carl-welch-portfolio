@@ -82,6 +82,12 @@ try {
     contract.PUBLIC_JOLENE_LIMITS.answerClaims,
   );
   assert.equal(
+    openApi.components.schemas.PublicConversationContext.properties.turnCount.maximum,
+    contract.PUBLIC_JOLENE_LIMITS.conversationTurns,
+  );
+  assert.ok('conversationContext' in openApi.components.schemas.PortfolioAnswerRequest.properties);
+  assert.ok('conversationContext' in openApi.components.schemas.PortfolioAnswerResponse.properties);
+  assert.equal(
     openApi.components.schemas.JobFitResponse.properties.requirements.maxItems,
     contract.PUBLIC_JOLENE_LIMITS.jobRequirements,
   );
@@ -119,6 +125,54 @@ try {
   assert.equal(answer.corpusVersion, manifest.corpusVersion);
   assert.ok(answer.citations.every((citation) => /^\/work\/[a-z0-9-]+#evidence--portfolio--claim--/.test(citation.href)));
   compatibility.validateResponseAgainstManifest(answer, manifest);
+  const activeContext = {
+    corpusVersion: answer.corpusVersion,
+    projectPath: '/work/jolene-ai',
+    evidenceIds: [answer.citations[0].evidenceId],
+    turnCount: 1,
+    expiresAt: new Date(Date.now() + 15 * 60_000).toISOString(),
+  };
+  assert.deepEqual(
+    validation.parsePortfolioAnswerRequest({
+      question: 'What about its security?',
+      conversationContext: activeContext,
+    }).conversationContext,
+    activeContext,
+  );
+  assert.deepEqual(
+    validation.parsePortfolioAnswerResponse({
+      ...answer,
+      conversationContext: activeContext,
+    }).conversationContext,
+    activeContext,
+  );
+  assert.deepEqual(validation.activePublicConversationContext(activeContext), activeContext);
+  assert.equal(
+    validation.activePublicConversationContext({
+      ...activeContext,
+      expiresAt: new Date(Date.now() - 1_000).toISOString(),
+    }),
+    undefined,
+  );
+  assert.throws(
+    () => validation.parsePortfolioAnswerRequest({
+      question: 'What about it?',
+      conversationContext: { ...activeContext, transcript: 'must not pass' },
+    }),
+    (error) => error instanceof validation.PublicJoleneContractError &&
+      error.path === 'answerRequest.conversationContext',
+  );
+  assert.throws(
+    () => validation.parsePortfolioAnswerResponse({
+      ...answer,
+      conversationContext: {
+        ...activeContext,
+        corpusVersion: `career:${'f'.repeat(64)}`,
+      },
+    }),
+    (error) => error instanceof validation.PublicJoleneContractError &&
+      error.path === 'answerResponse.conversationContext.corpusVersion',
+  );
 
   const additiveAnswer = structuredClone(answer);
   additiveAnswer.schemaVersion = '1.1.0';

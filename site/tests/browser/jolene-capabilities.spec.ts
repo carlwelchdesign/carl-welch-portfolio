@@ -44,11 +44,9 @@ test(`returned ${scenario === 'unavailable' ? 'error' : 'answer'} keeps keyboard
   await page.getByRole('button', { name: /Ask Jolene/ }).click();
 
   const panel = page.getByRole('dialog', { name: 'Ask Jolene' });
-  const starter = panel.getByRole('button', {
-    name: 'Which project best shows Carl’s product engineering work?',
-  });
-  await starter.focus();
-  await starter.click();
+  const question = panel.getByLabel('Ask about Carl’s work or experience');
+  await question.fill('Which project best shows Carl’s product engineering work?');
+  await panel.getByRole('button', { name: 'Ask Jolene', exact: true }).click();
 
   if (scenario === 'unavailable') {
     const errorResponse = panel.locator('.jolene-message[data-role="assistant"]').filter({
@@ -56,6 +54,19 @@ test(`returned ${scenario === 'unavailable' ? 'error' : 'answer'} keeps keyboard
     });
     await expect(errorResponse).toBeFocused();
     await expect(errorResponse).toContainText('I don’t have a reliable answer for that yet.');
+    await expect(panel.locator('.jolene-avatar')).toHaveAttribute('data-avatar-state', 'offline');
+    await expect.poll(async () => {
+      const [answerBounds, scrollerBounds] = await Promise.all([
+        errorResponse.boundingBox(),
+        panel.locator('.jolene-messages').boundingBox(),
+      ]);
+      return Boolean(
+        answerBounds
+        && scrollerBounds
+        && answerBounds.y >= scrollerBounds.y
+        && answerBounds.y < scrollerBounds.y + scrollerBounds.height,
+      );
+    }).toBe(true);
     return;
   }
 
@@ -64,6 +75,19 @@ test(`returned ${scenario === 'unavailable' ? 'error' : 'answer'} keeps keyboard
   });
   await expect(answer).toBeFocused();
   await expect(answer).toContainText('explicit review boundaries');
+  const messageScroller = panel.locator('.jolene-messages');
+  await expect.poll(async () => {
+    const [answerBounds, scrollerBounds] = await Promise.all([
+      answer.boundingBox(),
+      messageScroller.boundingBox(),
+    ]);
+    return Boolean(
+      answerBounds
+      && scrollerBounds
+      && answerBounds.y >= scrollerBounds.y
+      && answerBounds.y < scrollerBounds.y + scrollerBounds.height,
+    );
+  }).toBe(true);
 
   const evidence = answer.locator('details.jolene-evidence');
   const evidenceSummary = evidence.locator(':scope > summary');
@@ -77,4 +101,204 @@ test(`returned ${scenario === 'unavailable' ? 'error' : 'answer'} keeps keyboard
   const followUps = panel.locator('.jolene-starters');
   await expect(followUps.getByText('Ask next')).toBeVisible();
   await expect(followUps.getByRole('button')).toHaveCount(2);
+});
+
+test('country-host cameo appears once, leaves cleanly, and returns only with chat', async ({ page }) => {
+  await page.addInitScript(() => window.sessionStorage.removeItem('jolene-country-host-intro-seen-v1'));
+  await page.goto('/');
+
+  const cameo = page.locator('.jolene-cameo');
+  await expect(cameo).toBeVisible({ timeout: 2_000 });
+  await expect(cameo).toContainText('Howdy, folks!');
+  await expect(cameo.locator('.jolene-avatar')).toHaveCount(1);
+  await expect(cameo).toBeHidden({ timeout: 5_000 });
+  await expect(page.locator('.jolene-avatar')).toHaveCount(0);
+
+  await page.getByRole('button', { name: /Ask Jolene/ }).click();
+  const panel = page.getByRole('dialog', { name: 'Ask Jolene' });
+  const avatar = panel.locator('.jolene-avatar');
+  await expect(avatar).toBeVisible();
+  await expect(avatar).toHaveAttribute('data-avatar-state', /greet|idle/);
+
+  const question = panel.getByLabel('Ask about Carl’s work or experience');
+  await question.pressSequentially('Which project best shows Carl’s product engineering work?', { delay: 20 });
+  await expect(avatar).toHaveAttribute('data-avatar-state', 'excited');
+  await expect(avatar).toHaveAttribute('data-avatar-frame', 'excited-0');
+  await expect(avatar.locator('canvas')).toBeVisible();
+  await expect(avatar).toHaveCSS('overflow', 'visible');
+  await expect(avatar).toHaveCSS('contain', 'layout style');
+  await page.waitForTimeout(700);
+  await expect(avatar).toHaveAttribute('data-avatar-state', 'listen');
+  await panel.getByRole('button', { name: 'Ask Jolene', exact: true }).click();
+
+  if (scenario === 'unavailable') {
+    await expect(avatar).toHaveAttribute('data-avatar-state', 'offline');
+  } else {
+    await expect(avatar).toHaveAttribute('data-avatar-state', 'speak');
+    const evidence = panel.locator('details.jolene-evidence').last();
+    await evidence.locator(':scope > summary').click();
+    await expect(avatar).toHaveAttribute('data-avatar-state', 'evidence');
+  }
+
+  await panel.getByRole('button', { name: 'Close Jolene chat' }).click();
+  await expect(page.locator('.jolene-avatar')).toHaveCount(0);
+  await page.reload();
+  await page.waitForTimeout(1_000);
+  await expect(cameo).toHaveCount(0);
+});
+
+test('pixel avatar stays clear of controls at an iPhone viewport', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.addInitScript(() => window.sessionStorage.setItem('jolene-country-host-intro-seen-v1', 'true'));
+  await page.goto('/');
+  await page.getByRole('button', { name: /Ask Jolene/ }).click();
+
+  const panel = page.getByRole('dialog', { name: 'Ask Jolene' });
+  const avatar = panel.locator('.jolene-avatar');
+  const close = panel.getByRole('button', { name: 'Close Jolene chat' });
+  const starterButtons = panel.locator('.jolene-starters button');
+  const messageScroller = panel.locator('.jolene-messages');
+  const question = panel.getByLabel('Ask about Carl’s work or experience');
+  await expect(panel).toBeVisible();
+  await expect(avatar).toBeVisible();
+  await expect(close).toBeVisible();
+  await expect(question).toBeVisible();
+
+  await expect(avatar).toHaveCSS('pointer-events', 'none');
+  await expect(avatar.locator('canvas')).toHaveCSS('image-rendering', 'pixelated');
+  await expect(avatar).toHaveAttribute('data-avatar-facing', 'left');
+  const panelBounds = await panel.boundingBox();
+  const avatarBounds = await avatar.boundingBox();
+  const closeBounds = await close.boundingBox();
+  const lastStarterBounds = await starterButtons.last().boundingBox();
+  const formBounds = await panel.locator('.jolene-form').boundingBox();
+  expect(panelBounds).not.toBeNull();
+  expect(avatarBounds).not.toBeNull();
+  expect(closeBounds).not.toBeNull();
+  expect(lastStarterBounds).not.toBeNull();
+  expect(formBounds).not.toBeNull();
+  expect(panelBounds!.x).toBeGreaterThanOrEqual(0);
+  expect(panelBounds!.x + panelBounds!.width).toBeLessThanOrEqual(390);
+  expect(closeBounds!.x + closeBounds!.width).toBeLessThanOrEqual(390);
+  expect(lastStarterBounds!.x + lastStarterBounds!.width).toBeLessThanOrEqual(avatarBounds!.x);
+  expect(Math.abs(avatarBounds!.y + avatarBounds!.height - formBounds!.y)).toBeLessThanOrEqual(6);
+
+  await question.fill('Tell me about Carl');
+  await expect(avatar).toHaveAttribute('data-avatar-state', 'excited');
+  const typingCanvasBounds = await avatar.locator('canvas').boundingBox();
+  expect(typingCanvasBounds).not.toBeNull();
+  expect(typingCanvasBounds!.width).toBeLessThanOrEqual(avatarBounds!.width + 8);
+  expect(Math.abs(typingCanvasBounds!.y + typingCanvasBounds!.height - formBounds!.y)).toBeLessThanOrEqual(6);
+  const avatarTopBeforeScroll = (await avatar.boundingBox())!.y;
+  await messageScroller.evaluate((element) => { element.scrollTop = element.scrollHeight; });
+  await page.waitForTimeout(50);
+  const avatarTopAfterScroll = (await avatar.boundingBox())!.y;
+  expect(Math.abs(avatarTopAfterScroll - avatarTopBeforeScroll)).toBeLessThanOrEqual(1);
+  await expect(avatar.locator('xpath=..')).toHaveClass(/jolene-conversation-scroll/);
+});
+
+test('reduced motion skips the unsolicited cameo and uses static state frames', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.addInitScript(() => window.sessionStorage.removeItem('jolene-country-host-intro-seen-v1'));
+  await page.goto('/');
+  await page.waitForTimeout(1_000);
+  await expect(page.locator('.jolene-cameo')).toHaveCount(0);
+
+  await page.getByRole('button', { name: /Ask Jolene/ }).click();
+  const avatar = page.getByRole('dialog', { name: 'Ask Jolene' }).locator('.jolene-avatar');
+  const initialFrame = await avatar.getAttribute('data-avatar-frame');
+  await page.waitForTimeout(750);
+  const settledFrame = await avatar.getAttribute('data-avatar-frame');
+  expect(initialFrame).toBe('greet-3');
+  expect(settledFrame).toBe('idle-0');
+
+  const question = page.getByRole('dialog', { name: 'Ask Jolene' }).getByLabel('Ask about Carl’s work or experience');
+  await question.fill('Tell me about Carl');
+  await expect(avatar).toHaveAttribute('data-avatar-state', 'excited');
+  await expect(avatar).toHaveAttribute('data-avatar-frame', 'excited-0');
+  await page.waitForTimeout(300);
+  await expect(avatar).toHaveAttribute('data-avatar-frame', 'excited-0');
+});
+
+test('missing animation atlas fails over to the approved static master', async ({ page }) => {
+  await page.route(/\/jolene\/approved-animation\/jolene-approved-atlas\.(?:json|png)(?:\?.*)?$/, (route) => route.abort());
+  await page.addInitScript(() => window.sessionStorage.setItem('jolene-country-host-intro-seen-v1', 'true'));
+  await page.goto('/');
+  await page.getByRole('button', { name: /Ask Jolene/ }).click();
+  const avatar = page.getByRole('dialog', { name: 'Ask Jolene' }).locator('.jolene-avatar');
+  await expect(avatar).toHaveAttribute('data-avatar-fallback', 'master');
+  await expect(avatar.locator('img')).toHaveAttribute('src', /\/jolene\/sprites\/rig-base-v2\.png/);
+  await expect(avatar).toBeVisible();
+});
+
+test('avatar remains stable and contained across compact phone layouts', async ({ page }) => {
+  await page.addInitScript(() => {
+    (window as Window & { __joleneCumulativeLayoutShift?: number }).__joleneCumulativeLayoutShift = 0;
+    new PerformanceObserver((entries) => {
+      for (const entry of entries.getEntries() as Array<PerformanceEntry & { hadRecentInput?: boolean; value?: number }>) {
+        if (!entry.hadRecentInput) {
+          const target = window as Window & { __joleneCumulativeLayoutShift?: number };
+          target.__joleneCumulativeLayoutShift = (target.__joleneCumulativeLayoutShift ?? 0) + (entry.value ?? 0);
+        }
+      }
+    }).observe({ type: 'layout-shift', buffered: true });
+    window.sessionStorage.setItem('jolene-country-host-intro-seen-v1', 'true');
+  });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/');
+  const resourcesBeforeOpen = await page.evaluate(() => (
+    performance.getEntriesByType('resource').filter(({ name }) => name.includes('/jolene/')).length
+  ));
+  expect(resourcesBeforeOpen).toBe(0);
+
+  await page.locator('[data-jolene-launcher]').click();
+  await expect(page.locator('.jolene-conversation-avatar')).toBeVisible();
+  await page.waitForTimeout(800);
+  expect(await page.locator('.jolene-avatar canvas').count()).toBe(1);
+
+  const spriteResources = await page.evaluate(() => (
+    new Set(performance.getEntriesByType('resource')
+      .map(({ name }) => name)
+      .filter((name) => name.includes('/jolene/'))).size
+  ));
+  expect(spriteResources).toBeLessThanOrEqual(10);
+
+  for (const viewport of [
+    { width: 390, height: 844 },
+    { width: 844, height: 390 },
+    { width: 320, height: 568 },
+  ]) {
+    await page.setViewportSize(viewport);
+    await page.waitForTimeout(100);
+    const geometry = await page.evaluate(() => {
+      const bounds = (selector: string) => document.querySelector(selector)?.getBoundingClientRect().toJSON();
+      return {
+        panel: bounds('.jolene-panel'),
+        avatar: bounds('.jolene-conversation-avatar'),
+        lastStarter: bounds('.jolene-starters button:last-child'),
+        close: bounds('.jolene-panel-header button'),
+        textarea: bounds('.jolene-form textarea'),
+        submit: bounds('.jolene-form button[type="submit"]'),
+        horizontalOverflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+      };
+    });
+    for (const key of ['panel', 'avatar', 'lastStarter', 'close', 'textarea', 'submit'] as const) {
+      expect(geometry[key], `${key} is missing at ${viewport.width}×${viewport.height}`).toBeTruthy();
+    }
+    expect(geometry.panel!.left).toBeGreaterThanOrEqual(0);
+    expect(geometry.panel!.right).toBeLessThanOrEqual(viewport.width);
+    expect(geometry.panel!.top).toBeGreaterThanOrEqual(0);
+    expect(geometry.panel!.bottom).toBeLessThanOrEqual(viewport.height);
+    expect(geometry.avatar!.right).toBeLessThanOrEqual(geometry.panel!.right);
+    expect(geometry.lastStarter!.right).toBeLessThanOrEqual(geometry.avatar!.left);
+    expect(geometry.close!.right).toBeLessThanOrEqual(viewport.width);
+    expect(geometry.textarea!.bottom).toBeLessThanOrEqual(geometry.panel!.bottom);
+    expect(geometry.submit!.bottom).toBeLessThanOrEqual(geometry.panel!.bottom);
+    expect(geometry.horizontalOverflow).toBeLessThanOrEqual(0);
+  }
+
+  const cumulativeLayoutShift = await page.evaluate(() => (
+    (window as Window & { __joleneCumulativeLayoutShift?: number }).__joleneCumulativeLayoutShift ?? 0
+  ));
+  expect(cumulativeLayoutShift).toBeLessThanOrEqual(0.02);
 });

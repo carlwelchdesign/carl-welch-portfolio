@@ -1,0 +1,134 @@
+{
+  "schemaVersion": "1.0.0",
+  "status": "review_only_approved_by_carl",
+  "canonicalMasterSha256": "4e437fd64b3997bd834bb2310ed0175e75d9958c27871d4ae3857a18fc82cc6f",
+  "repositoryWrites": false,
+  "runtimeIntegrationChanged": false,
+  "outsideMaskChanges": {
+    "half": 0,
+    "full": 0
+  },
+  "paletteViolations": {
+    "half": 0,
+    "full": 0
+  },
+  "half": {
+    "near": {
+      "visibleArea": 41,
+      "apertureComponentsWithoutLash": 1,
+      "coolPixelCount": 30,
+      "movedCoolPixels": 0,
+      "path": {
+        "distinctYRows": 4,
+        "maximumSameColorHorizontalRun": 6,
+        "connected": true,
+        "mainColor": [
+          0,
+          0,
+          0,
+          255
+        ]
+      },
+      "finishedDarkComponents": 1,
+      "survivingOriginalMovingLinerPixels": []
+    },
+    "far": {
+      "visibleArea": 29,
+      "apertureComponentsWithoutLash": 1,
+      "coolPixelCount": 22,
+      "movedCoolPixels": 0,
+      "path": {
+        "distinctYRows": 4,
+        "maximumSameColorHorizontalRun": 5,
+        "connected": true,
+        "mainColor": [
+          0,
+          0,
+          0,
+          255
+        ]
+      },
+      "finishedDarkComponents": 1,
+      "survivingOriginalMovingLinerPixels": []
+    }
+  },
+  "full": {
+    "near": {
+      "coolPixelCount": 0,
+      "path": {
+        "distinctYRows": 6,
+        "maximumSameColorHorizontalRun": 3,
+        "connected": true,
+        "mainColor": [
+          0,
+          0,
+          0,
+          255
+        ]
+      },
+      "outerWeight": [
+        [
+          143,
+          132
+        ]
+      ],
+      "outerSide": "left",
+      "finishedDarkComponents": 1,
+      "survivingOriginalMovingLinerPixels": []
+    },
+    "far": {
+      "coolPixelCount": 0,
+      "path": {
+        "distinctYRows": 6,
+        "maximumSameColorHorizontalRun": 3,
+        "connected": true,
+        "mainColor": [
+          0,
+          0,
+          0,
+          255
+        ]
+      },
+      "outerWeight": [
+        [
+          212,
+          139
+        ]
+      ],
+      "outerSide": "right",
+      "finishedDarkComponents": 1,
+      "survivingOriginalMovingLinerPixels": []
+    }
+  },
+  "nearFarVisibleAreaRatio": 1.4137931034482758,
+  "alphaAndBounds": {
+    "open": {
+      "nonBinaryAlpha": 0,
+      "transparentRgb": 0,
+      "minY": 8,
+      "maxY": 447
+    },
+    "half": {
+      "nonBinaryAlpha": 0,
+      "transparentRgb": 0,
+      "minY": 8,
+      "maxY": 447
+    },
+    "full": {
+      "nonBinaryAlpha": 0,
+      "transparentRgb": 0,
+      "minY": 8,
+      "maxY": 447
+    }
+  },
+  "returnFramesExact": true,
+  "outputSha256": {
+    "open-1x.png": "90d07a6a9e0be7cfd626ef44ad3e50b8617fba2d0cf0d10b5f5b8bd7e7a870cd",
+    "half-1x.png": "b13d98b6368c4f64ed272e17edb2b513083e1dc5f8e2a5385c85981741ae7449",
+    "closed-1x.png": "e37f445094aaa6c212587a729f941fbe530c5d3a971fc8f99d7260897ec27fe9",
+    "sequence-face-1x.png": "bf33d2b9ff8876639e4183a521ce20e3bbccb8824648b3101fe45f07cee9927d",
+    "sequence-face-4x.png": "acd595b7845f3be906e561b12aae9606deb83bbc77be3de81316a36297d8fed5",
+    "sequence-face-6x.png": "c363f31db2813ae6b3132fe1604a1f4fa5384e451b42ffa153ba9ee215e923ae",
+    "diff-mask-face-6x.png": "3995596602f70c22aeaf634c309f21bf36fc708386d72ae6d977bfee796f2809"
+  }
+}

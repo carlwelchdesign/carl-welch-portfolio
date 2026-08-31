@@ -1,0 +1,274 @@
+{
+  "schemaVersion": "1.0.0",
+  "contractName": "jolene.avatar-frame-catalog",
+  "frameWidth": 320,
+  "frameHeight": 460,
+  "anchor": {
+    "x": 160,
+    "y": 448
+  },
+  "imageRendering": "pixelated",
+  "frames": {
+    "idle-0": {
+      "assetPath": "/jolene/approved-animation/idle-rest.png",
+      "state": "idle",
+      "translateX": 0,
+      "translateY": 0,
+      "rotateDeg": 0,
+      "scale": 1,
+      "transformOrigin": "160px 448px"
+    },
+    "idle-1": {
+      "assetPath": "/jolene/approved-animation/idle-inhale.png",
+      "state": "idle",
+      "translateX": 0,
+      "translateY": 0,
+      "rotateDeg": 0,
+      "scale": 1,
+      "transformOrigin": "160px 448px"
+    },
+    "idle-2": {
+      "assetPath": "/jolene/approved-animation/idle-rise.png",
+      "state": "idle",
+      "translateX": 0,
+      "translateY": 0,
+      "rotateDeg": 0,
+      "scale": 1,
+      "transformOrigin": "160px 448px"
+    },
+    "idle-3": {
+      "assetPath": "/jolene/approved-animation/idle-peak.png",
+      "state": "idle",
+      "translateX": 0,
+      "translateY": 0,
+      "rotateDeg": 0,
+      "scale": 1,
+      "transformOrigin": "160px 448px"
+    },
+    "blink-1": {
+      "assetPath": "/jolene/approved-animation/blink-half.png",
+      "state": "blink",
+      "translateX": 0,
+      "translateY": 0,
+      "rotateDeg": 0,
+      "scale": 1,
+      "transformOrigin": "160px 448px"
+    },
+    "blink-2": {
+      "assetPath": "/jolene/approved-animation/blink-closed.png",
+      "state": "blink",
+      "translateX": 0,
+      "translateY": 0,
+      "rotateDeg": 0,
+      "scale": 1,
+      "transformOrigin": "160px 448px"
+    },
+    "greet-0": {
+      "assetPath": "/jolene/approved-animation/greet-rest.png",
+      "state": "greet",
+      "translateX": 0,
+      "translateY": 0,
+      "rotateDeg": 0,
+      "scale": 1,
+      "transformOrigin": "160px 448px"
+    },
+    "greet-1": {
+      "assetPath": "/jolene/approved-animation/greet-early.png",
+      "state": "greet",
+      "translateX": 0,
+      "translateY": 0,
+      "rotateDeg": 0,
+      "scale": 1,
+      "transformOrigin": "160px 448px"
+    },
+    "greet-2": {
+      "assetPath": "/jolene/approved-animation/greet-mid.png",
+      "state": "greet",
+      "translateX": 0,
+      "translateY": 0,
+      "rotateDeg": 0,
+      "scale": 1,
+      "transformOrigin": "160px 448px"
+    },
+    "greet-3": {
+      "assetPath": "/jolene/approved-animation/greet-apex.png",
+      "state": "greet",
+      "translateX": 0,
+      "translateY": 0,
+      "rotateDeg": 0,
+      "scale": 1,
+      "transformOrigin": "160px 448px"
+    },
+    "greet-4": {
+      "assetPath": "/jolene/approved-animation/greet-secondary.png",
+      "state": "greet",
+      "translateX": 0,
+      "translateY": 0,
+      "rotateDeg": 0,
+      "scale": 1,
+      "transformOrigin": "160px 448px"
+    },
+    "greet-5": {
+      "assetPath": "/jolene/approved-animation/greet-settle.png",
+      "state": "greet",
+      "translateX": 0,
+      "translateY": 0,
+      "rotateDeg": 0,
+      "scale": 1,
+      "transformOrigin": "160px 448px"
+    },
+    "excited-0": {
+      "assetPath": "/jolene/sprites/typing-excited-v1.png?v=89b896f51e17",
+      "state": "excited",
+      "translateX": 0,
+      "translateY": 0,
+      "rotateDeg": 0,
+      "scale": 1,
+      "transformOrigin": "160px 448px"
+    },
+    "excited-1": {
+      "assetPath": "/jolene/sprites/typing-excited-v1.png?v=89b896f51e17",
+      "state": "excited",
+      "translateX": -4,
+      "translateY": 0,
+      "rotateDeg": -1.8,
+      "scale": 1,
+      "transformOrigin": "160px 448px"
+    },
+    "excited-2": {
+      "assetPath": "/jolene/sprites/typing-excited-v1.png?v=89b896f51e17",
+      "state": "excited",
+      "translateX": 3,
+      "translateY": 0,
+      "rotateDeg": 1.6,
+      "scale": 1,
+      "transformOrigin": "160px 448px"
+    },
+    "excited-3": {
+      "assetPath": "/jolene/sprites/typing-excited-v1.png?v=89b896f51e17",
+      "state": "excited",
+      "translateX": -2,
+      "translateY": 0,
+      "rotateDeg": -1.2,
+      "scale": 1,
+      "transformOrigin": "160px 448px"
+    },
+    "listen-0": {
+      "assetPath": "/jolene/sprites/rig-base-v2.png?v=83aecc00ed86",
+      "state": "listen",
+      "translateX": 0,
+      "translateY": 0,
+      "rotateDeg": 0,
+      "scale": 1,
+      "transformOrigin": "160px 448px"
+    },
+    "think-0": {
+      "assetPath": "/jolene/sprites/rig-base-v2.png?v=83aecc00ed86",
+      "state": "think",
+      "translateX": 0,
+      "translateY": 0,
+      "rotateDeg": 0,
+      "scale": 1,
+      "transformOrigin": "160px 448px"
+    },
+    "think-1": {
+      "assetPath": "/jolene/sprites/rig-base-v2.png?v=83aecc00ed86",
+      "state": "think",
+      "translateX": 1,
+      "translateY": -1,
+      "rotateDeg": 0.3,
+      "scale": 1,
+      "transformOrigin": "160px 448px"
+    },
+    "speak-0": {
+      "assetPath": "/jolene/sprites/rig-base-v2.png?v=83aecc00ed86",
+      "state": "speak",
+      "translateX": 0,
+      "translateY": 0,
+      "rotateDeg": 0,
+      "scale": 1,
+      "transformOrigin": "160px 448px"
+    },
+    "speak-1": {
+      "assetPath": "/jolene/sprites/rig-base-v2.png?v=83aecc00ed86",
+      "state": "speak",
+      "translateX": 1,
+      "translateY": -1,
+      "rotateDeg": 0.2,
+      "scale": 1.002,
+      "transformOrigin": "160px 448px"
+    },
+    "speak-2": {
+      "assetPath": "/jolene/sprites/rig-base-v2.png?v=83aecc00ed86",
+      "state": "speak",
+      "translateX": -1,
+      "translateY": -2,
+      "rotateDeg": -0.2,
+      "scale": 1.004,
+      "transformOrigin": "160px 448px"
+    },
+    "evidence-0": {
+      "assetPath": "/jolene/sprites/rig-base-v2.png?v=83aecc00ed86",
+      "state": "evidence",
+      "translateX": 0,
+      "translateY": 0,
+      "rotateDeg": 0,
+      "scale": 1,
+      "transformOrigin": "160px 448px"
+    },
+    "evidence-1": {
+      "assetPath": "/jolene/sprites/rig-base-v2.png?v=83aecc00ed86",
+      "state": "evidence",
+      "translateX": 2,
+      "translateY": -1,
+      "rotateDeg": 0.25,
+      "scale": 1,
+      "transformOrigin": "160px 448px"
+    },
+    "evidence-2": {
+      "assetPath": "/jolene/sprites/rig-base-v2.png?v=83aecc00ed86",
+      "state": "evidence",
+      "translateX": 3,
+      "translateY": -2,
+      "rotateDeg": 0.4,
+      "scale": 1.003,
+      "transformOrigin": "160px 448px"
+    },
+    "boundary-0": {
+      "assetPath": "/jolene/sprites/rig-base-v2.png?v=83aecc00ed86",
+      "state": "boundary",
+      "translateX": 0,
+      "translateY": 0,
+      "rotateDeg": 0,
+      "scale": 1,
+      "transformOrigin": "160px 448px"
+    },
+    "offline-0": {
+      "assetPath": "/jolene/sprites/rig-base-v2.png?v=83aecc00ed86",
+      "state": "offline",
+      "translateX": 0,
+      "translateY": 0,
+      "rotateDeg": 0,
+      "scale": 1,
+      "transformOrigin": "160px 448px"
+    },
+    "rest-0": {
+      "assetPath": "/jolene/sprites/rig-base-v2.png?v=83aecc00ed86",
+      "state": "rest",
+      "translateX": 0,
+      "translateY": 0,
+      "rotateDeg": 0,
+      "scale": 1,
+      "transformOrigin": "160px 448px"
+    },
+    "rest-1": {
+      "assetPath": "/jolene/sprites/rig-base-v2.png?v=83aecc00ed86",
+      "state": "rest",
+      "translateX": 0,
+      "translateY": 1,
+      "rotateDeg": -0.15,
+      "scale": 0.998,
+      "transformOrigin": "160px 448px"
+    }
+  }
+}

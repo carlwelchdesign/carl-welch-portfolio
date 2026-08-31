@@ -1,0 +1,271 @@
+{
+  "schemaVersion": "1.0.0",
+  "status": "candidate_pending_visual_approval",
+  "source": {
+    "path": "/jolene/review/country-host-rig-master-v2-source.png",
+    "sha256": "f5b262475980f94985c4817921702ea374b35f6fb8896b6ba6ad178645366d22",
+    "width": 1168,
+    "height": 1347,
+    "generatedWith": "built-in image generation edit mode"
+  },
+  "overrides": [
+    {
+      "state": "excited",
+      "path": "/jolene/review/country-host-typing-excited-v1-source.png",
+      "sha256": "3f3b683ace207b3497c0f650900627f85d0c4e302ca314a3a794a9a339ccc8e2",
+      "intent": "hands clasped at chest, slight forward lean, soft downward gaze toward visitor input"
+    }
+  ],
+  "layout": {
+    "frameWidth": 320,
+    "frameHeight": 460,
+    "anchor": {
+      "x": 160,
+      "y": 448
+    },
+    "imageSmoothing": false,
+    "transparentBackground": true,
+    "matteCleanup": "connected neutral fringe and outer perimeter removed"
+  },
+  "frames": [
+    {
+      "state": "idle",
+      "path": "/jolene/sprites/rig-base-v2.png",
+      "sha256": "83aecc00ed864b9d8864464901a33581a2cf3672885c3816a49fc877b53b9cc4",
+      "width": 320,
+      "height": 460,
+      "opaquePixels": 93701,
+      "sourceBounds": {
+        "x": 216,
+        "y": 89,
+        "width": 724,
+        "height": 1146
+      },
+      "drawBounds": {
+        "x": 21,
+        "y": 8,
+        "width": 278,
+        "height": 440
+      },
+      "removedInteriorMattePixels": 7204
+    },
+    {
+      "state": "blink",
+      "path": "/jolene/sprites/rig-base-v2.png",
+      "sha256": "83aecc00ed864b9d8864464901a33581a2cf3672885c3816a49fc877b53b9cc4",
+      "width": 320,
+      "height": 460,
+      "opaquePixels": 93701,
+      "sourceBounds": {
+        "x": 216,
+        "y": 89,
+        "width": 724,
+        "height": 1146
+      },
+      "drawBounds": {
+        "x": 21,
+        "y": 8,
+        "width": 278,
+        "height": 440
+      },
+      "removedInteriorMattePixels": 7204
+    },
+    {
+      "state": "greet",
+      "path": "/jolene/sprites/rig-base-v2.png",
+      "sha256": "83aecc00ed864b9d8864464901a33581a2cf3672885c3816a49fc877b53b9cc4",
+      "width": 320,
+      "height": 460,
+      "opaquePixels": 93701,
+      "sourceBounds": {
+        "x": 216,
+        "y": 89,
+        "width": 724,
+        "height": 1146
+      },
+      "drawBounds": {
+        "x": 21,
+        "y": 8,
+        "width": 278,
+        "height": 440
+      },
+      "removedInteriorMattePixels": 7204
+    },
+    {
+      "state": "excited",
+      "path": "/jolene/sprites/typing-excited-v1.png",
+      "sha256": "89b896f51e176095d5d39e8254a5d0b2a73718f1320fabc11886088bdb593c9f",
+      "width": 320,
+      "height": 460,
+      "opaquePixels": 88332,
+      "sourceBounds": {
+        "x": 182,
+        "y": 71,
+        "width": 726,
+        "height": 1181
+      },
+      "drawBounds": {
+        "x": 25,
+        "y": 8,
+        "width": 270,
+        "height": 440
+      },
+      "removedInteriorMattePixels": 2088
+    },
+    {
+      "state": "listen",
+      "path": "/jolene/sprites/rig-base-v2.png",
+      "sha256": "83aecc00ed864b9d8864464901a33581a2cf3672885c3816a49fc877b53b9cc4",
+      "width": 320,
+      "height": 460,
+      "opaquePixels": 93701,
+      "sourceBounds": {
+        "x": 216,
+        "y": 89,
+        "width": 724,
+        "height": 1146
+      },
+      "drawBounds": {
+        "x": 21,
+        "y": 8,
+        "width": 278,
+        "height": 440
+      },
+      "removedInteriorMattePixels": 7204
+    },
+    {
+      "state": "think",
+      "path": "/jolene/sprites/rig-base-v2.png",
+      "sha256": "83aecc00ed864b9d8864464901a33581a2cf3672885c3816a49fc877b53b9cc4",
+      "width": 320,
+      "height": 460,
+      "opaquePixels": 93701,
+      "sourceBounds": {
+        "x": 216,
+        "y": 89,
+        "width": 724,
+        "height": 1146
+      },
+      "drawBounds": {
+        "x": 21,
+        "y": 8,
+        "width": 278,
+        "height": 440
+      },
+      "removedInteriorMattePixels": 7204
+    },
+    {
+      "state": "speak",
+      "path": "/jolene/sprites/rig-base-v2.png",
+      "sha256": "83aecc00ed864b9d8864464901a33581a2cf3672885c3816a49fc877b53b9cc4",
+      "width": 320,
+      "height": 460,
+      "opaquePixels": 93701,
+      "sourceBounds": {
+        "x": 216,
+        "y": 89,
+        "width": 724,
+        "height": 1146
+      },
+      "drawBounds": {
+        "x": 21,
+        "y": 8,
+        "width": 278,
+        "height": 440
+      },
+      "removedInteriorMattePixels": 7204
+    },
+    {
+      "state": "evidence",
+      "path": "/jolene/sprites/rig-base-v2.png",
+      "sha256": "83aecc00ed864b9d8864464901a33581a2cf3672885c3816a49fc877b53b9cc4",
+      "width": 320,
+      "height": 460,
+      "opaquePixels": 93701,
+      "sourceBounds": {
+        "x": 216,
+        "y": 89,
+        "width": 724,
+        "height": 1146
+      },
+      "drawBounds": {
+        "x": 21,
+        "y": 8,
+        "width": 278,
+        "height": 440
+      },
+      "removedInteriorMattePixels": 7204
+    },
+    {
+      "state": "boundary",
+      "path": "/jolene/sprites/rig-base-v2.png",
+      "sha256": "83aecc00ed864b9d8864464901a33581a2cf3672885c3816a49fc877b53b9cc4",
+      "width": 320,
+      "height": 460,
+      "opaquePixels": 93701,
+      "sourceBounds": {
+        "x": 216,
+        "y": 89,
+        "width": 724,
+        "height": 1146
+      },
+      "drawBounds": {
+        "x": 21,
+        "y": 8,
+        "width": 278,
+        "height": 440
+      },
+      "removedInteriorMattePixels": 7204
+    },
+    {
+      "state": "offline",
+      "path": "/jolene/sprites/rig-base-v2.png",
+      "sha256": "83aecc00ed864b9d8864464901a33581a2cf3672885c3816a49fc877b53b9cc4",
+      "width": 320,
+      "height": 460,
+      "opaquePixels": 93701,
+      "sourceBounds": {
+        "x": 216,
+        "y": 89,
+        "width": 724,
+        "height": 1146
+      },
+      "drawBounds": {
+        "x": 21,
+        "y": 8,
+        "width": 278,
+        "height": 440
+      },
+      "removedInteriorMattePixels": 7204
+    },
+    {
+      "state": "rest",
+      "path": "/jolene/sprites/rig-base-v2.png",
+      "sha256": "83aecc00ed864b9d8864464901a33581a2cf3672885c3816a49fc877b53b9cc4",
+      "width": 320,
+      "height": 460,
+      "opaquePixels": 93701,
+      "sourceBounds": {
+        "x": 216,
+        "y": 89,
+        "width": 724,
+        "height": 1146
+      },
+      "drawBounds": {
+        "x": 21,
+        "y": 8,
+        "width": 278,
+        "height": 440
+      },
+      "removedInteriorMattePixels": 7204
+    }
+  ],
+  "invariants": {
+    "baseStatesShareIdentitySource": true,
+    "distinctPoseStates": [
+      "excited"
+    ],
+    "providerIndependent": true,
+    "approvedForPublicUse": false
+  }
+}

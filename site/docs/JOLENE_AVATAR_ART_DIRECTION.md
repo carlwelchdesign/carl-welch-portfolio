@@ -1,6 +1,6 @@
 # Jolene avatar production art direction
 
-Status: review-ready brief. No artwork in this document is approved for production or public use.
+Status: production master approved by Carl on August 28, 2026. Animation-state and public-use approval remain separate gates.
 
 ## Creative target
 
@@ -8,7 +8,11 @@ A playful, poised, waist-up Dolly Parton-inspired Jolene who feels drawn for an 
 
 The first read is a warm, quick-witted host waiting at the bottom-right of Carl's portfolio. The second read is early-career Dolly: enormous blonde hair, bright eyes, hoop earrings, a red tied patterned blouse, and confident posture. She should feel delighted to help without becoming a mascot that competes with Carl's work.
 
-## Locked production proposal
+The character is a reveal, not a persistent page ornament. On an eligible first load she briefly rises from below the bottom-right edge, says **“Howdy, folks!”**, and drops completely out of sight. After that cameo, the compact Jolene launcher remains visible but the character does not return unless the visitor deliberately opens the chat.
+
+## Superseded study proposal
+
+The following 48 × 56 constraint governed the rejected exploration studies. Carl's later approval of the more detailed Country Host image supersedes it for production. It remains here as decision history, not as a requirement to simplify or redraw the approved master.
 
 - Native frame: **48 × 56 pixels**, waist-up, transparent background.
 - Occupied silhouette: no more than 44 × 54 pixels; preserve two transparent pixels at every outer edge.
@@ -19,7 +23,7 @@ The first read is a warm, quick-witted host waiting at the bottom-right of Carl'
 - Pose: shoulders angled slightly, chin level, one hand or forearm available for a restrained evidence gesture.
 - Bottom-right launcher: keep the face above the chat label and preserve iPhone safe-area insets.
 
-This grid is deliberately smaller than a 64-bit-style portrait while retaining enough pixels for readable eyes, mouth shapes, hair volume, and a tied blouse. Do not increase the native grid to solve drawing problems.
+This grid was deliberately smaller than a 64-bit-style portrait. The selected Country Host direction demonstrated that its additional detail is part of the character Carl wants, so production now preserves the approved 1162 × 1353 transparent master instead.
 
 ## Palette budget
 
@@ -63,6 +67,53 @@ If the silhouette does not pass in one color, added facial pixels will not fix i
 
 The character represents confidence and hospitality. Avoid winks as a default, exaggerated eyebrow bouncing, constant hair motion, toothy flapping, or pin-up posing.
 
+## Entrance and visibility choreography
+
+The cameo introduces Jolene once without turning her into a distraction or placing a character over Carl's work.
+
+### State grammar
+
+1. `hidden`: the entire character and speech bubble sit below the viewport. The launcher remains visible and usable.
+2. `intro_rising`: after the page is visually stable, the waist-up character rises from below the bottom-right edge using a transform-only movement.
+3. `intro_greeting`: she settles once and a compact bubble reads exactly **“Howdy, folks!”**
+4. `intro_exiting`: the bubble and character move back below the viewport until no part of either is visible.
+5. `launcher_only`: the launcher remains; the character stays hidden.
+6. `chat_open`: the character is visible as part of the open Jolene experience, not as a separate floating ornament.
+7. `chat_closing`: closing the panel hides the character completely and returns to `launcher_only` without replaying the greeting.
+
+### Timing and frequency
+
+- Start the cameo about **700 ms** after the page is stable. Do not delay page interaction while waiting for it.
+- Rise for **360 ms**, settle once for **140 ms**, hold the greeting for **1,300 ms**, then exit for **300 ms**.
+- Play at most once per browser session, on the first eligible portfolio page. Do not replay it on route changes, browser back/forward navigation, chat close, or chat reopen.
+- If the visitor opens Jolene before or during the cameo, cancel the remaining intro sequence and transition directly to `chat_open`.
+- If the tab becomes hidden, stop the cameo and settle in `launcher_only` when the visitor returns. Never resume halfway through the entrance.
+- The launcher is usable throughout. The cameo must never steal focus, intercept pointer events, cover the launcher, or block page controls.
+
+### Motion character
+
+Use one poised rise and one restrained settle. The motion should feel like an arcade host stepping into view, not a spring toy. No repeated bouncing, idle bobbing, hair physics, wobble, overshoot loops, or attention-seeking replay.
+
+The cameo uses CSS transforms and discrete sprite frames only. It must not cause layout shift, move page content, or require WebGL. Keep all positions on integer display pixels so the native sprite remains crisp.
+
+### Mobile and safe-area behavior
+
+- Anchor the fixed reveal layer to the same bottom-right system as the launcher and include `env(safe-area-inset-right)` and `env(safe-area-inset-bottom)`.
+- At 390 × 844, keep the greeting bubble and visible sprite inside the viewport without covering the primary navigation or the launcher.
+- The hidden position must place the complete sprite and bubble below the viewport on every supported display scale—not merely crop the lower torso.
+- Recalculate the hidden endpoint after orientation or viewport-height changes; never leave hair or the bubble peeking above the edge.
+
+### Accessibility and reduced motion
+
+- The cameo is decorative: `aria-hidden="true"`, non-focusable, and `pointer-events: none`.
+- Do not auto-announce “Howdy, folks!” through a live region. The persistently available launcher carries the accessible name **“Ask Jolene about Carl's work.”**
+- With `prefers-reduced-motion: reduce`, skip `intro_rising`, `intro_greeting`, and `intro_exiting`. Show the static launcher only; reveal the character after the visitor opens chat.
+- Keyboard and screen-reader behavior must be identical whether or not the cameo ran.
+
+### Implementation boundary
+
+This brief defines the motion contract and authorizes the four review studies only. It does not authorize production sprite work, renderer implementation, or public use. The later integration ticket owns session persistence, lifecycle cancellation, chat state wiring, browser tests, and performance validation. The avatar renderer remains independent of Jolene's answer service and does not imply awareness, presence, or agency.
+
 ## Four artist studies
 
 Produce these as materially distinct **48 × 56 native sprites**, shown at 1× and 4×. They are studies, not four resolutions.
@@ -85,6 +136,25 @@ More asymmetric shoulder line and a compact lifted hand. Most playful study, but
 
 Each study uses the same palette ceiling and grid. An artist may move masses and anchors but may not add antialiasing, extra colors, partial alpha, or a larger source canvas.
 
+## Selected visual direction
+
+On August 28, 2026, Carl selected the **Country Host** study as the direction to preserve. The exact review reference is [`/jolene/review/country-host-selected-direction.png`](/jolene/review/country-host-selected-direction.png), fingerprinted as `sha256:839ade6ea55a69cf4812a238b05204446576eb7241274a06130276b95d0c17b8`.
+
+The locked visual qualities are:
+
+- poised three-quarter stance with one forearm crossing the waist;
+- large blonde hair silhouette with broad curls and a red flower;
+- warm, confident expression with readable eyes and restrained smile;
+- large hoop earrings;
+- red patterned tied blouse with a small dark-blue waist accent;
+- visible square-pixel character without chibi, puppet, or caricature proportions.
+
+This exact review PNG is intentionally retained as the taste reference even though it is 1162 × 1353, has no alpha channel, and contains a baked checkerboard. Those production defects were corrected without redesigning the selected character. Failed generative transparency edits are not approved substitutes because they changed the source and introduced edge artifacts.
+
+Carl approved the clean production master at [`/jolene/jolene-country-host-master.png`](/jolene/jolene-country-host-master.png) on August 28, 2026. Its fingerprint is `sha256:ec53fef8888e3faa15b19b2726882844cccc683493892b402dbe04ca394d6ac8`. The approved master preserves the source RGB values for every retained character pixel, adds true binary transparency, and locks the 1162 × 1353 frame, the 751 × 1173 opaque bounds at `(187, 88)`, and a bottom-center animation anchor at `(563, 1261)`.
+
+Production derivatives must preserve this master’s aspect ratio, color appearance, silhouette, face, hair, flower, earrings, blouse, and pose. Do not simplify away the visual qualities Carl selected merely to satisfy the superseded study grid.
+
 ## Review board
 
 Every study must be presented on:
@@ -100,16 +170,16 @@ Score silhouette, recognizable cues, warmth, professionalism, readability, anima
 
 ## Rendering contract
 
-- Master assets are indexed-color PNGs or a lossless sprite sheet exported at native resolution.
+- The approved master is a lossless RGBA PNG at 1162 × 1353; animation derivatives must remain lossless.
 - Use integer frame coordinates and one fixed origin across every state.
 - CSS uses `image-rendering: pixelated`; Canvas 2D uses `imageSmoothingEnabled = false`.
-- Never use filtered scaling, fractional CSS dimensions, fractional translation, blur, glow, SVG smoothing, JPEG, or a generated 1254 × 1254 source downsampled into a sprite.
+- Preserve aspect ratio and use the approved master or lossless derivatives. Never use blur, glow, JPEG, nonuniform scaling, or a generative redraw as a substitute.
 - Static fallback is the approved `idle` frame.
 - Reduced motion shows the static frame with at most user-initiated state changes.
 - Renderer and state manifest remain replaceable; no chat/model provider logic belongs in the asset.
 
 ## Approval and rights boundary
 
-Carl must select one study and approve its silhouette, likeness cues, palette, grid, anchors, and expression language before sprite-sheet production. The current assumption is personal, noncommercial portfolio exploration. Public deployment of a recognizable living person's likeness remains a separate rights and launch decision; documenting that boundary does not change the visual brief or substitute a different character.
+Carl approved this brief, its peek-reveal choreography, the Country Host visual direction, and the clean transparent production master on August 28, 2026. Sprite-state production is authorized. Public deployment remains a separate launch decision.
 
 Rejected generated concepts are reference evidence only. They must not be copied into the repository, traced, rigged, or treated as production art.
