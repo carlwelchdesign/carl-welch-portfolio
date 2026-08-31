@@ -635,13 +635,54 @@ test('Jolene case study publishes the approved origin story and stable evidence 
   expect(overflow).toBeLessThanOrEqual(0);
 });
 
+test('Jolene case study presents distinct character sheets, the build retrospective, and current architecture', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/work/jolene-ai#project-gallery');
+
+  const gallery = page.locator('#project-gallery');
+  const media = gallery.locator('.project-gallery-item img');
+  await expect(media).toHaveCount(4);
+  for (const image of await media.all()) {
+    await image.scrollIntoViewIfNeeded();
+    await expect.poll(() => image.evaluate((element) => (element as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+  }
+  const sources = await media.evaluateAll((images) => images.map((image) => image.getAttribute('src')));
+  expect(new Set(sources).size).toBe(4);
+  await expect(gallery.getByText('Conversation state ensemble', { exact: true })).toBeVisible();
+  await expect(gallery.getByText('Canonical identity lock', { exact: true })).toBeVisible();
+  await expect(gallery.getByText('Greeting keyframes', { exact: true })).toBeVisible();
+  await expect(gallery.getByText('Approved runtime atlas', { exact: true })).toBeVisible();
+
+  await gallery.getByRole('button', { name: 'Open full-size view of Greeting keyframes' }).click();
+  const viewer = page.getByRole('dialog', { name: 'Jolene AI full-size image viewer' });
+  await expect(viewer).toBeVisible();
+  await expect(viewer.getByText('Greeting keyframes', { exact: true })).toBeVisible();
+  await viewer.getByRole('button', { name: 'Close' }).click();
+  await expect(viewer).not.toBeVisible();
+
+  const retrospective = page.locator('#retrospective');
+  await expect(retrospective.getByRole('heading', { name: 'The character only became reliable when art direction became engineering.' })).toBeVisible();
+  await expect(retrospective.locator('.project-retrospective-grid > li')).toHaveCount(4);
+  await expect(retrospective).toContainText('Identity drift between poses');
+  await expect(retrospective).toContainText('Transparency versus intentional white');
+
+  const architecture = page.locator('#architecture');
+  const architectureMap = architecture.locator('.architecture-map').last();
+  await expect(architectureMap.locator('[data-architecture-node="corpus"]')).toContainText('Reviewed career artifact');
+  await expect(architectureMap.locator('[data-architecture-node="corpus"]')).toContainText('Five chapters, 16 roles, 92 records in review');
+  await expect(architectureMap.locator('[data-architecture-node="evaluation"]')).toContainText('132 cases, 192 turns, red team');
+
+  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+  expect(overflow).toBeLessThanOrEqual(0);
+});
+
 for (const [route, role, scope] of [
   ['/work/job-search-os', 'Independent product engineer', 'Product strategy, interface design, and full-stack implementation'],
   ['/work/flight-tracker-ai', 'Independent product engineer', 'Product design, frontend engineering, and Rust service integration'],
   ['/work/wave-factory-essentials', 'Creator and plug-in engineer', 'DSP, plug-in architecture, interface design, and product direction'],
   ['/work/supraconscious-avatar-ai', 'Independent product engineer', 'Product strategy, AI system design, and full-stack implementation'],
   ['/work/argent-matchmaking', 'Product engineer and system designer', 'Product strategy, interface art direction, platform architecture, and implementation'],
-  ['/work/jolene-ai', 'Product architect and lead builder', 'Product direction, agent architecture, evidence design, personality research, implementation, evaluation, and release governance'],
+  ['/work/jolene-ai', 'Product architect and lead builder', 'Product direction, agent architecture, evidence design, character and behavior direction, implementation, evaluation, and release governance'],
 ] as const) {
   test(`${route} presents recruiter-readable project facts above the fold`, async ({ page }) => {
     await page.setViewportSize({ width: 320, height: 720 });

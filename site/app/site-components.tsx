@@ -526,6 +526,43 @@ export function ProjectStory({ project }: { project: PortfolioProject }) {
   );
 }
 
+export function ProjectRetrospective({ project }: { project: PortfolioProject }) {
+  const retrospective = project.retrospective;
+  if (!retrospective) return null;
+
+  return (
+    <section id="retrospective" className="project-retrospective" aria-labelledby="project-retrospective-title">
+      <Reveal className="project-retrospective-heading">
+        <p className="eyebrow">Build retrospective</p>
+        <h2 id="project-retrospective-title">{retrospective.heading}</h2>
+        <p>{retrospective.summary}</p>
+      </Reveal>
+      <ol className="project-retrospective-grid">
+        {retrospective.lessons.map((lesson, index) => (
+          <li key={lesson.title}>
+            <span>{String(index + 1).padStart(2, '0')}</span>
+            <h3>{lesson.title}</h3>
+            <dl>
+              <div>
+                <dt>What broke</dt>
+                <dd>{lesson.challenge}</dd>
+              </div>
+              <div>
+                <dt>Course correction</dt>
+                <dd>{lesson.response}</dd>
+              </div>
+              <div>
+                <dt>What held</dt>
+                <dd>{lesson.result}</dd>
+              </div>
+            </dl>
+          </li>
+        ))}
+      </ol>
+    </section>
+  );
+}
+
 export function PageIntro({ eyebrow, title, summary }: { eyebrow: string; title: string; summary: string }) {
   return (
     <header className="page-intro">
