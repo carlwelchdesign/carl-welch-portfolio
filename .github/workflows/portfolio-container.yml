@@ -33,6 +33,10 @@ jobs:
         working-directory: site
         run: pnpm install --frozen-lockfile
 
+      - name: Install quality-check browser
+        working-directory: site
+        run: pnpm exec playwright install --with-deps chromium
+
       - name: Verify portfolio quality
         working-directory: site
         run: pnpm check
@@ -83,7 +87,7 @@ jobs:
 
       - name: Show logs on failure
         if: failure()
-        run: docker logs portfolio-ci
+        run: docker logs portfolio-ci 2>/dev/null || true
 
   browser-regression:
     runs-on: ubuntu-latest

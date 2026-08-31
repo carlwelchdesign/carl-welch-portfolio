@@ -23,6 +23,8 @@ assert.match(workflow, /aquasecurity\/trivy-action@[a-f0-9]{40}/);
 assert.match(workflow, /severity: HIGH,CRITICAL/);
 assert.match(workflow, /node site\/scripts\/check-repository-security\.mjs/);
 assert.match(workflow, /name: Verify portfolio quality[\s\S]*?run: pnpm check/);
+assert.match(workflow, /name: Install quality-check browser[\s\S]*?playwright install --with-deps chromium/);
+assert.match(workflow, /docker logs portfolio-ci 2>\/dev\/null \|\| true/);
 assert.doesNotMatch(dockerfile, /RUN pnpm check/);
 assert.doesNotMatch(dockerfile, /playwright install/);
 assert.match(dockerfile, /RUN pnpm build \\\n+  && pnpm check:no-public-sourcemaps/);
