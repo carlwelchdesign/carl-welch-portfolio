@@ -33,6 +33,59 @@ test('standalone client hydrates and the mobile launcher opens the modal', async
   expect([...failedClientChunks], 'client chunk failed while opening the modal').toEqual([]);
 });
 
+test('quick questions rotate across visits instead of repeating one fixed trio', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/');
+  await page.evaluate(() => {
+    window.sessionStorage.setItem('jolene-country-host-intro-seen-v1', 'true');
+    window.sessionStorage.setItem('jolene-question-rotation-v1', '0');
+  });
+  await page.reload();
+  await page.getByRole('button', { name: /Ask Jolene/ }).click();
+
+  const panel = page.getByRole('dialog', { name: 'Ask Jolene' });
+  const firstQuestions = await panel.locator('.jolene-starters button').allTextContents();
+  expect(firstQuestions).toHaveLength(3);
+  expect(new Set(firstQuestions).size).toBe(3);
+
+  await page.reload();
+  await page.getByRole('button', { name: /Ask Jolene/ }).click();
+  const nextQuestions = await page
+    .getByRole('dialog', { name: 'Ask Jolene' })
+    .locator('.jolene-starters button')
+    .allTextContents();
+  expect(nextQuestions).toHaveLength(3);
+  expect(nextQuestions).not.toEqual(firstQuestions);
+});
+
+test('contextual follow-ups are clickable and do not immediately repeat', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: /Ask Jolene/ }).click();
+  const panel = page.getByRole('dialog', { name: 'Ask Jolene' });
+  const textarea = panel.getByLabel('Ask about Carl’s work or experience');
+  const assistantMessages = panel.locator('.jolene-message[data-role="assistant"]');
+  const initialAssistantCount = await assistantMessages.count();
+  await textarea.fill('What kind of systems does Carl build?');
+  await panel.getByRole('button', { name: 'Ask Jolene', exact: true }).click();
+  await expect(assistantMessages).toHaveCount(initialAssistantCount + 1);
+  await expect(panel.getByText('Ask next')).toBeVisible();
+
+  const firstFollowUps = await panel.locator('.jolene-starters button').allTextContents();
+  expect(firstFollowUps).toHaveLength(3);
+  const assistantCount = await assistantMessages.count();
+  await panel.locator('.jolene-starters button').first().click();
+  await expect(panel.locator('.jolene-message[data-role="visitor"]').last()).toContainText(
+    firstFollowUps[0],
+  );
+  await expect(assistantMessages).toHaveCount(assistantCount + 1);
+  await expect(panel.getByText('Ask next')).toBeVisible();
+
+  const nextFollowUps = await panel.locator('.jolene-starters button').allTextContents();
+  expect(nextFollowUps).toHaveLength(3);
+  expect(nextFollowUps).not.toContain(firstFollowUps[0]);
+  expect(nextFollowUps).not.toEqual(firstFollowUps);
+});
+
 test(`contact intent is ${contactIntentEnabled ? 'available' : 'hidden'} when configured`, async ({ page }) => {
   await page.goto('/');
 
@@ -129,7 +182,7 @@ test(`returned ${scenario === 'unavailable' ? 'error' : 'answer'} keeps keyboard
 
   const followUps = panel.locator('.jolene-starters');
   await expect(followUps.getByText('Ask next')).toBeVisible();
-  await expect(followUps.getByRole('button')).toHaveCount(2);
+  await expect(followUps.getByRole('button')).toHaveCount(3);
 });
 
 test('country-host cameo appears once, leaves cleanly, and returns only with chat', async ({ page }) => {

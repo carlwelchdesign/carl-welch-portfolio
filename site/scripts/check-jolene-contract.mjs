@@ -16,6 +16,7 @@ const sourceFiles = [
   'public-evidence-targets.ts',
   'public-evidence-navigation-core.ts',
   'public-evidence-navigation.ts',
+  'conversation-starters.ts',
 ].map((file) => resolve(sourceRoot, file));
 const outputRoot = await mkdtemp(join(tmpdir(), 'portfolio-jolene-contract-'));
 
@@ -57,6 +58,7 @@ try {
   const navigation = await import(pathToFileURL(resolve(outputRoot, 'public-evidence-navigation-core.js')).href);
   const publicNavigation = await import(pathToFileURL(resolve(outputRoot, 'public-evidence-navigation.js')).href);
   const compatibility = await import(pathToFileURL(resolve(outputRoot, 'public-compatibility.js')).href);
+  const starters = await import(pathToFileURL(resolve(outputRoot, 'conversation-starters.js')).href);
   const openApi = JSON.parse(
     await readFile(resolve(process.cwd(), 'contracts/public-jolene-v1.openapi.json'), 'utf8'),
   );
@@ -96,6 +98,21 @@ try {
   assert.deepEqual(validation.parsePublicEvidenceManifest(validatedProviderManifest), validatedProviderManifest);
   assert.equal(validatedProviderManifest.evidenceCount, 41);
   assert.equal(validatedProviderManifest.revokedEvidenceIds.length, 0);
+  assert.ok(starters.PUBLIC_JOLENE_CONVERSATION_STARTERS.length >= 30);
+  assert.equal(
+    new Set(starters.PUBLIC_JOLENE_CONVERSATION_STARTERS).size,
+    starters.PUBLIC_JOLENE_CONVERSATION_STARTERS.length,
+  );
+  assert.deepEqual(
+    starters.selectConversationStarters(0),
+    starters.selectConversationStarters(0),
+  );
+  assert.notDeepEqual(
+    starters.selectConversationStarters(0),
+    starters.selectConversationStarters(11),
+  );
+  const excludedStarter = starters.selectConversationStarters(0)[0];
+  assert.ok(!starters.selectConversationStarters(0, 3, [excludedStarter]).includes(excludedStarter));
 
   const success = fixtures.createFixturePublicJoleneAdapter('success');
   assert.equal(contract.PUBLIC_JOLENE_ENDPOINTS.manifest, '/v1/public-evidence/manifest');
