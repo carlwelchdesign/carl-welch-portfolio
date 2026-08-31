@@ -97,7 +97,7 @@ export function JoleneEvidence({ evidence, onOpen }: JoleneEvidenceProps) {
     <details
       className="jolene-evidence"
       onToggle={(event) => {
-        if (event.currentTarget.open) onOpen?.();
+        if (event.target === event.currentTarget && event.currentTarget.open) onOpen?.();
       }}
       {...(!hasClaims ? { open: true } : {})}
     >
@@ -116,7 +116,12 @@ export function JoleneEvidence({ evidence, onOpen }: JoleneEvidenceProps) {
 
               return (
                 <li key={claim.claimId}>
-                  <details className="jolene-claim">
+                  <details
+                    className="jolene-claim"
+                    onToggle={(event) => {
+                      if (event.target === event.currentTarget && event.currentTarget.open) onOpen?.();
+                    }}
+                  >
                     <summary>
                       <span>Point {String(index + 1).padStart(2, '0')}</span>
                       <strong>{claim.text}</strong>

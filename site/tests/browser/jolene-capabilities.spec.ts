@@ -180,6 +180,22 @@ test('country-host cameo appears once, leaves cleanly, and returns only with cha
     const evidence = panel.locator('details.jolene-evidence').last();
     await evidence.locator(':scope > summary').click();
     await expect(avatar).toHaveAttribute('data-avatar-state', 'evidence');
+    await expect(avatar).toHaveAttribute('data-avatar-frame', 'evidence-2');
+    await expect(avatar).toHaveAttribute('data-avatar-state', 'idle', { timeout: 1_500 });
+
+    const firstPoint = evidence.locator('details.jolene-claim').first();
+    await firstPoint.locator(':scope > summary').click();
+    await expect(firstPoint).toHaveAttribute('open', '');
+    await expect(avatar).toHaveAttribute('data-avatar-state', 'evidence');
+    await expect(avatar).toHaveAttribute('data-avatar-frame', 'evidence-2');
+    await expect(avatar).toHaveAttribute('data-avatar-state', 'idle', { timeout: 1_500 });
+
+    await firstPoint.locator(':scope > summary').click();
+    await expect(firstPoint).not.toHaveAttribute('open', '');
+    await expect(avatar).toHaveAttribute('data-avatar-state', 'idle');
+
+    await question.fill('Which project best shows Carl’s product engineering work?');
+    await expect(avatar).toHaveAttribute('data-avatar-state', 'excited');
   }
 
   await panel.getByRole('button', { name: 'Close Jolene chat' }).click();
