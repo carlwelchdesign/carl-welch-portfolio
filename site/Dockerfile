@@ -10,7 +10,6 @@ RUN corepack enable
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN pnpm install --frozen-lockfile
-RUN pnpm exec playwright install --with-deps chromium
 
 COPY . .
 
@@ -29,7 +28,8 @@ ENV NEXT_PUBLIC_SENTRY_DSN=${NEXT_PUBLIC_SENTRY_DSN}
 ENV NEXT_PUBLIC_SENTRY_ENVIRONMENT=${NEXT_PUBLIC_SENTRY_ENVIRONMENT}
 ENV NEXT_PUBLIC_SENTRY_RELEASE=${NEXT_PUBLIC_SENTRY_RELEASE}
 
-RUN pnpm check \
+RUN pnpm build \
+  && pnpm check:no-public-sourcemaps \
   && pnpm prune --prod
 
 FROM node:${NODE_VERSION}-bookworm-slim AS runtime

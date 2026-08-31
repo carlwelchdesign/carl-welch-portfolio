@@ -3,6 +3,7 @@ import { readFile } from 'node:fs/promises';
 
 const dependabot = await readFile(new URL('../../.github/dependabot.yml', import.meta.url), 'utf8');
 const workflow = await readFile(new URL('../../.github/workflows/portfolio-container.yml', import.meta.url), 'utf8');
+const dockerfile = await readFile(new URL('../Dockerfile', import.meta.url), 'utf8');
 const runbook = await readFile(new URL('../docs/REPOSITORY_SECURITY_OPERATIONS.md', import.meta.url), 'utf8');
 
 assert.match(dependabot, /^version: 2$/m);
@@ -21,6 +22,12 @@ assert.match(dependabot, /open-pull-requests-limit: 3/);
 assert.match(workflow, /aquasecurity\/trivy-action@[a-f0-9]{40}/);
 assert.match(workflow, /severity: HIGH,CRITICAL/);
 assert.match(workflow, /node site\/scripts\/check-repository-security\.mjs/);
+assert.match(workflow, /name: Verify portfolio quality[\s\S]*?run: pnpm check/);
+assert.match(workflow, /name: Install quality-check browser[\s\S]*?playwright install --with-deps chromium/);
+assert.match(workflow, /docker logs portfolio-ci 2>\/dev\/null \|\| true/);
+assert.doesNotMatch(dockerfile, /RUN pnpm check/);
+assert.doesNotMatch(dockerfile, /playwright install/);
+assert.match(dockerfile, /RUN pnpm build \\\n+  && pnpm check:no-public-sourcemaps/);
 
 for (const boundary of [
   'vulnerability alerts are enabled',

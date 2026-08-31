@@ -801,11 +801,11 @@ export const projects: PortfolioProject[] = [
     slug: 'jolene-ai',
     name: 'Jolene AI',
     category: 'AI agents / Knowledge systems',
-    status: 'Deployed public delegate with career-wide expansion in progress',
+    status: 'Deployed career-wide public delegate',
     tone: 'green',
     number: '06',
     summary:
-      'A governed AI system that combines reviewed evidence, bounded conversation continuity, tested model and deterministic responses, explicit action boundaries, and a warm, recognizable personality. Current work is expanding the public delegate across my full 20-plus-year career.',
+      'A governed AI system that combines reviewed evidence, bounded conversation continuity, tested model and deterministic responses, explicit action boundaries, and a warm, recognizable personality across my full 20-plus-year career.',
     role: 'Product architect and lead builder',
     scope: 'Product direction, agent architecture, evidence design, character and behavior direction, implementation, evaluation, and release governance',
     image: {
@@ -925,7 +925,7 @@ export const projects: PortfolioProject[] = [
         { id: 'bff', label: 'Same-origin BFF', detail: 'Bounded schemas and server-only token', technology: 'Next.js · TypeScript', kind: 'service', x: 525, y: 105, width: 180 },
         { id: 'delegate', label: 'Public Jolene API', detail: 'Answer, job-fit, policy refusal', technology: 'Vercel · TypeScript', kind: 'ai', x: 325, y: 255, width: 180 },
         { id: 'retrieval', label: 'Career-wide retrieval', detail: 'Employer, agency, leadership, products', technology: 'Lexical · semantic rank', kind: 'service', x: 525, y: 255, width: 180 },
-        { id: 'corpus', label: 'Reviewed career artifact', detail: 'Five chapters, 16 roles, 92 records in review', technology: 'Versioned · hash verified', kind: 'data', x: 325, y: 430, width: 180 },
+        { id: 'corpus', label: 'Reviewed career artifact', detail: 'Five chapters, 16 roles, 92 published records', technology: 'Versioned · hash verified', kind: 'data', x: 325, y: 430, width: 180 },
         { id: 'continuity', label: 'Bounded continuity', detail: 'Public context only, short lived, resettable', technology: 'Typed conversationContext', kind: 'control', x: 525, y: 430, width: 180 },
         { id: 'composer', label: 'Grounded composer', detail: 'Model or deterministic answer, then validate', technology: 'OpenAI · structured output', kind: 'ai', x: 775, y: 105, width: 180 },
         { id: 'evaluation', label: 'Launch evaluation', detail: '132 cases, 192 turns, red team', technology: 'Playwright · eval runner', kind: 'control', x: 775, y: 270, width: 180 },
@@ -968,7 +968,7 @@ export const projects: PortfolioProject[] = [
       },
       {
         id: 'portfolio:claim:jolene-ai:corpus', sourceIds: ['portfolio:source:project:jolene-ai'],
-        text: 'Exports public career knowledge as a versioned, hash-verified, deny-by-default artifact with review timestamps and revocation continuity. Active expansion work covers five career chapters and 16 detailed roles in a 92-record reviewed candidate artifact without exposing private evidence or raw Obsidian content.',
+        text: 'Exports public career knowledge as a versioned, hash-verified, deny-by-default artifact with review timestamps and revocation continuity. The deployed corpus covers five career chapters and 16 detailed roles in a 92-record reviewed artifact without exposing private evidence or raw Obsidian content.',
         strength: 'moderate', maturity: 'deployed_demo', limitations: ['Public answers are limited to the currently published artifact.'], reviewState: 'approved', publicApproved: true,
       },
       {
@@ -998,7 +998,7 @@ export const projects: PortfolioProject[] = [
       },
       {
         id: 'portfolio:claim:jolene-ai:deployment', sourceIds: ['portfolio:source:project:jolene-ai'],
-        text: 'Separates build, evaluation, preview, production promotion, corpus pinning, and rollback proof into distinct release gates. The active career-wide launch suite contains 132 cases and 192 turns, with production browser and telemetry verification still required for each release.',
+        text: 'Separates build, evaluation, preview, production promotion, corpus pinning, and rollback proof into distinct release gates. The career-wide launch suite contains 132 cases and 192 turns, and the current release passed production browser and answer-mode telemetry verification.',
         strength: 'moderate', maturity: 'deployed_demo', limitations: ['Future releases still require their own checks and explicit promotion.'], reviewState: 'approved', publicApproved: true,
       },
       {
@@ -1019,7 +1019,7 @@ export const projects: PortfolioProject[] = [
     ],
     boundaries: [
       'Public Jolene can use only the reviewed public artifact. It cannot read Carl’s private Obsidian vault, memory, Slack, SQLite database, or MCP tools.',
-      'The 92-record career-wide artifact and its broader delivery routing are active release work. The deployed delegate remains pinned to the last separately verified production corpus until that work passes its full gates.',
+      'The deployed delegate is pinned to the versioned 92-record career-wide artifact. Future corpus or answer changes still require their own evaluation, browser, telemetry, promotion, and rollback gates.',
       'Audio voice remains future work, and external messages or other consequential actions remain disabled or subject to separate human authorization.',
       'The public chat is a deployed portfolio demonstration. The broader chief-of-staff runtime remains a private local system for Carl.',
     ],
