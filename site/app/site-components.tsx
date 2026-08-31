@@ -458,7 +458,7 @@ export function WorkIndex({ items }: { items: PortfolioProject[] }) {
       <Reveal className="work-index-heading">
         <p className="eyebrow">Jump to a case study</p>
         <h2 id="work-index-title">Project index</h2>
-        <p>Five flagship projects, organized for a quick scan.</p>
+        <p>{items.length} flagship projects, organized for a quick scan.</p>
       </Reveal>
       <ol>
         {items.map((project) => (
