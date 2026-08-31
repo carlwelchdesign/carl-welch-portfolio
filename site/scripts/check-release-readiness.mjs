@@ -4,13 +4,13 @@ import { resolve } from 'node:path';
 
 const siteRoot = process.cwd();
 const repositoryRoot = resolve(siteRoot, '..');
-const [manifest, readme, architecture, gates, audit, deliveryPolicy] = await Promise.all([
+const [manifest, readme, architecture, gates, audit, regressionPolicy] = await Promise.all([
   readJson('contracts/validated-public-evidence-manifest.json'),
   readText('README.md'),
   readOptionalText('../PUBLIC_JOLENE_DEPLOYMENT_ARCHITECTURE.md'),
   readOptionalText('../RELEASE_GATES.md'),
   readText('docs/PORTFOLIO_RELEASE_READINESS_2026-08-27.md'),
-  readText('../DELIVERY_POLICY.md'),
+  readText('docs/REGRESSION_TEST_POLICY.md'),
 ]);
 
 assert.equal(manifest.schemaVersion, '1.0.0');
@@ -41,9 +41,10 @@ assert.match(audit, /zero automated contact intents/);
 assert.match(audit, /PR #63 adds bearer verification/);
 assert.match(audit, /managed production secret/);
 assert.match(readme, /server-only upstream token/);
-assert.match(deliveryPolicy, /Every confirmed regression must add or strengthen an automated test/);
-assert.match(deliveryPolicy, /A regression is not complete and must not be reported as fixed until that test/);
-assert.match(deliveryPolicy, /Internal state labels alone are insufficient/);
+assert.match(regressionPolicy, /Every confirmed regression must add or strengthen an automated test/);
+assert.match(regressionPolicy, /A regression is not complete and must not be reported as fixed until that test/);
+assert.match(regressionPolicy, /Internal state labels alone are insufficient/);
+assert.match(readme, /REGRESSION_TEST_POLICY\.md/);
 
 for (const staleClaim of [
   'proposed public evidence export and isolated public delegate endpoints are not verified live',
