@@ -14,6 +14,7 @@ import {
 
 type FrameDefinition = {
   index: number;
+  assetPath?: string;
   pose: string;
   state: AvatarState;
 };
@@ -31,6 +32,9 @@ const stateDefinitions = stateContractJson.definitions as Record<AvatarState, St
 const spriteSheetPath = frameCatalogJson.sheetPath;
 const fallbackPath = frameCatalogJson.fallbackPath;
 const spriteSheetColumns = frameCatalogJson.columns;
+const standaloneAssetPaths = [...new Set(
+  Object.values(frameCatalog).flatMap((frame) => frame.assetPath ? [frame.assetPath] : []),
+)];
 
 export type JoleneAvatarController = {
   state: AvatarState;
@@ -39,7 +43,7 @@ export type JoleneAvatarController = {
 };
 
 export function preloadJoleneAvatarAssets(): void {
-  for (const assetPath of [spriteSheetPath, fallbackPath]) {
+  for (const assetPath of [spriteSheetPath, fallbackPath, ...standaloneAssetPaths]) {
     const image = new Image();
     image.decoding = 'async';
     image.src = assetPath;
@@ -172,6 +176,17 @@ export function JoleneAvatar({
       {fallbackToIdle ? (
         // eslint-disable-next-line @next/next/no-img-element -- Exact pixel art must bypass image optimization.
         <img className="jolene-avatar-fallback" src={fallbackPath} alt="" draggable={false} />
+      ) : frame.assetPath ? (
+        // eslint-disable-next-line @next/next/no-img-element -- Exact pixel art must bypass image optimization.
+        <img
+          className="jolene-avatar-standalone"
+          src={frame.assetPath}
+          alt=""
+          draggable={false}
+          decoding="async"
+          onLoad={() => setSheetReady(true)}
+          onError={() => setFallbackToIdle(true)}
+        />
       ) : (
         // eslint-disable-next-line @next/next/no-img-element -- Exact sprite cropping must bypass image optimization.
         <img

@@ -49,13 +49,19 @@ assert.notEqual(
 assert.equal(catalog.frames[contract.definitions.speak.reducedMotionFrame].index, 11, 'Speak must hold an open-eyed representative frame.');
 assert.ok(contract.definitions.speak.durationsMs[1] <= 120, 'The mouth-change speaking beat must remain brief and read as speech.');
 assert.deepEqual(contract.definitions.rest.frames, ['rest-0'], 'Rest must retain the known-good closed-eye pose until an identity-locked loop exists.');
-assert.equal(catalog.frames[contract.definitions.think.reducedMotionFrame].pose, 'attentive', 'Think must not use the rejected malformed standalone face.');
+assert.deepEqual(contract.definitions.think.frames, ['think-dance-a', 'think-dance-b'], 'Think must preserve the approved loading dance.');
+assert.equal(catalog.frames[contract.definitions.think.reducedMotionFrame].pose, 'loading-dance', 'Reduced-motion loading must hold the approved dance pose.');
+assert.equal(catalog.frames[contract.definitions.think.reducedMotionFrame].assetPath, '/jolene/sprites/loading-dance-v1.png');
 
 assert.deepEqual(Object.keys(contract.signals), expectedSignals);
 for (const [signal, state] of Object.entries(contract.signals)) {
   assert.ok(expectedStates.includes(state));
   const frameName = contract.definitions[state].reducedMotionFrame;
-  assert.equal(catalog.frames[frameName].pose, artManifest.signalToPose[signal], `${signal} does not use its approved pose.`);
+  if (signal === 'request_started') {
+    assert.equal(catalog.frames[frameName].pose, 'loading-dance', 'Request loading must use the approved standalone dance.');
+  } else {
+    assert.equal(catalog.frames[frameName].pose, artManifest.signalToPose[signal], `${signal} does not use its approved pose.`);
+  }
 }
 
 assert.equal(contract.rendering.sheetPath, artManifest.sheet.runtimePath);
@@ -84,4 +90,4 @@ for (const exportedName of ['AvatarState', 'AvatarSignal', 'stateForAvatarSignal
   assert.ok(source.includes(exportedName), `Avatar state module is missing ${exportedName}.`);
 }
 
-console.log('Jolene avatar state contract passed: authored reactions animate only where face identity is locked; Rest and Think use stable V1 poses.');
+console.log('Jolene avatar state contract passed: authored reactions and the approved loading dance animate; Rest keeps its stable V1 pose.');

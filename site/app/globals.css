@@ -773,6 +773,8 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .jolene-avatar { position: relative; width: 210px; aspect-ratio: 105 / 115; display: block; overflow: hidden; contain: layout paint style; pointer-events: none; user-select: none; transform: scaleX(-1); transform-origin: center bottom; }
 .jolene-avatar img { position: absolute; top: 0; display: block; max-width: none; height: 100%; image-rendering: pixelated; backface-visibility: hidden; }
 .jolene-avatar-sheet { left: calc(var(--jolene-frame-index) * -100%); width: calc(var(--jolene-sheet-columns) * 100%); }
+.jolene-avatar-standalone { left: 0; width: 100%; object-fit: contain; object-position: bottom center; transform-origin: center bottom; }
+.jolene-avatar[data-avatar-frame='think-dance-b'] .jolene-avatar-standalone { transform: scaleX(-1); }
 .jolene-avatar-fallback { left: 0; width: 100%; }
 .jolene-cameo { position: absolute; right: -14px; bottom: 56px; width: 250px; height: 330px; display: grid; align-content: end; justify-items: end; pointer-events: none; }
 .jolene-cameo p { position: absolute; z-index: 2; top: 12px; right: 112px; width: max-content; margin: 0; padding: 10px 12px; border: 1px solid var(--ink); background: var(--paper); color: var(--ink); font: 800 14px/1 var(--font-geist-sans), sans-serif; box-shadow: 7px 7px 0 var(--jolene-accent); }
