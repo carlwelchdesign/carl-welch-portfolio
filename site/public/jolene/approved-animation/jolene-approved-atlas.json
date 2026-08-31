@@ -120,7 +120,7 @@
         "h": 460
       }
     },
-    "greet-rest.png": {
+    "greet-wave.png": {
       "frame": {
         "x": 640,
         "y": 460,
@@ -140,7 +140,7 @@
         "h": 460
       }
     },
-    "greet-early.png": {
+    "loading-dance-a.png": {
       "frame": {
         "x": 960,
         "y": 460,
@@ -160,69 +160,9 @@
         "h": 460
       }
     },
-    "greet-mid.png": {
+    "loading-dance-b.png": {
       "frame": {
         "x": 0,
-        "y": 920,
-        "w": 320,
-        "h": 460
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 320,
-        "h": 460
-      },
-      "sourceSize": {
-        "w": 320,
-        "h": 460
-      }
-    },
-    "greet-apex.png": {
-      "frame": {
-        "x": 320,
-        "y": 920,
-        "w": 320,
-        "h": 460
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 320,
-        "h": 460
-      },
-      "sourceSize": {
-        "w": 320,
-        "h": 460
-      }
-    },
-    "greet-secondary.png": {
-      "frame": {
-        "x": 640,
-        "y": 920,
-        "w": 320,
-        "h": 460
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 320,
-        "h": 460
-      },
-      "sourceSize": {
-        "w": 320,
-        "h": 460
-      }
-    },
-    "greet-settle.png": {
-      "frame": {
-        "x": 960,
         "y": 920,
         "w": 320,
         "h": 460

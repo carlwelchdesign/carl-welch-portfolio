@@ -227,6 +227,7 @@ export function createFixturePublicJoleneAdapter(
     async answer(request) {
       parsePortfolioAnswerRequest(request);
       enforceOperationalScenario(scenario);
+      await new Promise((resolve) => setTimeout(resolve, 600));
       return parsePortfolioAnswerResponse(createAnswerResponse(scenario));
     },
     async compareJob(request) {

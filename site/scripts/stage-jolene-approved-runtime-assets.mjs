@@ -11,40 +11,83 @@ const sha256 = (bytes) => createHash('sha256').update(bytes).digest('hex');
 const decodeDataUrl = (url) => Buffer.from(url.split(',')[1], 'base64');
 
 const idleAtlas = await readFile(new URL('jolene-idle-blink-v5-atlas-1x.png', reviewDirectory));
-const greetNames = ['rest', 'early', 'mid', 'apex', 'secondary', 'settle'];
-const greetFrames = Object.fromEntries(await Promise.all(greetNames.map(async (name) => [
-  name,
-  await readFile(new URL(`jolene-greet-v2-${name}.png`, reviewDirectory)),
-])));
+const greetWave = await readFile(new URL('../public/jolene/sprites/greet.png', import.meta.url));
+const loadingDance = await readFile(new URL('../public/jolene/sprites/loading-dance-v1.png', import.meta.url));
 
 assert.equal(sha256(idleAtlas), '041692e505323a7d14c96df9b197829814516e661a43191e6aecab402023122c');
-const expectedGreetHashes = {
-  rest: 'a21a02ca80e28ce7c9e816cf9bf6c0ec9afcab8879e53ddcacebf1ee488387ed',
-  early: 'a33d7511c8e4dc07531d82dfc405a79bddd57000d45d1f6e2acea2aec08f7489',
-  mid: '275bac376d15c93ce4ca1c9a7e7db60c520f5fab42880952c9ca0cec09c0d7a4',
-  apex: 'a4b741620e625e5e25ad1b6f4fa73346dbb4adc4a69413b478b11b715b66b388',
-  secondary: '99bbd6cf85ac2ceb9d2d22804369ccad096d5be85bb6dddadb4c64cea24c3043',
-  settle: '4b17632c258a46a67a5b4131ad9e8cb81534da1a5651a422dc33c5b0ca0e6348',
-};
-for (const name of greetNames) assert.equal(sha256(greetFrames[name]), expectedGreetHashes[name]);
+assert.equal(
+  sha256(greetWave),
+  '185259c7634741878473e834a77ab23ac888d9cd5c766472bab5d828f347580c',
+  'The approved single-frame wave changed. Preserve the canonical face, eyes, teeth, hair, hand, and alpha exactly.',
+);
 
 const browser = await chromium.launch({ headless: true });
 let idleFrames;
 try {
   const page = await browser.newPage();
-  idleFrames = await page.evaluate(async (source) => {
+  idleFrames = await page.evaluate(async (idleSource) => {
     const image = new Image();
-    image.src = source;
+    image.src = idleSource;
     await image.decode();
     if (image.width !== 3520 || image.height !== 460) throw new Error('Unexpected approved idle atlas dimensions.');
     const frameAt = (index) => {
       const canvas = document.createElement('canvas');
       canvas.width = 320;
       canvas.height = 460;
-      const context = canvas.getContext('2d');
+      const context = canvas.getContext('2d', { willReadFrequently: true });
       context.imageSmoothingEnabled = false;
       context.drawImage(image, index * 320, 0, 320, 460, 0, 0, 320, 460);
-      return canvas.toDataURL('image/png');
+      const frame = context.getImageData(0, 0, 320, 460);
+      const original = new Uint8ClampedArray(frame.data);
+      const hairMask = new Uint8Array(320 * 460);
+      const pixelIndex = (x, y) => y * 320 + x;
+      for (let y = 155; y <= 315; y += 1) {
+        for (let x = 245; x <= 291; x += 1) {
+          const offset = pixelIndex(x, y) * 4;
+          const red = original[offset];
+          const green = original[offset + 1];
+          const blue = original[offset + 2];
+          if (
+            original[offset + 3] > 0
+            && red > 80
+            && red >= green
+            && green > blue
+            && green / red > 0.62
+            && green - blue > 25
+          ) hairMask[pixelIndex(x, y)] = 1;
+        }
+      }
+      const expandedMask = new Uint8Array(hairMask);
+      for (let y = 155; y <= 315; y += 1) {
+        for (let x = 245; x <= 291; x += 1) {
+          const index = pixelIndex(x, y);
+          const offset = index * 4;
+          if (hairMask[index] || original[offset + 3] === 0) continue;
+          if (
+            hairMask[pixelIndex(x - 1, y)]
+            || hairMask[pixelIndex(x + 1, y)]
+            || hairMask[pixelIndex(x, y - 1)]
+            || hairMask[pixelIndex(x, y + 1)]
+          ) expandedMask[index] = 1;
+        }
+      }
+      let extendedTransparentPixels = 0;
+      for (let y = 155; y <= 315; y += 1) {
+        for (let x = 245; x <= 291; x += 1) {
+          const sourceIndex = pixelIndex(x, y);
+          if (!expandedMask[sourceIndex]) continue;
+          const targetIndex = pixelIndex(x + 10, y);
+          const sourceOffset = sourceIndex * 4;
+          const targetOffset = targetIndex * 4;
+          if (frame.data[targetOffset + 3] === 0) extendedTransparentPixels += 1;
+          frame.data[targetOffset] = original[sourceOffset];
+          frame.data[targetOffset + 1] = original[sourceOffset + 1];
+          frame.data[targetOffset + 2] = original[sourceOffset + 2];
+          frame.data[targetOffset + 3] = original[sourceOffset + 3];
+        }
+      }
+      context.putImageData(frame, 0, 0);
+      return { dataUrl: canvas.toDataURL('image/png'), extendedTransparentPixels };
     };
     return {
       rest: frameAt(0),
@@ -60,16 +103,24 @@ try {
 }
 
 const frameOutputs = {
-  'idle-rest.png': decodeDataUrl(idleFrames.rest),
-  'idle-inhale.png': decodeDataUrl(idleFrames.inhale),
-  'idle-rise.png': decodeDataUrl(idleFrames.rise),
-  'idle-peak.png': decodeDataUrl(idleFrames.peak),
-  'blink-half.png': decodeDataUrl(idleFrames.half),
-  'blink-closed.png': decodeDataUrl(idleFrames.closed),
-  ...Object.fromEntries(greetNames.map((name) => [`greet-${name}.png`, greetFrames[name]])),
+  'idle-rest.png': decodeDataUrl(idleFrames.rest.dataUrl),
+  'idle-inhale.png': decodeDataUrl(idleFrames.inhale.dataUrl),
+  'idle-rise.png': decodeDataUrl(idleFrames.rise.dataUrl),
+  'idle-peak.png': decodeDataUrl(idleFrames.peak.dataUrl),
+  'blink-half.png': decodeDataUrl(idleFrames.half.dataUrl),
+  'blink-closed.png': decodeDataUrl(idleFrames.closed.dataUrl),
+  'greet-wave.png': greetWave,
+  'loading-dance-a.png': loadingDance,
+  'loading-dance-b.png': loadingDance,
 };
 
+for (const [name, frame] of Object.entries(idleFrames)) {
+  assert.ok(frame.extendedTransparentPixels >= 1_000, `${name} did not receive the complete outer-hair silhouette.`);
+}
+
 const atlasFrameNames = Object.keys(frameOutputs);
+const atlasColumns = 4;
+const atlasRows = Math.ceil(atlasFrameNames.length / atlasColumns);
 const atlasBrowser = await chromium.launch({ headless: true });
 let atlasBytes;
 try {
@@ -98,7 +149,7 @@ try {
 }
 
 const atlasFrames = Object.fromEntries(atlasFrameNames.map((name, index) => [name, {
-  frame: { x: (index % 4) * 320, y: Math.floor(index / 4) * 460, w: 320, h: 460 },
+  frame: { x: (index % atlasColumns) * 320, y: Math.floor(index / atlasColumns) * 460, w: 320, h: 460 },
   rotated: false,
   trimmed: false,
   spriteSourceSize: { x: 0, y: 0, w: 320, h: 460 },
@@ -111,7 +162,7 @@ const atlasManifest = Buffer.from(`${JSON.stringify({
     version: '1.0',
     image: 'jolene-approved-atlas.png',
     format: 'RGBA8888',
-    size: { w: 1280, h: 1380 },
+    size: { w: atlasColumns * 320, h: atlasRows * 460 },
     scale: '1',
   },
 }, null, 2)}\n`);

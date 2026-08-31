@@ -5,6 +5,7 @@ import { chromium } from '@playwright/test';
 
 const sourceUrl = new URL('../public/jolene/review/country-host-rig-master-v2-source.png', import.meta.url);
 const typingExcitedSourceUrl = new URL('../public/jolene/review/country-host-typing-excited-v1-source.png', import.meta.url);
+const loadingDanceSourceUrl = new URL('../public/jolene/review/country-host-loading-dance-v1-source.png', import.meta.url);
 const outputDirectoryUrl = new URL('../public/jolene/sprites/', import.meta.url);
 const manifestUrl = new URL('../docs/jolene-avatar-sprites.v1.json', import.meta.url);
 const checkOnly = process.argv.includes('--check');
@@ -143,10 +144,13 @@ async function normalizeStandaloneFrame(sourceBytes, state) {
       const boundsWidth = maximumX - minimumX + 1;
       const boundsHeight = maximumY - minimumY + 1;
       const scale = Math.min((targetWidth - 16) / boundsWidth, (targetHeight - 20) / boundsHeight);
+      const visualScale = stateName === 'think' ? 1.1 : 1;
       const drawWidth = Math.max(1, Math.round(boundsWidth * scale));
       const drawHeight = Math.max(1, Math.round(boundsHeight * scale));
-      const destinationX = Math.round(targetAnchor.x - drawWidth / 2);
-      const destinationY = targetAnchor.y - drawHeight;
+      const scaledDrawWidth = Math.max(1, Math.round(drawWidth * visualScale));
+      const scaledDrawHeight = Math.max(1, Math.round(drawHeight * visualScale));
+      const destinationX = Math.round(targetAnchor.x - scaledDrawWidth / 2);
+      const destinationY = stateName === 'think' ? 8 : targetAnchor.y - scaledDrawHeight;
       const frameCanvas = document.createElement('canvas');
       frameCanvas.width = targetWidth;
       frameCanvas.height = targetHeight;
@@ -161,12 +165,23 @@ async function normalizeStandaloneFrame(sourceBytes, state) {
         boundsHeight,
         destinationX,
         destinationY,
-        drawWidth,
-        drawHeight,
+        scaledDrawWidth,
+        scaledDrawHeight,
       );
 
       const framedImage = frameContext.getImageData(0, 0, targetWidth, targetHeight);
       const framedPixels = framedImage.data;
+      if (stateName === 'think') {
+        for (let y = targetAnchor.y; y < targetHeight; y += 1) {
+          for (let x = 0; x < targetWidth; x += 1) {
+            const offset = (y * targetWidth + x) * 4;
+            framedPixels[offset] = 0;
+            framedPixels[offset + 1] = 0;
+            framedPixels[offset + 2] = 0;
+            framedPixels[offset + 3] = 0;
+          }
+        }
+      }
       let removedMattePixel = true;
       while (removedMattePixel) {
         removedMattePixel = false;
@@ -209,8 +224,28 @@ async function normalizeStandaloneFrame(sourceBytes, state) {
 
       const framePixels = framedPixels;
       let opaquePixels = 0;
+      let identityMinimumX = targetWidth;
+      let identityMinimumY = targetHeight;
+      let identityMaximumX = -1;
+      let identityMaximumY = -1;
       for (let pixelIndex = 3; pixelIndex < framePixels.length; pixelIndex += 4) {
         if (framePixels[pixelIndex] > 0) opaquePixels += 1;
+      }
+      for (let pixelIndex = 0; pixelIndex < targetWidth * targetHeight; pixelIndex += 1) {
+        const offset = pixelIndex * 4;
+        if (framePixels[offset + 3] === 0) continue;
+        const x = pixelIndex % targetWidth;
+        const y = Math.floor(pixelIndex / targetWidth);
+        if (y > 140) continue;
+        const red = framePixels[offset];
+        const green = framePixels[offset + 1];
+        const blue = framePixels[offset + 2];
+        const matchesIdentityMass = red > 120 && green > 75 && blue < 135 && red > green * 1.15 && green > blue * 1.2;
+        if (!matchesIdentityMass) continue;
+        identityMinimumX = Math.min(identityMinimumX, x);
+        identityMinimumY = Math.min(identityMinimumY, y);
+        identityMaximumX = Math.max(identityMaximumX, x);
+        identityMaximumY = Math.max(identityMaximumY, y);
       }
       return {
         state: stateName,
@@ -220,7 +255,19 @@ async function normalizeStandaloneFrame(sourceBytes, state) {
         dataUrl: frameCanvas.toDataURL('image/png'),
         opaquePixels,
         sourceBounds: { x: minimumX, y: minimumY, width: boundsWidth, height: boundsHeight },
-        drawBounds: { x: destinationX, y: destinationY, width: drawWidth, height: drawHeight },
+        drawBounds: {
+          x: destinationX,
+          y: stateName === 'think' ? 8 : destinationY,
+          width: scaledDrawWidth,
+          height: stateName === 'think' ? targetAnchor.y - 8 : scaledDrawHeight,
+        },
+        identityBounds: {
+          x: identityMinimumX,
+          y: identityMinimumY,
+          width: identityMaximumX - identityMinimumX + 1,
+          height: identityMaximumY - identityMinimumY + 1,
+        },
+        visualScale,
       };
     }, {
       source: asDataUrl(sourceBytes),
@@ -238,23 +285,30 @@ async function normalizeStandaloneFrame(sourceBytes, state) {
 
 const sourceBytes = await readFile(sourceUrl);
 const typingExcitedSourceBytes = await readFile(typingExcitedSourceUrl);
+const loadingDanceSourceBytes = await readFile(loadingDanceSourceUrl);
 const rigBaseFrame = await normalizeStandaloneFrame(sourceBytes, 'rig-base');
 const typingExcitedFrame = await normalizeStandaloneFrame(typingExcitedSourceBytes, 'excited');
+const loadingDanceFrame = await normalizeStandaloneFrame(loadingDanceSourceBytes, 'think');
 const result = {
   sourceWidth: rigBaseFrame.sourceWidth,
   sourceHeight: rigBaseFrame.sourceHeight,
-  frames: stateNames.map((state) => state === 'excited'
-    ? typingExcitedFrame
-    : { ...rigBaseFrame, state }),
+  frames: stateNames.map((state) => {
+    if (state === 'excited') return typingExcitedFrame;
+    if (state === 'think') return loadingDanceFrame;
+    return { ...rigBaseFrame, state };
+  }),
 };
 const outputs = [];
 
 const rigBaseBytes = Buffer.from(rigBaseFrame.dataUrl.split(',')[1], 'base64');
 const typingExcitedBytes = Buffer.from(typingExcitedFrame.dataUrl.split(',')[1], 'base64');
+const loadingDanceBytes = Buffer.from(loadingDanceFrame.dataUrl.split(',')[1], 'base64');
 const rigBasePath = '/jolene/sprites/rig-base-v2.png';
 const typingExcitedPath = '/jolene/sprites/typing-excited-v1.png';
+const loadingDancePath = '/jolene/sprites/loading-dance-v1.png';
 const rigBaseOutputUrl = new URL(`../public${rigBasePath}`, import.meta.url);
 const typingExcitedOutputUrl = new URL(`../public${typingExcitedPath}`, import.meta.url);
+const loadingDanceOutputUrl = new URL(`../public${loadingDancePath}`, import.meta.url);
 if (checkOnly) {
   const committedBytes = await readFile(rigBaseOutputUrl);
   assert.equal(sha256(committedBytes), sha256(rigBaseBytes), 'The canonical rig base is stale.');
@@ -268,19 +322,36 @@ if (checkOnly) {
 } else {
   await writeFile(typingExcitedOutputUrl, typingExcitedBytes);
 }
+if (checkOnly) {
+  const committedBytes = await readFile(loadingDanceOutputUrl);
+  assert.equal(sha256(committedBytes), sha256(loadingDanceBytes), 'The loading dance pose is stale.');
+} else {
+  await writeFile(loadingDanceOutputUrl, loadingDanceBytes);
+}
 
 for (const frame of result.frames) {
   const usesTypingPose = frame.state === 'excited';
-  const frameBytes = usesTypingPose ? typingExcitedBytes : rigBaseBytes;
+  const usesLoadingDancePose = frame.state === 'think';
+  const frameBytes = usesTypingPose
+    ? typingExcitedBytes
+    : usesLoadingDancePose
+      ? loadingDanceBytes
+      : rigBaseBytes;
   outputs.push({
     state: frame.state,
-    path: usesTypingPose ? typingExcitedPath : rigBasePath,
+    path: usesTypingPose
+      ? typingExcitedPath
+      : usesLoadingDancePose
+        ? loadingDancePath
+        : rigBasePath,
     sha256: sha256(frameBytes),
     width: frameWidth,
     height: frameHeight,
     opaquePixels: frame.opaquePixels,
     sourceBounds: frame.sourceBounds,
     drawBounds: frame.drawBounds,
+    identityBounds: frame.identityBounds,
+    visualScale: frame.visualScale,
     removedInteriorMattePixels: frame.removedInteriorMattePixels,
   });
 }
@@ -302,6 +373,14 @@ const manifest = {
       sha256: sha256(typingExcitedSourceBytes),
       intent: 'hands clasped at chest, slight forward lean, soft downward gaze toward visitor input',
     },
+    {
+      state: 'think',
+      path: '/jolene/review/country-host-loading-dance-v1-source.png',
+      sha256: sha256(loadingDanceSourceBytes),
+      intent: 'asymmetric bent arms close to chest for the mirrored response-loading dance',
+      visualScale: 1.1,
+      alignment: 'canonical upper-body identity scale with top alignment and y=448 crop',
+    },
   ],
   layout: {
     frameWidth,
@@ -314,7 +393,7 @@ const manifest = {
   frames: outputs,
   invariants: {
     baseStatesShareIdentitySource: true,
-    distinctPoseStates: ['excited'],
+    distinctPoseStates: ['excited', 'think'],
     providerIndependent: true,
     approvedForPublicUse: false,
   },
@@ -324,13 +403,18 @@ if (checkOnly) {
   const committedManifest = JSON.parse(await readFile(manifestUrl, 'utf8'));
   assert.deepEqual(committedManifest, manifest);
   assert.deepEqual(outputs.map(({ state }) => state), stateNames);
-  const baseOutputs = outputs.filter(({ state }) => state !== 'excited');
+  const baseOutputs = outputs.filter(({ state }) => state !== 'excited' && state !== 'think');
   assert.equal(new Set(baseOutputs.map(({ sha256: fingerprint }) => fingerprint)).size, 1, 'Base states must share one character identity source.');
   assert.equal(outputs.find(({ state }) => state === 'excited').path, typingExcitedPath, 'Excited state must use the typing pose.');
+  assert.equal(outputs.find(({ state }) => state === 'think').path, loadingDancePath, 'Think state must use the loading dance pose.');
+  assert.equal(outputs.find(({ state }) => state === 'think').visualScale, 1.1, 'Think state must preserve the approved upper-body scale correction.');
+  assert.ok(Math.abs(loadingDanceFrame.identityBounds.width - rigBaseFrame.identityBounds.width) <= 14, 'Loading dance head scale drifted from the canonical pose.');
+  assert.ok(outputs.every(({ drawBounds }) => drawBounds.y === 8 && drawBounds.height === 440), 'Every pose must keep the shared 440 px character height.');
+  assert.ok(outputs.every(({ drawBounds }) => drawBounds.y + drawBounds.height === anchor.y), 'Every pose must meet the shared y=448 baseline.');
   assert.ok(baseOutputs.every(({ removedInteriorMattePixels }) => removedInteriorMattePixels >= 500), 'The enclosed arm-to-body matte was not removed.');
   assert.ok(outputs.every(({ opaquePixels }) => opaquePixels > 25_000), 'The canonical rig base lost too much of the character.');
-  console.log(`Jolene sprite check passed: ${baseOutputs.length} base states plus one transparent excited typing pose at ${frameWidth}×${frameHeight}.`);
+  console.log(`Jolene sprite check passed: ${baseOutputs.length} base states plus transparent typing and loading poses at ${frameWidth}×${frameHeight}.`);
 } else {
   await writeFile(manifestUrl, `${JSON.stringify(manifest, null, 2)}\n`);
-  console.log(`Built one canonical Jolene rig base and one excited typing pose for ${outputs.length} states in ${outputDirectoryUrl.pathname}`);
+  console.log(`Built one canonical Jolene rig base plus typing and loading poses for ${outputs.length} states in ${outputDirectoryUrl.pathname}`);
 }

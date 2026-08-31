@@ -14,6 +14,14 @@
       "path": "/jolene/review/country-host-typing-excited-v1-source.png",
       "sha256": "3f3b683ace207b3497c0f650900627f85d0c4e302ca314a3a794a9a339ccc8e2",
       "intent": "hands clasped at chest, slight forward lean, soft downward gaze toward visitor input"
+    },
+    {
+      "state": "think",
+      "path": "/jolene/review/country-host-loading-dance-v1-source.png",
+      "sha256": "d835fa6a1d1915723d8b62fb14efabb12d6725e5e22ea4ea82456c370d5db806",
+      "intent": "asymmetric bent arms close to chest for the mirrored response-loading dance",
+      "visualScale": 1.1,
+      "alignment": "canonical upper-body identity scale with top alignment and y=448 crop"
     }
   ],
   "layout": {
@@ -47,6 +55,13 @@
         "width": 278,
         "height": 440
       },
+      "identityBounds": {
+        "x": 55,
+        "y": 9,
+        "width": 212,
+        "height": 132
+      },
+      "visualScale": 1,
       "removedInteriorMattePixels": 7204
     },
     {
@@ -68,6 +83,13 @@
         "width": 278,
         "height": 440
       },
+      "identityBounds": {
+        "x": 55,
+        "y": 9,
+        "width": 212,
+        "height": 132
+      },
+      "visualScale": 1,
       "removedInteriorMattePixels": 7204
     },
     {
@@ -89,6 +111,13 @@
         "width": 278,
         "height": 440
       },
+      "identityBounds": {
+        "x": 55,
+        "y": 9,
+        "width": 212,
+        "height": 132
+      },
+      "visualScale": 1,
       "removedInteriorMattePixels": 7204
     },
     {
@@ -110,6 +139,13 @@
         "width": 270,
         "height": 440
       },
+      "identityBounds": {
+        "x": 74,
+        "y": 9,
+        "width": 214,
+        "height": 132
+      },
+      "visualScale": 1,
       "removedInteriorMattePixels": 2088
     },
     {
@@ -131,28 +167,42 @@
         "width": 278,
         "height": 440
       },
+      "identityBounds": {
+        "x": 55,
+        "y": 9,
+        "width": 212,
+        "height": 132
+      },
+      "visualScale": 1,
       "removedInteriorMattePixels": 7204
     },
     {
       "state": "think",
-      "path": "/jolene/sprites/rig-base-v2.png",
-      "sha256": "83aecc00ed864b9d8864464901a33581a2cf3672885c3816a49fc877b53b9cc4",
+      "path": "/jolene/sprites/loading-dance-v1.png",
+      "sha256": "36d51dae69c9f2c32008f4845772a2c4625d4ad041406315048943304eaeadf8",
       "width": 320,
       "height": 460,
-      "opaquePixels": 93701,
+      "opaquePixels": 96698,
       "sourceBounds": {
-        "x": 216,
-        "y": 89,
-        "width": 724,
-        "height": 1146
+        "x": 50,
+        "y": 27,
+        "width": 950,
+        "height": 1442
       },
       "drawBounds": {
-        "x": 21,
+        "x": 1,
         "y": 8,
-        "width": 278,
+        "width": 319,
         "height": 440
       },
-      "removedInteriorMattePixels": 7204
+      "identityBounds": {
+        "x": 38,
+        "y": 9,
+        "width": 202,
+        "height": 132
+      },
+      "visualScale": 1.1,
+      "removedInteriorMattePixels": 0
     },
     {
       "state": "speak",
@@ -173,6 +223,13 @@
         "width": 278,
         "height": 440
       },
+      "identityBounds": {
+        "x": 55,
+        "y": 9,
+        "width": 212,
+        "height": 132
+      },
+      "visualScale": 1,
       "removedInteriorMattePixels": 7204
     },
     {
@@ -194,6 +251,13 @@
         "width": 278,
         "height": 440
       },
+      "identityBounds": {
+        "x": 55,
+        "y": 9,
+        "width": 212,
+        "height": 132
+      },
+      "visualScale": 1,
       "removedInteriorMattePixels": 7204
     },
     {
@@ -215,6 +279,13 @@
         "width": 278,
         "height": 440
       },
+      "identityBounds": {
+        "x": 55,
+        "y": 9,
+        "width": 212,
+        "height": 132
+      },
+      "visualScale": 1,
       "removedInteriorMattePixels": 7204
     },
     {
@@ -236,6 +307,13 @@
         "width": 278,
         "height": 440
       },
+      "identityBounds": {
+        "x": 55,
+        "y": 9,
+        "width": 212,
+        "height": 132
+      },
+      "visualScale": 1,
       "removedInteriorMattePixels": 7204
     },
     {
@@ -257,13 +335,21 @@
         "width": 278,
         "height": 440
       },
+      "identityBounds": {
+        "x": 55,
+        "y": 9,
+        "width": 212,
+        "height": 132
+      },
+      "visualScale": 1,
       "removedInteriorMattePixels": 7204
     }
   ],
   "invariants": {
     "baseStatesShareIdentitySource": true,
     "distinctPoseStates": [
-      "excited"
+      "excited",
+      "think"
     ],
     "providerIndependent": true,
     "approvedForPublicUse": false

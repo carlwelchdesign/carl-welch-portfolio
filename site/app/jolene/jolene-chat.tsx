@@ -106,7 +106,6 @@ export function JoleneChat({
   const latestAssistantRef = useRef<HTMLElement>(null);
   const focusedAssistantId = useRef<string | null>(null);
   const messageSequence = useRef(0);
-  const answerAnimationTimer = useRef<number | null>(null);
   const typingAnimationTimer = useRef<number | null>(null);
   const conversationContextRef = useRef<PublicConversationContext | undefined>(undefined);
   const reducedMotion = useReducedMotion() === true;
@@ -121,7 +120,6 @@ export function JoleneChat({
   const latestAssistantMessageId = getLatestAssistantMessageId(messages);
 
   const closePanel = useCallback(() => {
-    if (answerAnimationTimer.current !== null) window.clearTimeout(answerAnimationTimer.current);
     if (typingAnimationTimer.current !== null) window.clearTimeout(typingAnimationTimer.current);
     sendAvatar('inactive');
     setOpen(false);
@@ -146,7 +144,6 @@ export function JoleneChat({
   }, [reducedMotion, sendAvatar]);
 
   useEffect(() => () => {
-    if (answerAnimationTimer.current !== null) window.clearTimeout(answerAnimationTimer.current);
     if (typingAnimationTimer.current !== null) window.clearTimeout(typingAnimationTimer.current);
   }, []);
 
@@ -196,7 +193,6 @@ export function JoleneChat({
     const normalizedQuestion = question.trim();
     if (!normalizedQuestion || waiting) return;
 
-    if (answerAnimationTimer.current !== null) window.clearTimeout(answerAnimationTimer.current);
     if (typingAnimationTimer.current !== null) window.clearTimeout(typingAnimationTimer.current);
     sendAvatar('visitor_input');
     sendAvatar('request_started');
@@ -223,7 +219,7 @@ export function JoleneChat({
         operation: 'answer',
         state: response.claims.length > 0 || isConversationalResponse ? 'success' : 'no_evidence',
       });
-      sendAvatar(response.claims.length > 0 || isConversationalResponse ? 'answer_started' : 'cannot_verify');
+      sendAvatar('answer_finished');
       setMessages((current) => [
         ...current,
         {
@@ -244,9 +240,6 @@ export function JoleneChat({
           },
         },
       ]);
-      if (response.claims.length > 0 || isConversationalResponse) {
-        answerAnimationTimer.current = window.setTimeout(() => sendAvatar('answer_finished'), 2_200);
-      }
     } catch (error) {
       conversationContextRef.current = undefined;
       sendAvatar(error instanceof PublicJoleneAdapterError && error.code === 'unavailable'

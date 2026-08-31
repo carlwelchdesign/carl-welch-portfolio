@@ -63,53 +63,8 @@
       "scale": 1,
       "transformOrigin": "160px 448px"
     },
-    "greet-0": {
-      "assetPath": "/jolene/approved-animation/greet-rest.png",
-      "state": "greet",
-      "translateX": 0,
-      "translateY": 0,
-      "rotateDeg": 0,
-      "scale": 1,
-      "transformOrigin": "160px 448px"
-    },
-    "greet-1": {
-      "assetPath": "/jolene/approved-animation/greet-early.png",
-      "state": "greet",
-      "translateX": 0,
-      "translateY": 0,
-      "rotateDeg": 0,
-      "scale": 1,
-      "transformOrigin": "160px 448px"
-    },
-    "greet-2": {
-      "assetPath": "/jolene/approved-animation/greet-mid.png",
-      "state": "greet",
-      "translateX": 0,
-      "translateY": 0,
-      "rotateDeg": 0,
-      "scale": 1,
-      "transformOrigin": "160px 448px"
-    },
-    "greet-3": {
-      "assetPath": "/jolene/approved-animation/greet-apex.png",
-      "state": "greet",
-      "translateX": 0,
-      "translateY": 0,
-      "rotateDeg": 0,
-      "scale": 1,
-      "transformOrigin": "160px 448px"
-    },
-    "greet-4": {
-      "assetPath": "/jolene/approved-animation/greet-secondary.png",
-      "state": "greet",
-      "translateX": 0,
-      "translateY": 0,
-      "rotateDeg": 0,
-      "scale": 1,
-      "transformOrigin": "160px 448px"
-    },
-    "greet-5": {
-      "assetPath": "/jolene/approved-animation/greet-settle.png",
+    "greet-wave": {
+      "assetPath": "/jolene/approved-animation/greet-wave.png",
       "state": "greet",
       "translateX": 0,
       "translateY": 0,
@@ -162,8 +117,8 @@
       "scale": 1,
       "transformOrigin": "160px 448px"
     },
-    "think-0": {
-      "assetPath": "/jolene/sprites/rig-base-v2.png?v=83aecc00ed86",
+    "think-dance-a": {
+      "assetPath": "/jolene/approved-animation/loading-dance-a.png",
       "state": "think",
       "translateX": 0,
       "translateY": 0,
@@ -171,12 +126,12 @@
       "scale": 1,
       "transformOrigin": "160px 448px"
     },
-    "think-1": {
-      "assetPath": "/jolene/sprites/rig-base-v2.png?v=83aecc00ed86",
+    "think-dance-b": {
+      "assetPath": "/jolene/approved-animation/loading-dance-b.png",
       "state": "think",
-      "translateX": 1,
-      "translateY": -1,
-      "rotateDeg": 0.3,
+      "translateX": 0,
+      "translateY": 0,
+      "rotateDeg": 0,
       "scale": 1,
       "transformOrigin": "160px 448px"
     },

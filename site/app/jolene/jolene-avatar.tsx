@@ -138,6 +138,15 @@ function AvatarPlayback({
     return () => window.clearTimeout(settleTimer);
   }, [definition.returnState, onStateComplete, reducedMotion]);
 
+  useEffect(() => {
+    if (reducedMotion || definition.frames.length !== 1 || !definition.returnState) return;
+    const settleTimer = window.setTimeout(
+      () => onStateComplete?.(definition.returnState!),
+      definition.durationsMs[0],
+    );
+    return () => window.clearTimeout(settleTimer);
+  }, [definition.durationsMs, definition.frames.length, definition.returnState, onStateComplete, reducedMotion]);
+
   if (!frame) throw new Error(`Jolene frame ${frameName} is not in the frame catalog.`);
   const style = {
     '--jolene-frame-x': '0px',

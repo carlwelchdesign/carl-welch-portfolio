@@ -57,7 +57,9 @@ assert.equal(contract.rendering.frameHeight, rigBase.height);
 assert.deepEqual(contract.rendering.anchor, spriteManifest.layout.anchor);
 assert.equal(createHash('sha256').update(rigBaseBytes).digest('hex'), contract.rendering.masterSha256);
 assert.equal(spriteManifest.invariants.baseStatesShareIdentitySource, true);
-assert.deepEqual(spriteManifest.invariants.distinctPoseStates, ['excited']);
+assert.deepEqual(spriteManifest.invariants.distinctPoseStates, ['excited', 'think']);
+assert.ok(spriteManifest.frames.every(({ drawBounds }) => drawBounds.y === 8 && drawBounds.height === 440), 'Every sprite must keep the shared 440 px character height.');
+assert.ok(spriteManifest.frames.every(({ drawBounds }) => drawBounds.y + drawBounds.height === 448), 'Every sprite must meet the shared y=448 baseline.');
 
 for (const forbidden of ['openai', 'anthropic', 'gemini', 'ollama', 'language model', 'llm']) {
   assert.equal(JSON.stringify(contract).toLowerCase().includes(forbidden), false, `Avatar contract leaks provider term: ${forbidden}`);

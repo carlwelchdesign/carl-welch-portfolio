@@ -2,8 +2,8 @@
   "schemaVersion": "1.0.0",
   "status": "candidate_pending_carl_approval",
   "boardPath": "/docs/review/jolene-avatar-state-board.png",
-  "boardSha256": "de877aa70366bb20f80ccae1dec227d09684d05e3294ae49d02881c1b6e26d76",
-  "renderInputSha256": "22d309ad97378dfe20529c4fb43ed0ae6d0a4e0e8d21fa6649a541176f281552",
+  "boardSha256": "c69e6cded4c1164ebd9bb4c8546083593fbee14ce3ebc92d08203f30d86de23e",
+  "renderInputSha256": "4310a96663cf7a58e2acd09a412bf1a10f22a5a14b8df6461c6ce88d192480ff",
   "stateCount": 11,
   "stateOrder": [
     "idle",

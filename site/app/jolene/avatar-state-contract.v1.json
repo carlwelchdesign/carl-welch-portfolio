@@ -32,11 +32,11 @@
       "reducedMotionFrame": "idle-0"
     },
     "greet": {
-      "frames": ["greet-0", "greet-1", "greet-2", "greet-3", "greet-4", "greet-3", "greet-5", "greet-2", "greet-1", "greet-0"],
-      "durationsMs": [260, 140, 130, 170, 120, 150, 140, 130, 140, 300],
+      "frames": ["greet-wave"],
+      "durationsMs": [1000],
       "loop": false,
       "returnState": "idle",
-      "reducedMotionFrame": "greet-3"
+      "reducedMotionFrame": "greet-wave"
     },
     "excited": {
       "frames": ["excited-0"],
@@ -53,11 +53,11 @@
       "reducedMotionFrame": "listen-0"
     },
     "think": {
-      "frames": ["think-0"],
-      "durationsMs": [1000],
+      "frames": ["think-dance-a", "think-dance-b"],
+      "durationsMs": [230, 230],
       "loop": true,
       "returnState": null,
-      "reducedMotionFrame": "think-0"
+      "reducedMotionFrame": "think-dance-a"
     },
     "speak": {
       "frames": ["speak-0"],

@@ -761,6 +761,8 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .jolene-avatar { position: relative; width: 200px; aspect-ratio: 320 / 460; display: block; overflow: visible; contain: layout style; pointer-events: none; user-select: none; transform: scaleX(-1); transform-origin: center bottom; }
 .jolene-avatar img { width: 100%; height: 100%; display: block; object-fit: contain; object-position: bottom center; image-rendering: pixelated; transform-origin: var(--jolene-frame-origin); backface-visibility: hidden; }
 .jolene-avatar-pixi, .jolene-avatar-canvas { width: 100%; height: 100%; display: block; }
+.jolene-avatar-pixi { transform-origin: center bottom; }
+.jolene-avatar[data-avatar-frame='think-dance-b'] .jolene-avatar-pixi { transform: scaleX(-1); }
 .jolene-avatar-canvas { image-rendering: pixelated; }
 .jolene-cameo { position: absolute; right: -14px; bottom: 56px; width: 250px; height: 330px; display: grid; align-content: end; justify-items: end; pointer-events: none; }
 .jolene-cameo p { position: absolute; z-index: 2; top: 12px; right: 112px; width: max-content; margin: 0; padding: 10px 12px; border: 1px solid var(--ink); background: var(--paper); color: var(--ink); font: 800 14px/1 var(--font-geist-sans), sans-serif; box-shadow: 7px 7px 0 var(--jolene-accent); }
@@ -825,7 +827,11 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .jolene-waiting { margin: 0; color: var(--muted); font: 10px var(--font-geist-mono), monospace; letter-spacing: 0.06em; }
 .jolene-starter-stage { position: relative; flex: 0 0 auto; min-height: 178px; margin-top: auto; padding-top: 10px; }
 .jolene-starters { display: grid; gap: 7px; padding-right: 122px; }
-.jolene-conversation-avatar { position: absolute; z-index: 1; right: 6px; bottom: -6px; width: 132px; }
+.jolene-conversation-avatar { position: absolute; z-index: 1; right: 6px; bottom: 0; width: 132px; transform: translateY(2.6086956522%) scaleX(-1); }
+.jolene-conversation-avatar[data-avatar-frame='greet-wave'],
+.jolene-conversation-avatar[data-avatar-frame^='excited-'],
+.jolene-conversation-avatar[data-avatar-frame^='think-dance-'] { transform: translateY(2.8260869565%) scaleX(-1); }
+.jolene-conversation-avatar[data-avatar-frame^='think-dance-'] { transform: translateY(2.8260869565%) scaleX(-1.075); }
 .jolene-starters > p { margin: 0; color: var(--muted); font: 8px var(--font-geist-mono), monospace; letter-spacing: 0.08em; text-transform: uppercase; }
 .jolene-starters button { min-height: 44px; padding: 9px 12px; border: 1px solid var(--line); border-radius: 0; background: transparent; color: var(--paper); cursor: pointer; font: 12px/1.35 var(--font-geist-sans), sans-serif; text-align: left; }
 .jolene-starters button:hover { border-color: var(--jolene-accent); background: rgba(255, 104, 0, 0.1); }
@@ -1158,7 +1164,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .jolene-panel-header { min-height: 110px; padding-right: 76px; }
   .jolene-starter-stage { min-height: 188px; }
   .jolene-starters { padding-right: 102px; }
-  .jolene-conversation-avatar { right: 8px; bottom: -5px; width: 112px; }
+  .jolene-conversation-avatar { right: 8px; width: 112px; }
   .jolene-panel-header h2 { font-size: 30px; }
   .jolene-message[data-role='visitor'] { margin-left: 18px; }
   .jolene-mode-switch button { padding: 0 5px; font-size: 8px; }
@@ -1212,7 +1218,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .jolene-starter-stage { min-height: 112px; padding-top: 6px; }
   .jolene-starters { gap: 5px; padding-right: 96px; }
   .jolene-starters button { min-height: 36px; padding: 6px 9px; }
-  .jolene-conversation-avatar { right: 4px; bottom: -5px; width: 98px; }
+  .jolene-conversation-avatar { right: 4px; width: 98px; }
   .jolene-form { padding: 6px 10px 8px; }
   .jolene-form label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
   .jolene-form textarea { min-height: 44px; max-height: 44px; padding: 8px; }
