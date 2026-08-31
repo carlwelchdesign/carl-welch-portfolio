@@ -29,3 +29,13 @@ Source repository: `wave-factory-essentials`
 - `spirit-mirror-scene.png` ← `plugins/SpiritMirror/resources/img/spirit-mirror-bg.png`
 
 The first two case-study cover images remain at their original stable public paths. Wave Factory's cover remains the Threefold Palm host screenshot.
+
+## ProgressionLab
+
+Source repository: `progression-lab-ai`
+
+- `generator.png` ← live capture of `https://progressionlab.app/` on August 31, 2026
+- `generated-result.png` ← public product screenshot embedded in the repository `README.md`
+- `public-library.png` ← live capture of `https://progressionlab.app/progressions?view=public` on August 31, 2026
+
+The Chord Explorer capture was excluded because browser-level MIDI permission was unavailable and the resulting screen did not represent the working product experience.

@@ -1,8 +1,7 @@
 'use client';
 
 import { useReducedMotion } from 'motion/react';
-import { useCallback, useEffect, useRef, useState, type CSSProperties } from 'react';
-import type { AnimatedSprite, Application, Spritesheet, Texture } from 'pixi.js';
+import { useCallback, useEffect, useState, type CSSProperties } from 'react';
 import frameCatalogJson from './avatar-frame-catalog.v1.json';
 import stateContractJson from './avatar-state-contract.v1.json';
 import {
@@ -14,13 +13,9 @@ import {
 } from './avatar-state-contract';
 
 type FrameDefinition = {
-  assetPath: string;
+  index: number;
+  pose: string;
   state: AvatarState;
-  translateX: number;
-  translateY: number;
-  rotateDeg: number;
-  scale: number;
-  transformOrigin: string;
 };
 
 type StateDefinition = {
@@ -31,18 +26,11 @@ type StateDefinition = {
   reducedMotionFrame: string;
 };
 
-type PixiRuntime = {
-  app: Application;
-  sprite: AnimatedSprite;
-  sheet: Spritesheet;
-  textureFrom: (source: string) => Texture;
-};
-
 const frameCatalog = frameCatalogJson.frames as Record<string, FrameDefinition>;
 const stateDefinitions = stateContractJson.definitions as Record<AvatarState, StateDefinition>;
-const interruptStates = new Set<AvatarState>(stateContractJson.interruption.alwaysInterruptFor as AvatarState[]);
-const atlasManifestPath = '/jolene/approved-animation/jolene-approved-atlas.json?v=df2a3bd0a3a7';
-const atlasImagePath = '/jolene/approved-animation/jolene-approved-atlas.png?v=e4d4375e596e';
+const spriteSheetPath = frameCatalogJson.sheetPath;
+const fallbackPath = frameCatalogJson.fallbackPath;
+const spriteSheetColumns = frameCatalogJson.columns;
 
 export type JoleneAvatarController = {
   state: AvatarState;
@@ -51,12 +39,7 @@ export type JoleneAvatarController = {
 };
 
 export function preloadJoleneAvatarAssets(): void {
-  for (const assetPath of [
-    atlasImagePath,
-    stateContractJson.rendering.masterPath,
-    frameCatalog['excited-0'].assetPath,
-    frameCatalog['evidence-2'].assetPath,
-  ]) {
+  for (const assetPath of [spriteSheetPath, fallbackPath]) {
     const image = new Image();
     image.decoding = 'async';
     image.src = assetPath;
@@ -67,12 +50,7 @@ export function useJoleneAvatarController(initialState: AvatarState = 'idle'): J
   const [state, setState] = useState<AvatarState>(initialState);
 
   const send = useCallback((signal: AvatarSignal) => {
-    const target = stateForAvatarSignal(signal);
-    setState((current) => (
-      current === target || interruptStates.has(target) || canTransitionAvatar(current, target)
-        ? target
-        : current
-    ));
+    setState(stateForAvatarSignal(signal));
   }, []);
 
   const settle = useCallback((returnState: AvatarState) => {
@@ -96,211 +74,116 @@ export function JoleneAvatar({
   decorative?: boolean;
 }) {
   const reducedMotion = useReducedMotion() === true;
-  return (
-    <AvatarPlayback
-      state={state}
-      reducedMotion={reducedMotion}
-      onStateComplete={onStateComplete}
-      className={className}
-      label={label}
-      decorative={decorative}
-    />
-  );
-}
-
-function AvatarPlayback({
-  state,
-  reducedMotion,
-  onStateComplete,
-  className,
-  label,
-  decorative,
-}: {
-  state: AvatarState;
-  reducedMotion: boolean;
-  onStateComplete?: (returnState: AvatarState) => void;
-  className: string;
-  label: string;
-  decorative: boolean;
-}) {
   const definition = stateDefinitions[state];
-  const stillFrameName = reducedMotionFrameForAvatarState(state);
-  const [frameName, setFrameName] = useState(stillFrameName);
-  const [rendererReady, setRendererReady] = useState(false);
-  const [fallbackToMaster, setFallbackToMaster] = useState(false);
-  const [assetUnavailable, setAssetUnavailable] = useState(false);
-  const displayedFrameName = reducedMotion ? stillFrameName : frameName;
-  const frame = frameCatalog[displayedFrameName] ?? frameCatalog[stillFrameName];
-  const handleRendererReady = useCallback(() => setRendererReady(true), []);
-  const handleRendererError = useCallback(() => setFallbackToMaster(true), []);
+  const [blinkVisible, setBlinkVisible] = useState(false);
+  const [sheetReady, setSheetReady] = useState(false);
+  const [fallbackToIdle, setFallbackToIdle] = useState(false);
+  const [animatedFrame, setAnimatedFrame] = useState<{ state: AvatarState; index: number }>({ state, index: 0 });
 
   useEffect(() => {
-    if (!reducedMotion || !definition.returnState) return;
-    const settleTimer = window.setTimeout(
-      () => onStateComplete?.(definition.returnState!),
-      stateContractJson.interruption.maximumSettleMs,
-    );
-    return () => window.clearTimeout(settleTimer);
-  }, [definition.returnState, onStateComplete, reducedMotion]);
+    if (state !== 'idle' || reducedMotion) return;
+
+    let blinkTimer = 0;
+    let resetTimer = 0;
+    let cancelled = false;
+    const clearVisibleTimer = window.setTimeout(() => setBlinkVisible(false), 0);
+    const scheduleBlink = () => {
+      const delay = 4_000 + Math.floor(Math.random() * 3_001);
+      blinkTimer = window.setTimeout(() => {
+        if (cancelled) return;
+        setBlinkVisible(true);
+        resetTimer = window.setTimeout(() => {
+          setBlinkVisible(false);
+          if (!cancelled) scheduleBlink();
+        }, stateContractJson.blink.durationMs);
+      }, delay);
+    };
+    scheduleBlink();
+    return () => {
+      cancelled = true;
+      window.clearTimeout(clearVisibleTimer);
+      window.clearTimeout(blinkTimer);
+      window.clearTimeout(resetTimer);
+    };
+  }, [reducedMotion, state]);
 
   useEffect(() => {
-    if (reducedMotion || definition.frames.length !== 1 || !definition.returnState) return;
+    if (!definition.returnState) return;
     const settleTimer = window.setTimeout(
       () => onStateComplete?.(definition.returnState!),
-      definition.durationsMs[0],
+      definition.durationsMs.reduce((total, duration) => total + duration, 0),
     );
     return () => window.clearTimeout(settleTimer);
-  }, [definition.durationsMs, definition.frames.length, definition.returnState, onStateComplete, reducedMotion]);
+  }, [definition, onStateComplete]);
 
-  if (!frame) throw new Error(`Jolene frame ${frameName} is not in the frame catalog.`);
+  useEffect(() => {
+    if (reducedMotion || definition.frames.length <= 1) return;
+
+    let frameIndex = 0;
+    let cancelled = false;
+    const resetTimer = window.setTimeout(() => setAnimatedFrame({ state, index: 0 }), 0);
+    let frameTimer = 0;
+    const scheduleFrame = () => {
+      frameTimer = window.setTimeout(() => {
+        if (cancelled) return;
+        const nextIndex = frameIndex + 1;
+        if (nextIndex >= definition.frames.length && !definition.loop) return;
+        frameIndex = nextIndex % definition.frames.length;
+        setAnimatedFrame({ state, index: frameIndex });
+        scheduleFrame();
+      }, definition.durationsMs[frameIndex]);
+    };
+    scheduleFrame();
+    return () => {
+      cancelled = true;
+      window.clearTimeout(resetTimer);
+      window.clearTimeout(frameTimer);
+    };
+  }, [definition, reducedMotion, state]);
+
+  const representativeFrame = reducedMotionFrameForAvatarState(state);
+  const animationFrameIndex = animatedFrame.state === state ? animatedFrame.index : 0;
+  const displayedFrameName = reducedMotion
+    ? representativeFrame
+    : state === 'idle' && blinkVisible
+      ? 'blink-0'
+      : definition.frames[animationFrameIndex] ?? definition.frames[0];
+  const frame = frameCatalog[displayedFrameName];
+  if (!frame) throw new Error(`Jolene frame ${displayedFrameName} is not in the frame catalog.`);
+
   const style = {
-    '--jolene-frame-x': '0px',
-    '--jolene-frame-y': '0px',
-    '--jolene-frame-rotation': '0deg',
-    '--jolene-frame-scale': 1,
-    '--jolene-frame-origin': frame.transformOrigin,
+    '--jolene-frame-index': frame.index,
+    '--jolene-sheet-columns': spriteSheetColumns,
   } as CSSProperties;
-  const fallbackSource = fallbackToMaster ? stateContractJson.rendering.masterPath : frame.assetPath;
 
   return (
     <span
       className={`jolene-avatar ${className}`.trim()}
       data-avatar-state={state}
       data-avatar-frame={displayedFrameName}
-      data-avatar-fallback={fallbackToMaster ? 'master' : rendererReady ? 'pixi' : 'frame'}
+      data-avatar-pose={frame.pose}
+      data-avatar-fallback={fallbackToIdle ? 'idle' : sheetReady ? 'sheet' : 'loading'}
       data-avatar-facing="left"
       aria-hidden={decorative ? 'true' : undefined}
       role={decorative ? undefined : 'img'}
       aria-label={decorative ? undefined : label}
       style={style}
-      hidden={assetUnavailable}
     >
-      {!reducedMotion && !fallbackToMaster ? (
-        <PixiAvatarCanvas
-          state={state}
-          onFrameChange={setFrameName}
-          onStateComplete={onStateComplete}
-          onReady={handleRendererReady}
-          onError={handleRendererError}
-        />
-      ) : null}
-      {(reducedMotion || !rendererReady || fallbackToMaster) ? (
-        // eslint-disable-next-line @next/next/no-img-element -- Pixel frames must bypass image optimization to preserve exact pixels.
+      {fallbackToIdle ? (
+        // eslint-disable-next-line @next/next/no-img-element -- Exact pixel art must bypass image optimization.
+        <img className="jolene-avatar-fallback" src={fallbackPath} alt="" draggable={false} />
+      ) : (
+        // eslint-disable-next-line @next/next/no-img-element -- Exact sprite cropping must bypass image optimization.
         <img
-          src={fallbackSource}
+          className="jolene-avatar-sheet"
+          src={spriteSheetPath}
           alt=""
           draggable={false}
           decoding="async"
-          onError={() => {
-            if (fallbackToMaster) setAssetUnavailable(true);
-            else setFallbackToMaster(true);
-          }}
+          onLoad={() => setSheetReady(true)}
+          onError={() => setFallbackToIdle(true)}
         />
-      ) : null}
+      )}
     </span>
   );
-}
-
-function PixiAvatarCanvas({
-  state,
-  onFrameChange,
-  onStateComplete,
-  onReady,
-  onError,
-}: {
-  state: AvatarState;
-  onFrameChange: (frameName: string) => void;
-  onStateComplete?: (returnState: AvatarState) => void;
-  onReady: () => void;
-  onError: () => void;
-}) {
-  const hostRef = useRef<HTMLSpanElement>(null);
-  const runtimeRef = useRef<PixiRuntime | null>(null);
-  const requestedStateRef = useRef(state);
-  const onFrameChangeRef = useRef(onFrameChange);
-  const onStateCompleteRef = useRef(onStateComplete);
-
-  useEffect(() => {
-    requestedStateRef.current = state;
-    onFrameChangeRef.current = onFrameChange;
-    onStateCompleteRef.current = onStateComplete;
-  }, [onFrameChange, onStateComplete, state]);
-
-  const play = useCallback((runtime: PixiRuntime, nextState: AvatarState) => {
-    const definition = stateDefinitions[nextState];
-    const frameNames = definition.frames;
-    runtime.sprite.stop();
-    runtime.sprite.onComplete = undefined;
-    runtime.sprite.onFrameChange = (index) => onFrameChangeRef.current(frameNames[index] ?? frameNames[0]);
-    runtime.sprite.textures = frameNames.map((name, index) => {
-      const assetPath = frameCatalog[name].assetPath;
-      const atlasFrameName = assetPath.split('/').at(-1)?.split('?')[0] ?? '';
-      const texture = runtime.sheet.textures[atlasFrameName] ?? runtime.textureFrom(assetPath);
-      texture.source.scaleMode = 'nearest';
-      return { texture, time: definition.durationsMs[index] };
-    });
-    runtime.sprite.loop = definition.loop;
-    runtime.sprite.onComplete = definition.returnState
-      ? () => onStateCompleteRef.current?.(definition.returnState!)
-      : undefined;
-    runtime.sprite.gotoAndStop(0);
-    onFrameChangeRef.current(frameNames[0]);
-    if (frameNames.length > 1) runtime.sprite.play();
-  }, []);
-
-  useEffect(() => {
-    let cancelled = false;
-    let runtime: PixiRuntime | null = null;
-    void (async () => {
-      try {
-        await import('pixi.js/unsafe-eval');
-        const { AnimatedSprite, Application, Assets, Texture } = await import('pixi.js');
-        const app = new Application();
-        await app.init({
-          width: frameCatalogJson.frameWidth,
-          height: frameCatalogJson.frameHeight,
-          backgroundAlpha: 0,
-          antialias: false,
-          resolution: 1,
-          autoDensity: false,
-          powerPreference: 'low-power',
-        });
-        const sheet = await Assets.load<Spritesheet>(atlasManifestPath);
-        await Assets.load([
-          stateContractJson.rendering.masterPath,
-          frameCatalog['excited-0'].assetPath,
-          frameCatalog['evidence-2'].assetPath,
-        ]);
-        if (cancelled || !hostRef.current) {
-          app.destroy({ removeView: true }, { children: true, context: true });
-          return;
-        }
-        const sprite = new AnimatedSprite({ textures: [Texture.EMPTY], autoUpdate: true, autoPlay: false });
-        sprite.eventMode = 'none';
-        app.stage.eventMode = 'none';
-        app.stage.addChild(sprite);
-        app.canvas.className = 'jolene-avatar-canvas';
-        app.canvas.setAttribute('aria-hidden', 'true');
-        hostRef.current.appendChild(app.canvas);
-        runtime = { app, sprite, sheet, textureFrom: Texture.from };
-        runtimeRef.current = runtime;
-        play(runtime, requestedStateRef.current);
-        onReady();
-      } catch (error) {
-        if (process.env.NODE_ENV !== 'production') console.error('Jolene PixiJS initialization failed.', error);
-        if (!cancelled) onError();
-      }
-    })();
-    return () => {
-      cancelled = true;
-      runtimeRef.current = null;
-      runtime?.app.destroy({ removeView: true }, { children: true, context: true });
-    };
-  }, [onError, onReady, play]);
-
-  useEffect(() => {
-    if (runtimeRef.current) play(runtimeRef.current, state);
-  }, [play, state]);
-
-  return <span ref={hostRef} className="jolene-avatar-pixi" aria-hidden="true" />;
 }
