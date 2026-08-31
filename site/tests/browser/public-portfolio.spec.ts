@@ -668,9 +668,17 @@ test('Jolene case study presents distinct character sheets, the build retrospect
 
   const architecture = page.locator('#architecture');
   const architectureMap = architecture.locator('.architecture-map').last();
+  await expect(architectureMap.locator('[data-architecture-node="retrieval"]')).toContainText('Public hybrid RAG');
+  await expect(architectureMap.locator('[data-architecture-node="retrieval"]')).toContainText('Lexical + embeddings');
+  await expect(architectureMap.locator('[data-architecture-node="retrieval"]')).toContainText('Reciprocal-rank fusion');
   await expect(architectureMap.locator('[data-architecture-node="corpus"]')).toContainText('Reviewed career artifact');
   await expect(architectureMap.locator('[data-architecture-node="corpus"]')).toContainText('Five chapters, 16 roles, 92 published records');
   await expect(architectureMap.locator('[data-architecture-node="evaluation"]')).toContainText('132 cases, 192 turns, red team');
+
+  const evidence = page.getByRole('region', { name: 'Jolene AI evidence and boundaries' });
+  await expect(evidence).toContainText('retrieval-augmented generation (RAG)');
+  await expect(evidence).toContainText('bounded in-memory vector index');
+  await expect(evidence).toContainText('separate vector database');
 
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
   expect(overflow).toBeLessThanOrEqual(0);
