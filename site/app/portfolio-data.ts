@@ -805,7 +805,7 @@ export const projects: PortfolioProject[] = [
     tone: 'green',
     number: '06',
     summary:
-      'A governed AI system that combines reviewed evidence, bounded conversation continuity, tested model and deterministic responses, explicit action boundaries, and a warm, recognizable personality across my full 20-plus-year career.',
+      'A governed AI system that uses public hybrid RAG over reviewed evidence, bounded conversation continuity, tested model and deterministic responses, explicit action boundaries, and a warm, recognizable personality across my full 20-plus-year career.',
     role: 'Product architect and lead builder',
     scope: 'Product direction, agent architecture, evidence design, character and behavior direction, implementation, evaluation, and release governance',
     image: {
@@ -860,7 +860,7 @@ export const projects: PortfolioProject[] = [
       problem:
         'After a March 2026 layoff, I spent two weeks that May on BLM land in Nevada with my daughter while she did fieldwork for her geology master’s research. With a generator, Starlink, and my MacBook, I began building Job Search OS. That work showed me I could build something broader: a chief-of-staff agent that could help me organize work, preserve context, and keep moving.',
       contribution:
-        'I imagined a comforting, capable, Jarvis-like partner. Dolly Parton came to mind because I grew up with her music and interviews and associated her with warmth, humor, resilience, and practical encouragement. Jolene is not Dolly, does not impersonate her, and does not imply her endorsement. From that starting point, I led a multi-agent build spanning the portable agent core, private memory, reviewed career evidence, public retrieval, Slack delivery, exact-action approvals, Docker runtimes, prompt-injection defenses, release evaluation, and a researched personality system. I also directed a pixel-character system with a canonical identity, event-driven poses, regression-tested scaling and interaction behavior, and reduced-motion fallbacks. Private and public Jolene remain separate deployments with different credentials, stores, and capabilities.',
+        'I imagined a comforting, capable, Jarvis-like partner. Dolly Parton came to mind because I grew up with her music and interviews and associated her with warmth, humor, resilience, and practical encouragement. Jolene is not Dolly, does not impersonate her, and does not imply her endorsement. From that starting point, I led a multi-agent build spanning the portable agent core, private memory, reviewed career evidence, public hybrid RAG, Slack delivery, exact-action approvals, Docker runtimes, prompt-injection defenses, release evaluation, and a researched personality system. I also directed a pixel-character system with a canonical identity, event-driven poses, regression-tested scaling and interaction behavior, and reduced-motion fallbacks. Private and public Jolene remain separate deployments with different credentials, stores, and capabilities.',
       decisions: [
         {
           title: 'Separate public knowledge from private memory',
@@ -868,7 +868,7 @@ export const projects: PortfolioProject[] = [
         },
         {
           title: 'Ground first, style second',
-          detail: 'Retrieval and deterministic validation own the factual answer. Jolene’s warmth, wit, and kindness are rendered afterward and cannot change claims or citations.',
+          detail: 'Public hybrid RAG and deterministic validation own the factual answer. Jolene’s warmth, wit, and kindness are rendered afterward and cannot change claims or citations.',
         },
         {
           title: 'Treat behavior as product state',
@@ -907,10 +907,10 @@ export const projects: PortfolioProject[] = [
         },
       ],
     },
-    stack: ['TypeScript', 'OpenAI', 'Next.js', 'PixiJS', 'SQLite', 'Docker', 'Slack', 'Vercel', 'Playwright'],
+    stack: ['TypeScript', 'OpenAI', 'Hybrid RAG', 'Next.js', 'PixiJS', 'SQLite', 'Docker', 'Slack', 'Vercel', 'Playwright'],
     architecture: {
       title: 'Private chief of staff, career-wide public delegate, and measured release system',
-      summary: 'Private memory and action tools stay in Carl’s local trust zone. The public path uses a reviewed career artifact, bounded continuity, grounded model or deterministic composition, and a separate evaluation and promotion pipeline.',
+      summary: 'Private memory and action tools stay in Carl’s local trust zone. The public path uses hybrid retrieval-augmented generation (RAG) over a reviewed career artifact, bounded continuity, grounded model or deterministic composition, and a separate evaluation and promotion pipeline.',
       groups: [
         { id: 'private', label: 'Private Jolene', detail: 'Carl-owned memory and action zone', x: 20, y: 35, width: 260, height: 550 },
         { id: 'public', label: 'Public portfolio delegate', detail: 'Read-only career conversation zone', x: 300, y: 35, width: 430, height: 550 },
@@ -924,7 +924,7 @@ export const projects: PortfolioProject[] = [
         { id: 'portfolio', label: 'Portfolio chat', detail: 'Questions, citations, role comparison', technology: 'Next.js · React', kind: 'surface', x: 325, y: 105, width: 180 },
         { id: 'bff', label: 'Same-origin BFF', detail: 'Bounded schemas and server-only token', technology: 'Next.js · TypeScript', kind: 'service', x: 525, y: 105, width: 180 },
         { id: 'delegate', label: 'Public Jolene API', detail: 'Answer, job-fit, policy refusal', technology: 'Vercel · TypeScript', kind: 'ai', x: 325, y: 255, width: 180 },
-        { id: 'retrieval', label: 'Career-wide retrieval', detail: 'Employer, agency, leadership, products', technology: 'Lexical · semantic rank', kind: 'service', x: 525, y: 255, width: 180 },
+        { id: 'retrieval', label: 'Public hybrid RAG', detail: 'Reciprocal-rank fusion over approved evidence', technology: 'Lexical + embeddings', kind: 'service', x: 525, y: 255, width: 180 },
         { id: 'corpus', label: 'Reviewed career artifact', detail: 'Five chapters, 16 roles, 92 published records', technology: 'Versioned · hash verified', kind: 'data', x: 325, y: 430, width: 180 },
         { id: 'continuity', label: 'Bounded continuity', detail: 'Public context only, short lived, resettable', technology: 'Typed conversationContext', kind: 'control', x: 525, y: 430, width: 180 },
         { id: 'composer', label: 'Grounded composer', detail: 'Model or deterministic answer, then validate', technology: 'OpenAI · structured output', kind: 'ai', x: 775, y: 105, width: 180 },
@@ -963,7 +963,7 @@ export const projects: PortfolioProject[] = [
       },
       {
         id: 'portfolio:claim:jolene-ai:rag', sourceIds: ['portfolio:source:project:jolene-ai'],
-        text: 'Uses hybrid retrieval over only the approved public artifact, combining lexical and semantic ranks in a bounded in-memory index instead of adding a separate vector database for a small corpus.',
+        text: 'Uses retrieval-augmented generation (RAG) over only the approved public artifact, combining lexical and embedding ranks through reciprocal-rank fusion in a bounded in-memory vector index instead of adding a separate vector database for the 92-record corpus.',
         strength: 'moderate', maturity: 'deployed_demo', limitations: ['The public index cannot search private career evidence or Obsidian notes.'], reviewState: 'approved', publicApproved: true,
       },
       {
