@@ -781,7 +781,8 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .jolene-panel-header p, .jolene-panel-header h2 { margin: 0; }
 .jolene-panel-header p { font: 9px var(--font-geist-mono), monospace; letter-spacing: 0.1em; text-transform: uppercase; }
 .jolene-panel-header h2 { margin-top: 10px; font-size: 34px; line-height: 0.9; letter-spacing: -0.055em; }
-.jolene-panel-header button { position: absolute; z-index: 3; top: 20px; right: 20px; min-width: 44px; min-height: 44px; padding: 0 10px; border: 1px solid currentColor; border-radius: 0; background: transparent; color: inherit; cursor: pointer; font: 700 9px var(--font-geist-mono), monospace; letter-spacing: 0.09em; text-transform: uppercase; }
+.jolene-panel-header-actions { position: absolute; z-index: 3; top: 20px; right: 20px; display: flex; gap: 6px; }
+.jolene-panel-header button { min-width: 44px; min-height: 44px; padding: 0 10px; border: 1px solid currentColor; border-radius: 0; background: transparent; color: inherit; cursor: pointer; font: 700 9px var(--font-geist-mono), monospace; letter-spacing: 0.09em; text-transform: uppercase; }
 .jolene-panel-header button:hover { background: var(--ink); color: var(--paper); }
 .jolene-fixture-notice { margin: 0; padding: 10px 20px; border-bottom: 1px solid var(--line); color: var(--muted); font: 9px/1.45 var(--font-geist-mono), monospace; letter-spacing: 0.045em; text-transform: uppercase; }
 .jolene-mode-switch { display: grid; grid-template-columns: repeat(3, 1fr); border-bottom: 1px solid var(--line); }
@@ -1210,7 +1211,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .jolene-panel[data-mode='job'] { width: min(520px, calc(100vw - 16px)); height: calc(100svh - 16px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); max-height: calc(100svh - 16px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); grid-template-rows: 76px 36px minmax(80px, 1fr) auto; }
   .jolene-panel-header { min-height: 76px; padding: 10px 70px 8px 14px; }
   .jolene-panel-header h2 { margin-top: 4px; font-size: 27px; }
-  .jolene-panel-header button { top: 10px; right: 10px; }
+  .jolene-panel-header-actions { top: 10px; right: 10px; }
   .jolene-fixture-notice { display: none; }
   .jolene-mode-switch button { min-height: 36px; }
   .jolene-messages { min-height: 0; padding: 8px 12px; }
