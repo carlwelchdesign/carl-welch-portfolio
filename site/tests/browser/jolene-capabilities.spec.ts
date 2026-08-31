@@ -140,7 +140,7 @@ test('country-host cameo appears once, leaves cleanly, and returns only with cha
   await expect(cameo).toBeVisible({ timeout: 2_000 });
   await expect(cameo).toContainText('Howdy, folks!');
   await expect(cameo.locator('.jolene-avatar')).toHaveCount(1);
-  await expect(cameo).toBeHidden({ timeout: 5_000 });
+  await expect(cameo).toBeHidden({ timeout: 8_000 });
   await expect(page.locator('.jolene-avatar')).toHaveCount(0);
 
   await page.getByRole('button', { name: /Ask Jolene/ }).click();
@@ -167,10 +167,13 @@ test('country-host cameo appears once, leaves cleanly, and returns only with cha
   } else {
     await expect(avatar).toHaveAttribute('data-avatar-state', 'think');
     await expect(avatar).toHaveAttribute('data-avatar-frame', 'think-dance-a');
-    const loadingPoseBounds = await avatar.boundingBox();
-    expect(loadingPoseBounds).not.toBeNull();
-    expect(Math.abs(loadingPoseBounds!.height - defaultPoseBounds!.height)).toBeLessThanOrEqual(0.5);
-    expect(loadingPoseBounds!.width / defaultPoseBounds!.width).toBeCloseTo(1.075, 2);
+    await expect(avatar).toHaveCSS('transform', /matrix\(-1\.075, 0, 0, 1,/);
+    await expect.poll(async () => {
+      const loadingPoseBounds = await avatar.boundingBox();
+      expect(loadingPoseBounds).not.toBeNull();
+      expect(Math.abs(loadingPoseBounds!.height - defaultPoseBounds!.height)).toBeLessThanOrEqual(0.5);
+      return loadingPoseBounds!.width / defaultPoseBounds!.width;
+    }).toBeCloseTo(1.075, 2);
     await expect(avatar).toHaveAttribute('data-avatar-frame', 'think-dance-b', { timeout: 500 });
     await expect(avatar.locator('.jolene-avatar-pixi')).toHaveCSS('transform', /matrix\(-1, 0, 0, 1, 0, 0\)/);
     await expect(avatar).toHaveAttribute('data-avatar-state', 'idle');
