@@ -38,4 +38,4 @@ This is a point-in-time engineering audit of portfolio commit `0a46b06e3467404b4
 
 ## Release-profile conclusion
 
-The repository is a verified local release candidate, not a finished public launch. A static release may exclude Jolene, contact intent, analytics, and the avatar only while those paths remain disabled. A public Jolene release requires every remaining gate in `RELEASE_GATES.md` to pass.
+This document records the August 27, 2026 release-candidate checkpoint. Current production procedures and gates are maintained in [`PRODUCTION_OPERATIONS_RUNBOOK.md`](PRODUCTION_OPERATIONS_RUNBOOK.md); the repository README describes the deployed product and current public boundaries.
