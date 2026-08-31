@@ -167,7 +167,7 @@ const atlasManifest = Buffer.from(`${JSON.stringify({
   meta: {
     app: 'Aseprite-compatible Jolene approved runtime export',
     version: '1.0',
-    image: 'jolene-approved-atlas.png',
+    image: `jolene-approved-atlas.png?v=${sha256(atlasBytes).slice(0, 12)}`,
     format: 'RGBA8888',
     size: { w: atlasColumns * 320, h: atlasRows * 460 },
     scale: '1',

@@ -38,6 +38,8 @@ for (const requirement of ['image-rendering: pixelated', 'pointer-events: none',
 }
 assert.equal(styles.includes('contain: layout paint style'), false, 'Paint containment would clip scaled typing frames.');
 assert.ok(styles.includes("[data-avatar-frame='think-dance-b']"), 'Loading dance must mirror its second beat.');
+assert.match(source, /jolene-approved-atlas\.json\?v=[a-f0-9]{12}/, 'The atlas manifest URL must be content-versioned.');
+assert.match(source, /jolene-approved-atlas\.png\?v=[a-f0-9]{12}/, 'The atlas image URL must be content-versioned.');
 
 const primarySequence = ['greet', 'excited', 'listen', 'think', 'speak', 'evidence', 'idle'];
 for (let index = 0; index < primarySequence.length - 1; index += 1) {
