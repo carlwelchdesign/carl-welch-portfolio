@@ -831,6 +831,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .jolene-conversation-avatar[data-avatar-frame='greet-wave'],
 .jolene-conversation-avatar[data-avatar-frame^='excited-'],
 .jolene-conversation-avatar[data-avatar-frame^='think-dance-'] { transform: translateY(2.8260869565%) scaleX(-1); }
+.jolene-conversation-avatar[data-avatar-frame^='think-dance-'] { transform: translateY(2.8260869565%) scaleX(-1.075); }
 .jolene-starters > p { margin: 0; color: var(--muted); font: 8px var(--font-geist-mono), monospace; letter-spacing: 0.08em; text-transform: uppercase; }
 .jolene-starters button { min-height: 44px; padding: 9px 12px; border: 1px solid var(--line); border-radius: 0; background: transparent; color: var(--paper); cursor: pointer; font: 12px/1.35 var(--font-geist-sans), sans-serif; text-align: left; }
 .jolene-starters button:hover { border-color: var(--jolene-accent); background: rgba(255, 104, 0, 0.1); }

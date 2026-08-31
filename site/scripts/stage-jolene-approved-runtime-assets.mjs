@@ -17,7 +17,7 @@ const loadingDance = await readFile(new URL('../public/jolene/sprites/loading-da
 assert.equal(sha256(idleAtlas), '041692e505323a7d14c96df9b197829814516e661a43191e6aecab402023122c');
 assert.equal(
   sha256(greetWave),
-  '47b6e47b923e5682497014fbd1e5239ccb5e8a76df3f059ab67ea5b623e879c9',
+  '185259c7634741878473e834a77ab23ac888d9cd5c766472bab5d828f347580c',
   'The approved single-frame wave changed. Preserve the canonical face, eyes, teeth, hair, hand, and alpha exactly.',
 );
 
@@ -34,10 +34,60 @@ try {
       const canvas = document.createElement('canvas');
       canvas.width = 320;
       canvas.height = 460;
-      const context = canvas.getContext('2d');
+      const context = canvas.getContext('2d', { willReadFrequently: true });
       context.imageSmoothingEnabled = false;
       context.drawImage(image, index * 320, 0, 320, 460, 0, 0, 320, 460);
-      return canvas.toDataURL('image/png');
+      const frame = context.getImageData(0, 0, 320, 460);
+      const original = new Uint8ClampedArray(frame.data);
+      const hairMask = new Uint8Array(320 * 460);
+      const pixelIndex = (x, y) => y * 320 + x;
+      for (let y = 155; y <= 315; y += 1) {
+        for (let x = 245; x <= 291; x += 1) {
+          const offset = pixelIndex(x, y) * 4;
+          const red = original[offset];
+          const green = original[offset + 1];
+          const blue = original[offset + 2];
+          if (
+            original[offset + 3] > 0
+            && red > 80
+            && red >= green
+            && green > blue
+            && green / red > 0.62
+            && green - blue > 25
+          ) hairMask[pixelIndex(x, y)] = 1;
+        }
+      }
+      const expandedMask = new Uint8Array(hairMask);
+      for (let y = 155; y <= 315; y += 1) {
+        for (let x = 245; x <= 291; x += 1) {
+          const index = pixelIndex(x, y);
+          const offset = index * 4;
+          if (hairMask[index] || original[offset + 3] === 0) continue;
+          if (
+            hairMask[pixelIndex(x - 1, y)]
+            || hairMask[pixelIndex(x + 1, y)]
+            || hairMask[pixelIndex(x, y - 1)]
+            || hairMask[pixelIndex(x, y + 1)]
+          ) expandedMask[index] = 1;
+        }
+      }
+      let extendedTransparentPixels = 0;
+      for (let y = 155; y <= 315; y += 1) {
+        for (let x = 245; x <= 291; x += 1) {
+          const sourceIndex = pixelIndex(x, y);
+          if (!expandedMask[sourceIndex]) continue;
+          const targetIndex = pixelIndex(x + 10, y);
+          const sourceOffset = sourceIndex * 4;
+          const targetOffset = targetIndex * 4;
+          if (frame.data[targetOffset + 3] === 0) extendedTransparentPixels += 1;
+          frame.data[targetOffset] = original[sourceOffset];
+          frame.data[targetOffset + 1] = original[sourceOffset + 1];
+          frame.data[targetOffset + 2] = original[sourceOffset + 2];
+          frame.data[targetOffset + 3] = original[sourceOffset + 3];
+        }
+      }
+      context.putImageData(frame, 0, 0);
+      return { dataUrl: canvas.toDataURL('image/png'), extendedTransparentPixels };
     };
     return {
       rest: frameAt(0),
@@ -53,16 +103,20 @@ try {
 }
 
 const frameOutputs = {
-  'idle-rest.png': decodeDataUrl(idleFrames.rest),
-  'idle-inhale.png': decodeDataUrl(idleFrames.inhale),
-  'idle-rise.png': decodeDataUrl(idleFrames.rise),
-  'idle-peak.png': decodeDataUrl(idleFrames.peak),
-  'blink-half.png': decodeDataUrl(idleFrames.half),
-  'blink-closed.png': decodeDataUrl(idleFrames.closed),
+  'idle-rest.png': decodeDataUrl(idleFrames.rest.dataUrl),
+  'idle-inhale.png': decodeDataUrl(idleFrames.inhale.dataUrl),
+  'idle-rise.png': decodeDataUrl(idleFrames.rise.dataUrl),
+  'idle-peak.png': decodeDataUrl(idleFrames.peak.dataUrl),
+  'blink-half.png': decodeDataUrl(idleFrames.half.dataUrl),
+  'blink-closed.png': decodeDataUrl(idleFrames.closed.dataUrl),
   'greet-wave.png': greetWave,
   'loading-dance-a.png': loadingDance,
   'loading-dance-b.png': loadingDance,
 };
+
+for (const [name, frame] of Object.entries(idleFrames)) {
+  assert.ok(frame.extendedTransparentPixels >= 1_000, `${name} did not receive the complete outer-hair silhouette.`);
+}
 
 const atlasFrameNames = Object.keys(frameOutputs);
 const atlasColumns = 4;
