@@ -204,7 +204,7 @@
   "meta": {
     "app": "Aseprite-compatible Jolene approved runtime export",
     "version": "1.0",
-    "image": "jolene-approved-atlas.png",
+    "image": "jolene-approved-atlas.png?v=ff9e65504266",
     "format": "RGBA8888",
     "size": {
       "w": 1280,
