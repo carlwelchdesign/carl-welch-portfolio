@@ -1889,6 +1889,30 @@ test('homepage project index supports a complete recruiter scan and return path'
   }
 });
 
+test('homepage publishes an image-rich static 1200×630 social card', async ({ page }, testInfo) => {
+  const expectedOrigin = new URL(testInfo.project.use.baseURL as string).origin;
+  const expectedImage = `${expectedOrigin}/social/carl-welch-portfolio.png`;
+  await page.goto('/');
+
+  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', expectedImage);
+  await expect(page.locator('meta[property="og:image:width"]')).toHaveAttribute('content', '1200');
+  await expect(page.locator('meta[property="og:image:height"]')).toHaveAttribute('content', '630');
+  await expect(page.locator('meta[property="og:image:alt"]')).toHaveAttribute(
+    'content',
+    'Carl Welch portfolio preview featuring applied AI, product interfaces, and creative software',
+  );
+  await expect(page.locator('meta[name="twitter:image"]')).toHaveAttribute('content', expectedImage);
+
+  const response = await page.request.get('/social/carl-welch-portfolio.png');
+  expect(response.status()).toBe(200);
+  expect(response.headers()['content-type']).toContain('image/png');
+  const image = await response.body();
+  const dimensions = new DataView(image.buffer, image.byteOffset, image.byteLength);
+  expect(dimensions.getUint32(16)).toBe(1200);
+  expect(dimensions.getUint32(20)).toBe(630);
+  expect(image.byteLength).toBeGreaterThanOrEqual(200_000);
+});
+
 test('flagship case studies publish unique 1200×630 social cards', async ({ page }, testInfo) => {
   const expectedOrigin = new URL(testInfo.project.use.baseURL as string).origin;
   for (const slug of [

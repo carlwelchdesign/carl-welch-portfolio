@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "1.0.0",
+  "output": "/social/carl-welch-portfolio.png",
+  "dimensions": {
+    "width": 1200,
+    "height": 630
+  },
+  "minimumBytes": 200000,
+  "copy": {
+    "brand": "CARL WELCH",
+    "eyebrow": "SENIOR PRODUCT ENGINEER · CREATIVE TECHNOLOGIST",
+    "headline": "I build complex product interfaces and the systems behind them.",
+    "callToAction": "SELECTED WORK"
+  },
+  "sources": [
+    {
+      "src": "/projects/job-search-os-dashboard.png",
+      "label": "01 / PRODUCT SYSTEMS"
+    },
+    {
+      "src": "/projects/flight-tracker-ai/live-traffic-weather.png",
+      "label": "02 / AVIATION INTELLIGENCE"
+    },
+    {
+      "src": "/projects/echoatlas/analyze-hero.png",
+      "label": "08 / EVIDENCE SYSTEMS"
+    }
+  ]
+}

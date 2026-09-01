@@ -47,10 +47,10 @@ export function buildPageMetadata({
 }: PageMetadataInput): Metadata {
   const socialTitle = title === defaultTitle ? title : `${title} | Carl Welch`;
   const socialImage: PageImage = image || {
-    url: '/opengraph-image',
+    url: '/social/carl-welch-portfolio.png',
     width: 1200,
     height: 630,
-    alt: defaultTitle,
+    alt: 'Carl Welch portfolio preview featuring applied AI, product interfaces, and creative software',
   };
 
   return {
