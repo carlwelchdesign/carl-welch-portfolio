@@ -1,6 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 import { githubProjects } from '../../app/github-projects';
+import { legacyArchiveProjects } from '../../app/legacy-archive-data';
 import { projects } from '../../app/portfolio-data';
 import { recommendations } from '../../app/recommendations-data';
 
@@ -1188,10 +1189,10 @@ test('homepage career portrait shows exact archival proof with mobile browsing',
   await expect(proof.getByText('Swipe to browse')).toBeVisible();
   await expect(links).toHaveCount(4);
   expect(await links.evaluateAll((elements) => elements.map((element) => element.getAttribute('href')))).toEqual([
-    '/archive#legacy-dkny',
-    '/archive#legacy-gm-defense',
-    '/archive#legacy-gtd-iq',
-    '/archive#legacy-ufc-japan',
+    '/archive?inspect=legacy-dkny#working-archive',
+    '/archive?inspect=legacy-gm-defense#working-archive',
+    '/archive?inspect=legacy-gtd-iq#working-archive',
+    '/archive?inspect=legacy-ufc-japan#working-archive',
   ]);
   await expect(proof.locator('strong')).toHaveText([
     'DKNY e-commerce',
@@ -1205,6 +1206,7 @@ test('homepage career portrait shows exact archival proof with mobile browsing',
   for (let index = 0; index < 4; index += 1) {
     const image = images.nth(index);
     await image.scrollIntoViewIfNeeded();
+    await expect.poll(() => image.evaluate((element) => (element as HTMLImageElement).naturalWidth)).toBe(240);
     const dimensions = await image.evaluate((element) => {
       const source = element as HTMLImageElement;
       return { naturalWidth: source.naturalWidth, renderedWidth: source.getBoundingClientRect().width };
@@ -1225,8 +1227,8 @@ test('homepage career portrait shows exact archival proof with mobile browsing',
 
   await links.first().focus();
   await links.first().press('Enter');
-  await page.waitForURL(/\/archive#legacy-dkny$/);
-  await expect(page.locator('#legacy-dkny')).toBeInViewport({ timeout: 5000 });
+  await page.waitForURL(/\/archive\?inspect=legacy-dkny#working-archive$/);
+  await expect(page.getByRole('dialog', { name: 'DKNY e-commerce' })).toBeVisible();
 });
 
 test('archive map makes the full historical record navigable', async ({ page }) => {
@@ -1734,6 +1736,33 @@ test('archive inspector supports focused keyboard and mobile review without upsc
   await expect(page.locator('#legacy-gm-defense')).toHaveCount(1);
 });
 
+test('every selected professional archive image opens in the native-scale inspector', async ({ page }) => {
+  await page.goto('/archive#visual-archive');
+  const gallery = page.locator('.legacy-gallery');
+  const expectedImages = legacyArchiveProjects.slice(1).reduce(
+    (count, project) => count + 1 + (project.additionalImages?.length ?? 0),
+    0,
+  );
+  await expect(gallery.getByRole('button', { name: /^Inspect / })).toHaveCount(expectedImages);
+
+  await gallery.getByRole('button', { name: 'Inspect Darksiders II promotional site, image 1 of 1' }).click();
+  const dialog = page.getByRole('dialog', { name: 'Selected archive image viewer' });
+  await expect(dialog).toBeVisible();
+  await expect(dialog.getByRole('heading', { name: 'Darksiders II promotional site' })).toBeVisible();
+
+  const dimensions = await dialog.locator('figure img').evaluate((element) => {
+    const image = element as HTMLImageElement;
+    return { naturalWidth: image.naturalWidth, renderedWidth: image.getBoundingClientRect().width };
+  });
+  expect(dimensions.naturalWidth).toBe(240);
+  expect(dimensions.renderedWidth).toBeLessThanOrEqual(dimensions.naturalWidth);
+
+  await dialog.getByRole('button', { name: 'Next image' }).click();
+  await expect(dialog.getByRole('heading', { name: 'Almost Alice music experience' })).toBeVisible();
+  await dialog.getByRole('button', { name: 'Close selected archive image viewer' }).click();
+  await expect(dialog).not.toBeVisible();
+});
+
 test('visitor-facing routes avoid internal editorial and evidence-system language', async ({ page }) => {
   const rejectedCopy = /supported role|reviewed image record|reviewed public evidence only|public corpus|evidence model|view evidence map|claim limitations|requirement evidence|current résumé|message collection|privacy-safe crop|date unverified|source-verified recommendation|review-only lead channels|approved career facts|explicitly approval-gated|current boundaries/i;
   for (const viewport of [{ width: 1440, height: 1000 }, { width: 390, height: 844 }]) {
@@ -2004,18 +2033,16 @@ test('server-rendered navigation and content remain available without JavaScript
   await page.goto('/');
   await expectCorePageContract(page);
   await expect(page.getByRole('link', { name: 'View selected work' })).toBeVisible();
-  const homepageProjectIndex = page.getByRole('navigation', { name: 'Project index' });
-  await expect(homepageProjectIndex.getByRole('link')).toHaveCount(8);
-  await expect(homepageProjectIndex.getByRole('link', { name: /Flight Tracker AI/ })).toHaveAttribute(
-    'href',
-    '#work-flight-tracker-ai',
-  );
+  await expect(page.locator('.featured-project-card')).toHaveCount(3);
+  await expect(page.getByRole('link', { name: 'View all 8 case studies' })).toHaveAttribute('href', '/work');
   await expect(page.getByRole('region', { name: 'Let’s talk about what you’re building.' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Start a conversation' })).toHaveAttribute('href', '/contact');
   const homepageArchiveLink = page.getByRole('link', { name: 'View DKNY e-commerce in the archive' });
-  await expect(homepageArchiveLink).toHaveAttribute('href', '/archive#legacy-dkny');
+  await expect(homepageArchiveLink).toHaveAttribute('href', '/archive?inspect=legacy-dkny#working-archive');
   await homepageArchiveLink.click();
-  await page.waitForURL(/\/archive#legacy-dkny$/);
+  await page.waitForURL(/\/archive\?inspect=legacy-dkny#working-archive$/);
+  await expect(page.locator('#working-archive')).toBeVisible();
+  await expect(page.locator('.legacy-inspector[open]')).toHaveCount(0);
   await expect(page.locator('#legacy-dkny')).toHaveCount(1);
   await expect(page.locator('.legacy-working-grid > li')).toHaveCount(16);
 

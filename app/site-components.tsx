@@ -55,7 +55,10 @@ export function CareerPortraitPreview() {
         <ol>
           {homepageLegacyWork.map((item) => (
             <li key={item.id}>
-              <a href={`/archive#${item.id}`} aria-label={`View ${item.project} in the archive`}>
+              <a
+                href={`/archive?inspect=${item.id}#working-archive`}
+                aria-label={`View ${item.project} in the archive`}
+              >
                 <figure>
                   <Image
                     src={item.image.src}

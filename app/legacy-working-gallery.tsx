@@ -34,7 +34,16 @@ export function LegacyWorkingGallery({ items }: LegacyWorkingGalleryProps) {
 
   useEffect(() => {
     gridRef.current?.setAttribute('data-inspector-ready', 'true');
-  }, []);
+
+    const requestedId = new URLSearchParams(window.location.search).get('inspect');
+    if (!requestedId) return;
+    const requestedIndex = items.findIndex((item) => item.id === requestedId);
+    if (requestedIndex < 0) return;
+    const opener = gridRef.current?.querySelector<HTMLButtonElement>(`[data-inspect-id="${requestedId}"]`);
+    if (!opener) return;
+    openerRef.current = opener;
+    setActiveIndex(requestedIndex);
+  }, [items]);
 
   useEffect(() => {
     const dialog = dialogRef.current;
@@ -107,6 +116,7 @@ export function LegacyWorkingGallery({ items }: LegacyWorkingGalleryProps) {
                 <button
                   type="button"
                   className="legacy-working-image legacy-working-inspect-trigger"
+                  data-inspect-id={item.id}
                   aria-label={`Inspect ${item.project}`}
                   onClick={(event) => openInspector(index, event.currentTarget)}
                 >

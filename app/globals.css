@@ -278,7 +278,14 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .legacy-gallery-figure { min-width: 0; margin: 0; display: flex; flex-direction: column; background: var(--ink); color: var(--paper); }
 .legacy-gallery-image { flex: 1; min-height: 380px; padding: clamp(18px, 3vw, 44px); display: flex; align-items: center; justify-content: center; overflow: hidden; }
 .legacy-gallery-image img { display: block; width: auto; max-width: 100%; height: auto; max-height: 720px; object-fit: contain; }
+.legacy-gallery-inspect-trigger { position: relative; min-width: 0; min-height: 44px; padding: 0; display: grid; place-items: center; border: 0; background: transparent; color: inherit; cursor: zoom-in; }
+.legacy-gallery-inspect-trigger > span { position: absolute; right: 10px; bottom: 10px; padding: 8px 10px; background: rgba(9, 12, 9, 0.92); color: var(--paper); font: 9px/1 var(--font-geist-mono), monospace; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0; transform: translateY(4px); transition: opacity 160ms ease, transform 160ms ease; }
+.legacy-gallery-inspect-trigger::after { content: ''; position: absolute; inset: 0; border: 2px solid transparent; pointer-events: none; transition: border-color 160ms ease; }
+.legacy-gallery-inspect-trigger:hover::after, .legacy-gallery-inspect-trigger:focus-visible::after { border-color: var(--orange); }
+.legacy-gallery-inspect-trigger:hover > span, .legacy-gallery-inspect-trigger:focus-visible > span { opacity: 1; transform: none; }
+.legacy-gallery-inspect-trigger:focus-visible { outline: 0; }
 .legacy-gallery-image-collection { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2px; padding: 2px; background: var(--ink); }
+.legacy-gallery-image-collection .legacy-gallery-inspect-trigger { width: 100%; }
 .legacy-gallery-image-collection img { width: 100%; max-width: none; max-height: none; aspect-ratio: 1; object-fit: cover; }
 .legacy-gallery-item-thumbnail .legacy-gallery-image { min-height: 250px; padding: clamp(18px, 2vw, 30px); }
 .legacy-gallery-figure figcaption { min-height: 48px; padding: 0 16px; display: grid; grid-template-columns: auto 1fr auto; gap: 16px; align-items: center; border-top: 1px solid var(--line); color: var(--muted); font: 9px/1.4 var(--font-geist-mono), monospace; letter-spacing: 0.09em; text-transform: uppercase; }
@@ -344,6 +351,8 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .legacy-inspector-body { flex: 1; display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr); }
 .legacy-inspector-body > figure { min-height: 490px; margin: 0; padding: clamp(30px, 5vw, 72px); display: grid; place-items: center; overflow: auto; background: #e9e5dc; }
 .legacy-inspector-body > figure img { width: min(100%, 240px); height: auto; display: block; object-fit: contain; }
+.legacy-gallery-inspector .legacy-inspector-body > figure img { width: auto; max-width: 100%; max-height: 66dvh; }
+.legacy-inspector-image-count { font: 9px/1.4 var(--font-geist-mono), monospace !important; letter-spacing: 0.08em; text-transform: uppercase; }
 .legacy-inspector-body > figure[data-display='wide'] img { width: 100%; max-width: 921px; max-height: 66dvh; }
 .legacy-inspector-copy { padding: clamp(34px, 5vw, 74px); display: flex; flex-direction: column; justify-content: center; border-left: 1px solid var(--line); }
 .legacy-inspector-copy .eyebrow { margin: 0 0 26px; color: var(--orange); }
@@ -1162,6 +1171,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .legacy-gallery-item-feature, .legacy-gallery-item-standard, .legacy-gallery-item-thumbnail { grid-column: auto; }
   .legacy-gallery-image, .legacy-gallery-item-thumbnail .legacy-gallery-image { min-height: 240px; }
   .legacy-gallery-image-collection { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .legacy-gallery-inspect-trigger > span { opacity: 1; transform: none; }
   .legacy-working-controls { grid-template-columns: 1fr; gap: 0; align-items: start; }
   .legacy-working-controls label { padding: 26px 0 20px; }
   .legacy-working-controls input { width: 100%; font-size: 18px; }
