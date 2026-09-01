@@ -1,6 +1,6 @@
 'use client';
 
-import { LazyMotion, MotionConfig, domAnimation, m, useInView, useReducedMotion } from 'motion/react';
+import { LazyMotion, MotionConfig, domAnimation, m, useInView, useReducedMotion, useScroll, useSpring } from 'motion/react';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 
 type SectionTone = 'red' | 'orange' | 'green';
@@ -15,10 +15,38 @@ export function MotionRuntime({ children }: { children: ReactNode }) {
   return (
     <MotionConfig reducedMotion="user">
       <LazyMotion features={domAnimation} strict>
+        <ReadingProgress />
         <SectionToneBackdrop />
         {children}
       </LazyMotion>
     </MotionConfig>
+  );
+}
+
+function ReadingProgress() {
+  const [reduceMotion, setReduceMotion] = useState(false);
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 120,
+    damping: 24,
+    mass: 0.28,
+  });
+
+  useEffect(() => {
+    const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const updateMotionPreference = () => setReduceMotion(motionPreference.matches);
+    updateMotionPreference();
+    motionPreference.addEventListener('change', updateMotionPreference);
+    return () => motionPreference.removeEventListener('change', updateMotionPreference);
+  }, []);
+
+  return (
+    <m.div
+      className="reading-progress"
+      aria-hidden="true"
+      data-reduced-motion={reduceMotion ? 'true' : 'false'}
+      style={{ scaleX }}
+    />
   );
 }
 

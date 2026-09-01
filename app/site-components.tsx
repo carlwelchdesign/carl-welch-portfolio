@@ -55,7 +55,10 @@ export function CareerPortraitPreview() {
         <ol>
           {homepageLegacyWork.map((item) => (
             <li key={item.id}>
-              <a href={`/archive#${item.id}`} aria-label={`View ${item.project} in the archive`}>
+              <a
+                href={`/archive?inspect=${item.id}#working-archive`}
+                aria-label={`View ${item.project} in the archive`}
+              >
                 <figure>
                   <Image
                     src={item.image.src}
@@ -545,6 +548,56 @@ export function WorkIndex({ items }: { items: PortfolioProject[] }) {
         ))}
       </ol>
     </nav>
+  );
+}
+
+export function FeaturedWork({ items, totalCount }: { items: PortfolioProject[]; totalCount: number }) {
+  return (
+    <section id="work" className="featured-work" aria-labelledby="featured-work-title" tabIndex={-1}>
+      <Reveal className="featured-work-heading">
+        <div>
+          <p className="eyebrow">Current work</p>
+          <h2 id="featured-work-title">Current work, selected for a fast read.</h2>
+        </div>
+        <p>
+          Three systems that show the range of the practice now: product operations,
+          grounded AI, and evidence-led technical visualization.
+        </p>
+      </Reveal>
+
+      <ol className="featured-work-grid">
+        {items.map((project) => (
+          <li key={project.slug} style={{ '--chapter-tone': toneColors[project.tone] } as ToneStyle}>
+            <article className="featured-project-card">
+              <Link className="featured-project-image" href={`/work/${project.slug}`}>
+                <Image
+                  src={project.image.src}
+                  alt={project.image.alt}
+                  width={project.image.width}
+                  height={project.image.height}
+                  sizes="(max-width: 760px) 100vw, 33vw"
+                />
+              </Link>
+              <div className="featured-project-copy">
+                <p className="eyebrow">Selected work / {project.number}</p>
+                <h3>{project.name}</h3>
+                <p>{project.summary}</p>
+                <ul aria-label={`${project.name} selected technologies`}>
+                  {project.stack.slice(0, 4).map((item) => <li key={item}>{item}</li>)}
+                </ul>
+                <Link href={`/work/${project.slug}`} aria-label={`View ${project.name} case study`}>
+                  View case study <span aria-hidden="true">→</span>
+                </Link>
+              </div>
+            </article>
+          </li>
+        ))}
+      </ol>
+
+      <Link className="primary-action dark-action featured-work-all" href="/work">
+        View all {totalCount} case studies <span aria-hidden="true">→</span>
+      </Link>
+    </section>
   );
 }
 
