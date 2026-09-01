@@ -171,6 +171,13 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .architecture-connectors path { fill: none; stroke: currentColor; stroke-width: 1.65; opacity: 0.78; vector-effect: non-scaling-stroke; }
 .architecture-connectors marker path { fill: currentColor; stroke: none; opacity: 1; }
 .architecture-connectors .architecture-edge-dashed { stroke-dasharray: 6 6; opacity: 0.55; }
+.architecture-flow-endpoints, .architecture-flow-orbs, .architecture-flow-endpoint, .architecture-flow-orb { pointer-events: none; }
+.architecture-flow-endpoint { fill: var(--chapter-tone); opacity: 0.12; stroke: color-mix(in srgb, var(--chapter-tone) 48%, white); stroke-width: 0.8; transition: opacity 180ms ease; }
+.architecture-flow-orb { color: var(--chapter-tone); opacity: 1; transition: opacity 180ms ease; }
+.architecture-map-motion[data-flow-active='false'] .architecture-flow-orb { opacity: 0; }
+.architecture-flow-orb-tail { fill: currentColor; opacity: 0.42; }
+.architecture-flow-orb-halo { fill: currentColor; opacity: 0.28; }
+.architecture-flow-orb-core { fill: #ffffff; stroke: currentColor; stroke-width: 1.55; }
 .architecture-track { position: absolute; z-index: 2; inset: 0; margin: 0; padding: 0; list-style: none; }
 .architecture-step { position: absolute; min-height: 80px; padding: 11px 12px 10px; display: flex; flex-direction: column; border: 1px solid rgba(242, 242, 235, 0.34); border-top: 2px solid var(--node-color, var(--chapter-tone)); background: rgba(9, 14, 11, 0.96); box-shadow: 0 10px 24px rgba(0, 0, 0, 0.34); }
 .architecture-step[data-node-kind='surface'] { --node-color: #f2f2eb; }
@@ -212,6 +219,8 @@ button, a { -webkit-tap-highlight-color: transparent; }
 
 @media (prefers-reduced-motion: reduce) {
   .architecture-map-motion .architecture-connectors { animation: none; clip-path: none; }
+  .architecture-flow-orb { display: none; }
+  .architecture-flow-endpoint { opacity: 0.68; }
 }
 
 .experience-preview { padding: clamp(76px, 10vw, 150px) var(--page-padding); background: rgba(98, 232, 121, 0.9); color: var(--ink); }
@@ -1068,6 +1077,10 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .architecture-summary { font-size: 12px; }
   .architecture-viewport { position: relative; margin-top: 18px; }
   .architecture-viewport::after { content: 'Swipe to inspect →'; position: sticky; z-index: 5; bottom: 8px; left: 8px; display: inline-block; padding: 7px 9px; background: var(--chapter-tone); color: var(--ink); font: 8px var(--font-geist-mono), monospace; letter-spacing: 0.1em; text-transform: uppercase; pointer-events: none; }
+  .architecture-flow-orb-tail, .architecture-flow-orb-halo, .architecture-flow-orb-core { transform: scale(1.28); transform-box: fill-box; transform-origin: center; }
+  .architecture-flow-orb-tail { opacity: 0.68; }
+  .architecture-flow-orb-halo { opacity: 0.42; }
+  .architecture-flow-orb-core { stroke-width: 1.9; }
   .architecture-map { margin-inline: 0; }
   .architecture-card-compact .architecture-viewport { height: 450px; }
   .architecture-card-compact .architecture-map { transform: scale(0.72); }
