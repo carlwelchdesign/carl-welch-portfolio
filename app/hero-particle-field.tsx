@@ -2,28 +2,35 @@
 
 import { useEffect, useRef } from 'react';
 
-const DESKTOP_PARTICLE_COUNT = 64;
-const MOBILE_PARTICLE_COUNT = 34;
+const DESKTOP_PARTICLE_COUNT = 6400;
+const MOBILE_PARTICLE_COUNT = 2800;
+const CLOUD_COUNT = 9;
 const MOBILE_BREAKPOINT = 720;
 const MAX_DEVICE_PIXEL_RATIO = 2;
 const MAX_FRAME_DELTA_SECONDS = 1 / 30;
 const TARGET_FRAME_INTERVAL_MILLISECONDS = 1000 / 60;
-const POINTER_RADIUS = 156;
+const POINTER_RADIUS = 172;
+const TAU = Math.PI * 2;
 
 type Particle = {
   x: number;
   y: number;
   vx: number;
   vy: number;
-  size: number;
   phase: number;
   opacity: number;
+  windAffinity: number;
 };
 
 type PointerForce = {
   x: number;
   y: number;
+  previousX: number;
+  previousY: number;
+  previousTime: number;
+  speed: number;
   active: boolean;
+  initialized: boolean;
 };
 
 function seededRandom(seed: number) {
@@ -37,76 +44,44 @@ function seededRandom(seed: number) {
   };
 }
 
+function gaussian(random: () => number) {
+  const first = Math.max(random(), Number.EPSILON);
+  return Math.sqrt(-2 * Math.log(first)) * Math.cos(TAU * random());
+}
+
 function createParticles(width: number, height: number, count: number): Particle[] {
-  const random = seededRandom(0x4341524c + count);
+  const random = seededRandom(0x434c4f55 + count);
+  const centers = Array.from({ length: CLOUD_COUNT }, (_, index) => ({
+    x: width * (0.08 + ((index * 0.193 + random() * 0.11) % 0.84)),
+    y: height * (0.09 + ((index * 0.271 + random() * 0.13) % 0.82)),
+    spreadX: width * (0.045 + random() * 0.055),
+    spreadY: height * (0.03 + random() * 0.055),
+  }));
+
   return Array.from({ length: count }, (_, index) => {
-    const size = 3 + Math.floor(random() * 5);
-    const half = size / 2;
+    const center = centers[index % CLOUD_COUNT];
     return {
-      x: half + random() * Math.max(1, width - size),
-      y: half + random() * Math.max(1, height - size),
-      vx: (random() - 0.5) * 82,
-      vy: (random() - 0.58) * 72,
-      size,
-      phase: random() * Math.PI * 2 + index * 0.17,
-      opacity: 0.42 + random() * 0.5,
+      x: Math.max(0, Math.min(width - 1, center.x + gaussian(random) * center.spreadX)),
+      y: Math.max(0, Math.min(height - 1, center.y + gaussian(random) * center.spreadY)),
+      vx: (random() - 0.35) * 46,
+      vy: (random() - 0.5) * 34,
+      phase: random() * TAU,
+      opacity: 0.3 + random() * 0.68,
+      windAffinity: 0.72 + random() * 0.5,
     };
   });
 }
 
-function resolveParticleCollisions(particles: Particle[]) {
-  for (let leftIndex = 0; leftIndex < particles.length; leftIndex += 1) {
-    const left = particles[leftIndex];
-    for (let rightIndex = leftIndex + 1; rightIndex < particles.length; rightIndex += 1) {
-      const right = particles[rightIndex];
-      let dx = right.x - left.x;
-      let dy = right.y - left.y;
-      const minimumDistance = (left.size + right.size) * 0.62;
-      let distanceSquared = dx * dx + dy * dy;
-      if (distanceSquared >= minimumDistance * minimumDistance) continue;
-
-      if (distanceSquared < 0.0001) {
-        dx = 0.01;
-        dy = 0;
-        distanceSquared = dx * dx;
-      }
-      const distance = Math.sqrt(distanceSquared);
-      const normalX = dx / distance;
-      const normalY = dy / distance;
-      const correction = (minimumDistance - distance) / 2;
-      left.x -= normalX * correction;
-      left.y -= normalY * correction;
-      right.x += normalX * correction;
-      right.y += normalY * correction;
-
-      const relativeVelocity = (right.vx - left.vx) * normalX + (right.vy - left.vy) * normalY;
-      if (relativeVelocity >= 0) continue;
-      const impulse = (-(1 + 0.84) * relativeVelocity) / 2;
-      left.vx -= impulse * normalX;
-      left.vy -= impulse * normalY;
-      right.vx += impulse * normalX;
-      right.vy += impulse * normalY;
-    }
-  }
-}
-
-function containParticle(particle: Particle, width: number, height: number, index: number) {
-  const half = particle.size / 2;
-  if (particle.x < half) {
-    particle.x = half;
-    particle.vx = Math.abs(particle.vx) * 0.86;
-  } else if (particle.x > width - half) {
-    particle.x = width - half;
-    particle.vx = -Math.abs(particle.vx) * 0.86;
-  }
-
-  if (particle.y < half) {
-    particle.y = half;
-    particle.vy = Math.abs(particle.vy) * 0.86;
-  } else if (particle.y > height - half) {
-    particle.y = height - half;
-    particle.vy = -Math.max(Math.abs(particle.vy) * 0.86, 72 + (index % 6) * 7);
-  }
+function sampleWind(particle: Particle, width: number, height: number, elapsedSeconds: number) {
+  const x = particle.x / Math.max(1, width);
+  const y = particle.y / Math.max(1, height);
+  return {
+    x: (24
+      + Math.sin(y * TAU + elapsedSeconds * 0.26) * 38
+      + Math.cos(y * TAU * 2 - elapsedSeconds * 0.15 + particle.phase) * 13) * particle.windAffinity,
+    y: (Math.sin(x * TAU - elapsedSeconds * 0.22) * 31
+      + Math.cos(x * TAU * 2 + elapsedSeconds * 0.12 + particle.phase * 0.5) * 11) * particle.windAffinity,
+  };
 }
 
 function stepParticles(
@@ -117,73 +92,74 @@ function stepParticles(
   elapsedMilliseconds: number,
   pointer: PointerForce,
 ) {
-  particles.forEach((particle, index) => {
-    let accelerationX = Math.sin(particle.phase + elapsedMilliseconds * 0.00032) * 7;
-    let accelerationY = 30 + Math.cos(particle.phase + elapsedMilliseconds * 0.00021) * 3;
+  let repelledParticles = 0;
+  let reboundEvents = 0;
+  const elapsedSeconds = elapsedMilliseconds / 1000;
+
+  for (const particle of particles) {
+    const wind = sampleWind(particle, width, height, elapsedSeconds);
+    let accelerationX = (wind.x - particle.vx) * 1.4;
+    let accelerationY = (wind.y - particle.vy) * 1.4;
 
     if (pointer.active) {
       const dx = particle.x - pointer.x;
       const dy = particle.y - pointer.y;
-      const distance = Math.sqrt(dx * dx + dy * dy);
-      if (distance > 0.001 && distance < POINTER_RADIUS) {
-        const pressure = (1 - distance / POINTER_RADIUS) * 430;
-        accelerationX += (dx / distance) * pressure;
-        accelerationY += (dy / distance) * pressure;
+      const distanceSquared = dx * dx + dy * dy;
+      if (distanceSquared > 0.01 && distanceSquared < POINTER_RADIUS * POINTER_RADIUS) {
+        const distance = Math.sqrt(distanceSquared);
+        const pressure = 1 - distance / POINTER_RADIUS;
+        const force = pressure * pressure * (720 + pointer.speed * 0.75);
+        accelerationX += (dx / distance) * force;
+        accelerationY += (dy / distance) * force;
+        repelledParticles += 1;
       }
     }
 
-    particle.vx = (particle.vx + accelerationX * deltaSeconds) * 0.999;
-    particle.vy = (particle.vy + accelerationY * deltaSeconds) * 0.999;
+    particle.vx = (particle.vx + accelerationX * deltaSeconds) * 0.997;
+    particle.vy = (particle.vy + accelerationY * deltaSeconds) * 0.997;
     const speed = Math.sqrt(particle.vx * particle.vx + particle.vy * particle.vy);
-    if (speed > 210) {
-      particle.vx = (particle.vx / speed) * 210;
-      particle.vy = (particle.vy / speed) * 210;
+    if (speed > 290) {
+      particle.vx = (particle.vx / speed) * 290;
+      particle.vy = (particle.vy / speed) * 290;
     }
     particle.x += particle.vx * deltaSeconds;
     particle.y += particle.vy * deltaSeconds;
-    containParticle(particle, width, height, index);
-  });
 
-  resolveParticleCollisions(particles);
-  particles.forEach((particle, index) => containParticle(particle, width, height, index));
+    if (particle.x < 0) {
+      particle.x = 0;
+      particle.vx = Math.abs(particle.vx) * 0.88;
+      reboundEvents += 1;
+    } else if (particle.x >= width) {
+      particle.x = width - 1;
+      particle.vx = -Math.abs(particle.vx) * 0.88;
+      reboundEvents += 1;
+    }
+    if (particle.y < 0) {
+      particle.y = 0;
+      particle.vy = Math.abs(particle.vy) * 0.88;
+      reboundEvents += 1;
+    } else if (particle.y >= height) {
+      particle.y = height - 1;
+      particle.vy = -Math.abs(particle.vy) * 0.88;
+      reboundEvents += 1;
+    }
+  }
+
+  return { repelledParticles, reboundEvents };
 }
 
-function drawParticles(
-  context: CanvasRenderingContext2D,
-  particles: Particle[],
-  width: number,
-  height: number,
-) {
+function drawParticles(context: CanvasRenderingContext2D, particles: Particle[], width: number, height: number) {
   context.clearRect(0, 0, width, height);
+  context.fillStyle = '#090c09';
   for (const particle of particles) {
-    const speed = Math.sqrt(particle.vx * particle.vx + particle.vy * particle.vy);
-    const trailSteps = speed > 48 ? 2 : 1;
-    for (let step = trailSteps; step >= 1; step -= 1) {
-      const trailScale = step / (trailSteps + 1);
-      const trailSize = Math.max(2, Math.round(particle.size * (1 - trailScale * 0.38)));
-      context.fillStyle = `rgba(9, 12, 9, ${particle.opacity * (0.11 + trailScale * 0.08)})`;
-      context.fillRect(
-        Math.round(particle.x - particle.vx * 0.018 * step - trailSize / 2),
-        Math.round(particle.y - particle.vy * 0.018 * step - trailSize / 2),
-        trailSize,
-        trailSize,
-      );
-    }
-    context.fillStyle = `rgba(9, 12, 9, ${particle.opacity})`;
-    context.fillRect(
-      Math.round(particle.x - particle.size / 2),
-      Math.round(particle.y - particle.size / 2),
-      particle.size,
-      particle.size,
-    );
+    context.globalAlpha = particle.opacity;
+    context.fillRect(Math.floor(particle.x), Math.floor(particle.y), 1, 1);
   }
+  context.globalAlpha = 1;
 }
 
 function countBoundsViolations(particles: Particle[], width: number, height: number) {
-  return particles.filter((particle) => {
-    const half = particle.size / 2;
-    return particle.x < half || particle.x > width - half || particle.y < half || particle.y > height - half;
-  }).length;
+  return particles.filter(({ x, y }) => x < 0 || x >= width || y < 0 || y >= height).length;
 }
 
 export function HeroParticleField() {
@@ -196,12 +172,18 @@ export function HeroParticleField() {
     if (!canvas || !field || !context) return;
 
     const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const pointer: PointerForce = { x: 0, y: 0, active: false };
+    const pointer: PointerForce = {
+      x: 0, y: 0, previousX: 0, previousY: 0, previousTime: 0,
+      speed: 0, active: false, initialized: false,
+    };
     let particles: Particle[] = [];
     let width = 1;
     let height = 1;
     let frameCount = 0;
     let inputEvents = 0;
+    let wakeEvents = 0;
+    let repelledParticles = 0;
+    let reboundEvents = 0;
     let lastFrameTime = 0;
     let animationFrame: number | null = null;
     let inView = false;
@@ -211,56 +193,59 @@ export function HeroParticleField() {
     const updateDiagnostics = () => {
       canvas.dataset.frameCount = String(frameCount);
       canvas.dataset.inputEvents = String(inputEvents);
+      canvas.dataset.wakeEvents = String(wakeEvents);
+      canvas.dataset.repelledParticles = String(repelledParticles);
+      canvas.dataset.reboundEvents = String(reboundEvents);
+      canvas.dataset.pointerSpeed = String(Math.round(pointer.speed));
       canvas.dataset.boundsViolations = String(countBoundsViolations(particles, width, height));
     };
-
     const render = () => {
       drawParticles(context, particles, width, height);
       updateDiagnostics();
     };
-
     const shouldAnimate = () => inView && documentVisible && !reduceMotion;
-
     const tick = (time: number) => {
       animationFrame = null;
       if (!shouldAnimate()) return;
-      if (lastFrameTime !== 0 && time - lastFrameTime < TARGET_FRAME_INTERVAL_MILLISECONDS) {
-        animationFrame = window.requestAnimationFrame(tick);
+      if (lastFrameTime && time - lastFrameTime < TARGET_FRAME_INTERVAL_MILLISECONDS) {
+        animationFrame = requestAnimationFrame(tick);
         return;
       }
-      const deltaSeconds = lastFrameTime === 0
-        ? 1 / 60
-        : Math.min((time - lastFrameTime) / 1000, MAX_FRAME_DELTA_SECONDS);
+      const deltaSeconds = lastFrameTime
+        ? Math.min((time - lastFrameTime) / 1000, MAX_FRAME_DELTA_SECONDS)
+        : 1 / 60;
       lastFrameTime = time;
-      stepParticles(particles, width, height, deltaSeconds, time, pointer);
+      const result = stepParticles(particles, width, height, deltaSeconds, time, pointer);
+      repelledParticles = result.repelledParticles;
+      reboundEvents += result.reboundEvents;
+      pointer.speed *= 0.91;
       frameCount += 1;
       render();
-      animationFrame = window.requestAnimationFrame(tick);
+      animationFrame = requestAnimationFrame(tick);
     };
-
     const syncAnimation = () => {
       const active = shouldAnimate();
       canvas.dataset.active = String(active);
       canvas.dataset.renderMode = reduceMotion ? 'static' : 'dynamic';
       if (active && animationFrame === null) {
         lastFrameTime = 0;
-        animationFrame = window.requestAnimationFrame(tick);
+        animationFrame = requestAnimationFrame(tick);
       } else if (!active && animationFrame !== null) {
-        window.cancelAnimationFrame(animationFrame);
+        cancelAnimationFrame(animationFrame);
         animationFrame = null;
       }
     };
-
     const resize = () => {
       const rect = field.getBoundingClientRect();
       width = Math.max(1, Math.round(rect.width));
       height = Math.max(1, Math.round(rect.height));
-      const quality = window.innerWidth <= MOBILE_BREAKPOINT ? 'mobile' : 'desktop';
+      const quality = innerWidth <= MOBILE_BREAKPOINT ? 'mobile' : 'desktop';
       const particleCount = quality === 'mobile' ? MOBILE_PARTICLE_COUNT : DESKTOP_PARTICLE_COUNT;
       const devicePixelRatio = Math.min(window.devicePixelRatio || 1, MAX_DEVICE_PIXEL_RATIO);
       canvas.width = Math.max(1, Math.round(width * devicePixelRatio));
       canvas.height = Math.max(1, Math.round(height * devicePixelRatio));
       context.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+      context.imageSmoothingEnabled = false;
       particles = createParticles(width, height, particleCount);
       frameCount = reduceMotion ? 1 : 0;
       canvas.dataset.quality = quality;
@@ -269,17 +254,32 @@ export function HeroParticleField() {
       render();
       syncAnimation();
     };
-
     const onPointerMove = (event: PointerEvent) => {
       const rect = field.getBoundingClientRect();
-      pointer.x = event.clientX - rect.left;
-      pointer.y = event.clientY - rect.top;
-      pointer.active = pointer.x >= 0 && pointer.x <= rect.width && pointer.y >= 0 && pointer.y <= rect.height;
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+      const time = performance.now();
+      if (pointer.initialized) {
+        const seconds = Math.max((time - pointer.previousTime) / 1000, 1 / 120);
+        pointer.speed = Math.min(1400, Math.hypot(x - pointer.previousX, y - pointer.previousY) / seconds);
+        if (Math.abs(x - pointer.previousX) + Math.abs(y - pointer.previousY) > 1) wakeEvents += 1;
+      }
+      pointer.x = x;
+      pointer.y = y;
+      pointer.previousX = x;
+      pointer.previousY = y;
+      pointer.previousTime = time;
+      pointer.active = x >= 0 && x <= rect.width && y >= 0 && y <= rect.height;
+      pointer.initialized = true;
       inputEvents += 1;
-      canvas.dataset.inputEvents = String(inputEvents);
+      updateDiagnostics();
     };
     const onPointerLeave = () => {
       pointer.active = false;
+      pointer.initialized = false;
+      pointer.speed = 0;
+      repelledParticles = 0;
+      updateDiagnostics();
     };
     const onVisibilityChange = () => {
       documentVisible = document.visibilityState === 'visible';
@@ -291,14 +291,12 @@ export function HeroParticleField() {
       render();
       syncAnimation();
     };
-
     const intersectionObserver = new IntersectionObserver(([entry]) => {
       inView = Boolean(entry?.isIntersecting);
       syncAnimation();
     }, { threshold: 0.02 });
     const resizeObserver = new ResizeObserver(resize);
 
-    canvas.dataset.inputEvents = '0';
     field.addEventListener('pointermove', onPointerMove, { passive: true });
     field.addEventListener('pointerleave', onPointerLeave);
     document.addEventListener('visibilitychange', onVisibilityChange);
@@ -308,7 +306,7 @@ export function HeroParticleField() {
     resize();
 
     return () => {
-      if (animationFrame !== null) window.cancelAnimationFrame(animationFrame);
+      if (animationFrame !== null) cancelAnimationFrame(animationFrame);
       field.removeEventListener('pointermove', onPointerMove);
       field.removeEventListener('pointerleave', onPointerLeave);
       document.removeEventListener('visibilitychange', onVisibilityChange);
@@ -323,7 +321,11 @@ export function HeroParticleField() {
       ref={canvasRef}
       className="hero-particle-canvas"
       aria-hidden="true"
-      data-physics-model="gravity-collision-pointer"
+      data-physics-model="wind-bounce-pointer-repel"
+      data-pixel-size="1"
+      data-cloud-count={CLOUD_COUNT}
+      data-boundary-mode="hard-rebound"
+      data-weather-mode="procedural"
       data-target-fps="60"
     />
   );

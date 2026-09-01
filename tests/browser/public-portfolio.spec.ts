@@ -596,14 +596,18 @@ test('homepage gives recruiters a synchronized proof summary', async ({ page }) 
   expect(overflow).toBeLessThanOrEqual(0);
 });
 
-test('homepage hero renders a bounded interactive pixel-physics field without intercepting controls', async ({ page }) => {
+test('homepage hero renders dense one-pixel wind clouds with border rebounds and pointer repulsion', async ({ page }) => {
   await page.goto('/');
 
   const field = page.locator('.hero-field');
   const canvas = field.locator('.hero-particle-canvas');
   await expect(canvas).toHaveCount(1);
   await expect(canvas).toHaveAttribute('aria-hidden', 'true');
-  await expect(canvas).toHaveAttribute('data-physics-model', 'gravity-collision-pointer');
+  await expect(canvas).toHaveAttribute('data-physics-model', 'wind-bounce-pointer-repel');
+  await expect(canvas).toHaveAttribute('data-pixel-size', '1');
+  await expect(canvas).toHaveAttribute('data-cloud-count', '9');
+  await expect(canvas).toHaveAttribute('data-boundary-mode', 'hard-rebound');
+  await expect(canvas).toHaveAttribute('data-weather-mode', 'procedural');
   await expect(canvas).toHaveAttribute('data-target-fps', '60');
   await expect(canvas).toHaveCSS('pointer-events', 'none');
   await expect(canvas).toHaveAttribute('data-render-mode', 'dynamic');
@@ -613,8 +617,8 @@ test('homepage hero renders a bounded interactive pixel-physics field without in
   await expect(canvas).toHaveAttribute('data-bounds-violations', '0');
 
   const particleCount = Number(await canvas.getAttribute('data-particle-count'));
-  expect(particleCount).toBeGreaterThanOrEqual(48);
-  expect(particleCount).toBeLessThanOrEqual(72);
+  expect(particleCount).toBeGreaterThanOrEqual(6000);
+  expect(particleCount).toBeLessThanOrEqual(6800);
 
   const dimensions = await canvas.evaluate((element) => {
     const target = element as HTMLCanvasElement;
@@ -637,10 +641,19 @@ test('homepage hero renders a bounded interactive pixel-physics field without in
   expect(laterFrame).not.toBe(firstFrame);
 
   const interactionCount = Number(await canvas.getAttribute('data-input-events'));
+  const wakeCount = Number(await canvas.getAttribute('data-wake-events'));
   const box = await field.boundingBox();
   expect(box).not.toBeNull();
-  await page.mouse.move((box?.x ?? 0) + (box?.width ?? 0) / 2, (box?.y ?? 0) + (box?.height ?? 0) / 2);
+  const fieldX = box?.x ?? 0;
+  const fieldY = box?.y ?? 0;
+  const fieldWidth = box?.width ?? 0;
+  const fieldHeight = box?.height ?? 0;
+  await page.mouse.move(fieldX + fieldWidth * 0.2, fieldY + fieldHeight * 0.55);
+  await page.mouse.move(fieldX + fieldWidth * 0.8, fieldY + fieldHeight * 0.42, { steps: 10 });
   await expect.poll(async () => Number(await canvas.getAttribute('data-input-events'))).toBeGreaterThan(interactionCount);
+  await expect.poll(async () => Number(await canvas.getAttribute('data-wake-events'))).toBeGreaterThan(wakeCount);
+  await expect.poll(async () => Number(await canvas.getAttribute('data-repelled-particles'))).toBeGreaterThan(0);
+  await expect.poll(async () => Number(await canvas.getAttribute('data-pointer-speed'))).toBeGreaterThan(0);
 
   const selectedWork = page.getByRole('link', { name: 'View selected work' });
   await expect(selectedWork).toBeVisible();
@@ -690,8 +703,8 @@ test('homepage pixel field adapts to mobile and renders a composed reduced-motio
   await mobileCanvas.scrollIntoViewIfNeeded();
   await expect(mobileCanvas).toHaveAttribute('data-quality', 'mobile');
   const mobileCount = Number(await mobileCanvas.getAttribute('data-particle-count'));
-  expect(mobileCount).toBeGreaterThanOrEqual(28);
-  expect(mobileCount).toBeLessThanOrEqual(40);
+  expect(mobileCount).toBeGreaterThanOrEqual(2500);
+  expect(mobileCount).toBeLessThanOrEqual(3200);
   await expect(mobileCanvas).toHaveAttribute('data-bounds-violations', '0');
 
   await page.emulateMedia({ reducedMotion: 'reduce' });
@@ -713,7 +726,7 @@ test('homepage pixel field adapts to mobile and renders a composed reduced-motio
     }
     return count;
   });
-  expect(opaquePixels).toBeGreaterThan(100);
+  expect(opaquePixels).toBeGreaterThan(1800);
 });
 
 test('homepage closes with a direct recruiter next step', async ({ page }) => {
