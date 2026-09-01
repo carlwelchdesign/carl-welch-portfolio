@@ -6,6 +6,7 @@ const DESKTOP_PARTICLE_COUNT = 14000;
 const MOBILE_PARTICLE_COUNT = 6000;
 const MINIMUM_PARTICLE_OPACITY = 0.55;
 const CLOUD_COUNT = 9;
+const PIXEL_SIZE = 2;
 const MOBILE_BREAKPOINT = 720;
 const MAX_DEVICE_PIXEL_RATIO = 2;
 const MAX_FRAME_DELTA_SECONDS = 1 / 30;
@@ -62,8 +63,8 @@ function createParticles(width: number, height: number, count: number): Particle
   return Array.from({ length: count }, (_, index) => {
     const center = centers[index % CLOUD_COUNT];
     return {
-      x: Math.max(0, Math.min(width - 1, center.x + gaussian(random) * center.spreadX)),
-      y: Math.max(0, Math.min(height - 1, center.y + gaussian(random) * center.spreadY)),
+      x: Math.max(0, Math.min(width - PIXEL_SIZE, center.x + gaussian(random) * center.spreadX)),
+      y: Math.max(0, Math.min(height - PIXEL_SIZE, center.y + gaussian(random) * center.spreadY)),
       vx: (random() - 0.35) * 46,
       vy: (random() - 0.5) * 34,
       phase: random() * TAU,
@@ -96,6 +97,8 @@ function stepParticles(
   let repelledParticles = 0;
   let reboundEvents = 0;
   const elapsedSeconds = elapsedMilliseconds / 1000;
+  const maximumX = Math.max(0, width - PIXEL_SIZE);
+  const maximumY = Math.max(0, height - PIXEL_SIZE);
 
   for (const particle of particles) {
     const wind = sampleWind(particle, width, height, elapsedSeconds);
@@ -130,8 +133,8 @@ function stepParticles(
       particle.x = 0;
       particle.vx = Math.abs(particle.vx) * 0.88;
       reboundEvents += 1;
-    } else if (particle.x >= width) {
-      particle.x = width - 1;
+    } else if (particle.x > maximumX) {
+      particle.x = maximumX;
       particle.vx = -Math.abs(particle.vx) * 0.88;
       reboundEvents += 1;
     }
@@ -139,8 +142,8 @@ function stepParticles(
       particle.y = 0;
       particle.vy = Math.abs(particle.vy) * 0.88;
       reboundEvents += 1;
-    } else if (particle.y >= height) {
-      particle.y = height - 1;
+    } else if (particle.y > maximumY) {
+      particle.y = maximumY;
       particle.vy = -Math.abs(particle.vy) * 0.88;
       reboundEvents += 1;
     }
@@ -154,13 +157,15 @@ function drawParticles(context: CanvasRenderingContext2D, particles: Particle[],
   context.fillStyle = '#090c09';
   for (const particle of particles) {
     context.globalAlpha = particle.opacity;
-    context.fillRect(Math.floor(particle.x), Math.floor(particle.y), 1, 1);
+    context.fillRect(Math.floor(particle.x), Math.floor(particle.y), PIXEL_SIZE, PIXEL_SIZE);
   }
   context.globalAlpha = 1;
 }
 
 function countBoundsViolations(particles: Particle[], width: number, height: number) {
-  return particles.filter(({ x, y }) => x < 0 || x >= width || y < 0 || y >= height).length;
+  const maximumX = Math.max(0, width - PIXEL_SIZE);
+  const maximumY = Math.max(0, height - PIXEL_SIZE);
+  return particles.filter(({ x, y }) => x < 0 || x > maximumX || y < 0 || y > maximumY).length;
 }
 
 export function HeroParticleField() {
@@ -323,7 +328,7 @@ export function HeroParticleField() {
       className="hero-particle-canvas"
       aria-hidden="true"
       data-physics-model="wind-bounce-pointer-repel"
-      data-pixel-size="1"
+      data-pixel-size={PIXEL_SIZE}
       data-minimum-opacity={MINIMUM_PARTICLE_OPACITY}
       data-cloud-count={CLOUD_COUNT}
       data-boundary-mode="hard-rebound"

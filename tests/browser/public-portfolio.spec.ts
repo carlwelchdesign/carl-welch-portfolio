@@ -596,7 +596,7 @@ test('homepage gives recruiters a synchronized proof summary', async ({ page }) 
   expect(overflow).toBeLessThanOrEqual(0);
 });
 
-test('homepage hero renders dense one-pixel wind clouds with border rebounds and pointer repulsion', async ({ page }) => {
+test('homepage hero renders dense crisp pixel clouds with border rebounds and pointer repulsion', async ({ page }) => {
   await page.goto('/');
 
   const field = page.locator('.hero-field');
@@ -604,7 +604,7 @@ test('homepage hero renders dense one-pixel wind clouds with border rebounds and
   await expect(canvas).toHaveCount(1);
   await expect(canvas).toHaveAttribute('aria-hidden', 'true');
   await expect(canvas).toHaveAttribute('data-physics-model', 'wind-bounce-pointer-repel');
-  await expect(canvas).toHaveAttribute('data-pixel-size', '1');
+  await expect(canvas).toHaveAttribute('data-pixel-size', '2');
   await expect(canvas).toHaveAttribute('data-minimum-opacity', '0.55');
   await expect(canvas).toHaveAttribute('data-cloud-count', '9');
   await expect(canvas).toHaveAttribute('data-boundary-mode', 'hard-rebound');
@@ -727,7 +727,7 @@ test('homepage pixel field adapts to mobile and renders a composed reduced-motio
     }
     return count;
   });
-  expect(opaquePixels).toBeGreaterThan(3500);
+  expect(opaquePixels).toBeGreaterThan(7000);
 });
 
 test('homepage closes with a direct recruiter next step', async ({ page }) => {
