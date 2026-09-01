@@ -55,8 +55,8 @@ function gaussian(random: () => number) {
 function createParticles(width: number, height: number, count: number): Particle[] {
   const random = seededRandom(0x434c4f55 + count);
   const centers = Array.from({ length: CLOUD_COUNT }, (_, index) => ({
-    x: width * (0.08 + ((index * 0.193 + random() * 0.11) % 0.84)),
-    y: height * (0.09 + ((index * 0.271 + random() * 0.13) % 0.82)),
+    x: width * (0.16 + (index % 3) * 0.34 + (random() - 0.5) * 0.04),
+    y: height * (0.16 + Math.floor(index / 3) * 0.34 + (random() - 0.5) * 0.04),
     spreadX: width * (0.06 + random() * 0.06),
     spreadY: height * (0.045 + random() * 0.06),
   }));
@@ -66,8 +66,8 @@ function createParticles(width: number, height: number, count: number): Particle
     return {
       x: Math.max(0, Math.min(width - PIXEL_SIZE, center.x + gaussian(random) * center.spreadX)),
       y: Math.max(0, Math.min(height - PIXEL_SIZE, center.y + gaussian(random) * center.spreadY)),
-      vx: 52 + (random() - 0.5) * 72,
-      vy: (random() - 0.5) * 78,
+      vx: (random() - 0.5) * 132,
+      vy: (random() - 0.5) * 112,
       phase: random() * TAU,
       opacity: MINIMUM_PARTICLE_OPACITY + random() * (1 - MINIMUM_PARTICLE_OPACITY),
       windAffinity: 0.72 + random() * 0.5,
@@ -78,11 +78,10 @@ function createParticles(width: number, height: number, count: number): Particle
 function sampleWind(particle: Particle, width: number, height: number, elapsedSeconds: number) {
   const x = particle.x / Math.max(1, width);
   const y = particle.y / Math.max(1, height);
-  let velocityX = 58
-    + Math.sin(y * TAU + elapsedSeconds * 0.48) * 68
-    + Math.cos(y * TAU * 2 - elapsedSeconds * 0.31 + particle.phase) * 24;
-  let velocityY = Math.sin(x * TAU - elapsedSeconds * 0.44) * 66
-    + Math.cos(x * TAU * 2 + elapsedSeconds * 0.27 + particle.phase * 0.5) * 22;
+  let velocityX = Math.sin(y * TAU + elapsedSeconds * 0.48) * 92
+    + Math.cos(y * TAU * 2 - elapsedSeconds * 0.31 + particle.phase) * 34;
+  let velocityY = Math.sin(x * TAU - elapsedSeconds * 0.44) * 82
+    + Math.cos(x * TAU * 2 + elapsedSeconds * 0.27 + particle.phase * 0.5) * 30;
 
   const vortices = [
     [0.25 + Math.sin(elapsedSeconds * 0.21) * 0.12, 0.27 + Math.cos(elapsedSeconds * 0.17) * 0.11, 142],

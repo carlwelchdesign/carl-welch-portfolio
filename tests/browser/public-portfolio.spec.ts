@@ -639,9 +639,29 @@ test('homepage hero renders dense crisp pixel clouds with border rebounds and po
   expect(dimensions.pixelHeight / dimensions.cssHeight).toBeLessThanOrEqual(2);
 
   const firstFrame = await canvas.evaluate((element) => (element as HTMLCanvasElement).toDataURL());
-  await page.waitForTimeout(120);
+  await page.waitForTimeout(900);
   const laterFrame = await canvas.evaluate((element) => (element as HTMLCanvasElement).toDataURL());
   expect(laterFrame).not.toBe(firstFrame);
+
+  const horizontalCoverage = await canvas.evaluate((element) => {
+    const target = element as HTMLCanvasElement;
+    const context = target.getContext('2d');
+    if (!context) return { left: 0, right: 0 };
+    const pixels = context.getImageData(0, 0, target.width, target.height).data;
+    let left = 0;
+    let right = 0;
+    for (let y = 0; y < target.height; y += 1) {
+      for (let x = 0; x < target.width; x += 1) {
+        if (pixels[(y * target.width + x) * 4 + 3] <= 24) continue;
+        if (x < target.width / 2) left += 1;
+        else right += 1;
+      }
+    }
+    return { left, right };
+  });
+  const horizontalCoverageRatio = horizontalCoverage.left / Math.max(1, horizontalCoverage.right);
+  expect(horizontalCoverageRatio).toBeGreaterThanOrEqual(0.75);
+  expect(horizontalCoverageRatio).toBeLessThanOrEqual(1.33);
 
   const interactionCount = Number(await canvas.getAttribute('data-input-events'));
   const wakeCount = Number(await canvas.getAttribute('data-wake-events'));
