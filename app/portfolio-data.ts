@@ -181,7 +181,7 @@ export const projects: PortfolioProject[] = [
       problem:
         'A serious job search splinters across browser tabs, spreadsheets, drafts, inboxes, and repeated research. The difficult part is not producing more material. It is knowing what is credible, what needs review, and what can move forward.',
       contribution:
-        'I designed and built a single-user product that joins role discovery, fit review, career evidence, application materials, tracking, email operations, and LinkedIn planning. Each workflow has visible state, and consequential actions stay in my hands.',
+        'I designed and built a single-user product that joins role discovery, fit review, career evidence, application materials, tracking, email operations, and LinkedIn planning. LangGraph gives the application assistant and recruiting agency durable workflow state with Postgres checkpointing. LangSmith adds optional redacted tracing for agent and workflow diagnostics. Each workflow has visible state, and consequential actions stay in my hands.',
       decisions: [
         {
           title: 'Review before action',
@@ -192,12 +192,12 @@ export const projects: PortfolioProject[] = [
           detail: 'Career claims stay tied to source material, with structured outputs and deterministic fallbacks when model output is incomplete.',
         },
         {
-          title: 'Operations are part of the product',
-          detail: 'Search yield, filters, blockers, and agent handoffs stay visible so a failed run can be understood instead of blindly repeated.',
+          title: 'Make orchestration observable',
+          detail: 'LangGraph owns pause, resume, retry, and checkpoint state where durable orchestration is useful. LangSmith redacted tracing and local quality records help diagnose failures without exposing application materials by default.',
         },
       ],
     },
-    stack: ['Next.js', 'TypeScript', 'PostgreSQL + pgvector', 'OpenAI', 'LangGraph', 'MCP'],
+    stack: ['Next.js', 'TypeScript', 'LangGraph', 'LangSmith', 'PostgreSQL + pgvector', 'OpenAI', 'MCP'],
     architecture: {
       title: 'Human-reviewed career operations',
       summary: 'Four product surfaces share one evidence and orchestration layer; every consequential external action stops at an approval boundary.',
@@ -213,9 +213,9 @@ export const projects: PortfolioProject[] = [
         { id: 'slack', label: 'Jolene command', detail: 'Private operator channel', technology: 'Slack', kind: 'surface', x: 42, y: 345, width: 160 },
         { id: 'mcp', label: 'Local tool access', detail: 'Tracking and preparation tools', technology: 'MCP · stdio', kind: 'surface', x: 42, y: 465, width: 160 },
         { id: 'api', label: 'Workflow API', detail: 'Typed routes and policy checks', technology: 'Next.js App Router', kind: 'service', x: 275, y: 105, width: 160 },
-        { id: 'agents', label: 'Specialist agents', detail: 'Structured outputs + fallbacks', technology: 'OpenAI', kind: 'ai', x: 470, y: 105, width: 165 },
+        { id: 'agents', label: 'Specialist agents', detail: 'Structured outputs + redacted traces', technology: 'OpenAI · LangSmith', kind: 'ai', x: 470, y: 105, width: 165 },
         { id: 'rag', label: 'Evidence RAG', detail: 'Approved career evidence only', technology: 'pgvector', kind: 'ai', x: 275, y: 265, width: 160 },
-        { id: 'graph', label: 'Durable workflows', detail: 'Runs, checkpoints, review state', technology: 'LangGraph', kind: 'service', x: 470, y: 265, width: 165 },
+        { id: 'graph', label: 'Durable workflows', detail: 'Postgres checkpointing + review state', technology: 'LangGraph', kind: 'service', x: 470, y: 265, width: 165 },
         { id: 'worker', label: 'Background worker', detail: 'Embeddings and queued work', technology: 'Node.js · Redis', kind: 'runtime', x: 372, y: 440, width: 170 },
         { id: 'postgres', label: 'System of record', detail: 'Roles, claims, runs, materials', technology: 'PostgreSQL', kind: 'data', x: 710, y: 105, width: 150 },
         { id: 'vector', label: 'Semantic index', detail: 'Career evidence embeddings', technology: 'pgvector', kind: 'data', x: 805, y: 195, width: 150 },
@@ -238,7 +238,7 @@ export const projects: PortfolioProject[] = [
       {
         id: 'portfolio:claim:job-search-os:integrated-workflow',
         sourceIds: ['portfolio:source:project:job-search-os'],
-        text: 'Combines job discovery, fit review, application materials, tracking, email operations, and LinkedIn content workflows in one product.',
+        text: 'Combines job discovery, fit review, application materials, tracking, email operations, and LinkedIn content workflows in one product, with LangGraph and Postgres checkpointing for durable assistant and recruiting-agency workflows plus optional redacted LangSmith tracing.',
         strength: 'strong', maturity: 'production', limitations: ['Protected single-user scope.'], reviewState: 'approved', publicApproved: true,
       },
       {
@@ -814,10 +814,19 @@ export const projects: PortfolioProject[] = [
       width: 1162,
       height: 1353,
     },
-    galleryTitle: 'Identity, behavior, and motion as a designed system',
+    galleryTitle: 'Origin, identity, and an animation experiment',
     gallerySummary:
-      'The character work moved from a single portrait to a documented identity lock, state grammar, keyframe sequence, and bounded runtime atlas. These sheets show the design system behind the visible character.',
+      'The character work began in Nevada, then moved from a single portrait to a documented identity lock and bounded runtime frame set. The gallery also preserves the greeting keyframe experiment that did not meet the visual bar and was abandoned rather than shipped.',
     gallery: [
+      {
+        src: '/projects/jolene-ai/nevada-field-camp.png',
+        alt: 'A MacBook running at a field camp on BLM land in Nevada at sunset, where Carl began the work that led to Jolene AI',
+        width: 800,
+        height: 600,
+        label: 'Nevada field camp',
+        caption: 'In May 2026, I worked from BLM land in Nevada with a generator, Starlink, and my MacBook. Building Job Search OS there led to the idea for Jolene as a broader chief-of-staff agent.',
+        layout: 'wide',
+      },
       {
         src: '/projects/jolene-ai/state-ensemble.png',
         alt: 'Jolene state ensemble board showing idle, blink, greet, excited, listen, think, speak, evidence, boundary, offline, and rest behaviors',
@@ -838,11 +847,11 @@ export const projects: PortfolioProject[] = [
       },
       {
         src: '/projects/jolene-ai/greet-keyframes.png',
-        alt: 'Ten-frame Jolene greeting contact sheet showing the raised-hand wave from rest through apex and settle',
+        alt: 'Archived ten-frame Jolene greeting experiment showing inconsistent raised-hand wave poses',
         width: 6400,
         height: 3680,
-        label: 'Greeting keyframes',
-        caption: 'The wave was built as authored key poses with a complete hand silhouette, consistent baseline, and deliberate settle instead of uncontrolled frame generation.',
+        label: 'Abandoned greeting experiment',
+        caption: 'This authored wave experiment did not meet the visual bar. Identity drift and unstable eyes, hands, and motion made the sequence unusable, so I abandoned this direction rather than ship it. I may revisit animation later with a better process.',
         layout: 'wide',
       },
       {
@@ -851,7 +860,7 @@ export const projects: PortfolioProject[] = [
         width: 1280,
         height: 1380,
         label: 'Approved runtime atlas',
-        caption: 'Only the approved frames ship. Runtime behavior is event-driven, testable, reduced-motion aware, and independent from answer generation.',
+        caption: 'The live renderer uses a separate set of manually approved runtime frames for bounded reactions and the loading dance. Character state is event-driven, testable, reduced-motion aware, and independent from answer generation. The failed greeting sequence above is not part of that runtime.',
         layout: 'standard',
       },
     ],
@@ -860,7 +869,7 @@ export const projects: PortfolioProject[] = [
       problem:
         'After a March 2026 layoff, I spent two weeks that May on BLM land in Nevada with my daughter while she did fieldwork for her geology master’s research. With a generator, Starlink, and my MacBook, I began building Job Search OS. That work showed me I could build something broader: a chief-of-staff agent that could help me organize work, preserve context, and keep moving.',
       contribution:
-        'I imagined a comforting, capable, Jarvis-like partner. Dolly Parton came to mind because I grew up with her music and interviews and associated her with warmth, humor, resilience, and practical encouragement. Jolene is not Dolly, does not impersonate her, and does not imply her endorsement. From that starting point, I led a multi-agent build spanning the portable agent core, private memory, reviewed career evidence, public hybrid RAG, Slack delivery, exact-action approvals, Docker runtimes, prompt-injection defenses, release evaluation, and a researched personality system. I also directed a pixel-character system with a canonical identity, event-driven poses, regression-tested scaling and interaction behavior, and reduced-motion fallbacks. Private and public Jolene remain separate deployments with different credentials, stores, and capabilities.',
+        'I imagined a comforting, capable, Jarvis-like partner. Dolly Parton came to mind because I grew up with her music and interviews and associated her with warmth, humor, resilience, and practical encouragement. Jolene is not Dolly, does not impersonate her, and does not imply her endorsement. From that starting point, I led a multi-agent build spanning the portable agent core, private memory, reviewed career evidence, public hybrid RAG, Slack delivery, exact-action approvals, Docker runtimes, prompt-injection defenses, release evaluation, and a researched personality system. I also directed a pixel-character system with a canonical identity, event-driven reactions, regression-tested scaling and interaction behavior, and reduced-motion fallbacks. The attempted greeting animation did not meet the quality bar, so I stopped that effort and kept the live character bounded to a separate set of approved runtime frames. Private and public Jolene remain separate deployments with different credentials, stores, and capabilities.',
       decisions: [
         {
           title: 'Separate public knowledge from private memory',
@@ -877,15 +886,15 @@ export const projects: PortfolioProject[] = [
       ],
     },
     retrospective: {
-      heading: 'The character only became reliable when art direction became engineering.',
+      heading: 'What the failed animation effort taught me.',
       summary:
-        'The difficult part was not making one attractive portrait. It was preserving the same person, proportions, pixel language, baseline, transparency, and product meaning across every state and viewport. The failures produced a stricter production system.',
+        'The static character design held, but the greeting animation experiment did not. Generated and interpolated frames repeatedly changed Jolene’s face, eyes, hair, hands, and proportions. I abandoned that sequence, preserved the strongest assets, and may revisit a fuller greeting later with a more reliable process.',
       lessons: [
         {
           title: 'Identity drift between poses',
           challenge: 'Pose-by-pose generation changed facial structure, hair volume, body proportions, eye treatment, and scale enough to make Jolene look like a different person.',
           response: 'Lock one canonical master, named landmarks, a silhouette envelope, palette anchors, a common 320 by 460 canvas, and a shared waist baseline. Every other image became pose reference rather than identity authority.',
-          result: 'The runtime now preserves one recognizable character while allowing restrained pose changes.',
+          result: 'These controls improved the approved assets, but they did not make the generated greeting experiment reliable enough to ship.',
         },
         {
           title: 'Transparency versus intentional white',
@@ -896,8 +905,8 @@ export const projects: PortfolioProject[] = [
         {
           title: 'Animation ambition versus control',
           challenge: 'Long generated sequences introduced unstable eyes, hair, hands, and whole-body pumping. More frames did not automatically create better motion.',
-          response: 'Author a few strong key poses, interpolate only controlled movement, keep the baseline fixed, and ship a small approved atlas. Loading uses a deliberate two-pose mirror; reduced motion uses static representatives.',
-          result: 'Fewer trusted frames produce cleaner rhythm, lower runtime cost, and more predictable review.',
+          response: 'Stop the greeting sequence, archive the failed keyframes, and keep the live renderer bounded to a separate set of manually approved runtime frames. Reduced motion uses static representatives.',
+          result: 'The generated keyframe direction was abandoned. A fuller greeting may be revisited later only if the process can preserve identity and motion quality.',
         },
         {
           title: 'Behavior regressions in the live interface',

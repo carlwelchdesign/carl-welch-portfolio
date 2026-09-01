@@ -201,6 +201,12 @@ const jobSearchOs = projects.find((project) => project.slug === 'job-search-os')
 assert(jobSearchOs?.gallery.length >= 6, 'Job Search OS must retain its expanded multi-surface product tour.');
 assert(jobSearchOs?.architecture.nodes.length >= 10, 'Job Search OS must retain its detailed source-grounded topology.');
 assert(!jobSearchOs?.gallery.some((item) => item.src.includes('system-topology')), 'Job Search OS must not render the rejected topology artifact.');
+assert.match(jobSearchOs?.story.contribution ?? '', /LangGraph.*Postgres checkpointing/);
+assert.match(jobSearchOs?.story.contribution ?? '', /LangSmith.*redacted tracing/);
+assert(
+  jobSearchOs?.architecture.nodes.some((node) => node.technology.includes('LangSmith')),
+  'Job Search OS architecture must identify its optional LangSmith observability layer.',
+);
 assert(projects.find((project) => project.slug === 'flight-tracker-ai')?.gallery.length >= 3, 'Flight Tracker AI must retain live, replay, and route-comparison views.');
 assert(projects.find((project) => project.slug === 'wave-factory-essentials')?.gallery.length >= 5, 'Wave Factory Essentials must retain its expanded product-family gallery.');
 const supraconscious = projects.find((project) => project.slug === 'supraconscious-avatar-ai');
@@ -324,7 +330,7 @@ assert.match(joleneProject.story.problem, /generator, Starlink, and my MacBook/)
 assert.match(joleneProject.story.contribution, /Jolene is not Dolly, does not impersonate her, and does not imply her endorsement/);
 assert.match(joleneOrigin.text, /chief-of-staff agent/);
 assert.deepEqual(joleneOrigin.limitations, ['Jolene is not Dolly Parton, does not impersonate her, and does not imply her endorsement.']);
-assert.equal(joleneProject.gallery.length, 4, 'Jolene case study must publish four character-system views.');
+assert.equal(joleneProject.gallery.length, 5, 'Jolene case study must publish its origin photograph and four character-system views.');
 assert.equal(
   new Set(joleneProject.gallery.map((item) => item.src)).size,
   joleneProject.gallery.length,
@@ -332,10 +338,15 @@ assert.equal(
 );
 assert.deepEqual(
   joleneProject.gallery.map((item) => item.label),
-  ['Conversation state ensemble', 'Canonical identity lock', 'Greeting keyframes', 'Approved runtime atlas'],
+  ['Nevada field camp', 'Conversation state ensemble', 'Canonical identity lock', 'Abandoned greeting experiment', 'Approved runtime atlas'],
 );
 assert.equal(joleneProject.retrospective?.lessons.length, 4, 'Jolene retrospective must retain all four production lessons.');
-assert.match(joleneProject.retrospective?.heading ?? '', /art direction became engineering/);
+assert.match(joleneProject.retrospective?.heading ?? '', /failed animation effort/);
+assert.match(
+  joleneProject.gallery.find((item) => item.label === 'Abandoned greeting experiment')?.caption ?? '',
+  /did not meet the visual bar.*abandoned this direction rather than ship it/,
+);
+assert.match(joleneProject.retrospective?.summary ?? '', /greeting animation experiment did not.*abandoned that sequence/);
 assert(
   joleneProject.architecture.nodes.some((node) => node.id === 'corpus' && /92 published records/.test(node.detail)),
   'Jolene architecture must identify the deployed reviewed career artifact.',

@@ -39,3 +39,11 @@ Source repository: `progression-lab-ai`
 - `public-library.png` ← live capture of `https://progressionlab.app/progressions?view=public` on August 31, 2026
 
 The Chord Explorer capture was excluded because browser-level MIDI permission was unavailable and the resulting screen did not represent the working product experience.
+
+## Jolene AI
+
+- `nevada-field-camp.png` ← Carl Welch's photograph from the May 2026 Nevada field camp where the work that led to Jolene began
+- `state-ensemble.png` ← Jolene character state exploration board
+- `identity-lock.png` ← Jolene canonical identity reference
+- `greet-keyframes.png` ← archived greeting animation experiment that did not meet the visual bar and was abandoned
+- `approved-runtime-atlas.png` ← manually approved reaction and loading frames used by the live renderer

@@ -562,9 +562,20 @@ test('Job Search OS renders a source-grounded product topology instead of the re
   await expect(architecture).toContainText('PostgreSQL');
   await expect(architecture).toContainText('pgvector');
   await expect(architecture).toContainText('LangGraph');
+  await expect(architecture).toContainText('LangSmith');
   await expect(architecture).toContainText('MCP');
   await expect(architecture).toContainText('approved only');
   expect(await architecture.locator('.architecture-step').count()).toBeGreaterThanOrEqual(10);
+});
+
+test('Job Search OS explains its LangGraph orchestration and LangSmith observability', async ({ page }) => {
+  await page.goto('/work/job-search-os#case-study');
+
+  const story = page.locator('#case-study');
+  await expect(story).toContainText('LangGraph');
+  await expect(story).toContainText('Postgres checkpointing');
+  await expect(story).toContainText('LangSmith');
+  await expect(story).toContainText('redacted tracing');
 });
 
 for (const route of [
@@ -649,30 +660,34 @@ test('Jolene case study presents distinct character sheets, the build retrospect
 
   const gallery = page.locator('#project-gallery');
   const media = gallery.locator('.project-gallery-item img');
-  await expect(media).toHaveCount(4);
+  await expect(media).toHaveCount(5);
   for (const image of await media.all()) {
     await image.scrollIntoViewIfNeeded();
     await expect.poll(() => image.evaluate((element) => (element as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
   }
   const sources = await media.evaluateAll((images) => images.map((image) => image.getAttribute('src')));
-  expect(new Set(sources).size).toBe(4);
+  expect(new Set(sources).size).toBe(5);
+  await expect(gallery.getByText('Nevada field camp', { exact: true })).toBeVisible();
   await expect(gallery.getByText('Conversation state ensemble', { exact: true })).toBeVisible();
   await expect(gallery.getByText('Canonical identity lock', { exact: true })).toBeVisible();
-  await expect(gallery.getByText('Greeting keyframes', { exact: true })).toBeVisible();
+  await expect(gallery.getByText('Abandoned greeting experiment', { exact: true })).toBeVisible();
   await expect(gallery.getByText('Approved runtime atlas', { exact: true })).toBeVisible();
+  await expect(gallery).toContainText('did not meet the visual bar');
+  await expect(gallery).toContainText('abandoned this direction rather than ship it');
 
-  await gallery.getByRole('button', { name: 'Open full-size view of Greeting keyframes' }).click();
+  await gallery.getByRole('button', { name: 'Open full-size view of Abandoned greeting experiment' }).click();
   const viewer = page.getByRole('dialog', { name: 'Jolene AI full-size image viewer' });
   await expect(viewer).toBeVisible();
-  await expect(viewer.getByText('Greeting keyframes', { exact: true })).toBeVisible();
+  await expect(viewer.getByText('Abandoned greeting experiment', { exact: true })).toBeVisible();
   await viewer.getByRole('button', { name: 'Close' }).click();
   await expect(viewer).not.toBeVisible();
 
   const retrospective = page.locator('#retrospective');
-  await expect(retrospective.getByRole('heading', { name: 'The character only became reliable when art direction became engineering.' })).toBeVisible();
+  await expect(retrospective.getByRole('heading', { name: 'What the failed animation effort taught me.' })).toBeVisible();
   await expect(retrospective.locator('.project-retrospective-grid > li')).toHaveCount(4);
   await expect(retrospective).toContainText('Identity drift between poses');
   await expect(retrospective).toContainText('Transparency versus intentional white');
+  await expect(retrospective).toContainText('The generated keyframe direction was abandoned');
 
   const architecture = page.locator('#architecture');
   const architectureMap = architecture.locator('.architecture-map').last();
