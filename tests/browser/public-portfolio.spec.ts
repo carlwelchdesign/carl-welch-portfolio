@@ -605,6 +605,7 @@ test('homepage hero renders dense one-pixel wind clouds with border rebounds and
   await expect(canvas).toHaveAttribute('aria-hidden', 'true');
   await expect(canvas).toHaveAttribute('data-physics-model', 'wind-bounce-pointer-repel');
   await expect(canvas).toHaveAttribute('data-pixel-size', '1');
+  await expect(canvas).toHaveAttribute('data-minimum-opacity', '0.55');
   await expect(canvas).toHaveAttribute('data-cloud-count', '9');
   await expect(canvas).toHaveAttribute('data-boundary-mode', 'hard-rebound');
   await expect(canvas).toHaveAttribute('data-weather-mode', 'procedural');
@@ -617,8 +618,8 @@ test('homepage hero renders dense one-pixel wind clouds with border rebounds and
   await expect(canvas).toHaveAttribute('data-bounds-violations', '0');
 
   const particleCount = Number(await canvas.getAttribute('data-particle-count'));
-  expect(particleCount).toBeGreaterThanOrEqual(6000);
-  expect(particleCount).toBeLessThanOrEqual(6800);
+  expect(particleCount).toBeGreaterThanOrEqual(13000);
+  expect(particleCount).toBeLessThanOrEqual(15000);
 
   const dimensions = await canvas.evaluate((element) => {
     const target = element as HTMLCanvasElement;
@@ -703,8 +704,8 @@ test('homepage pixel field adapts to mobile and renders a composed reduced-motio
   await mobileCanvas.scrollIntoViewIfNeeded();
   await expect(mobileCanvas).toHaveAttribute('data-quality', 'mobile');
   const mobileCount = Number(await mobileCanvas.getAttribute('data-particle-count'));
-  expect(mobileCount).toBeGreaterThanOrEqual(2500);
-  expect(mobileCount).toBeLessThanOrEqual(3200);
+  expect(mobileCount).toBeGreaterThanOrEqual(5500);
+  expect(mobileCount).toBeLessThanOrEqual(6500);
   await expect(mobileCanvas).toHaveAttribute('data-bounds-violations', '0');
 
   await page.emulateMedia({ reducedMotion: 'reduce' });
@@ -726,7 +727,7 @@ test('homepage pixel field adapts to mobile and renders a composed reduced-motio
     }
     return count;
   });
-  expect(opaquePixels).toBeGreaterThan(1800);
+  expect(opaquePixels).toBeGreaterThan(3500);
 });
 
 test('homepage closes with a direct recruiter next step', async ({ page }) => {

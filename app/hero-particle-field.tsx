@@ -2,8 +2,9 @@
 
 import { useEffect, useRef } from 'react';
 
-const DESKTOP_PARTICLE_COUNT = 6400;
-const MOBILE_PARTICLE_COUNT = 2800;
+const DESKTOP_PARTICLE_COUNT = 14000;
+const MOBILE_PARTICLE_COUNT = 6000;
+const MINIMUM_PARTICLE_OPACITY = 0.55;
 const CLOUD_COUNT = 9;
 const MOBILE_BREAKPOINT = 720;
 const MAX_DEVICE_PIXEL_RATIO = 2;
@@ -54,8 +55,8 @@ function createParticles(width: number, height: number, count: number): Particle
   const centers = Array.from({ length: CLOUD_COUNT }, (_, index) => ({
     x: width * (0.08 + ((index * 0.193 + random() * 0.11) % 0.84)),
     y: height * (0.09 + ((index * 0.271 + random() * 0.13) % 0.82)),
-    spreadX: width * (0.045 + random() * 0.055),
-    spreadY: height * (0.03 + random() * 0.055),
+    spreadX: width * (0.06 + random() * 0.06),
+    spreadY: height * (0.045 + random() * 0.06),
   }));
 
   return Array.from({ length: count }, (_, index) => {
@@ -66,7 +67,7 @@ function createParticles(width: number, height: number, count: number): Particle
       vx: (random() - 0.35) * 46,
       vy: (random() - 0.5) * 34,
       phase: random() * TAU,
-      opacity: 0.3 + random() * 0.68,
+      opacity: MINIMUM_PARTICLE_OPACITY + random() * (1 - MINIMUM_PARTICLE_OPACITY),
       windAffinity: 0.72 + random() * 0.5,
     };
   });
@@ -323,6 +324,7 @@ export function HeroParticleField() {
       aria-hidden="true"
       data-physics-model="wind-bounce-pointer-repel"
       data-pixel-size="1"
+      data-minimum-opacity={MINIMUM_PARTICLE_OPACITY}
       data-cloud-count={CLOUD_COUNT}
       data-boundary-mode="hard-rebound"
       data-weather-mode="procedural"
