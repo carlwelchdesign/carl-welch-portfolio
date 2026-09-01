@@ -419,17 +419,28 @@ test('architecture flow uses static endpoints when reduced motion is requested',
   await expect(connectors).toHaveAttribute('aria-hidden', 'true');
 });
 
-test('architecture flow bounds visible orb density on mobile', async ({ page }) => {
+test('architecture flow keeps every directional orb visible on mobile', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/work/echoatlas#architecture');
 
   const orbs = page.locator('.architecture-flow-orb');
+  const edges = page.locator('.architecture-edge');
   await expect(orbs).toHaveCount(15);
   await expect
     .poll(() => orbs.evaluateAll((elements) => (
       elements.filter((element) => getComputedStyle(element).display !== 'none').length
     )))
-    .toBe(8);
+    .toBe(15);
+
+  const edgeIds = await edges.evaluateAll((elements) => (
+    elements.map((element) => element.getAttribute('data-flow-edge'))
+  ));
+  const visibleOrbIds = await orbs.evaluateAll((elements) => (
+    elements
+      .filter((element) => getComputedStyle(element).display !== 'none')
+      .map((element) => element.getAttribute('data-flow-edge'))
+  ));
+  expect(visibleOrbIds).toEqual(expect.arrayContaining(edgeIds));
 });
 
 test('primary navigation identifies the current portfolio section', async ({ page }) => {

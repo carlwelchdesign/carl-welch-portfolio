@@ -1079,7 +1079,6 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .architecture-map { margin-inline: 0; }
   .architecture-card-compact .architecture-viewport { height: 450px; }
   .architecture-card-compact .architecture-map { transform: scale(0.72); }
-  .architecture-flow-orb[data-flow-density='secondary'] { display: none; }
   .architecture-connections ul { grid-template-columns: minmax(0, 1fr); }
   .experience-preview-list li { padding: 18px 0; grid-template-columns: 1fr; gap: 6px; }
   .experience-preview-list strong { grid-row: 1; }

@@ -279,7 +279,6 @@ export function ArchitectureDiagram({
       geometry: forward,
       duration,
       delay: (edgeIndex * 0.83) % duration,
-      secondary: edgeIndex % 2 === 1,
     }];
 
     if (edge.bidirectional) {
@@ -290,7 +289,6 @@ export function ArchitectureDiagram({
           geometry: reverse,
           duration: duration + 0.35,
           delay: duration / 2,
-          secondary: false,
         });
       }
     }
@@ -338,6 +336,7 @@ export function ArchitectureDiagram({
                 <g key={`${edge.from}-${edge.to}`}>
                   <path
                     className={`architecture-edge${edge.dashed ? ' architecture-edge-dashed' : ''}`}
+                    data-flow-edge={`${edge.from}-${edge.to}`}
                     d={connectionGeometry(edge.from, edge.to)?.path ?? ''}
                     markerEnd={`url(#${markerId})`}
                     markerStart={edge.bidirectional ? `url(#${markerId})` : undefined}
@@ -359,7 +358,6 @@ export function ArchitectureDiagram({
                 {flowDirections.map((flow) => (
                   <g
                     className="architecture-flow-orb"
-                    data-flow-density={flow.secondary ? 'secondary' : 'primary'}
                     data-flow-edge={flow.id}
                     key={`${flow.id}-orb`}
                   >
