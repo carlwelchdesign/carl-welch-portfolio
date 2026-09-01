@@ -672,7 +672,8 @@ test('EchoAtlas distinguishes the bounded public demonstration from operational 
   await expect(story).toContainText('Scientific validity remains undetermined');
 
   const architecture = page.locator('#architecture');
-  await expect(architecture).toContainText('Vercel portfolio surface');
+  await expect(architecture).toContainText('Public EchoAtlas deployment');
+  await expect(architecture).not.toContainText('Vercel portfolio surface');
   await expect(architecture).toContainText('Local raster pipeline');
   await expect(architecture).toContainText('Versioned analysis bundle');
 

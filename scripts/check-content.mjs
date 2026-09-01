@@ -242,6 +242,22 @@ requireUnique(
   'EchoAtlas case-study screenshots',
 );
 assert.match(echoAtlas.story.contribution, /Scientific validity remains undetermined/);
+const echoAtlasArchitectureText = echoAtlas.architecture.nodes
+  .flatMap((node) => [node.label, node.detail, node.technology])
+  .join(' ');
+assert.doesNotMatch(
+  echoAtlasArchitectureText,
+  /portfolio/i,
+  'EchoAtlas architecture must describe EchoAtlas itself, not the website hosting its case study.',
+);
+assert(
+  echoAtlas.architecture.nodes.some(
+    (node) => node.id === 'vercel'
+      && node.label === 'Public EchoAtlas deployment'
+      && node.technology === 'Vite · FastAPI · Vercel',
+  ),
+  'EchoAtlas architecture must identify its bounded public deployment explicitly.',
+);
 assert(
   echoAtlas.boundaries.some((boundary) => boundary.includes('operational monitoring') && boundary.includes('not implemented')),
   'EchoAtlas must keep operational monitoring outside the shipped capability boundary.',
