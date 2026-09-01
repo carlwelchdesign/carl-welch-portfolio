@@ -2027,6 +2027,21 @@ test('reduced motion preserves content and suppresses looping animation', async 
   expect(durations.every((duration) => duration <= 0.00001)).toBe(true);
 });
 
+test('site-wide reading progress communicates long-page position and respects reduced motion', async ({ page }) => {
+  await page.goto('/');
+  const progress = page.locator('.reading-progress');
+  await expect(progress).toHaveAttribute('aria-hidden', 'true');
+  await expect(progress).toHaveAttribute('data-reduced-motion', 'false');
+  const initialTransform = await progress.evaluate((element) => getComputedStyle(element).transform);
+  await page.evaluate(() => window.scrollTo({ top: document.documentElement.scrollHeight / 2 }));
+  await expect.poll(() => progress.evaluate((element) => getComputedStyle(element).transform)).not.toBe(initialTransform);
+
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.reload();
+  await expect(progress).toHaveAttribute('data-reduced-motion', 'true');
+  await expect(progress).toBeHidden();
+});
+
 test('server-rendered navigation and content remain available without JavaScript', async ({ browser }) => {
   const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 844 } });
   const page = await context.newPage();
