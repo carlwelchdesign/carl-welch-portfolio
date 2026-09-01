@@ -51,6 +51,7 @@ The Chord Explorer capture was excluded because browser-level MIDI permission wa
 ## EchoAtlas
 
 Source repository: `earth-atlas-ai`
+Source release: PR `#52`, merged as `08640db` on 2026-08-31; public surface verified at `https://earth-atlas-ai.vercel.app/`
 
 - `explore-results.png` ← live Vercel capture of the focused two-record Umbra search result on 2026-08-31
 - `pair-review.png` ← live Vercel capture of the approved Umbra pair and completed engineering-comparability review on 2026-08-31
