@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { capabilities } from './capabilities-data';
 import { FragmentFocusLink } from './fragment-focus-link';
+import { HeroParticleField } from './hero-particle-field';
 import { MotionRuntime, Orbit, Reveal } from './motion-elements';
 import { experience, projects } from './portfolio-data';
 import { recommendations } from './recommendations-data';
@@ -41,6 +42,7 @@ export function PortfolioHome() {
 
             <div className="hero-field" aria-hidden="true">
               <div className="hero-grid" />
+              <HeroParticleField />
               <Orbit variant="one" />
               <Orbit variant="two" />
               <div className="hero-index">

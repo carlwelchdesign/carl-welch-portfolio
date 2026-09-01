@@ -21,6 +21,10 @@ test('standalone client hydrates and the mobile launcher opens the modal', async
 
   expect([...failedClientChunks], 'standalone build served a missing client chunk').toEqual([]);
 
+  const particleCanvas = page.locator('.hero-particle-canvas');
+  await expect(particleCanvas).toHaveCount(1);
+  await expect(particleCanvas).toHaveCSS('pointer-events', 'none');
+
   const launcher = page.locator('[data-jolene-launcher]');
   await expect(launcher).toBeVisible();
   await expect(launcher).toHaveAttribute('aria-expanded', 'false');

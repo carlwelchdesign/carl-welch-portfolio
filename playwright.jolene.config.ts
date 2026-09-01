@@ -24,10 +24,11 @@ export default defineConfig({
       'export NEXT_PUBLIC_JOLENE_MODE=fixture',
       `export NEXT_PUBLIC_JOLENE_FIXTURE_SCENARIO=${scenario}`,
       `export JOLENE_PUBLIC_CONTACT_INTENT_ENABLED=${String(contactIntentEnabled)}`,
+      'export JOLENE_FIXTURE_ANSWER_DELAY_MS=1500',
       `pnpm build && PORT=${port} HOSTNAME=127.0.0.1 node dist/standalone/server.js`,
     ].join('; '),
     url: baseURL,
-    reuseExistingServer: false,
+    reuseExistingServer: !process.env.CI,
     timeout: 120_000,
   },
 });

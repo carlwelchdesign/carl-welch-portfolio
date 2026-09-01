@@ -596,6 +596,162 @@ test('homepage gives recruiters a synchronized proof summary', async ({ page }) 
   expect(overflow).toBeLessThanOrEqual(0);
 });
 
+test('homepage hero renders dense crisp pixel clouds with border rebounds and pointer repulsion', async ({ page }) => {
+  await page.goto('/');
+
+  const field = page.locator('.hero-field');
+  const canvas = field.locator('.hero-particle-canvas');
+  await expect(canvas).toHaveCount(1);
+  await expect(canvas).toHaveAttribute('aria-hidden', 'true');
+  await expect(canvas).toHaveAttribute('data-physics-model', 'wind-bounce-pointer-repel');
+  await expect(canvas).toHaveAttribute('data-pixel-size', '2');
+  await expect(canvas).toHaveAttribute('data-minimum-opacity', '0.55');
+  await expect(canvas).toHaveAttribute('data-cloud-count', '9');
+  await expect(canvas).toHaveAttribute('data-boundary-mode', 'hard-rebound');
+  await expect(canvas).toHaveAttribute('data-flow-pattern', 'multi-vortex-circulation');
+  await expect(canvas).toHaveAttribute('data-trail-steps', '2');
+  await expect(canvas).toHaveAttribute('data-target-fps', '60');
+  await expect(canvas).toHaveCSS('pointer-events', 'none');
+  await expect(canvas).toHaveAttribute('data-render-mode', 'dynamic');
+  await expect(canvas).toHaveAttribute('data-quality', 'desktop');
+  await expect(canvas).toHaveAttribute('data-active', 'true');
+  await expect.poll(async () => Number(await canvas.getAttribute('data-frame-count'))).toBeGreaterThan(2);
+  await expect.poll(async () => Number(await canvas.getAttribute('data-average-speed'))).toBeGreaterThan(70);
+  await expect(canvas).toHaveAttribute('data-bounds-violations', '0');
+
+  const particleCount = Number(await canvas.getAttribute('data-particle-count'));
+  expect(particleCount).toBeGreaterThanOrEqual(13000);
+  expect(particleCount).toBeLessThanOrEqual(15000);
+
+  const dimensions = await canvas.evaluate((element) => {
+    const target = element as HTMLCanvasElement;
+    const rect = target.getBoundingClientRect();
+    return {
+      cssWidth: rect.width,
+      cssHeight: rect.height,
+      pixelWidth: target.width,
+      pixelHeight: target.height,
+    };
+  });
+  expect(dimensions.cssWidth).toBeGreaterThan(0);
+  expect(dimensions.cssHeight).toBeGreaterThan(0);
+  expect(dimensions.pixelWidth / dimensions.cssWidth).toBeLessThanOrEqual(2);
+  expect(dimensions.pixelHeight / dimensions.cssHeight).toBeLessThanOrEqual(2);
+
+  const firstFrame = await canvas.evaluate((element) => (element as HTMLCanvasElement).toDataURL());
+  await page.waitForTimeout(900);
+  const laterFrame = await canvas.evaluate((element) => (element as HTMLCanvasElement).toDataURL());
+  expect(laterFrame).not.toBe(firstFrame);
+
+  const horizontalCoverage = await canvas.evaluate((element) => {
+    const target = element as HTMLCanvasElement;
+    const context = target.getContext('2d');
+    if (!context) return { left: 0, right: 0 };
+    const pixels = context.getImageData(0, 0, target.width, target.height).data;
+    let left = 0;
+    let right = 0;
+    for (let y = 0; y < target.height; y += 1) {
+      for (let x = 0; x < target.width; x += 1) {
+        if (pixels[(y * target.width + x) * 4 + 3] <= 24) continue;
+        if (x < target.width / 2) left += 1;
+        else right += 1;
+      }
+    }
+    return { left, right };
+  });
+  const horizontalCoverageRatio = horizontalCoverage.left / Math.max(1, horizontalCoverage.right);
+  expect(horizontalCoverageRatio).toBeGreaterThanOrEqual(0.75);
+  expect(horizontalCoverageRatio).toBeLessThanOrEqual(1.33);
+
+  const interactionCount = Number(await canvas.getAttribute('data-input-events'));
+  const wakeCount = Number(await canvas.getAttribute('data-wake-events'));
+  const box = await field.boundingBox();
+  expect(box).not.toBeNull();
+  const fieldX = box?.x ?? 0;
+  const fieldY = box?.y ?? 0;
+  const fieldWidth = box?.width ?? 0;
+  const fieldHeight = box?.height ?? 0;
+  await page.mouse.move(fieldX + fieldWidth * 0.2, fieldY + fieldHeight * 0.55);
+  await page.mouse.move(fieldX + fieldWidth * 0.8, fieldY + fieldHeight * 0.42, { steps: 10 });
+  await expect.poll(async () => Number(await canvas.getAttribute('data-input-events'))).toBeGreaterThan(interactionCount);
+  await expect.poll(async () => Number(await canvas.getAttribute('data-wake-events'))).toBeGreaterThan(wakeCount);
+  await expect.poll(async () => Number(await canvas.getAttribute('data-repelled-particles'))).toBeGreaterThan(0);
+  await expect.poll(async () => Number(await canvas.getAttribute('data-pointer-speed'))).toBeGreaterThan(0);
+
+  const selectedWork = page.getByRole('link', { name: 'View selected work' });
+  await expect(selectedWork).toBeVisible();
+  await selectedWork.click();
+  await expect(page.locator('#work')).toBeFocused();
+});
+
+test('homepage pixel field pauses when hidden or offscreen and resumes when visible', async ({ page }) => {
+  await page.addInitScript(() => {
+    let visibilityState: DocumentVisibilityState = 'visible';
+    Object.defineProperty(document, 'visibilityState', {
+      configurable: true,
+      get: () => visibilityState,
+    });
+    Object.defineProperty(window, '__setParticleTestVisibility', {
+      configurable: true,
+      value: (nextState: DocumentVisibilityState) => {
+        visibilityState = nextState;
+        document.dispatchEvent(new Event('visibilitychange'));
+      },
+    });
+  });
+  await page.goto('/');
+
+  const canvas = page.locator('.hero-particle-canvas');
+  await expect(canvas).toHaveAttribute('data-active', 'true');
+  await page.evaluate(() => {
+    (window as typeof window & { __setParticleTestVisibility: (state: DocumentVisibilityState) => void })
+      .__setParticleTestVisibility('hidden');
+  });
+  await expect(canvas).toHaveAttribute('data-active', 'false');
+  await page.evaluate(() => {
+    (window as typeof window & { __setParticleTestVisibility: (state: DocumentVisibilityState) => void })
+      .__setParticleTestVisibility('visible');
+  });
+  await expect(canvas).toHaveAttribute('data-active', 'true');
+
+  await page.evaluate(() => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'instant' }));
+  await expect(canvas).toHaveAttribute('data-active', 'false');
+});
+
+test('homepage pixel field adapts to mobile and renders a composed reduced-motion still', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/');
+
+  const mobileCanvas = page.locator('.hero-particle-canvas');
+  await mobileCanvas.scrollIntoViewIfNeeded();
+  await expect(mobileCanvas).toHaveAttribute('data-quality', 'mobile');
+  const mobileCount = Number(await mobileCanvas.getAttribute('data-particle-count'));
+  expect(mobileCount).toBeGreaterThanOrEqual(5500);
+  expect(mobileCount).toBeLessThanOrEqual(6500);
+  await expect(mobileCanvas).toHaveAttribute('data-bounds-violations', '0');
+
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.reload();
+  const staticCanvas = page.locator('.hero-particle-canvas');
+  await staticCanvas.scrollIntoViewIfNeeded();
+  await expect(staticCanvas).toHaveAttribute('data-render-mode', 'static');
+  await expect(staticCanvas).toHaveAttribute('data-active', 'false');
+  await expect(staticCanvas).toHaveAttribute('data-frame-count', '1');
+  await expect(staticCanvas).toHaveAttribute('data-bounds-violations', '0');
+  const opaquePixels = await staticCanvas.evaluate((element) => {
+    const canvas = element as HTMLCanvasElement;
+    const context = canvas.getContext('2d');
+    if (!context) return 0;
+    const pixels = context.getImageData(0, 0, canvas.width, canvas.height).data;
+    let count = 0;
+    for (let index = 3; index < pixels.length; index += 4) {
+      if (pixels[index] > 0) count += 1;
+    }
+    return count;
+  });
+  expect(opaquePixels).toBeGreaterThan(7000);
+});
+
 test('homepage closes with a direct recruiter next step', async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 720 });
   await page.goto('/');
@@ -730,6 +886,32 @@ for (const route of [
     expect(overflow).toBeLessThanOrEqual(0);
   });
 }
+
+test('compact mobile architecture charts never scroll beyond their rendered diagram', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/');
+
+  const viewports = page.locator('.architecture-card-compact .architecture-viewport');
+  expect(await viewports.count()).toBeGreaterThan(0);
+
+  for (const viewport of await viewports.all()) {
+    const geometry = await viewport.evaluate((element) => {
+      const map = element.querySelector<HTMLElement>('.architecture-map');
+      if (!map) return null;
+      element.scrollLeft = element.scrollWidth;
+      const viewportRect = element.getBoundingClientRect();
+      const mapRect = map.getBoundingClientRect();
+      return {
+        renderedRightGap: viewportRect.right - mapRect.right,
+        scrollLeft: element.scrollLeft,
+        maximumScrollLeft: element.scrollWidth - element.clientWidth,
+      };
+    });
+    expect(geometry).not.toBeNull();
+    expect(geometry?.scrollLeft).toBe(geometry?.maximumScrollLeft);
+    expect(geometry?.renderedRightGap).toBeLessThanOrEqual(2);
+  }
+});
 
 for (const [route, heading, decision] of [
   ['/work/job-search-os', 'Turning a fragmented search into one operating system.', 'Evidence over invention'],
