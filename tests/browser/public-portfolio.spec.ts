@@ -120,7 +120,6 @@ for (const viewport of mobileViewports) {
 
 test('all return-to-index controls meet the mobile touch-target contract', async ({ page }) => {
   const routeControls = [
-    ['/', '.project-index-return', 8],
     ['/work', '.project-index-return', 8],
     ['/archive', '.archive-map-return', 6],
     ['/capabilities', '.capability-index-return', 5],
@@ -153,7 +152,6 @@ test('all return-to-index controls meet the mobile touch-target contract', async
 
 test('return-to-index controls expose unique contextual names and preserve their destinations', async ({ page }) => {
   const routeControls = [
-    ['/', '.project-index-return', 8, '#work-index'],
     ['/work', '.project-index-return', 8, '#work-index'],
     ['/archive', '.archive-map-return', 6, '#archive-map'],
     ['/capabilities', '.capability-index-return', 5, '#capability-index'],
@@ -483,7 +481,7 @@ test('architecture flow keeps every directional orb visible on mobile', async ({
 });
 
 test('compact architecture flow strengthens each existing orb without duplicating it', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/work');
 
   const compactChart = page.locator('.architecture-card-compact').first();
   const orbs = compactChart.locator('.architecture-flow-orb');
@@ -920,7 +918,7 @@ for (const route of [
 
 test('compact mobile architecture charts never scroll beyond their rendered diagram', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto('/');
+  await page.goto('/work');
 
   const viewports = page.locator('.architecture-card-compact .architecture-viewport');
   expect(await viewports.count()).toBeGreaterThan(0);
@@ -1675,7 +1673,7 @@ test('working archive search finds source-backed projects and keeps inspection i
   await expect(archive.getByRole('heading', { name: 'GTD IQ application' })).toHaveCount(0);
 
   await archive.getByRole('button', { name: 'Inspect GM Defense immersive training' }).click();
-  const dialog = page.locator('.legacy-inspector');
+  const dialog = archive.locator('.legacy-inspector');
   await expect(dialog).toContainText('01 of 1');
   await dialog.getByRole('button', { name: /^Next/ }).click();
   await expect(dialog.getByRole('heading', { name: 'GM Defense immersive training' })).toBeVisible();
@@ -1698,13 +1696,14 @@ test('archive inspector supports focused keyboard and mobile review without upsc
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/archive#legacy-gm-defense');
 
-  const controls = page.getByRole('button', { name: /^Inspect / });
+  const archive = page.locator('.legacy-working-archive');
+  const controls = archive.getByRole('button', { name: /^Inspect / });
   await expect(controls).toHaveCount(16);
   await expect(page.locator('.legacy-working-grid')).toHaveAttribute('data-inspector-ready', 'true');
   const firstControl = controls.first();
   await firstControl.click();
 
-  const dialog = page.locator('.legacy-inspector');
+  const dialog = archive.locator('.legacy-inspector');
   await expect(dialog).toBeVisible();
   await expect(dialog.getByRole('heading', { name: 'GM Defense immersive training' })).toBeVisible();
   await expect(dialog.getByText('General Dynamics / GM Defense')).toBeVisible();
@@ -1895,50 +1894,33 @@ test('work index lets recruiters jump to each flagship project', async ({ page }
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 });
 
-test('homepage project index supports a complete recruiter scan and return path', async ({ page }) => {
+test('homepage current-work shortlist supports a fast recruiter scan and full-work path', async ({ page }) => {
   await page.goto('/');
-  const index = page.getByRole('navigation', { name: 'Project index' });
+  const shortlist = page.locator('#work');
   const projects = [
-    ['Job Search OS', '#work-job-search-os'],
-    ['Flight Tracker AI', '#work-flight-tracker-ai'],
-    ['Wave Factory Essentials', '#work-wave-factory-essentials'],
-    ['Supraconscious Avatar AI', '#work-supraconscious-avatar-ai'],
-    ['Argent Matchmaking', '#work-argent-matchmaking'],
-    ['Jolene AI', '#work-jolene-ai'],
-    ['ProgressionLab', '#work-progression-lab-ai'],
-    ['EchoAtlas', '#work-echoatlas'],
+    ['Job Search OS', '/work/job-search-os'],
+    ['Jolene AI', '/work/jolene-ai'],
+    ['EchoAtlas', '/work/echoatlas'],
   ] as const;
 
-  await expect(index).toBeVisible();
-  await expect(index.getByRole('link')).toHaveCount(projects.length);
-  await expect(page.locator('.project-index-return')).toHaveCount(projects.length);
+  await expect(shortlist).toBeVisible();
+  await expect(shortlist.locator('.featured-project-card')).toHaveCount(projects.length);
   for (const [name, href] of projects) {
-    await expect(index.getByRole('link', { name: new RegExp(name) })).toHaveAttribute('href', href);
-    await expect(page.locator(href).getByRole('link', { name: /Project index/ })).toHaveAttribute(
-      'href',
-      '#work-index',
-    );
+    await expect(shortlist.getByRole('link', { name: `View ${name} case study` })).toHaveAttribute('href', href);
   }
+  await expect(shortlist.getByRole('link', { name: 'View all 8 case studies' })).toHaveAttribute('href', '/work');
 
-  const projectLink = index.getByRole('link', { name: /Flight Tracker AI/ });
+  const projectLink = shortlist.getByRole('link', { name: 'View Jolene AI case study' });
   await projectLink.focus();
   await expect(projectLink).toBeFocused();
   await projectLink.click();
-  await expect(page).toHaveURL(/\/#work-flight-tracker-ai$/);
-  await expect(page.locator('#work-flight-tracker-ai')).toBeInViewport();
-
-  const returnLink = page.locator('#work-flight-tracker-ai').getByRole('link', { name: /Project index/ });
-  await returnLink.focus();
-  await expect(returnLink).toBeFocused();
-  await returnLink.click();
-  await expect(page).toHaveURL(/\/#work-index$/);
-  await expect(index).toBeInViewport();
+  await expect(page).toHaveURL(/\/work\/jolene-ai$/);
 
   for (const width of [320, 390, 430]) {
     await page.setViewportSize({ width, height: 844 });
     await page.goto('/');
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
-    const undersizedLinks = await index.getByRole('link').evaluateAll((links) => (
+    const undersizedLinks = await shortlist.getByRole('link').evaluateAll((links) => (
       links.filter((link) => {
         const bounds = link.getBoundingClientRect();
         return bounds.width < 44 || bounds.height < 44;
