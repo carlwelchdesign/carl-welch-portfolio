@@ -596,6 +596,126 @@ test('homepage gives recruiters a synchronized proof summary', async ({ page }) 
   expect(overflow).toBeLessThanOrEqual(0);
 });
 
+test('homepage hero renders a bounded interactive pixel-physics field without intercepting controls', async ({ page }) => {
+  await page.goto('/');
+
+  const field = page.locator('.hero-field');
+  const canvas = field.locator('.hero-particle-canvas');
+  await expect(canvas).toHaveCount(1);
+  await expect(canvas).toHaveAttribute('aria-hidden', 'true');
+  await expect(canvas).toHaveAttribute('data-physics-model', 'gravity-collision-pointer');
+  await expect(canvas).toHaveAttribute('data-target-fps', '60');
+  await expect(canvas).toHaveCSS('pointer-events', 'none');
+  await expect(canvas).toHaveAttribute('data-render-mode', 'dynamic');
+  await expect(canvas).toHaveAttribute('data-quality', 'desktop');
+  await expect(canvas).toHaveAttribute('data-active', 'true');
+  await expect.poll(async () => Number(await canvas.getAttribute('data-frame-count'))).toBeGreaterThan(2);
+  await expect(canvas).toHaveAttribute('data-bounds-violations', '0');
+
+  const particleCount = Number(await canvas.getAttribute('data-particle-count'));
+  expect(particleCount).toBeGreaterThanOrEqual(48);
+  expect(particleCount).toBeLessThanOrEqual(72);
+
+  const dimensions = await canvas.evaluate((element) => {
+    const target = element as HTMLCanvasElement;
+    const rect = target.getBoundingClientRect();
+    return {
+      cssWidth: rect.width,
+      cssHeight: rect.height,
+      pixelWidth: target.width,
+      pixelHeight: target.height,
+    };
+  });
+  expect(dimensions.cssWidth).toBeGreaterThan(0);
+  expect(dimensions.cssHeight).toBeGreaterThan(0);
+  expect(dimensions.pixelWidth / dimensions.cssWidth).toBeLessThanOrEqual(2);
+  expect(dimensions.pixelHeight / dimensions.cssHeight).toBeLessThanOrEqual(2);
+
+  const firstFrame = await canvas.evaluate((element) => (element as HTMLCanvasElement).toDataURL());
+  await page.waitForTimeout(120);
+  const laterFrame = await canvas.evaluate((element) => (element as HTMLCanvasElement).toDataURL());
+  expect(laterFrame).not.toBe(firstFrame);
+
+  const interactionCount = Number(await canvas.getAttribute('data-input-events'));
+  const box = await field.boundingBox();
+  expect(box).not.toBeNull();
+  await page.mouse.move((box?.x ?? 0) + (box?.width ?? 0) / 2, (box?.y ?? 0) + (box?.height ?? 0) / 2);
+  await expect.poll(async () => Number(await canvas.getAttribute('data-input-events'))).toBeGreaterThan(interactionCount);
+
+  const selectedWork = page.getByRole('link', { name: 'View selected work' });
+  await expect(selectedWork).toBeVisible();
+  await selectedWork.click();
+  await expect(page.locator('#work')).toBeFocused();
+});
+
+test('homepage pixel field pauses when hidden or offscreen and resumes when visible', async ({ page }) => {
+  await page.addInitScript(() => {
+    let visibilityState: DocumentVisibilityState = 'visible';
+    Object.defineProperty(document, 'visibilityState', {
+      configurable: true,
+      get: () => visibilityState,
+    });
+    Object.defineProperty(window, '__setParticleTestVisibility', {
+      configurable: true,
+      value: (nextState: DocumentVisibilityState) => {
+        visibilityState = nextState;
+        document.dispatchEvent(new Event('visibilitychange'));
+      },
+    });
+  });
+  await page.goto('/');
+
+  const canvas = page.locator('.hero-particle-canvas');
+  await expect(canvas).toHaveAttribute('data-active', 'true');
+  await page.evaluate(() => {
+    (window as typeof window & { __setParticleTestVisibility: (state: DocumentVisibilityState) => void })
+      .__setParticleTestVisibility('hidden');
+  });
+  await expect(canvas).toHaveAttribute('data-active', 'false');
+  await page.evaluate(() => {
+    (window as typeof window & { __setParticleTestVisibility: (state: DocumentVisibilityState) => void })
+      .__setParticleTestVisibility('visible');
+  });
+  await expect(canvas).toHaveAttribute('data-active', 'true');
+
+  await page.evaluate(() => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'instant' }));
+  await expect(canvas).toHaveAttribute('data-active', 'false');
+});
+
+test('homepage pixel field adapts to mobile and renders a composed reduced-motion still', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/');
+
+  const mobileCanvas = page.locator('.hero-particle-canvas');
+  await mobileCanvas.scrollIntoViewIfNeeded();
+  await expect(mobileCanvas).toHaveAttribute('data-quality', 'mobile');
+  const mobileCount = Number(await mobileCanvas.getAttribute('data-particle-count'));
+  expect(mobileCount).toBeGreaterThanOrEqual(28);
+  expect(mobileCount).toBeLessThanOrEqual(40);
+  await expect(mobileCanvas).toHaveAttribute('data-bounds-violations', '0');
+
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.reload();
+  const staticCanvas = page.locator('.hero-particle-canvas');
+  await staticCanvas.scrollIntoViewIfNeeded();
+  await expect(staticCanvas).toHaveAttribute('data-render-mode', 'static');
+  await expect(staticCanvas).toHaveAttribute('data-active', 'false');
+  await expect(staticCanvas).toHaveAttribute('data-frame-count', '1');
+  await expect(staticCanvas).toHaveAttribute('data-bounds-violations', '0');
+  const opaquePixels = await staticCanvas.evaluate((element) => {
+    const canvas = element as HTMLCanvasElement;
+    const context = canvas.getContext('2d');
+    if (!context) return 0;
+    const pixels = context.getImageData(0, 0, canvas.width, canvas.height).data;
+    let count = 0;
+    for (let index = 3; index < pixels.length; index += 4) {
+      if (pixels[index] > 0) count += 1;
+    }
+    return count;
+  });
+  expect(opaquePixels).toBeGreaterThan(100);
+});
+
 test('homepage closes with a direct recruiter next step', async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 720 });
   await page.goto('/');
