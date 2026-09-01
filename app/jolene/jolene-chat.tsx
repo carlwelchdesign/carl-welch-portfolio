@@ -111,15 +111,19 @@ export function JoleneChat({
   mode: connectionMode,
   scenario: scenarioValue = 'success',
   contactIntentEnabled = false,
+  fixtureAnswerDelayMs,
 }: {
   mode: JoleneMode;
   scenario?: string;
   contactIntentEnabled?: boolean;
+  fixtureAnswerDelayMs?: number;
 }) {
   const scenario = normalizeScenario(scenarioValue);
   const adapter = useMemo(
-    () => connectionMode === 'live' ? createBrowserPublicJoleneAdapter() : createFixturePublicJoleneAdapter(scenario),
-    [connectionMode, scenario],
+    () => connectionMode === 'live'
+      ? createBrowserPublicJoleneAdapter()
+      : createFixturePublicJoleneAdapter(scenario, fixtureAnswerDelayMs),
+    [connectionMode, fixtureAnswerDelayMs, scenario],
   );
   const launcherRef = useRef<HTMLButtonElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);

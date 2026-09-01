@@ -218,7 +218,12 @@ function enforceOperationalScenario(scenario: PublicJoleneFixtureScenario): void
 
 export function createFixturePublicJoleneAdapter(
   scenario: PublicJoleneFixtureScenario = 'success',
+  answerDelayMs = 600,
 ): PublicJoleneAdapter {
+  const boundedAnswerDelayMs = Number.isFinite(answerDelayMs)
+    ? Math.max(0, Math.min(10_000, Math.floor(answerDelayMs)))
+    : 600;
+
   return {
     async getManifest() {
       enforceOperationalScenario(scenario);
@@ -227,7 +232,7 @@ export function createFixturePublicJoleneAdapter(
     async answer(request) {
       parsePortfolioAnswerRequest(request);
       enforceOperationalScenario(scenario);
-      await new Promise((resolve) => setTimeout(resolve, 600));
+      await new Promise((resolve) => setTimeout(resolve, boundedAnswerDelayMs));
       return parsePortfolioAnswerResponse(createAnswerResponse(scenario));
     },
     async compareJob(request) {
