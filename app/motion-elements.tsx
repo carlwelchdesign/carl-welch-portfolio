@@ -96,15 +96,49 @@ export function ImageDrift({ children }: { children: ReactNode }) {
 }
 
 export function ArchitectureFlow({ children, className }: { children: ReactNode; className?: string }) {
-  const reduceMotion = useReducedMotion();
   const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.12 });
+  const revealed = useInView(ref, { once: true, amount: 0.12 });
+  const inView = useInView(ref, { amount: 0.08 });
+  const [documentVisible, setDocumentVisible] = useState(true);
+  const [reduceMotion, setReduceMotion] = useState(false);
+  const flowActive = inView && documentVisible && !reduceMotion;
+
+  useEffect(() => {
+    const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const updateMotionPreference = () => setReduceMotion(motionPreference.matches);
+    updateMotionPreference();
+    motionPreference.addEventListener('change', updateMotionPreference);
+    return () => motionPreference.removeEventListener('change', updateMotionPreference);
+  }, []);
+
+  useEffect(() => {
+    const updateDocumentVisibility = () => setDocumentVisible(document.visibilityState === 'visible');
+    updateDocumentVisibility();
+    document.addEventListener('visibilitychange', updateDocumentVisibility);
+    return () => document.removeEventListener('visibilitychange', updateDocumentVisibility);
+  }, []);
+
+  useEffect(() => {
+    const connectors = ref.current?.querySelector<SVGSVGElement>('.architecture-connectors');
+    if (
+      !connectors
+      || typeof connectors.pauseAnimations !== 'function'
+      || typeof connectors.unpauseAnimations !== 'function'
+    ) return;
+
+    if (flowActive) connectors.unpauseAnimations();
+    else connectors.pauseAnimations();
+
+    return () => connectors.pauseAnimations();
+  }, [flowActive]);
 
   return (
     <m.div
       ref={ref}
       className={className}
-      data-in-view={inView || reduceMotion ? 'true' : 'false'}
+      data-in-view={revealed || reduceMotion ? 'true' : 'false'}
+      data-flow-active={flowActive ? 'true' : 'false'}
+      data-reduced-motion={reduceMotion ? 'true' : 'false'}
     >
       {children}
     </m.div>

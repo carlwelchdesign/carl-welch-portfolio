@@ -345,6 +345,93 @@ test('fixed mobile targets preserve author attribution and architecture disclosu
   await expect(connections).toHaveAttribute('open', '');
 });
 
+test('architecture flow orbs follow connector paths and pause outside the viewport', async ({ page }) => {
+  await page.addInitScript(() => {
+    let visibilityState: DocumentVisibilityState = 'visible';
+    Object.defineProperty(document, 'visibilityState', {
+      configurable: true,
+      get: () => visibilityState,
+    });
+    Object.defineProperty(window, '__setArchitectureTestVisibility', {
+      configurable: true,
+      value: (nextState: DocumentVisibilityState) => {
+        visibilityState = nextState;
+        document.dispatchEvent(new Event('visibilitychange'));
+      },
+    });
+  });
+  await page.goto('/work/echoatlas');
+
+  const flow = page.locator('.architecture-map-motion');
+  const connectors = page.locator('.architecture-connectors');
+  const edges = connectors.locator('.architecture-edge');
+  const orbs = connectors.locator('.architecture-flow-orb');
+
+  await flow.scrollIntoViewIfNeeded();
+  await expect(flow).toHaveAttribute('data-flow-active', 'true');
+  await expect(edges).toHaveCount(14);
+  await expect(orbs).toHaveCount(15);
+  await expect(connectors.locator('.architecture-flow-endpoint')).toHaveCount(15);
+  await expect(orbs.first().locator('animateMotion')).toHaveAttribute(
+    'path',
+    await edges.first().getAttribute('d') ?? '',
+  );
+  await expect(orbs.first()).toHaveCSS('pointer-events', 'none');
+  await expect
+    .poll(() => connectors.evaluate((svg) => !(svg as SVGSVGElement).animationsPaused()))
+    .toBe(true);
+
+  await page.evaluate(() => {
+    (window as typeof window & { __setArchitectureTestVisibility: (state: DocumentVisibilityState) => void })
+      .__setArchitectureTestVisibility('hidden');
+  });
+  await expect(flow).toHaveAttribute('data-flow-active', 'false');
+  await expect
+    .poll(() => connectors.evaluate((svg) => (svg as SVGSVGElement).animationsPaused()))
+    .toBe(true);
+  await page.evaluate(() => {
+    (window as typeof window & { __setArchitectureTestVisibility: (state: DocumentVisibilityState) => void })
+      .__setArchitectureTestVisibility('visible');
+  });
+  await expect(flow).toHaveAttribute('data-flow-active', 'true');
+
+  await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
+  await expect(flow).toHaveAttribute('data-flow-active', 'false');
+  await expect
+    .poll(() => connectors.evaluate((svg) => (svg as SVGSVGElement).animationsPaused()))
+    .toBe(true);
+});
+
+test('architecture flow uses static endpoints when reduced motion is requested', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/work/echoatlas#architecture');
+
+  const flow = page.locator('.architecture-map-motion');
+  const connectors = page.locator('.architecture-connectors');
+  const orbs = connectors.locator('.architecture-flow-orb');
+  const endpoints = connectors.locator('.architecture-flow-endpoint');
+
+  await expect(flow).toHaveAttribute('data-reduced-motion', 'true');
+  await expect(orbs).toHaveCount(15);
+  await expect(orbs.first()).toBeHidden();
+  await expect(endpoints).toHaveCount(15);
+  await expect(endpoints.first()).toBeVisible();
+  await expect(connectors).toHaveAttribute('aria-hidden', 'true');
+});
+
+test('architecture flow bounds visible orb density on mobile', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/work/echoatlas#architecture');
+
+  const orbs = page.locator('.architecture-flow-orb');
+  await expect(orbs).toHaveCount(15);
+  await expect
+    .poll(() => orbs.evaluateAll((elements) => (
+      elements.filter((element) => getComputedStyle(element).display !== 'none').length
+    )))
+    .toBe(8);
+});
+
 test('primary navigation identifies the current portfolio section', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByRole('link', { name: 'Carl Welch home' })).toHaveAttribute('aria-current', 'page');

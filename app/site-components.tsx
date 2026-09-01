@@ -237,10 +237,10 @@ export function ArchitectureDiagram({
   const nodeById = new Map(architecture.nodes.map((node) => [node.id, node]));
   const markerId = `architecture-arrow-${architecture.title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
 
-  const connectionPath = (fromId: string, toId: string) => {
+  const connectionGeometry = (fromId: string, toId: string) => {
     const from = nodeById.get(fromId);
     const to = nodeById.get(toId);
-    if (!from || !to) return '';
+    if (!from || !to) return null;
 
     const fromWidth = from.width ?? 170;
     const toWidth = to.width ?? 170;
@@ -253,15 +253,50 @@ export function ArchitectureDiagram({
       const startX = fromCenter.x + direction * fromWidth / 2;
       const endX = toCenter.x - direction * toWidth / 2;
       const control = Math.max(34, Math.abs(endX - startX) * 0.45);
-      return `M ${startX} ${fromCenter.y} C ${startX + direction * control} ${fromCenter.y}, ${endX - direction * control} ${toCenter.y}, ${endX} ${toCenter.y}`;
+      return {
+        path: `M ${startX} ${fromCenter.y} C ${startX + direction * control} ${fromCenter.y}, ${endX - direction * control} ${toCenter.y}, ${endX} ${toCenter.y}`,
+        endpoint: { x: endX, y: toCenter.y },
+      };
     }
 
     const direction = toCenter.y >= fromCenter.y ? 1 : -1;
     const startY = fromCenter.y + direction * 40;
     const endY = toCenter.y - direction * 40;
     const control = Math.max(30, Math.abs(endY - startY) * 0.45);
-    return `M ${fromCenter.x} ${startY} C ${fromCenter.x} ${startY + direction * control}, ${toCenter.x} ${endY - direction * control}, ${toCenter.x} ${endY}`;
+    return {
+      path: `M ${fromCenter.x} ${startY} C ${fromCenter.x} ${startY + direction * control}, ${toCenter.x} ${endY - direction * control}, ${toCenter.x} ${endY}`,
+      endpoint: { x: toCenter.x, y: endY },
+    };
   };
+
+  const flowDirections = architecture.edges.flatMap((edge, edgeIndex) => {
+    const forward = connectionGeometry(edge.from, edge.to);
+    if (!forward) return [];
+
+    const duration = (edge.dashed ? 6.2 : 4.2) + (edgeIndex % 3) * 0.45;
+    const directions = [{
+      id: `${edge.from}-${edge.to}`,
+      geometry: forward,
+      duration,
+      delay: (edgeIndex * 0.83) % duration,
+      secondary: edgeIndex % 2 === 1,
+    }];
+
+    if (edge.bidirectional) {
+      const reverse = connectionGeometry(edge.to, edge.from);
+      if (reverse) {
+        directions.push({
+          id: `${edge.to}-${edge.from}`,
+          geometry: reverse,
+          duration: duration + 0.35,
+          delay: duration / 2,
+          secondary: false,
+        });
+      }
+    }
+
+    return directions;
+  });
 
   return (
     <figure
@@ -302,13 +337,44 @@ export function ArchitectureDiagram({
               {architecture.edges.map((edge) => (
                 <g key={`${edge.from}-${edge.to}`}>
                   <path
-                    className={edge.dashed ? 'architecture-edge-dashed' : undefined}
-                    d={connectionPath(edge.from, edge.to)}
+                    className={`architecture-edge${edge.dashed ? ' architecture-edge-dashed' : ''}`}
+                    d={connectionGeometry(edge.from, edge.to)?.path ?? ''}
                     markerEnd={`url(#${markerId})`}
                     markerStart={edge.bidirectional ? `url(#${markerId})` : undefined}
                   />
                 </g>
               ))}
+              <g className="architecture-flow-endpoints" aria-hidden="true">
+                {flowDirections.map((flow) => (
+                  <circle
+                    className="architecture-flow-endpoint"
+                    cx={flow.geometry.endpoint.x}
+                    cy={flow.geometry.endpoint.y}
+                    key={`${flow.id}-endpoint`}
+                    r="3.25"
+                  />
+                ))}
+              </g>
+              <g className="architecture-flow-orbs" aria-hidden="true">
+                {flowDirections.map((flow) => (
+                  <g
+                    className="architecture-flow-orb"
+                    data-flow-density={flow.secondary ? 'secondary' : 'primary'}
+                    data-flow-edge={flow.id}
+                    key={`${flow.id}-orb`}
+                  >
+                    <circle className="architecture-flow-orb-halo" r="6" />
+                    <circle className="architecture-flow-orb-core" r="2.4" />
+                    <animateMotion
+                      begin={`-${flow.delay.toFixed(2)}s`}
+                      calcMode="linear"
+                      dur={`${flow.duration.toFixed(2)}s`}
+                      path={flow.geometry.path}
+                      repeatCount="indefinite"
+                    />
+                  </g>
+                ))}
+              </g>
             </svg>
             <ol className="architecture-track">
               {architecture.nodes.map((node, index) => (
