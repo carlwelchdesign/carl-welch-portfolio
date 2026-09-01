@@ -51,11 +51,11 @@ The Chord Explorer capture was excluded because browser-level MIDI permission wa
 ## EchoAtlas
 
 Source repository: `earth-atlas-ai`
-Source release: PR `#52`, merged as `08640db` on 2026-08-31; public surface verified at `https://earth-atlas-ai.vercel.app/`
+Source release: the Analyze viewport and independent candidate-queue correction merged in PR `#57` as `5d92cfe`; PR `#58` recorded the release evidence. The public surface was recaptured from `https://earth-atlas-ai.vercel.app/` on 2026-08-31 after both merges.
 
-- `explore-results.png` ← live Vercel capture of the focused two-record Umbra search result on 2026-08-31
-- `pair-review.png` ← live Vercel capture of the approved Umbra pair and completed engineering-comparability review on 2026-08-31
-- `analyze-workspace.png` ← live Vercel capture of the prepared Bingham Canyon bundle with candidate C-018 selected on 2026-08-31
-- `analyze-hero.png` ← presentation copy of the same selected-candidate live capture
+- `explore-results.png` ← current 1440×960 live Vercel capture with Explore/Analyze navigation, the Bingham Canyon map, and the independently scrollable 17-record provider queue
+- `pair-review.png` ← current 1440×960 live Vercel capture of the approved Umbra pair and completed engineering-comparability review
+- `analyze-workspace.png` ← current 1440×960 live Vercel capture of the prepared Bingham Canyon bundle with candidate C-018 selected and its acquisition provenance visible
+- `analyze-hero.png` ← current 1440×960 live Vercel capture with the 26-candidate independent scroll region, balanced imagery, and selected-candidate evidence
 
 The imagery shown in Analyze is derived from public Umbra SAR data licensed CC BY 4.0. It depicts the approved Bingham Canyon civilian review area and must retain the visible interpretation and attribution boundaries.

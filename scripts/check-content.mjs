@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { access, readFile, stat } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { loadTypescriptData } from './load-typescript-data.mjs';
@@ -52,6 +53,18 @@ async function requirePng(relativePath) {
   const bytes = await readFile(path);
   const signature = bytes.subarray(0, 8).toString('hex');
   if (signature !== '89504e470d0a1a0a') throw new Error(`${relativePath} is not a valid PNG file.`);
+}
+
+async function readPngIdentity(relativePath) {
+  const path = await requireFile(relativePath, 24);
+  const bytes = await readFile(path);
+  const signature = bytes.subarray(0, 8).toString('hex');
+  if (signature !== '89504e470d0a1a0a') throw new Error(`${relativePath} is not a valid PNG file.`);
+  return {
+    width: bytes.readUInt32BE(16),
+    height: bytes.readUInt32BE(20),
+    sha256: createHash('sha256').update(bytes).digest('hex'),
+  };
 }
 
 const [
@@ -214,6 +227,19 @@ assert.equal(echoAtlas.liveUrl, 'https://earth-atlas-ai.vercel.app/');
 assert.deepEqual(
   echoAtlas.gallery.map((item) => item.label),
   ['Explore provider availability', 'Review pair comparability', 'Analyze prepared evidence'],
+);
+const echoAtlasMedia = [echoAtlas.image, ...echoAtlas.gallery];
+const echoAtlasMediaIdentities = await Promise.all(echoAtlasMedia.map(async (item) => {
+  const identity = await readPngIdentity(`public${item.src}`);
+  assert.equal(item.width, 1440, `${item.src} metadata must retain the approved desktop width.`);
+  assert.equal(item.height, 960, `${item.src} metadata must retain the approved viewport height.`);
+  assert.equal(identity.width, item.width, `${item.src} width metadata must match the PNG.`);
+  assert.equal(identity.height, item.height, `${item.src} height metadata must match the PNG.`);
+  return identity;
+}));
+requireUnique(
+  echoAtlasMediaIdentities.map((identity) => identity.sha256),
+  'EchoAtlas case-study screenshots',
 );
 assert.match(echoAtlas.story.contribution, /Scientific validity remains undetermined/);
 assert(
