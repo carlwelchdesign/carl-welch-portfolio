@@ -361,14 +361,21 @@ export function ArchitectureDiagram({
                     data-flow-edge={flow.id}
                     key={`${flow.id}-orb`}
                   >
-                    <circle className="architecture-flow-orb-halo" r="6" />
-                    <circle className="architecture-flow-orb-core" r="2.4" />
+                    <ellipse
+                      className="architecture-flow-orb-tail"
+                      cx={compact ? -6.25 : -5}
+                      rx={compact ? 7.5 : 6}
+                      ry={compact ? 2.1 : 1.65}
+                    />
+                    <circle className="architecture-flow-orb-halo" r={compact ? 7.5 : 6} />
+                    <circle className="architecture-flow-orb-core" r={compact ? 3 : 2.4} />
                     <animateMotion
                       begin={`-${flow.delay.toFixed(2)}s`}
                       calcMode="linear"
                       dur={`${flow.duration.toFixed(2)}s`}
                       path={flow.geometry.path}
                       repeatCount="indefinite"
+                      rotate="auto"
                     />
                   </g>
                 ))}

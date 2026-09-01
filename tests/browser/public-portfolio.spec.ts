@@ -371,11 +371,13 @@ test('architecture flow orbs follow connector paths and pause outside the viewpo
   await expect(flow).toHaveAttribute('data-flow-active', 'true');
   await expect(edges).toHaveCount(14);
   await expect(orbs).toHaveCount(15);
+  await expect(connectors.locator('.architecture-flow-orb-tail')).toHaveCount(15);
   await expect(connectors.locator('.architecture-flow-endpoint')).toHaveCount(15);
   await expect(orbs.first().locator('animateMotion')).toHaveAttribute(
     'path',
     await edges.first().getAttribute('d') ?? '',
   );
+  await expect(orbs.first().locator('animateMotion')).toHaveAttribute('rotate', 'auto');
   await expect(orbs.first()).toHaveCSS('pointer-events', 'none');
   await expect
     .poll(() => connectors.evaluate((svg) => !(svg as SVGSVGElement).animationsPaused()))
@@ -441,6 +443,26 @@ test('architecture flow keeps every directional orb visible on mobile', async ({
       .map((element) => element.getAttribute('data-flow-edge'))
   ));
   expect(visibleOrbIds).toEqual(expect.arrayContaining(edgeIds));
+
+  const firstOrb = orbs.first();
+  await expect(firstOrb.locator('.architecture-flow-orb-tail')).toBeVisible();
+  await expect(firstOrb.locator('.architecture-flow-orb-tail')).toHaveCSS('opacity', '0.68');
+  await expect(firstOrb.locator('.architecture-flow-orb-halo')).toHaveCSS('opacity', '0.42');
+  await expect(firstOrb.locator('.architecture-flow-orb-core')).toHaveCSS('stroke-width', '1.9px');
+});
+
+test('compact architecture flow strengthens each existing orb without duplicating it', async ({ page }) => {
+  await page.goto('/');
+
+  const compactChart = page.locator('.architecture-card-compact').first();
+  const orbs = compactChart.locator('.architecture-flow-orb');
+  const tails = compactChart.locator('.architecture-flow-orb-tail');
+  await expect(compactChart).toBeVisible();
+  await expect(orbs).not.toHaveCount(0);
+  await expect(tails).toHaveCount(await orbs.count());
+  await expect(orbs.first().locator('.architecture-flow-orb-tail')).toHaveAttribute('rx', '7.5');
+  await expect(orbs.first().locator('.architecture-flow-orb-halo')).toHaveAttribute('r', '7.5');
+  await expect(orbs.first().locator('.architecture-flow-orb-core')).toHaveAttribute('r', '3');
 });
 
 test('primary navigation identifies the current portfolio section', async ({ page }) => {
