@@ -867,6 +867,32 @@ for (const route of [
   });
 }
 
+test('compact mobile architecture charts never scroll beyond their rendered diagram', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/');
+
+  const viewports = page.locator('.architecture-card-compact .architecture-viewport');
+  expect(await viewports.count()).toBeGreaterThan(0);
+
+  for (const viewport of await viewports.all()) {
+    const geometry = await viewport.evaluate((element) => {
+      const map = element.querySelector<HTMLElement>('.architecture-map');
+      if (!map) return null;
+      element.scrollLeft = element.scrollWidth;
+      const viewportRect = element.getBoundingClientRect();
+      const mapRect = map.getBoundingClientRect();
+      return {
+        renderedRightGap: viewportRect.right - mapRect.right,
+        scrollLeft: element.scrollLeft,
+        maximumScrollLeft: element.scrollWidth - element.clientWidth,
+      };
+    });
+    expect(geometry).not.toBeNull();
+    expect(geometry?.scrollLeft).toBe(geometry?.maximumScrollLeft);
+    expect(geometry?.renderedRightGap).toBeLessThanOrEqual(2);
+  }
+});
+
 for (const [route, heading, decision] of [
   ['/work/job-search-os', 'Turning a fragmented search into one operating system.', 'Evidence over invention'],
   ['/work/flight-tracker-ai', 'Making a dense air picture understandable and reviewable.', 'Live when available, repeatable when needed'],

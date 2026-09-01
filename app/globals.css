@@ -210,7 +210,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .architecture-connections small { margin-left: auto; color: var(--chapter-tone); }
 .architecture-card-compact .architecture-summary { display: none; }
 .architecture-card-compact .architecture-viewport { height: 390px; }
-.architecture-card-compact .architecture-map { margin-inline: 0; transform: scale(0.62); transform-origin: top left; }
+.architecture-card-compact .architecture-map { margin-inline: 0; zoom: 0.62; }
 .architecture-card-compact .architecture-legend, .architecture-card-compact .architecture-connections { display: none; }
 
 @keyframes architecture-connections-reveal {
@@ -1084,7 +1084,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .architecture-flow-orb-core { stroke-width: 1.9; }
   .architecture-map { margin-inline: 0; }
   .architecture-card-compact .architecture-viewport { height: 450px; }
-  .architecture-card-compact .architecture-map { transform: scale(0.72); }
+  .architecture-card-compact .architecture-map { zoom: 0.72; }
   .architecture-connections ul { grid-template-columns: minmax(0, 1fr); }
   .experience-preview-list li { padding: 18px 0; grid-template-columns: 1fr; gap: 6px; }
   .experience-preview-list strong { grid-row: 1; }
