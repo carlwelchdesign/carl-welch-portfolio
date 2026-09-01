@@ -296,6 +296,36 @@ test('homepage selected-work action transfers focus and preserves native fallbac
   await noScriptContext.close();
 });
 
+test('homepage leads with three current projects and keeps the full project record on the work page', async ({ page }) => {
+  await page.goto('/');
+
+  const featuredWork = page.locator('#work');
+  await expect(featuredWork.getByRole('heading', { name: 'Current work, selected for a fast read.' })).toBeVisible();
+  await expect(featuredWork.locator('.featured-project-card')).toHaveCount(3);
+  await expect(featuredWork.locator('.architecture-card')).toHaveCount(0);
+  await expect(featuredWork.getByRole('link', { name: 'View all 8 case studies' })).toHaveAttribute('href', '/work');
+
+  const sectionOrder = await page.locator('#work, .career-portrait-preview').evaluateAll((elements) =>
+    elements.map((element) => element.id || element.className),
+  );
+  expect(sectionOrder).toEqual(['work', 'career-portrait-preview']);
+
+  await page.goto('/work');
+  await expect(page.locator('.project-chapter')).toHaveCount(projects.length);
+  await expect(page.locator('.architecture-card')).toHaveCount(projects.length);
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/');
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBeLessThanOrEqual(0);
+  const overflowingCards = await page.locator('.featured-project-card').evaluateAll((cards) =>
+    cards.filter((card) => {
+      const bounds = card.getBoundingClientRect();
+      return bounds.left < 0 || bounds.right > window.innerWidth;
+    }).length,
+  );
+  expect(overflowingCards).toBe(0);
+});
+
 test('every public route meets the mobile control-size and overflow contract', async ({ page }) => {
   for (const viewport of mobileViewports) {
     await page.setViewportSize(viewport);

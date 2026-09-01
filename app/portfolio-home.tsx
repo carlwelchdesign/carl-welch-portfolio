@@ -5,7 +5,14 @@ import { HeroParticleField } from './hero-particle-field';
 import { MotionRuntime, Orbit, Reveal } from './motion-elements';
 import { experience, projects } from './portfolio-data';
 import { recommendations } from './recommendations-data';
-import { CareerPortraitPreview, CharacterSignals, PageFrame, ProjectChapter, WorkIndex } from './site-components';
+import { CareerPortraitPreview, CharacterSignals, FeaturedWork, PageFrame } from './site-components';
+
+const featuredProjectSlugs = ['job-search-os', 'jolene-ai', 'echoatlas'] as const;
+const featuredProjects = featuredProjectSlugs.map((slug) => {
+  const project = projects.find((candidate) => candidate.slug === slug);
+  if (!project) throw new Error(`Missing featured project: ${slug}`);
+  return project;
+});
 
 export function PortfolioHome() {
   return (
@@ -80,14 +87,9 @@ export function PortfolioHome() {
             </dl>
           </section>
 
-          <CareerPortraitPreview />
+          <FeaturedWork items={featuredProjects} totalCount={projects.length} />
 
-          <div id="work" tabIndex={-1}>
-            <WorkIndex items={projects} />
-            {projects.map((project, index) => (
-              <ProjectChapter key={project.slug} project={project} priority={index === 0} />
-            ))}
-          </div>
+          <CareerPortraitPreview />
 
           <section className="capabilities-preview" data-tone="orange" aria-labelledby="capabilities-title">
             <Reveal className="capabilities-preview-heading">
