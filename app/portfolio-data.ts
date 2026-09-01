@@ -1244,7 +1244,7 @@ export const projects: PortfolioProject[] = [
         },
         {
           title: 'Deployment should not pretend to be the pipeline',
-          challenge: 'A serverless portfolio surface cannot honestly provide the local system’s raster acquisition, alignment, durable jobs, or arbitrary on-demand processing.',
+          challenge: 'A bounded serverless demonstration cannot honestly provide the local system’s raster acquisition, alignment, durable jobs, or arbitrary on-demand processing.',
           response: 'Keep heavy deterministic processing local. The public path serves bounded metadata discovery, engineering comparability, and the exact prepared Bingham Canyon demonstration.',
           result: 'The product is publicly reviewable while arbitrary cloud processing and operational monitoring remains unimplemented.',
         },
@@ -1280,7 +1280,7 @@ export const projects: PortfolioProject[] = [
         { id: 'catalog', label: 'Provider metadata', detail: 'Availability, footprints, licenses', technology: 'STAC · public catalogs', kind: 'data', x: 785, y: 85, width: 165 },
         { id: 'bundle', label: 'Versioned analysis bundle', detail: 'Images, lineage, warnings, hashes', technology: 'Schema 1.0.0', kind: 'data', x: 785, y: 225, width: 165 },
         { id: 'assessments', label: 'Owner assessments', detail: 'Correctable browser-local history', technology: 'Append-only events', kind: 'data', x: 785, y: 365, width: 165 },
-        { id: 'vercel', label: 'Vercel portfolio surface', detail: 'Bounded prepared demonstration', technology: 'Vite · FastAPI function', kind: 'runtime', x: 785, y: 505, width: 165 },
+        { id: 'vercel', label: 'Public EchoAtlas deployment', detail: 'Bounded prepared demonstration', technology: 'Vite · FastAPI · Vercel', kind: 'runtime', x: 785, y: 505, width: 165 },
       ],
       edges: [
         { from: 'explore', to: 'api' }, { from: 'list', to: 'api' },
