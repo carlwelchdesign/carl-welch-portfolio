@@ -47,3 +47,14 @@ The Chord Explorer capture was excluded because browser-level MIDI permission wa
 - `identity-lock.png` ← Jolene canonical identity reference
 - `greet-keyframes.png` ← archived greeting animation experiment that did not meet the visual bar and was abandoned
 - `approved-runtime-atlas.png` ← manually approved reaction and loading frames used by the live renderer
+
+## EchoAtlas
+
+Source repository: `earth-atlas-ai`
+
+- `explore-results.png` ← live Vercel capture of the focused two-record Umbra search result on 2026-08-31
+- `pair-review.png` ← live Vercel capture of the approved Umbra pair and completed engineering-comparability review on 2026-08-31
+- `analyze-workspace.png` ← live Vercel capture of the prepared Bingham Canyon bundle with candidate C-018 selected on 2026-08-31
+- `analyze-hero.png` ← presentation copy of the same selected-candidate live capture
+
+The imagery shown in Analyze is derived from public Umbra SAR data licensed CC BY 4.0. It depicts the approved Bingham Canyon civilian review area and must retain the visible interpretation and attribution boundaries.

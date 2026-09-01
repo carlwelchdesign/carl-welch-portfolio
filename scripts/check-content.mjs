@@ -207,6 +207,27 @@ assert(
   jobSearchOs?.architecture.nodes.some((node) => node.technology.includes('LangSmith')),
   'Job Search OS architecture must identify its optional LangSmith observability layer.',
 );
+const echoAtlas = projects.find((project) => project.slug === 'echoatlas');
+assert(echoAtlas, 'EchoAtlas case study must remain published.');
+assert.equal(echoAtlas.maturity, 'deployed_demo', 'EchoAtlas must retain its bounded public-demonstration maturity.');
+assert.equal(echoAtlas.liveUrl, 'https://earth-atlas-ai.vercel.app/');
+assert.deepEqual(
+  echoAtlas.gallery.map((item) => item.label),
+  ['Explore provider availability', 'Review pair comparability', 'Analyze prepared evidence'],
+);
+assert.match(echoAtlas.story.contribution, /Scientific validity remains undetermined/);
+assert(
+  echoAtlas.boundaries.some((boundary) => boundary.includes('operational monitoring') && boundary.includes('not implemented')),
+  'EchoAtlas must keep operational monitoring outside the shipped capability boundary.',
+);
+assert(
+  echoAtlas.evidence.some((item) => item.id === 'portfolio:claim:echoatlas:prepared-evidence' && /26 machine-generated candidates/.test(item.text)),
+  'EchoAtlas must retain the bounded prepared-evidence claim.',
+);
+assert(
+  echoAtlas.evidence.some((item) => item.id === 'portfolio:claim:echoatlas:public-boundary' && /does not process arbitrary remote imagery/.test(item.text)),
+  'EchoAtlas must retain the public deployment processing boundary.',
+);
 assert(projects.find((project) => project.slug === 'flight-tracker-ai')?.gallery.length >= 3, 'Flight Tracker AI must retain live, replay, and route-comparison views.');
 assert(projects.find((project) => project.slug === 'wave-factory-essentials')?.gallery.length >= 5, 'Wave Factory Essentials must retain its expanded product-family gallery.');
 const supraconscious = projects.find((project) => project.slug === 'supraconscious-avatar-ai');

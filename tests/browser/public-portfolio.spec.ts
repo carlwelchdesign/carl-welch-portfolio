@@ -20,6 +20,7 @@ const routes = [
   '/work/argent-matchmaking',
   '/work/jolene-ai',
   '/work/progression-lab-ai',
+  '/work/echoatlas',
 ] as const;
 
 const mobileViewports = [
@@ -118,8 +119,8 @@ for (const viewport of mobileViewports) {
 
 test('all return-to-index controls meet the mobile touch-target contract', async ({ page }) => {
   const routeControls = [
-    ['/', '.project-index-return', 7],
-    ['/work', '.project-index-return', 7],
+    ['/', '.project-index-return', 8],
+    ['/work', '.project-index-return', 8],
     ['/archive', '.archive-map-return', 6],
     ['/capabilities', '.capability-index-return', 5],
     ['/experience', '.career-index-return', 11],
@@ -151,8 +152,8 @@ test('all return-to-index controls meet the mobile touch-target contract', async
 
 test('return-to-index controls expose unique contextual names and preserve their destinations', async ({ page }) => {
   const routeControls = [
-    ['/', '.project-index-return', 7, '#work-index'],
-    ['/work', '.project-index-return', 7, '#work-index'],
+    ['/', '.project-index-return', 8, '#work-index'],
+    ['/work', '.project-index-return', 8, '#work-index'],
     ['/archive', '.archive-map-return', 6, '#archive-map'],
     ['/capabilities', '.capability-index-return', 5, '#capability-index'],
     ['/experience', '.career-index-return', 11, '#career-index'],
@@ -465,7 +466,7 @@ test('homepage gives recruiters a synchronized proof summary', async ({ page }) 
 
   const proof = page.getByRole('region', { name: 'Portfolio at a glance' });
   await expect(proof.locator('dt')).toHaveCount(4);
-  await expect(proof.locator('dd')).toHaveText(['20+', '5', '13', '7']);
+  await expect(proof.locator('dd')).toHaveText(['20+', '5', '13', '8']);
   await expect(proof).toContainText('Years across interactive and product work');
   await expect(proof).toContainText('Product engineering roles since 2016');
   await expect(proof).toContainText('Professional recommendations');
@@ -497,6 +498,7 @@ for (const [route, expectedGalleryImages] of [
   ['/work/supraconscious-avatar-ai', 3],
   ['/work/argent-matchmaking', 3],
   ['/work/progression-lab-ai', 2],
+  ['/work/echoatlas', 3],
 ] as const) {
   test(`${route} keeps its repository media gallery intact on mobile`, async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
@@ -585,6 +587,7 @@ for (const route of [
   '/work/supraconscious-avatar-ai',
   '/work/argent-matchmaking',
   '/work/progression-lab-ai',
+  '/work/echoatlas',
 ] as const) {
   test(`${route} renders a responsive project-specific system map`, async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
@@ -615,6 +618,7 @@ for (const [route, heading, decision] of [
   ['/work/supraconscious-avatar-ai', 'Building a reflection product that can be governed.', 'Govern retrieval before expanding it'],
   ['/work/argent-matchmaking', 'Designing for judgment, discretion, and human review.', 'Human-led by design'],
   ['/work/progression-lab-ai', 'Turning harmonic intent into something a musician can hear, inspect, and keep.', 'Constrain model output'],
+  ['/work/echoatlas', 'Turning SAR availability into reviewable evidence.', 'Review before compute'],
 ] as const) {
   test(`${route} explains the problem, contribution, and product decisions`, async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
@@ -652,6 +656,38 @@ test('Jolene case study publishes the approved origin story and stable evidence 
 
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
   expect(overflow).toBeLessThanOrEqual(0);
+});
+
+test('EchoAtlas distinguishes the bounded public demonstration from operational monitoring', async ({ page }) => {
+  await page.goto('/work/echoatlas');
+
+  await expect(page.locator('.project-detail-image img')).toHaveAttribute('src', /analyze-hero/);
+  const gallery = page.locator('#project-gallery');
+  await expect(gallery.getByText('Explore provider availability', { exact: true })).toBeVisible();
+  await expect(gallery.getByText('Review pair comparability', { exact: true })).toBeVisible();
+  await expect(gallery.getByText('Analyze prepared evidence', { exact: true })).toBeVisible();
+
+  const story = page.locator('#case-study');
+  await expect(story).toContainText('machine-generated review candidates');
+  await expect(story).toContainText('Scientific validity remains undetermined');
+
+  const architecture = page.locator('#architecture');
+  await expect(architecture).toContainText('Vercel portfolio surface');
+  await expect(architecture).toContainText('Local raster pipeline');
+  await expect(architecture).toContainText('Versioned analysis bundle');
+
+  const retrospective = page.locator('#retrospective');
+  await expect(retrospective).toContainText('Software verification is not scientific validation');
+  await expect(retrospective).toContainText('operational monitoring remains unimplemented');
+
+  const evidence = page.getByRole('region', { name: 'EchoAtlas evidence and boundaries' });
+  await expect(evidence).toContainText('26 machine-generated candidates');
+  await expect(evidence).toContainText('not confirmed physical change');
+  await expect(evidence).toContainText('does not process arbitrary remote imagery');
+  await expect(page.getByRole('link', { name: 'Open EchoAtlas live demo (opens in a new tab)' })).toHaveAttribute(
+    'href',
+    'https://earth-atlas-ai.vercel.app/',
+  );
 });
 
 test('Jolene case study presents distinct character sheets, the build retrospective, and current architecture', async ({ page }) => {
@@ -715,6 +751,7 @@ for (const [route, role, scope] of [
   ['/work/argent-matchmaking', 'Product engineer and system designer', 'Product strategy, interface art direction, platform architecture, and implementation'],
   ['/work/jolene-ai', 'Product architect and lead builder', 'Product direction, agent architecture, evidence design, character and behavior direction, implementation, evaluation, and release governance'],
   ['/work/progression-lab-ai', 'Creator and independent product engineer', 'Product strategy, interaction design, full-stack engineering, AI orchestration, and music playback'],
+  ['/work/echoatlas', 'Product architect and lead builder', 'Product strategy, system architecture, interaction design, full-stack implementation, evidence boundaries, verification, and release direction'],
 ] as const) {
   test(`${route} presents recruiter-readable project facts above the fold`, async ({ page }) => {
     await page.setViewportSize({ width: 320, height: 720 });
@@ -739,7 +776,8 @@ for (const [route, nextProject, nextHref] of [
   ['/work/supraconscious-avatar-ai', 'Argent Matchmaking', '/work/argent-matchmaking'],
   ['/work/argent-matchmaking', 'Jolene AI', '/work/jolene-ai'],
   ['/work/jolene-ai', 'ProgressionLab', '/work/progression-lab-ai'],
-  ['/work/progression-lab-ai', 'Job Search OS', '/work/job-search-os'],
+  ['/work/progression-lab-ai', 'EchoAtlas', '/work/echoatlas'],
+  ['/work/echoatlas', 'Job Search OS', '/work/job-search-os'],
 ] as const) {
   test(`${route} continues to the next flagship case study`, async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
@@ -1418,8 +1456,9 @@ test('work overview shows every flagship gallery preview without broken media', 
     { name: 'Wave Factory Essentials', previews: 5 },
     { name: 'Supraconscious Avatar AI', previews: 3 },
     { name: 'Argent Matchmaking', previews: 3 },
-    { name: 'Jolene AI', previews: 4 },
+    { name: 'Jolene AI', previews: 5 },
     { name: 'ProgressionLab', previews: 2 },
+    { name: 'EchoAtlas', previews: 3 },
   ];
 
   for (const project of projects) {
@@ -1461,6 +1500,7 @@ test('work index lets recruiters jump to each flagship project', async ({ page }
     ['Argent Matchmaking', '#work-argent-matchmaking'],
     ['Jolene AI', '#work-jolene-ai'],
     ['ProgressionLab', '#work-progression-lab-ai'],
+    ['EchoAtlas', '#work-echoatlas'],
   ] as const;
 
   await expect(index).toBeVisible();
@@ -1504,6 +1544,7 @@ test('homepage project index supports a complete recruiter scan and return path'
     ['Argent Matchmaking', '#work-argent-matchmaking'],
     ['Jolene AI', '#work-jolene-ai'],
     ['ProgressionLab', '#work-progression-lab-ai'],
+    ['EchoAtlas', '#work-echoatlas'],
   ] as const;
 
   await expect(index).toBeVisible();
@@ -1555,6 +1596,7 @@ test('flagship case studies publish unique 1200×630 social cards', async ({ pag
     'argent-matchmaking',
     'jolene-ai',
     'progression-lab-ai',
+    'echoatlas',
   ]) {
     await page.goto(`/work/${slug}`);
     const expectedImage = `${expectedOrigin}/social/${slug}.png`;
@@ -1606,7 +1648,7 @@ test('server-rendered navigation and content remain available without JavaScript
   await expectCorePageContract(page);
   await expect(page.getByRole('link', { name: 'View selected work' })).toBeVisible();
   const homepageProjectIndex = page.getByRole('navigation', { name: 'Project index' });
-  await expect(homepageProjectIndex.getByRole('link')).toHaveCount(7);
+  await expect(homepageProjectIndex.getByRole('link')).toHaveCount(8);
   await expect(homepageProjectIndex.getByRole('link', { name: /Flight Tracker AI/ })).toHaveAttribute(
     'href',
     '#work-flight-tracker-ai',
@@ -1622,12 +1664,12 @@ test('server-rendered navigation and content remain available without JavaScript
 
   await page.goto('/work');
   const projectIndex = page.getByRole('navigation', { name: 'Project index' });
-  await expect(projectIndex.getByRole('link')).toHaveCount(7);
+  await expect(projectIndex.getByRole('link')).toHaveCount(8);
   await expect(projectIndex.getByRole('link', { name: /Argent Matchmaking/ })).toHaveAttribute(
     'href',
     '#work-argent-matchmaking',
   );
-  await expect(page.locator('.project-index-return')).toHaveCount(7);
+  await expect(page.locator('.project-index-return')).toHaveCount(8);
   await expect(page.locator('#work-argent-matchmaking').getByRole('link', { name: /Project index/ })).toHaveAttribute(
     'href',
     '#work-index',
