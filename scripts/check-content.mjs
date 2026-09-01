@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { access, readFile, stat } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { loadTypescriptData } from './load-typescript-data.mjs';
@@ -52,6 +53,18 @@ async function requirePng(relativePath) {
   const bytes = await readFile(path);
   const signature = bytes.subarray(0, 8).toString('hex');
   if (signature !== '89504e470d0a1a0a') throw new Error(`${relativePath} is not a valid PNG file.`);
+}
+
+async function readPngIdentity(relativePath) {
+  const path = await requireFile(relativePath, 24);
+  const bytes = await readFile(path);
+  const signature = bytes.subarray(0, 8).toString('hex');
+  if (signature !== '89504e470d0a1a0a') throw new Error(`${relativePath} is not a valid PNG file.`);
+  return {
+    width: bytes.readUInt32BE(16),
+    height: bytes.readUInt32BE(20),
+    sha256: createHash('sha256').update(bytes).digest('hex'),
+  };
 }
 
 const [
@@ -201,6 +214,46 @@ const jobSearchOs = projects.find((project) => project.slug === 'job-search-os')
 assert(jobSearchOs?.gallery.length >= 6, 'Job Search OS must retain its expanded multi-surface product tour.');
 assert(jobSearchOs?.architecture.nodes.length >= 10, 'Job Search OS must retain its detailed source-grounded topology.');
 assert(!jobSearchOs?.gallery.some((item) => item.src.includes('system-topology')), 'Job Search OS must not render the rejected topology artifact.');
+assert.match(jobSearchOs?.story.contribution ?? '', /LangGraph.*Postgres checkpointing/);
+assert.match(jobSearchOs?.story.contribution ?? '', /LangSmith.*redacted tracing/);
+assert(
+  jobSearchOs?.architecture.nodes.some((node) => node.technology.includes('LangSmith')),
+  'Job Search OS architecture must identify its optional LangSmith observability layer.',
+);
+const echoAtlas = projects.find((project) => project.slug === 'echoatlas');
+assert(echoAtlas, 'EchoAtlas case study must remain published.');
+assert.equal(echoAtlas.maturity, 'deployed_demo', 'EchoAtlas must retain its bounded public-demonstration maturity.');
+assert.equal(echoAtlas.liveUrl, 'https://earth-atlas-ai.vercel.app/');
+assert.deepEqual(
+  echoAtlas.gallery.map((item) => item.label),
+  ['Explore provider availability', 'Review pair comparability', 'Analyze prepared evidence'],
+);
+const echoAtlasMedia = [echoAtlas.image, ...echoAtlas.gallery];
+const echoAtlasMediaIdentities = await Promise.all(echoAtlasMedia.map(async (item) => {
+  const identity = await readPngIdentity(`public${item.src}`);
+  assert.equal(item.width, 1440, `${item.src} metadata must retain the approved desktop width.`);
+  assert.equal(item.height, 960, `${item.src} metadata must retain the approved viewport height.`);
+  assert.equal(identity.width, item.width, `${item.src} width metadata must match the PNG.`);
+  assert.equal(identity.height, item.height, `${item.src} height metadata must match the PNG.`);
+  return identity;
+}));
+requireUnique(
+  echoAtlasMediaIdentities.map((identity) => identity.sha256),
+  'EchoAtlas case-study screenshots',
+);
+assert.match(echoAtlas.story.contribution, /Scientific validity remains undetermined/);
+assert(
+  echoAtlas.boundaries.some((boundary) => boundary.includes('operational monitoring') && boundary.includes('not implemented')),
+  'EchoAtlas must keep operational monitoring outside the shipped capability boundary.',
+);
+assert(
+  echoAtlas.evidence.some((item) => item.id === 'portfolio:claim:echoatlas:prepared-evidence' && /26 machine-generated candidates/.test(item.text)),
+  'EchoAtlas must retain the bounded prepared-evidence claim.',
+);
+assert(
+  echoAtlas.evidence.some((item) => item.id === 'portfolio:claim:echoatlas:public-boundary' && /does not process arbitrary remote imagery/.test(item.text)),
+  'EchoAtlas must retain the public deployment processing boundary.',
+);
 assert(projects.find((project) => project.slug === 'flight-tracker-ai')?.gallery.length >= 3, 'Flight Tracker AI must retain live, replay, and route-comparison views.');
 assert(projects.find((project) => project.slug === 'wave-factory-essentials')?.gallery.length >= 5, 'Wave Factory Essentials must retain its expanded product-family gallery.');
 const supraconscious = projects.find((project) => project.slug === 'supraconscious-avatar-ai');
@@ -324,7 +377,7 @@ assert.match(joleneProject.story.problem, /generator, Starlink, and my MacBook/)
 assert.match(joleneProject.story.contribution, /Jolene is not Dolly, does not impersonate her, and does not imply her endorsement/);
 assert.match(joleneOrigin.text, /chief-of-staff agent/);
 assert.deepEqual(joleneOrigin.limitations, ['Jolene is not Dolly Parton, does not impersonate her, and does not imply her endorsement.']);
-assert.equal(joleneProject.gallery.length, 4, 'Jolene case study must publish four character-system views.');
+assert.equal(joleneProject.gallery.length, 5, 'Jolene case study must publish its origin photograph and four character-system views.');
 assert.equal(
   new Set(joleneProject.gallery.map((item) => item.src)).size,
   joleneProject.gallery.length,
@@ -332,10 +385,15 @@ assert.equal(
 );
 assert.deepEqual(
   joleneProject.gallery.map((item) => item.label),
-  ['Conversation state ensemble', 'Canonical identity lock', 'Greeting keyframes', 'Approved runtime atlas'],
+  ['Nevada field camp', 'Conversation state ensemble', 'Canonical identity lock', 'Abandoned greeting experiment', 'Approved runtime atlas'],
 );
 assert.equal(joleneProject.retrospective?.lessons.length, 4, 'Jolene retrospective must retain all four production lessons.');
-assert.match(joleneProject.retrospective?.heading ?? '', /art direction became engineering/);
+assert.match(joleneProject.retrospective?.heading ?? '', /failed animation effort/);
+assert.match(
+  joleneProject.gallery.find((item) => item.label === 'Abandoned greeting experiment')?.caption ?? '',
+  /did not meet the visual bar.*abandoned this direction rather than ship it/,
+);
+assert.match(joleneProject.retrospective?.summary ?? '', /greeting animation experiment did not.*abandoned that sequence/);
 assert(
   joleneProject.architecture.nodes.some((node) => node.id === 'corpus' && /92 published records/.test(node.detail)),
   'Jolene architecture must identify the deployed reviewed career artifact.',

@@ -39,3 +39,23 @@ Source repository: `progression-lab-ai`
 - `public-library.png` ← live capture of `https://progressionlab.app/progressions?view=public` on August 31, 2026
 
 The Chord Explorer capture was excluded because browser-level MIDI permission was unavailable and the resulting screen did not represent the working product experience.
+
+## Jolene AI
+
+- `nevada-field-camp.png` ← Carl Welch's photograph from the May 2026 Nevada field camp where the work that led to Jolene began
+- `state-ensemble.png` ← Jolene character state exploration board
+- `identity-lock.png` ← Jolene canonical identity reference
+- `greet-keyframes.png` ← archived greeting animation experiment that did not meet the visual bar and was abandoned
+- `approved-runtime-atlas.png` ← manually approved reaction and loading frames used by the live renderer
+
+## EchoAtlas
+
+Source repository: `earth-atlas-ai`
+Source release: the Analyze viewport and independent candidate-queue correction merged in PR `#57` as `5d92cfe`; PR `#58` recorded the release evidence. The public surface was recaptured from `https://earth-atlas-ai.vercel.app/` on 2026-08-31 after both merges.
+
+- `explore-results.png` ← current 1440×960 live Vercel capture with Explore/Analyze navigation, the Bingham Canyon map, and the independently scrollable 17-record provider queue
+- `pair-review.png` ← current 1440×960 live Vercel capture of the approved Umbra pair and completed engineering-comparability review
+- `analyze-workspace.png` ← current 1440×960 live Vercel capture of the prepared Bingham Canyon bundle with candidate C-018 selected and its acquisition provenance visible
+- `analyze-hero.png` ← current 1440×960 live Vercel capture with the 26-candidate independent scroll region, balanced imagery, and selected-candidate evidence
+
+The imagery shown in Analyze is derived from public Umbra SAR data licensed CC BY 4.0. It depicts the approved Bingham Canyon civilian review area and must retain the visible interpretation and attribution boundaries.

@@ -181,7 +181,7 @@ export const projects: PortfolioProject[] = [
       problem:
         'A serious job search splinters across browser tabs, spreadsheets, drafts, inboxes, and repeated research. The difficult part is not producing more material. It is knowing what is credible, what needs review, and what can move forward.',
       contribution:
-        'I designed and built a single-user product that joins role discovery, fit review, career evidence, application materials, tracking, email operations, and LinkedIn planning. Each workflow has visible state, and consequential actions stay in my hands.',
+        'I designed and built a single-user product that joins role discovery, fit review, career evidence, application materials, tracking, email operations, and LinkedIn planning. LangGraph gives the application assistant and recruiting agency durable workflow state with Postgres checkpointing. LangSmith adds optional redacted tracing for agent and workflow diagnostics. Each workflow has visible state, and consequential actions stay in my hands.',
       decisions: [
         {
           title: 'Review before action',
@@ -192,12 +192,12 @@ export const projects: PortfolioProject[] = [
           detail: 'Career claims stay tied to source material, with structured outputs and deterministic fallbacks when model output is incomplete.',
         },
         {
-          title: 'Operations are part of the product',
-          detail: 'Search yield, filters, blockers, and agent handoffs stay visible so a failed run can be understood instead of blindly repeated.',
+          title: 'Make orchestration observable',
+          detail: 'LangGraph owns pause, resume, retry, and checkpoint state where durable orchestration is useful. LangSmith redacted tracing and local quality records help diagnose failures without exposing application materials by default.',
         },
       ],
     },
-    stack: ['Next.js', 'TypeScript', 'PostgreSQL + pgvector', 'OpenAI', 'LangGraph', 'MCP'],
+    stack: ['Next.js', 'TypeScript', 'LangGraph', 'LangSmith', 'PostgreSQL + pgvector', 'OpenAI', 'MCP'],
     architecture: {
       title: 'Human-reviewed career operations',
       summary: 'Four product surfaces share one evidence and orchestration layer; every consequential external action stops at an approval boundary.',
@@ -213,9 +213,9 @@ export const projects: PortfolioProject[] = [
         { id: 'slack', label: 'Jolene command', detail: 'Private operator channel', technology: 'Slack', kind: 'surface', x: 42, y: 345, width: 160 },
         { id: 'mcp', label: 'Local tool access', detail: 'Tracking and preparation tools', technology: 'MCP · stdio', kind: 'surface', x: 42, y: 465, width: 160 },
         { id: 'api', label: 'Workflow API', detail: 'Typed routes and policy checks', technology: 'Next.js App Router', kind: 'service', x: 275, y: 105, width: 160 },
-        { id: 'agents', label: 'Specialist agents', detail: 'Structured outputs + fallbacks', technology: 'OpenAI', kind: 'ai', x: 470, y: 105, width: 165 },
+        { id: 'agents', label: 'Specialist agents', detail: 'Structured outputs + redacted traces', technology: 'OpenAI · LangSmith', kind: 'ai', x: 470, y: 105, width: 165 },
         { id: 'rag', label: 'Evidence RAG', detail: 'Approved career evidence only', technology: 'pgvector', kind: 'ai', x: 275, y: 265, width: 160 },
-        { id: 'graph', label: 'Durable workflows', detail: 'Runs, checkpoints, review state', technology: 'LangGraph', kind: 'service', x: 470, y: 265, width: 165 },
+        { id: 'graph', label: 'Durable workflows', detail: 'Postgres checkpointing + review state', technology: 'LangGraph', kind: 'service', x: 470, y: 265, width: 165 },
         { id: 'worker', label: 'Background worker', detail: 'Embeddings and queued work', technology: 'Node.js · Redis', kind: 'runtime', x: 372, y: 440, width: 170 },
         { id: 'postgres', label: 'System of record', detail: 'Roles, claims, runs, materials', technology: 'PostgreSQL', kind: 'data', x: 710, y: 105, width: 150 },
         { id: 'vector', label: 'Semantic index', detail: 'Career evidence embeddings', technology: 'pgvector', kind: 'data', x: 805, y: 195, width: 150 },
@@ -238,7 +238,7 @@ export const projects: PortfolioProject[] = [
       {
         id: 'portfolio:claim:job-search-os:integrated-workflow',
         sourceIds: ['portfolio:source:project:job-search-os'],
-        text: 'Combines job discovery, fit review, application materials, tracking, email operations, and LinkedIn content workflows in one product.',
+        text: 'Combines job discovery, fit review, application materials, tracking, email operations, and LinkedIn content workflows in one product, with LangGraph and Postgres checkpointing for durable assistant and recruiting-agency workflows plus optional redacted LangSmith tracing.',
         strength: 'strong', maturity: 'production', limitations: ['Protected single-user scope.'], reviewState: 'approved', publicApproved: true,
       },
       {
@@ -814,10 +814,19 @@ export const projects: PortfolioProject[] = [
       width: 1162,
       height: 1353,
     },
-    galleryTitle: 'Identity, behavior, and motion as a designed system',
+    galleryTitle: 'Origin, identity, and an animation experiment',
     gallerySummary:
-      'The character work moved from a single portrait to a documented identity lock, state grammar, keyframe sequence, and bounded runtime atlas. These sheets show the design system behind the visible character.',
+      'The character work began in Nevada, then moved from a single portrait to a documented identity lock and bounded runtime frame set. The gallery also preserves the greeting keyframe experiment that did not meet the visual bar and was abandoned rather than shipped.',
     gallery: [
+      {
+        src: '/projects/jolene-ai/nevada-field-camp.png',
+        alt: 'A MacBook running at a field camp on BLM land in Nevada at sunset, where Carl began the work that led to Jolene AI',
+        width: 800,
+        height: 600,
+        label: 'Nevada field camp',
+        caption: 'In May 2026, I worked from BLM land in Nevada with a generator, Starlink, and my MacBook. Building Job Search OS there led to the idea for Jolene as a broader chief-of-staff agent.',
+        layout: 'wide',
+      },
       {
         src: '/projects/jolene-ai/state-ensemble.png',
         alt: 'Jolene state ensemble board showing idle, blink, greet, excited, listen, think, speak, evidence, boundary, offline, and rest behaviors',
@@ -838,11 +847,11 @@ export const projects: PortfolioProject[] = [
       },
       {
         src: '/projects/jolene-ai/greet-keyframes.png',
-        alt: 'Ten-frame Jolene greeting contact sheet showing the raised-hand wave from rest through apex and settle',
+        alt: 'Archived ten-frame Jolene greeting experiment showing inconsistent raised-hand wave poses',
         width: 6400,
         height: 3680,
-        label: 'Greeting keyframes',
-        caption: 'The wave was built as authored key poses with a complete hand silhouette, consistent baseline, and deliberate settle instead of uncontrolled frame generation.',
+        label: 'Abandoned greeting experiment',
+        caption: 'This authored wave experiment did not meet the visual bar. Identity drift and unstable eyes, hands, and motion made the sequence unusable, so I abandoned this direction rather than ship it. I may revisit animation later with a better process.',
         layout: 'wide',
       },
       {
@@ -851,7 +860,7 @@ export const projects: PortfolioProject[] = [
         width: 1280,
         height: 1380,
         label: 'Approved runtime atlas',
-        caption: 'Only the approved frames ship. Runtime behavior is event-driven, testable, reduced-motion aware, and independent from answer generation.',
+        caption: 'The live renderer uses a separate set of manually approved runtime frames for bounded reactions and the loading dance. Character state is event-driven, testable, reduced-motion aware, and independent from answer generation. The failed greeting sequence above is not part of that runtime.',
         layout: 'standard',
       },
     ],
@@ -860,7 +869,7 @@ export const projects: PortfolioProject[] = [
       problem:
         'After a March 2026 layoff, I spent two weeks that May on BLM land in Nevada with my daughter while she did fieldwork for her geology master’s research. With a generator, Starlink, and my MacBook, I began building Job Search OS. That work showed me I could build something broader: a chief-of-staff agent that could help me organize work, preserve context, and keep moving.',
       contribution:
-        'I imagined a comforting, capable, Jarvis-like partner. Dolly Parton came to mind because I grew up with her music and interviews and associated her with warmth, humor, resilience, and practical encouragement. Jolene is not Dolly, does not impersonate her, and does not imply her endorsement. From that starting point, I led a multi-agent build spanning the portable agent core, private memory, reviewed career evidence, public hybrid RAG, Slack delivery, exact-action approvals, Docker runtimes, prompt-injection defenses, release evaluation, and a researched personality system. I also directed a pixel-character system with a canonical identity, event-driven poses, regression-tested scaling and interaction behavior, and reduced-motion fallbacks. Private and public Jolene remain separate deployments with different credentials, stores, and capabilities.',
+        'I imagined a comforting, capable, Jarvis-like partner. Dolly Parton came to mind because I grew up with her music and interviews and associated her with warmth, humor, resilience, and practical encouragement. Jolene is not Dolly, does not impersonate her, and does not imply her endorsement. From that starting point, I led a multi-agent build spanning the portable agent core, private memory, reviewed career evidence, public hybrid RAG, Slack delivery, exact-action approvals, Docker runtimes, prompt-injection defenses, release evaluation, and a researched personality system. I also directed a pixel-character system with a canonical identity, event-driven reactions, regression-tested scaling and interaction behavior, and reduced-motion fallbacks. The attempted greeting animation did not meet the quality bar, so I stopped that effort and kept the live character bounded to a separate set of approved runtime frames. Private and public Jolene remain separate deployments with different credentials, stores, and capabilities.',
       decisions: [
         {
           title: 'Separate public knowledge from private memory',
@@ -877,15 +886,15 @@ export const projects: PortfolioProject[] = [
       ],
     },
     retrospective: {
-      heading: 'The character only became reliable when art direction became engineering.',
+      heading: 'What the failed animation effort taught me.',
       summary:
-        'The difficult part was not making one attractive portrait. It was preserving the same person, proportions, pixel language, baseline, transparency, and product meaning across every state and viewport. The failures produced a stricter production system.',
+        'The static character design held, but the greeting animation experiment did not. Generated and interpolated frames repeatedly changed Jolene’s face, eyes, hair, hands, and proportions. I abandoned that sequence, preserved the strongest assets, and may revisit a fuller greeting later with a more reliable process.',
       lessons: [
         {
           title: 'Identity drift between poses',
           challenge: 'Pose-by-pose generation changed facial structure, hair volume, body proportions, eye treatment, and scale enough to make Jolene look like a different person.',
           response: 'Lock one canonical master, named landmarks, a silhouette envelope, palette anchors, a common 320 by 460 canvas, and a shared waist baseline. Every other image became pose reference rather than identity authority.',
-          result: 'The runtime now preserves one recognizable character while allowing restrained pose changes.',
+          result: 'These controls improved the approved assets, but they did not make the generated greeting experiment reliable enough to ship.',
         },
         {
           title: 'Transparency versus intentional white',
@@ -896,8 +905,8 @@ export const projects: PortfolioProject[] = [
         {
           title: 'Animation ambition versus control',
           challenge: 'Long generated sequences introduced unstable eyes, hair, hands, and whole-body pumping. More frames did not automatically create better motion.',
-          response: 'Author a few strong key poses, interpolate only controlled movement, keep the baseline fixed, and ship a small approved atlas. Loading uses a deliberate two-pose mirror; reduced motion uses static representatives.',
-          result: 'Fewer trusted frames produce cleaner rhythm, lower runtime cost, and more predictable review.',
+          response: 'Stop the greeting sequence, archive the failed keyframes, and keep the live renderer bounded to a separate set of manually approved runtime frames. Reduced motion uses static representatives.',
+          result: 'The generated keyframe direction was abandoned. A fuller greeting may be revisited later only if the process can preserve identity and motion quality.',
         },
         {
           title: 'Behavior regressions in the live interface',
@@ -1145,6 +1154,181 @@ export const projects: PortfolioProject[] = [
     ],
     repositoryUrl: 'https://github.com/carlwelchdesign/progression-lab-ai',
     liveUrl: 'https://progressionlab.app',
+  },
+  {
+    slug: 'echoatlas',
+    name: 'EchoAtlas',
+    category: 'Geospatial / SAR evidence systems',
+    status: 'Public portfolio demonstration',
+    tone: 'green',
+    number: '08',
+    summary:
+      'A human-in-the-loop synthetic aperture radar workbench for discovering provider-reported imagery, reviewing acquisition pairs, and inspecting deterministic change candidates without turning a heuristic into a claim about the world.',
+    role: 'Product architect and lead builder',
+    scope: 'Product strategy, system architecture, interaction design, full-stack implementation, evidence boundaries, verification, and release direction',
+    image: {
+      src: '/projects/echoatlas/analyze-hero.png',
+      alt: 'EchoAtlas Analyze workspace with public Umbra-derived before and after imagery, machine-generated candidate outlines, and an analyst review queue',
+      width: 1440,
+      height: 960,
+    },
+    galleryTitle: 'From provider availability to bounded human review',
+    gallerySummary:
+      'Explore keeps global navigation separate from reported coverage, pair review exposes engineering comparability before processing, and Analyze carries prepared imagery, provenance, candidates, warnings, and human assessments into one review surface.',
+    gallery: [
+      {
+        src: '/projects/echoatlas/explore-results.png',
+        alt: 'EchoAtlas Explore mode showing the approved Bingham Canyon area, attributed map navigation, provider controls, and an independently scrollable 17-record acquisition-results queue',
+        width: 1440,
+        height: 960,
+        label: 'Explore provider availability',
+        caption: 'MapLibre supports navigation while the equivalent results list carries the provider records, source links, warnings, filters, and pair-selection controls. Global navigation never implies global imagery coverage.',
+        layout: 'wide',
+      },
+      {
+        src: '/projects/echoatlas/pair-review.png',
+        alt: 'EchoAtlas pair-review dialog comparing two public Umbra acquisitions with dates, metadata, licensing, overlap, and an immutable manifest',
+        width: 1440,
+        height: 960,
+        label: 'Review pair comparability',
+        caption: 'The approved pair is 25.1 days apart with about 99.9 percent mutual footprint overlap and matching GEC, VV, and ascending metadata. Those are engineering comparability signals, not proof of scientific validity.',
+        layout: 'wide',
+      },
+      {
+        src: '/projects/echoatlas/analyze-workspace.png',
+        alt: 'EchoAtlas Analyze workspace showing public Umbra-derived before and after imagery, the independently scrollable 26-candidate queue, and selected-candidate acquisition provenance',
+        width: 1440,
+        height: 960,
+        label: 'Analyze prepared evidence',
+        caption: 'A validated versioned bundle brings two real-derived display images, 26 machine-generated review candidates, lineage, warnings, hashes, and Umbra attribution into the human review workspace.',
+        layout: 'wide',
+      },
+    ],
+    story: {
+      heading: 'Turning SAR availability into reviewable evidence.',
+      problem:
+        'Open SAR imagery may be technically available, but availability alone does not make it decision-ready. A useful comparison depends on acquisition geometry, timing, polarization, resolution, overlap, processing choices, and data quality. Even when those conditions are documented, an image difference is not automatically evidence of damage, cause, identity, intent, or operational status.',
+      contribution:
+        'I defined and approved the product scope, civilian-use boundary, demonstration story, interaction direction, architecture, and release decisions. I directed and reviewed agent-assisted implementation across deterministic geospatial processing, FastAPI services, the React workbench, accessibility, testing, packaging, and delivery. EchoAtlas now connects provider metadata discovery, immutable pair review, a checksum-verified local raster pipeline, versioned evidence bundles, and machine-generated review candidates while keeping human judgment and interpretation limits explicit. Scientific validity remains undetermined.',
+      decisions: [
+        {
+          title: 'Review before compute',
+          detail: 'Pair review exposes dates, geometry, overlap, polarization, resolution, licenses, warnings, and a content-hashed manifest before deterministic preparation can begin.',
+        },
+        {
+          title: 'Make the bundle the boundary',
+          detail: 'Python owns deterministic acquisition and raster processing, React owns the analyst experience, and a strict versioned analysis bundle carries identities, parameters, artifacts, candidates, provenance, and limitations between them.',
+        },
+        {
+          title: 'Separate evidence from interpretation',
+          detail: 'The system produces machine-generated review candidates. Supported, Rejected, and Needs context are reversible analyst assessments, not confirmation of physical change or operational truth.',
+        },
+      ],
+    },
+    retrospective: {
+      heading: 'The useful product emerged from keeping each boundary honest.',
+      summary:
+        'The hard work was not drawing boxes over satellite images. It was separating provider availability, engineering comparability, deterministic processing, machine evidence, and human interpretation so each layer could say exactly what it knew and fail safely when it did not.',
+      lessons: [
+        {
+          title: 'Map and list parity clarified the product model',
+          challenge: 'A globe is useful for navigation but can hide source details, exclude non-pointer workflows, and visually imply coverage the providers never reported.',
+          response: 'Keep map and accessible list selection synchronized while making provider status, warnings, metadata, attribution, and every selection control available without the map.',
+          result: 'The non-map path became a clearer evidence surface, not merely an accessibility fallback.',
+        },
+        {
+          title: 'A safe failure protected the evidence',
+          challenge: 'A broad demo could silently substitute synthetic or unrelated imagery when the selected pair did not match a prepared analysis bundle.',
+          response: 'Require exact acquisition identities and a validated bundle contract. Unknown or mismatched pairs fail visibly instead of receiving convenient replacement data.',
+          result: 'The demonstration is deliberately narrow, but every displayed analysis remains tied to the pair the user reviewed.',
+        },
+        {
+          title: 'Deployment should not pretend to be the pipeline',
+          challenge: 'A serverless portfolio surface cannot honestly provide the local system’s raster acquisition, alignment, durable jobs, or arbitrary on-demand processing.',
+          response: 'Keep heavy deterministic processing local. The public path serves bounded metadata discovery, engineering comparability, and the exact prepared Bingham Canyon demonstration.',
+          result: 'The product is publicly reviewable while arbitrary cloud processing and operational monitoring remains unimplemented.',
+        },
+        {
+          title: 'Software verification is not scientific validation',
+          challenge: 'Reproducible candidate output and green workflow tests can be mistaken for proof that the regions represent real physical change.',
+          response: 'Label every region as a machine-generated review candidate, retain interpretation warnings, and keep AI summaries and accuracy claims gated behind qualified independent SAR adjudication.',
+          result: 'The system demonstrates engineering and review quality without claiming precision, recall, calibration, scientific validity, or generalization.',
+        },
+      ],
+    },
+    stack: ['Python', 'FastAPI', 'Rasterio + NumPy', 'React + TypeScript', 'MapLibre GL JS', 'Vite', 'Docker', 'Vercel'],
+    architecture: {
+      title: 'Navigation, evidence, processing, and interpretation stay separate',
+      summary: 'The public interface can discover metadata, compare a pair, and open one approved prepared demonstration. Deterministic raster processing remains local, and a versioned evidence bundle connects it to human review.',
+      groups: [
+        { id: 'surfaces', label: 'Human review surfaces', detail: 'Navigate, compare, inspect, assess', x: 20, y: 35, width: 205, height: 550 },
+        { id: 'boundary', label: 'Public application boundary', detail: 'Validated metadata and pair contracts', x: 250, y: 35, width: 250, height: 550 },
+        { id: 'processing', label: 'Deterministic local processing', detail: 'Pinned inputs and reproducible artifacts', x: 525, y: 35, width: 205, height: 550 },
+        { id: 'evidence', label: 'Evidence and delivery', detail: 'Portable records and bounded hosting', x: 755, y: 35, width: 225, height: 550 },
+      ],
+      nodes: [
+        { id: 'explore', label: 'Explore', detail: 'AOI, provider search, footprints', technology: 'React · MapLibre', kind: 'surface', x: 42, y: 95, width: 160 },
+        { id: 'list', label: 'Accessible results', detail: 'Map and list selection parity', technology: 'Semantic HTML', kind: 'surface', x: 42, y: 215, width: 160 },
+        { id: 'pair', label: 'Pair review', detail: 'Comparability before compute', technology: 'React dialog', kind: 'control', x: 42, y: 345, width: 160 },
+        { id: 'analyze', label: 'Analyze', detail: 'Candidates, evidence, assessments', technology: 'React workbench', kind: 'surface', x: 42, y: 475, width: 160 },
+        { id: 'api', label: 'Workflow API', detail: 'Strict runtime validation', technology: 'FastAPI · Pydantic', kind: 'service', x: 275, y: 95, width: 195 },
+        { id: 'adapters', label: 'Provider adapters', detail: 'Normalized partial-result search', technology: 'Umbra · Sentinel-1', kind: 'integration', x: 275, y: 245, width: 195 },
+        { id: 'manifest', label: 'Immutable selection', detail: 'Pair identity + content hash', technology: 'JSON · GeoJSON', kind: 'control', x: 275, y: 405, width: 195 },
+        { id: 'acquire', label: 'Pinned acquisition', detail: 'Allowlisted, checksum verified', technology: 'Python · AWS CRT', kind: 'service', x: 548, y: 105, width: 160 },
+        { id: 'raster', label: 'Local raster pipeline', detail: 'Crop, align, normalize', technology: 'Rasterio · NumPy', kind: 'runtime', x: 548, y: 260, width: 160 },
+        { id: 'candidates', label: 'Candidate generation', detail: 'Deterministic review prompts', technology: 'SciPy · Python', kind: 'service', x: 548, y: 430, width: 160 },
+        { id: 'catalog', label: 'Provider metadata', detail: 'Availability, footprints, licenses', technology: 'STAC · public catalogs', kind: 'data', x: 785, y: 85, width: 165 },
+        { id: 'bundle', label: 'Versioned analysis bundle', detail: 'Images, lineage, warnings, hashes', technology: 'Schema 1.0.0', kind: 'data', x: 785, y: 225, width: 165 },
+        { id: 'assessments', label: 'Owner assessments', detail: 'Correctable browser-local history', technology: 'Append-only events', kind: 'data', x: 785, y: 365, width: 165 },
+        { id: 'vercel', label: 'Vercel portfolio surface', detail: 'Bounded prepared demonstration', technology: 'Vite · FastAPI function', kind: 'runtime', x: 785, y: 505, width: 165 },
+      ],
+      edges: [
+        { from: 'explore', to: 'api' }, { from: 'list', to: 'api' },
+        { from: 'api', to: 'adapters' }, { from: 'adapters', to: 'catalog' },
+        { from: 'explore', to: 'pair' }, { from: 'pair', to: 'manifest' },
+        { from: 'manifest', to: 'acquire', dashed: true }, { from: 'acquire', to: 'raster' },
+        { from: 'raster', to: 'candidates' }, { from: 'candidates', to: 'bundle' },
+        { from: 'bundle', to: 'analyze' }, { from: 'analyze', to: 'assessments', bidirectional: true },
+        { from: 'api', to: 'vercel', dashed: true }, { from: 'bundle', to: 'vercel', dashed: true, label: 'approved demo only' },
+      ],
+    },
+    maturity: 'deployed_demo',
+    sourceId: 'portfolio:source:project:echoatlas',
+    evidence: [
+      {
+        id: 'portfolio:claim:echoatlas:explore-review',
+        sourceIds: ['portfolio:source:project:echoatlas'],
+        text: 'Normalizes bounded Umbra and Sentinel-1 provider metadata into an Explore workflow with attributed map navigation, equivalent non-map results, explicit provider failures, pair selection, and engineering comparability review.',
+        strength: 'strong', maturity: 'deployed_demo', limitations: ['Provider-reported availability does not establish global coverage or scientific pair suitability.'], reviewState: 'approved', publicApproved: true,
+      },
+      {
+        id: 'portfolio:claim:echoatlas:prepared-evidence',
+        sourceIds: ['portfolio:source:project:echoatlas'],
+        text: 'The approved Bingham Canyon demonstration uses two pinned public Umbra acquisitions, checksum-verified local preparation, two 361 by 512 real-derived display images, and a versioned bundle containing provenance, warnings, hashes, and 26 machine-generated candidates.',
+        strength: 'strong', maturity: 'deployed_demo', limitations: ['The candidates are review prompts, not confirmed physical change or calibrated detections.'], reviewState: 'approved', publicApproved: true,
+      },
+      {
+        id: 'portfolio:claim:echoatlas:human-boundary',
+        sourceIds: ['portfolio:source:project:echoatlas'],
+        text: 'Keeps machine evidence separate from human judgment through explicit, correctable Supported, Rejected, and Needs context assessments plus persistent interpretation warnings.',
+        strength: 'strong', maturity: 'deployed_demo', limitations: ['Assessment history is browser-local convenience storage, not a durable multi-user audit service.'], reviewState: 'approved', publicApproved: true,
+      },
+      {
+        id: 'portfolio:claim:echoatlas:public-boundary',
+        sourceIds: ['portfolio:source:project:echoatlas'],
+        text: 'The public Vercel demonstration exposes the Explore-first interface, lightweight metadata and comparability APIs, and one exact prepared real-derived workflow. It does not process arbitrary remote imagery or provide operational monitoring.',
+        strength: 'moderate', maturity: 'deployed_demo', limitations: ['No authentication, public SLA, durable server-side jobs, or operational support is claimed.'], reviewState: 'approved', publicApproved: true,
+      },
+    ],
+    boundaries: [
+      'EchoAtlas surfaces machine-generated review candidates. They are not confirmed physical change, damage, cause, identity, intent, safety status, or operational truth.',
+      'Scientific validity remains undetermined. Qualified independent SAR adjudication is incomplete, so no accuracy, precision, recall, calibration, confidence, or generalization claim is supported.',
+      'The public application supports bounded metadata discovery, engineering comparability, and one prepared Bingham Canyon demonstration. Raster acquisition and processing remain local, and arbitrary remote pairs are not analyzed on demand.',
+      'Global map navigation does not imply global imagery coverage, current provider availability, paid tasking, or a scientifically suitable pair.',
+      'AI summaries, multi-user authentication, durable assessment storage, operational monitoring, automatic alerts, incident feeds, and a public SLA are not implemented.',
+    ],
+    repositoryUrl: 'https://github.com/carlwelchdesign/earth-atlas-ai',
+    liveUrl: 'https://earth-atlas-ai.vercel.app/',
   },
 ];
 
