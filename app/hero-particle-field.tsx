@@ -7,6 +7,7 @@ const MOBILE_PARTICLE_COUNT = 6000;
 const MINIMUM_PARTICLE_OPACITY = 0.55;
 const CLOUD_COUNT = 9;
 const PIXEL_SIZE = 2;
+const TRAIL_STEPS = 2;
 const MOBILE_BREAKPOINT = 720;
 const MAX_DEVICE_PIXEL_RATIO = 2;
 const MAX_FRAME_DELTA_SECONDS = 1 / 30;
@@ -65,8 +66,8 @@ function createParticles(width: number, height: number, count: number): Particle
     return {
       x: Math.max(0, Math.min(width - PIXEL_SIZE, center.x + gaussian(random) * center.spreadX)),
       y: Math.max(0, Math.min(height - PIXEL_SIZE, center.y + gaussian(random) * center.spreadY)),
-      vx: (random() - 0.35) * 46,
-      vy: (random() - 0.5) * 34,
+      vx: 52 + (random() - 0.5) * 72,
+      vy: (random() - 0.5) * 78,
       phase: random() * TAU,
       opacity: MINIMUM_PARTICLE_OPACITY + random() * (1 - MINIMUM_PARTICLE_OPACITY),
       windAffinity: 0.72 + random() * 0.5,
@@ -77,12 +78,33 @@ function createParticles(width: number, height: number, count: number): Particle
 function sampleWind(particle: Particle, width: number, height: number, elapsedSeconds: number) {
   const x = particle.x / Math.max(1, width);
   const y = particle.y / Math.max(1, height);
+  let velocityX = 58
+    + Math.sin(y * TAU + elapsedSeconds * 0.48) * 68
+    + Math.cos(y * TAU * 2 - elapsedSeconds * 0.31 + particle.phase) * 24;
+  let velocityY = Math.sin(x * TAU - elapsedSeconds * 0.44) * 66
+    + Math.cos(x * TAU * 2 + elapsedSeconds * 0.27 + particle.phase * 0.5) * 22;
+
+  const vortices = [
+    [0.25 + Math.sin(elapsedSeconds * 0.21) * 0.12, 0.27 + Math.cos(elapsedSeconds * 0.17) * 0.11, 142],
+    [0.72 + Math.cos(elapsedSeconds * 0.16) * 0.13, 0.55 + Math.sin(elapsedSeconds * 0.2) * 0.12, -156],
+    [0.43 + Math.sin(elapsedSeconds * 0.13) * 0.16, 0.82 + Math.cos(elapsedSeconds * 0.19) * 0.08, 128],
+  ] as const;
+  for (const [centerX, centerY, strength] of vortices) {
+    const dx = x - centerX;
+    const dy = y - centerY;
+    const distanceSquared = dx * dx + dy * dy;
+    const radiusSquared = 0.115;
+    if (distanceSquared > 0.0001 && distanceSquared < radiusSquared) {
+      const pressure = 1 - distanceSquared / radiusSquared;
+      const inverseDistance = 1 / Math.sqrt(distanceSquared);
+      velocityX -= dy * inverseDistance * strength * pressure;
+      velocityY += dx * inverseDistance * strength * pressure;
+    }
+  }
+
   return {
-    x: (24
-      + Math.sin(y * TAU + elapsedSeconds * 0.26) * 38
-      + Math.cos(y * TAU * 2 - elapsedSeconds * 0.15 + particle.phase) * 13) * particle.windAffinity,
-    y: (Math.sin(x * TAU - elapsedSeconds * 0.22) * 31
-      + Math.cos(x * TAU * 2 + elapsedSeconds * 0.12 + particle.phase * 0.5) * 11) * particle.windAffinity,
+    x: velocityX * particle.windAffinity,
+    y: velocityY * particle.windAffinity,
   };
 }
 
@@ -96,14 +118,15 @@ function stepParticles(
 ) {
   let repelledParticles = 0;
   let reboundEvents = 0;
+  let cumulativeSpeed = 0;
   const elapsedSeconds = elapsedMilliseconds / 1000;
   const maximumX = Math.max(0, width - PIXEL_SIZE);
   const maximumY = Math.max(0, height - PIXEL_SIZE);
 
   for (const particle of particles) {
     const wind = sampleWind(particle, width, height, elapsedSeconds);
-    let accelerationX = (wind.x - particle.vx) * 1.4;
-    let accelerationY = (wind.y - particle.vy) * 1.4;
+    let accelerationX = (wind.x - particle.vx) * 2.15;
+    let accelerationY = (wind.y - particle.vy) * 2.15;
 
     if (pointer.active) {
       const dx = particle.x - pointer.x;
@@ -119,12 +142,15 @@ function stepParticles(
       }
     }
 
-    particle.vx = (particle.vx + accelerationX * deltaSeconds) * 0.997;
-    particle.vy = (particle.vy + accelerationY * deltaSeconds) * 0.997;
+    particle.vx = (particle.vx + accelerationX * deltaSeconds) * 0.998;
+    particle.vy = (particle.vy + accelerationY * deltaSeconds) * 0.998;
     const speed = Math.sqrt(particle.vx * particle.vx + particle.vy * particle.vy);
-    if (speed > 290) {
-      particle.vx = (particle.vx / speed) * 290;
-      particle.vy = (particle.vy / speed) * 290;
+    if (speed > 420) {
+      particle.vx = (particle.vx / speed) * 420;
+      particle.vy = (particle.vy / speed) * 420;
+      cumulativeSpeed += 420;
+    } else {
+      cumulativeSpeed += speed;
     }
     particle.x += particle.vx * deltaSeconds;
     particle.y += particle.vy * deltaSeconds;
@@ -149,13 +175,31 @@ function stepParticles(
     }
   }
 
-  return { repelledParticles, reboundEvents };
+  return {
+    repelledParticles,
+    reboundEvents,
+    averageSpeed: cumulativeSpeed / Math.max(1, particles.length),
+  };
 }
 
 function drawParticles(context: CanvasRenderingContext2D, particles: Particle[], width: number, height: number) {
   context.clearRect(0, 0, width, height);
   context.fillStyle = '#090c09';
   for (const particle of particles) {
+    context.globalAlpha = particle.opacity * 0.12;
+    context.fillRect(
+      Math.floor(particle.x - particle.vx * 0.04),
+      Math.floor(particle.y - particle.vy * 0.04),
+      1,
+      1,
+    );
+    context.globalAlpha = particle.opacity * 0.24;
+    context.fillRect(
+      Math.floor(particle.x - particle.vx * 0.02),
+      Math.floor(particle.y - particle.vy * 0.02),
+      1,
+      1,
+    );
     context.globalAlpha = particle.opacity;
     context.fillRect(Math.floor(particle.x), Math.floor(particle.y), PIXEL_SIZE, PIXEL_SIZE);
   }
@@ -190,6 +234,7 @@ export function HeroParticleField() {
     let wakeEvents = 0;
     let repelledParticles = 0;
     let reboundEvents = 0;
+    let averageSpeed = 0;
     let lastFrameTime = 0;
     let animationFrame: number | null = null;
     let inView = false;
@@ -202,6 +247,7 @@ export function HeroParticleField() {
       canvas.dataset.wakeEvents = String(wakeEvents);
       canvas.dataset.repelledParticles = String(repelledParticles);
       canvas.dataset.reboundEvents = String(reboundEvents);
+      canvas.dataset.averageSpeed = String(Math.round(averageSpeed));
       canvas.dataset.pointerSpeed = String(Math.round(pointer.speed));
       canvas.dataset.boundsViolations = String(countBoundsViolations(particles, width, height));
     };
@@ -224,6 +270,7 @@ export function HeroParticleField() {
       const result = stepParticles(particles, width, height, deltaSeconds, time, pointer);
       repelledParticles = result.repelledParticles;
       reboundEvents += result.reboundEvents;
+      averageSpeed = result.averageSpeed;
       pointer.speed *= 0.91;
       frameCount += 1;
       render();
@@ -332,7 +379,8 @@ export function HeroParticleField() {
       data-minimum-opacity={MINIMUM_PARTICLE_OPACITY}
       data-cloud-count={CLOUD_COUNT}
       data-boundary-mode="hard-rebound"
-      data-weather-mode="procedural"
+      data-flow-pattern="multi-vortex-circulation"
+      data-trail-steps={TRAIL_STEPS}
       data-target-fps="60"
     />
   );

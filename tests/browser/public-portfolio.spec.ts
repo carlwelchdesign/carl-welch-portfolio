@@ -608,13 +608,15 @@ test('homepage hero renders dense crisp pixel clouds with border rebounds and po
   await expect(canvas).toHaveAttribute('data-minimum-opacity', '0.55');
   await expect(canvas).toHaveAttribute('data-cloud-count', '9');
   await expect(canvas).toHaveAttribute('data-boundary-mode', 'hard-rebound');
-  await expect(canvas).toHaveAttribute('data-weather-mode', 'procedural');
+  await expect(canvas).toHaveAttribute('data-flow-pattern', 'multi-vortex-circulation');
+  await expect(canvas).toHaveAttribute('data-trail-steps', '2');
   await expect(canvas).toHaveAttribute('data-target-fps', '60');
   await expect(canvas).toHaveCSS('pointer-events', 'none');
   await expect(canvas).toHaveAttribute('data-render-mode', 'dynamic');
   await expect(canvas).toHaveAttribute('data-quality', 'desktop');
   await expect(canvas).toHaveAttribute('data-active', 'true');
   await expect.poll(async () => Number(await canvas.getAttribute('data-frame-count'))).toBeGreaterThan(2);
+  await expect.poll(async () => Number(await canvas.getAttribute('data-average-speed'))).toBeGreaterThan(70);
   await expect(canvas).toHaveAttribute('data-bounds-violations', '0');
 
   const particleCount = Number(await canvas.getAttribute('data-particle-count'));
