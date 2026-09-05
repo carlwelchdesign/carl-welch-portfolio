@@ -102,7 +102,7 @@ export function JoleneEvidence({ evidence, onOpen }: JoleneEvidenceProps) {
       {...(!hasClaims ? { open: true } : {})}
     >
       <summary>
-        <span>{hasClaims ? 'See what supports this answer' : 'No matching example found'}</span>
+        <span>{hasClaims ? 'See what supports this answer' : 'No public example is linked yet'}</span>
         <small>{sourceCount} {sourceCount === 1 ? 'source' : 'sources'}</small>
       </summary>
 
@@ -147,7 +147,7 @@ export function JoleneEvidence({ evidence, onOpen }: JoleneEvidenceProps) {
 
                       {claim.limitations.length > 0 ? (
                         <div className="jolene-claim-limitations">
-                          <strong>What this doesn’t establish</strong>
+                          <strong>Context for the conversation</strong>
                           <ul>
                             {claim.limitations.map((limitation) => <li key={limitation}>{limitation}</li>)}
                           </ul>
@@ -161,7 +161,7 @@ export function JoleneEvidence({ evidence, onOpen }: JoleneEvidenceProps) {
           </ol>
         ) : (
           <p className="jolene-no-evidence">
-            I couldn’t find a strong enough example in Carl’s portfolio to support that answer.
+            Carl can add the most useful context for that question directly.
           </p>
         )}
 

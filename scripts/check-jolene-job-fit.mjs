@@ -68,7 +68,7 @@ try {
         assert.equal(requirement.evidenceIds.length, 0, `${requirement.assessment} must not fabricate evidence`);
       }
     }
-    assert.ok(response.caveats.some((caveat) => /not a recommendation|blanket fit/i.test(caveat)));
+    assert.ok(response.caveats.some((caveat) => /work can do the talking|not a conclusion about Carl/i.test(caveat)));
   }
 
   await assert.rejects(

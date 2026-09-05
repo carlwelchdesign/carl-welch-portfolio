@@ -935,13 +935,13 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .jolene-job-fit-result-header h3 { margin-bottom: 0; }
 .jolene-job-fit-result-header button { flex: 0 0 auto; border-color: var(--line); background: transparent; color: var(--paper); }
 .jolene-job-fit-results > .jolene-job-fit-policy { padding: 16px 20px 0; }
-.jolene-job-fit-counts { margin: 0; padding: 0 20px 18px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; }
+.jolene-job-fit-counts { margin: 0; padding: 0 20px 18px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; }
 .jolene-job-fit-counts > div { min-height: 68px; padding: 9px; display: flex; flex-direction: column-reverse; justify-content: space-between; border: 1px solid var(--line); }
 .jolene-job-fit-counts dt { color: var(--muted); font: 7px/1.3 var(--font-geist-mono), monospace; letter-spacing: 0.05em; text-transform: uppercase; }
 .jolene-job-fit-counts dd { margin: 0; font-size: 24px; font-weight: 750; }
 .jolene-job-fit-counts [data-assessment='direct'] dd { color: var(--green); }
 .jolene-job-fit-counts [data-assessment='adjacent'] dd { color: var(--orange); }
-.jolene-job-fit-counts [data-assessment='missing'] dd { color: var(--red); }
+.jolene-job-fit-counts [data-assessment='conversation'] dd { color: var(--paper); }
 .jolene-job-fit-redactions { margin: 0 20px 18px; padding: 10px; border: 1px solid var(--green); color: var(--paper); font-size: 11px; line-height: 1.4; }
 .jolene-job-fit-requirements { margin: 0; padding: 0 20px; display: grid; gap: 12px; list-style: none; }
 .jolene-job-fit-requirements > li { padding: 15px; border: 1px solid var(--line); background: var(--ink); }
@@ -951,8 +951,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .jolene-job-fit-requirements header > strong { padding: 5px 7px; border: 1px solid currentColor; }
 .jolene-job-fit-requirements header > strong[data-assessment='direct'] { color: var(--green); }
 .jolene-job-fit-requirements header > strong[data-assessment='adjacent'] { color: var(--orange); }
-.jolene-job-fit-requirements header > strong[data-assessment='missing'] { color: var(--red); }
-.jolene-job-fit-requirements header > strong[data-assessment='unknown'] { color: var(--muted); }
+.jolene-job-fit-requirements header > strong[data-assessment='conversation'] { color: var(--paper); }
 .jolene-job-fit-requirements h4 { margin: 18px 0 8px; font-size: 18px; line-height: 1.15; letter-spacing: -0.025em; }
 .jolene-job-fit-requirements > li > p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.45; }
 .jolene-job-fit-evidence, .jolene-job-fit-limitations { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); }
