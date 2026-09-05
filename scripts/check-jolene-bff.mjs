@@ -235,6 +235,7 @@ try {
     corpusVersion: answer.corpusVersion,
     projectPath: '/work/jolene-ai',
     evidenceIds: [answer.citations[0].evidenceId],
+    responseBeat: 'story_turn',
     turnCount: 1,
     expiresAt: new Date(Date.now() + 15 * 60_000).toISOString(),
   };
@@ -249,6 +250,14 @@ try {
   });
   assert.equal(browserAnswer.corpusVersion, answer.corpusVersion);
   assert.deepEqual(browserAnswer.conversationContext, conversationContext);
+  assert.throws(
+    () => browserAdapter.answer({
+      question: 'What about its security?',
+      conversationContext: { ...conversationContext, responseBeat: 'surprise' },
+    }),
+    (error) => error.path === 'answerRequest.conversationContext.responseBeat',
+    'unknown response beats must remain fail-closed',
+  );
   assert.equal(browserCalls[0].url, '/api/jolene/answer');
   assert.equal(new Headers(browserCalls[0].init.headers).has('authorization'), false);
   assert.deepEqual(JSON.parse(browserCalls[0].init.body), {

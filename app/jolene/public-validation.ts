@@ -4,6 +4,7 @@ import {
   evidenceStrengths,
   jobRequirementAssessments,
   projectMaturities,
+  publicConversationResponseBeats,
   publicEvidenceSourceTypes,
   publicJoleneErrorCodes,
   type ContactIntentRequest,
@@ -18,6 +19,7 @@ import {
   type ProjectMaturity,
   type PublicClaim,
   type PublicConversationContext,
+  type PublicConversationResponseBeat,
   type PublicEvidenceCitation,
   type PublicEvidenceManifest,
   type PublicEvidenceSourceType,
@@ -186,7 +188,7 @@ function parsePublicConversationContext(
   const item = readRecord(value, path);
   requireOnlyKeys(
     item,
-    ['corpusVersion', 'projectPath', 'evidenceIds', 'turnCount', 'expiresAt'],
+    ['corpusVersion', 'projectPath', 'evidenceIds', 'responseBeat', 'turnCount', 'expiresAt'],
     path,
   );
   const projectPath = item.projectPath === undefined
@@ -204,6 +206,13 @@ function parsePublicConversationContext(
       `${path}.evidenceIds`,
       PUBLIC_JOLENE_LIMITS.conversationEvidenceIds,
     );
+  const responseBeat = item.responseBeat === undefined
+    ? undefined
+    : readEnum(
+      item.responseBeat,
+      publicConversationResponseBeats,
+      `${path}.responseBeat`,
+    ) as PublicConversationResponseBeat;
   if (evidenceIds) {
     if (evidenceIds.length === 0) {
       throw new PublicJoleneContractError(`${path}.evidenceIds`, 'must not be empty');
@@ -238,6 +247,7 @@ function parsePublicConversationContext(
     ),
     ...(projectPath ? { projectPath } : {}),
     ...(evidenceIds ? { evidenceIds } : {}),
+    ...(responseBeat ? { responseBeat } : {}),
     turnCount: item.turnCount as number,
     expiresAt: readIsoDate(item.expiresAt, `${path}.expiresAt`),
   };
