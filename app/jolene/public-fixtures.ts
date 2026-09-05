@@ -148,7 +148,10 @@ function createJobFitResponse(scenario: PublicJoleneFixtureScenario): JobFitResp
         },
       ],
       citations: [],
-      caveats: ['Let’s start where the work can do the talking: this is an evidence-backed positioning view of Carl’s published work against this role.'],
+      caveats: [
+        'Let’s start where the work can do the talking: this is an evidence-backed positioning view of Carl’s published work against this role.',
+        'This comparison is not a recommendation to hire or a blanket fit score.',
+      ],
       suggestedFollowUpQuestions: ['Which best story should Carl lead with for this role?'],
       corpusVersion: scenario === 'empty_corpus' ? emptyManifest.corpusVersion : fixtureCorpusVersion,
     };
@@ -189,6 +192,7 @@ function createJobFitResponse(scenario: PublicJoleneFixtureScenario): JobFitResp
     citations,
     caveats: [
       'Let’s start where the work can do the talking: this is an evidence-backed positioning view of Carl’s published work against this role.',
+      'This comparison is not a recommendation to hire or a blanket fit score.',
       'Where this public portfolio does not make a direct claim, treat that as an invitation for Carl to tell the right story—not a conclusion about Carl.',
     ],
     suggestedFollowUpQuestions: [
