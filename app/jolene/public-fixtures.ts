@@ -122,6 +122,14 @@ function createAnswerResponse(scenario: PublicJoleneFixtureScenario): PortfolioA
       'What limitations remain in the cited work?',
     ],
     corpusVersion: fixtureCorpusVersion,
+    conversationContext: {
+      corpusVersion: fixtureCorpusVersion,
+      projectPath: '/work/jolene-ai',
+      evidenceIds: selectedCitations.map((citation) => citation.evidenceId),
+      responseBeat: 'story_turn',
+      turnCount: 1,
+      expiresAt: '2099-01-01T00:00:00.000Z',
+    },
   };
 }
 

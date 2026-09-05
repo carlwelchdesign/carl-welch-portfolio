@@ -117,10 +117,20 @@ export type PublicClaim = {
   limitations: string[];
 };
 
+export const publicConversationResponseBeats = [
+  'contextual_spark',
+  'story_turn',
+  'candid_directness',
+  'quiet_care',
+  'none',
+] as const;
+export type PublicConversationResponseBeat = (typeof publicConversationResponseBeats)[number];
+
 export type PublicConversationContext = {
   corpusVersion: string;
   projectPath?: string;
   evidenceIds?: string[];
+  responseBeat?: PublicConversationResponseBeat;
   turnCount: number;
   expiresAt: string;
 };
