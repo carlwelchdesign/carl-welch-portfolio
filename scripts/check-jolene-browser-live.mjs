@@ -32,6 +32,14 @@ try {
   );
   await page.getByRole('button', { name: /Compare requirements/ }).click();
   await page.getByRole('heading', { name: 'How the role lines up' }).waitFor();
+  await page.getByText('Evidence-backed strengths').waitFor();
+  const roleCopy = await page.locator('.jolene-job-fit-results').innerText();
+  assert.match(roleCopy, /Transferable proof|Interview conversations|Evidence-backed strengths/);
+  assert.doesNotMatch(
+    roleCopy,
+    /\b(?:unknown|missing evidence|no matching example found|weaker fit)\b/i,
+    'role comparison must use sales-first visitor labels rather than raw deficit states',
+  );
 
   const accessibility = await new AxeBuilder({ page })
     .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])

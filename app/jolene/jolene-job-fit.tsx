@@ -18,12 +18,19 @@ import { JoleneCitationLink } from './jolene-evidence';
 import { PublicJoleneContractError } from './public-validation';
 import { trackAnalytics } from '../analytics/analytics-client';
 
-const assessmentLabels: Record<JobRequirementAssessment, string> = {
-  direct: 'Direct evidence',
-  adjacent: 'Adjacent evidence',
-  missing: 'Missing evidence',
-  unknown: 'Unknown',
+type VisitorAssessment = 'direct' | 'adjacent' | 'conversation';
+
+const assessmentLabels: Record<VisitorAssessment, string> = {
+  direct: 'Evidence-backed strengths',
+  adjacent: 'Transferable proof',
+  conversation: 'Interview conversations',
 };
+
+function visitorAssessment(assessment: JobRequirementAssessment): VisitorAssessment {
+  if (assessment === 'direct') return 'direct';
+  if (assessment === 'adjacent') return 'adjacent';
+  return 'conversation';
+}
 
 const redactionLabels: Record<JobDescriptionRedaction, string> = {
   credential: 'credential-like value',
@@ -114,9 +121,12 @@ export function JoleneJobFit({
   if (comparison) {
     const { response, redactions } = comparison;
     const citationsById = new Map(response.citations.map((citation) => [citation.evidenceId, citation]));
-    const counts = response.requirements.reduce<Record<JobRequirementAssessment, number>>(
-      (totals, requirement) => ({ ...totals, [requirement.assessment]: totals[requirement.assessment] + 1 }),
-      { direct: 0, adjacent: 0, missing: 0, unknown: 0 },
+    const counts = response.requirements.reduce<Record<VisitorAssessment, number>>(
+      (totals, requirement) => {
+        const assessment = visitorAssessment(requirement.assessment);
+        return { ...totals, [assessment]: totals[assessment] + 1 };
+      },
+      { direct: 0, adjacent: 0, conversation: 0 },
     );
 
     return (
@@ -130,11 +140,11 @@ export function JoleneJobFit({
         </div>
 
         <p className="jolene-job-fit-policy">
-          Each requirement stands on its own. If the portfolio does not answer one clearly, that is a good question to bring to Carl.
+          Start with the strongest proof. Where this portfolio cannot tell the full story on its own, Jolene turns it into a useful conversation with Carl.
         </p>
 
         <dl className="jolene-job-fit-counts" aria-label="Requirement assessment counts">
-          {(Object.keys(assessmentLabels) as JobRequirementAssessment[]).map((assessment) => (
+          {(Object.keys(assessmentLabels) as VisitorAssessment[]).map((assessment) => (
             <div data-assessment={assessment} key={assessment}>
               <dt>{assessmentLabels[assessment]}</dt>
               <dd>{counts[assessment]}</dd>
@@ -151,11 +161,12 @@ export function JoleneJobFit({
         <ol className="jolene-job-fit-requirements">
           {response.requirements.map((requirement, index) => {
             const sources = evidenceFor(requirement.evidenceIds, citationsById);
+            const assessment = visitorAssessment(requirement.assessment);
             return (
               <li key={requirement.requirementId}>
                 <header>
                   <span>Requirement {String(index + 1).padStart(2, '0')}</span>
-                  <strong data-assessment={requirement.assessment}>{assessmentLabels[requirement.assessment]}</strong>
+                  <strong data-assessment={assessment}>{assessmentLabels[assessment]}</strong>
                 </header>
                 <h4>{requirement.requirement}</h4>
                 <p>{requirement.explanation}</p>
@@ -176,12 +187,12 @@ export function JoleneJobFit({
                     ))}
                   </div>
                 ) : (
-                  <p className="jolene-job-fit-no-source">No matching example found.</p>
+                  <p className="jolene-job-fit-no-source">A useful story for Carl to address directly.</p>
                 )}
 
                 {requirement.limitations.length > 0 ? (
                   <div className="jolene-job-fit-limitations">
-                    <strong>What this doesn’t establish</strong>
+                    <strong>Context for the conversation</strong>
                     <ul>{requirement.limitations.map((limitation) => <li key={limitation}>{limitation}</li>)}</ul>
                   </div>
                 ) : null}
@@ -213,7 +224,7 @@ export function JoleneJobFit({
       <p className="jolene-contact-kicker">Role comparison</p>
       <h3 id="jolene-job-fit-title">Paste a job description</h3>
       <p className="jolene-job-fit-policy">
-        Jolene compares each requirement with examples from Carl’s work and tells you where the match is direct, adjacent, or unclear.
+        Jolene starts with Carl’s strongest relevant proof, then identifies transferable stories and useful interview conversations.
       </p>
       <label htmlFor="jolene-job-description">Job description</label>
       <textarea

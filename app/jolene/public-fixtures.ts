@@ -140,8 +140,8 @@ function createJobFitResponse(scenario: PublicJoleneFixtureScenario): JobFitResp
         },
       ],
       citations: [],
-      caveats: ['This comparison is not a recommendation to hire or a blanket fit score.'],
-      suggestedFollowUpQuestions: ['Which requirement should be clarified with Carl directly?'],
+      caveats: ['Let’s start where the work can do the talking: this is an evidence-backed positioning view of Carl’s published work against this role.'],
+      suggestedFollowUpQuestions: ['Which best story should Carl lead with for this role?'],
       corpusVersion: scenario === 'empty_corpus' ? emptyManifest.corpusVersion : fixtureCorpusVersion,
     };
   }
@@ -180,8 +180,8 @@ function createJobFitResponse(scenario: PublicJoleneFixtureScenario): JobFitResp
     requirements,
     citations,
     caveats: [
-      'This comparison considers each requirement separately; it is not a recommendation to hire or a blanket fit score.',
-      'A visitor should confirm missing or ambiguous requirements with Carl directly.',
+      'Let’s start where the work can do the talking: this is an evidence-backed positioning view of Carl’s published work against this role.',
+      'Where this public portfolio does not make a direct claim, treat that as an invitation for Carl to tell the right story—not a conclusion about Carl.',
     ],
     suggestedFollowUpQuestions: [
       'Which requirement has the strongest direct evidence?',
