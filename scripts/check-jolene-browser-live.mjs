@@ -32,12 +32,12 @@ try {
   );
   await page.getByRole('button', { name: /Compare requirements/ }).click();
   await page.getByRole('heading', { name: 'How the role lines up' }).waitFor();
-  await page.getByText('Evidence-backed strengths').waitFor();
+  await page.locator('.jolene-job-fit-results').getByText('Evidence-backed strengths').first().waitFor();
   const roleCopy = await page.locator('.jolene-job-fit-results').innerText();
-  assert.match(roleCopy, /Transferable proof|Interview conversations|Evidence-backed strengths/);
+  assert.match(roleCopy, /Transferable proof|Interview conversations|Evidence-backed strengths/i);
   assert.doesNotMatch(
     roleCopy,
-    /\b(?:unknown|missing evidence|no matching example found|weaker fit)\b/i,
+    /\b(?:unknown|missing evidence|missing public evidence|no matching example found|weaker fit|does not currently include)\b/i,
     'role comparison must use sales-first visitor labels rather than raw deficit states',
   );
 
@@ -50,6 +50,7 @@ try {
 
   await page.getByRole('button', { name: 'Questions' }).click();
   await page.getByText('See what supports this answer').click();
+  await page.locator('.jolene-claim summary').first().click();
   const citation = page.locator('.jolene-citation').first();
   const citationHref = await citation.getAttribute('href');
   assert.match(citationHref, /^\/[a-z0-9/-]+#[a-z0-9-]+$/);

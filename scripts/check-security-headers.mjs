@@ -23,6 +23,7 @@ for (const directive of [
   "frame-ancestors 'none'",
   "object-src 'none'",
   "connect-src 'self' https://*.ingest.sentry.io https://*.ingest.us.sentry.io",
+  "script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com",
   'upgrade-insecure-requests',
 ]) {
   assert.ok(csp.includes(directive), `Missing CSP directive: ${directive}`);

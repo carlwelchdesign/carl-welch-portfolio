@@ -153,7 +153,7 @@ function createJobFitResponse(scenario: PublicJoleneFixtureScenario): JobFitResp
       assessment: 'direct',
       explanation: 'A cited project shows a typed browser-to-service product implementation.',
       evidenceIds: [citations[1].evidenceId],
-      limitations: ['A portfolio project does not establish experience in every product domain.'],
+      limitations: ['This case study shows one product domain; Carl can add the broader context in conversation.'],
     },
     {
       requirementId: 'req:0000000000000003',
@@ -170,9 +170,9 @@ function createJobFitResponse(scenario: PublicJoleneFixtureScenario): JobFitResp
       requirementId: 'req:0000000000000004',
       requirement: 'Operate Kubernetes in production',
       assessment: 'missing',
-      explanation: 'The portfolio does not currently include a Kubernetes example.',
+      explanation: 'For Kubernetes, Carl can add the relevant production context directly.',
       evidenceIds: [],
-      limitations: ['Missing public evidence does not prove the experience has never occurred.'],
+      limitations: ['The public portfolio is one part of the conversation, and Carl can add the most relevant context directly.'],
     },
   ];
   return {
@@ -185,7 +185,7 @@ function createJobFitResponse(scenario: PublicJoleneFixtureScenario): JobFitResp
     ],
     suggestedFollowUpQuestions: [
       'Which requirement has the strongest direct evidence?',
-      'Which missing requirement should be discussed in an interview?',
+      'Which experience would be most useful to discuss in an interview?',
     ],
     corpusVersion: fixtureCorpusVersion,
   };

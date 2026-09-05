@@ -4,6 +4,7 @@ import { JoleneShell } from './jolene/jolene-shell';
 import { EvidenceTargetObserver } from './jolene/evidence-target-observer';
 import { AnalyticsRuntime } from './analytics/analytics-runtime';
 import { SentryRuntime } from './observability/sentry-runtime';
+import { Analytics } from '@vercel/analytics/react';
 import { analyticsModes, type AnalyticsMode } from './analytics/analytics-contract';
 import {
   buildPageMetadata,
@@ -71,6 +72,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <EvidenceTargetObserver />
         {children}
         <JoleneShell />
+        <Analytics />
       </body>
     </html>
   );

@@ -140,7 +140,7 @@ export function JoleneJobFit({
         </div>
 
         <p className="jolene-job-fit-policy">
-          Start with the strongest proof. Where this portfolio cannot tell the full story on its own, Jolene turns it into a useful conversation with Carl.
+          Start with the strongest proof. When a role calls for more context, Jolene turns that into a useful conversation with Carl.
         </p>
 
         <dl className="jolene-job-fit-counts" aria-label="Requirement assessment counts">

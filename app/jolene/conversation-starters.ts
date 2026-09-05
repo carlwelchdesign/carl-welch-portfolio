@@ -26,7 +26,7 @@ export const PUBLIC_JOLENE_CONVERSATION_STARTERS = [
   'Which Carl project would you show a hiring manager first?',
   'What should an interviewer ask Carl to uncover his best work?',
   'What should a skeptical hiring manager verify directly with Carl?',
-  'Where might Carl be a weaker fit?',
+  'Which part of Carl’s experience would you like to explore next?',
   'What kind of team gets the most value from Carl?',
   'How would you compare Carl’s experience with a specific job description?',
   'How would Carl approach a messy zero-to-one product?',
