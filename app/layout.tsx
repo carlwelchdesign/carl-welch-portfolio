@@ -42,7 +42,10 @@ export const metadata: Metadata = {
   authors: [{ name: 'Carl Welch' }],
   creator: 'Carl Welch',
   manifest: '/manifest.webmanifest',
-  icons: { icon: '/favicon.svg' },
+  icons: {
+    icon: [{ url: '/favicon-dolly.png', sizes: '512x512', type: 'image/png' }],
+    apple: [{ url: '/favicon-dolly.png', sizes: '512x512', type: 'image/png' }],
+  },
 };
 
 export const viewport: Viewport = {
