@@ -38,6 +38,48 @@ async function expectCorePageContract(page: Page) {
   await expect(page.locator('[data-jolene-fixture-launcher]')).toHaveCount(0);
 }
 
+test('the Dolly favicon is published as a transparent square site icon', async ({ page }) => {
+  await page.goto('/');
+
+  const icon = page.locator('link[rel="icon"][href="/favicon-dolly.png"]');
+  await expect(icon).toHaveCount(1);
+  await expect(icon).toHaveAttribute('type', 'image/png');
+  await expect(icon).toHaveAttribute('sizes', '512x512');
+
+  const iconResponse = await page.request.get('/favicon-dolly.png');
+  expect(iconResponse.status()).toBe(200);
+  expect(iconResponse.headers()['content-type']).toBe('image/png');
+
+  const imageContract = await page.evaluate(async () => {
+    const image = new Image();
+    image.src = '/favicon-dolly.png';
+    await image.decode();
+    const canvas = document.createElement('canvas');
+    canvas.width = image.naturalWidth;
+    canvas.height = image.naturalHeight;
+    const context = canvas.getContext('2d');
+    if (!context) throw new Error('Canvas context is unavailable.');
+    context.drawImage(image, 0, 0);
+    const corners = [
+      context.getImageData(0, 0, 1, 1).data[3],
+      context.getImageData(canvas.width - 1, 0, 1, 1).data[3],
+      context.getImageData(0, canvas.height - 1, 1, 1).data[3],
+      context.getImageData(canvas.width - 1, canvas.height - 1, 1, 1).data[3],
+    ];
+    return { width: image.naturalWidth, height: image.naturalHeight, corners };
+  });
+  expect(imageContract).toEqual({ width: 512, height: 512, corners: [0, 0, 0, 0] });
+
+  const manifestResponse = await page.request.get('/manifest.webmanifest');
+  expect(manifestResponse.status()).toBe(200);
+  const manifest = await manifestResponse.json();
+  expect(manifest.icons).toContainEqual({
+    src: '/favicon-dolly.png',
+    sizes: '512x512',
+    type: 'image/png',
+  });
+});
+
 test('skip navigation transfers focus into main content on every public route', async ({ page }) => {
   for (const route of routes) {
     await page.goto(route);
